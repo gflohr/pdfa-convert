@@ -1,53 +1,53 @@
-import commonjs from "@rollup/plugin-commonjs";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
-import typescript from "@rollup/plugin-typescript";
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
 
 function tsPlugin(tsconfig) {
 	return typescript({
 		tsconfig,
-		exclude: ["**/*.spec.ts"],
+		exclude: ['**/*.spec.ts'],
 	});
 }
 
 const external = [
 	// Node built-ins
-	"fs",
-	"path",
-	"stream",
-	"util",
+	'fs',
+	'path',
+	'stream',
+	'util',
 ];
 
 export default [
 	{
-		input: "src/index.ts",
+		input: 'src/index.ts',
 		output: {
-			file: "dist/index.esm.js",
-			format: "esm",
+			file: 'dist/index.esm.js',
+			format: 'esm',
 			sourcemap: true,
 		},
 		external,
-		plugins: [tsPlugin("./tsconfig.build.json"), nodeResolve(), commonjs()],
+		plugins: [tsPlugin('./tsconfig.build.json'), nodeResolve(), commonjs()],
 	},
 	{
-		input: "src/index.ts",
+		input: 'src/index.ts',
 		output: {
-			file: "dist/index.cjs.js",
-			format: "cjs",
+			file: 'dist/index.cjs.js',
+			format: 'cjs',
 			sourcemap: true,
-			exports: "named",
+			exports: 'named',
 		},
 		external,
-		plugins: [tsPlugin("./tsconfig.build.json"), nodeResolve(), commonjs()],
+		plugins: [tsPlugin('./tsconfig.build.json'), nodeResolve(), commonjs()],
 	},
 	{
-		input: "src/index.ts",
+		input: 'src/index.ts',
 		output: {
-			file: "dist/index.browser.js",
-			format: "esm",
+			file: 'dist/index.browser.js',
+			format: 'esm',
 			sourcemap: true,
 		},
 		plugins: [
-			tsPlugin("./tsconfig.build.json"),
+			tsPlugin('./tsconfig.build.json'),
 			nodeResolve({
 				browser: true,
 			}),

@@ -1,0 +1,12 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "dist",
+		"rootDir": "src",
+		"module": "ESNext",
+		"target": "ES2022"
+	},
+	"references": [{ "path": "../../packages/pdfa-convert" }],
+	"include": ["src"],
+	"exclude": ["node_modules", "dist"]
+}

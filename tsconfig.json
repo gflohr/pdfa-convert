@@ -1,0 +1,20 @@
+{
+	"files": [],
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ESNext",
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"esModuleInterop": true,
+		"moduleResolution": "Node",
+		"skipLibCheck": true,
+		"declaration": true,
+		"composite": true,
+		"sourceMap": true,
+		"rootDir": ".",
+		"outDir": "dist"
+	},
+	"include": [],
+	"exclude": ["node_modules", "dist"],
+	"references": [{ "path": "packages/pdfa-convert" }, { "path": "apps/cli" }]
+}

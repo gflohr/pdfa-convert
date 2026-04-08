@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"sourceMap": true,
+		"composite": true,
+		"outDir": "dist"
+	},
+	"include": ["src"],
+	"exclude": ["src/**/*.spec.ts"]
+}

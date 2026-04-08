@@ -1,0 +1,46 @@
+{
+	"name": "pdfa-convert-monorepo",
+	"private": true,
+	"description": "Convert PDFs to PDF/A-1b, PDF/A-2b, or PDF/A-3b",
+	"homepage": "https://gflohr.github.io/pdfa-convert#readme",
+	"keywords": [
+		"PDF",
+		"PDF/A",
+		"PDF/A-1b",
+		"PDF/A-2b",
+		"PDF/A-3b",
+		"Factur-X",
+		"ZUGFeRD",
+		"nodejs",
+		"typescript"
+	],
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"build": "pnpm run -r build",
+		"check": "biome check",
+		"check:fix": "biome check --write",
+		"check:staged": "biome check --staged --write --no-errors-on-unmatched",
+		"test": "pnpm -r run test",
+		"test:cov": "pnpm -r run test:cov",
+		"test:cov-changed": "pnpm -r run test:cov-changed",
+		"test:watch": "pnpm-r run test:watch",
+		"release": "HUSKY=0 pnpm changeset publish",
+		"prerelease": "pnpm install && pnpm run build && pnpm run test",
+		"check:clean": "./check-clean && pnpm -r --parallel run check:clean",
+		"prepublish": "pnpm run check:clean && pnpm run test",
+		"clean": "pnpm -r --parallel run clean",
+		"prepare": "husky",
+		"preinstall": "npx only-allow pnpm"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.10",
+		"@changesets/cli": "^2.30.0",
+		"@tsconfig/recommended": "^1.0.13",
+		"changeset": "^0.2.6",
+		"husky": "^9.1.7",
+		"pnpm": "^10.33.0"
+	}
+}

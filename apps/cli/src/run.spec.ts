@@ -6,9 +6,9 @@ import {
 	type MockInstance,
 	vi,
 } from 'vitest';
+import * as convertModule from './convert.js';
 import { Package } from './package.js';
 import { run } from './run.js';
-import * as convertModule from './convert.js';
 
 describe('pdfa-convert-cli', () => {
 	let consoleLogSpy: MockInstance<(...args: unknown[]) => void>;
@@ -56,7 +56,9 @@ describe('pdfa-convert-cli', () => {
 	it('convert files', async () => {
 		const argv = ['a.pdf', 'b.pdf', 'c.pdf'];
 
-		const convertSpy = vi.spyOn(convertModule, 'convert').mockResolvedValue(undefined);
+		const convertSpy = vi
+			.spyOn(convertModule, 'convert')
+			.mockResolvedValue(undefined);
 		const exitCode = await run(argv);
 
 		expect(exitCode).toBe(0);
@@ -71,6 +73,8 @@ describe('pdfa-convert-cli', () => {
 		const exitCode = await run(argv);
 
 		expect(exitCode).toBe(1);
-		expect(consoleErrorSpy).toHaveBeenCalledWith(`${Package.name}: conversion failed: boum`);
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			`${Package.name}: conversion failed: boum`,
+		);
 	});
 });

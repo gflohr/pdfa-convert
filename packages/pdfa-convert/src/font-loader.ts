@@ -1,4 +1,9 @@
-import { FontStyle, FontWeight, type FontCategory, type FontDescription } from './font-resolver.js';
+import type {
+	FontCategory,
+	FontDescription,
+	FontStyle,
+	FontWeight,
+} from './font-resolver.js';
 
 type OsType = 'unix' | 'darwin' | 'win32';
 
@@ -8,169 +13,255 @@ const fontLocations: Record<OsType, string[]> = {
 	win32: ['C:/Windows/Fonts'],
 };
 
-const fontFiles: Record<OsType, Record<FontCategory, Record<FontWeight, Record<FontStyle, string[]>>>> = {
+const fontFiles: Record<
+	OsType,
+	Record<FontCategory, Record<FontWeight, Record<FontStyle, string[]>>>
+> = {
 	unix: {
 		sans: {
 			normal: {
-				roman: [ 'liberation-fonts/LiberationSans-Regular', 'dejavu/DejaVuSans', 'ubuntu/Ubuntu-R' ],
-				italic: [ 'liberation-fonts/LiberationSans-Italic', 'dejavu/DejaVuSans-Oblique', 'ubuntu/Ubuntu-I' ],
+				roman: [
+					'liberation-fonts/LiberationSans-Regular',
+					'dejavu/DejaVuSans',
+					'ubuntu/Ubuntu-R',
+				],
+				italic: [
+					'liberation-fonts/LiberationSans-Italic',
+					'dejavu/DejaVuSans-Oblique',
+					'ubuntu/Ubuntu-I',
+				],
 			},
 			bold: {
-				roman: [ 'liberation-fonts/LiberationSans-Bold', 'dejavu/DejaVuSans-Bold', 'ubuntu/Ubuntu-B' ],
-				italic: [ 'liberation-fonts/LiberationSans-Italic', 'dejavu/DejaVuSans-BoldOblique', 'ubuntu/Ubuntu-BI' ],
+				roman: [
+					'liberation-fonts/LiberationSans-Bold',
+					'dejavu/DejaVuSans-Bold',
+					'ubuntu/Ubuntu-B',
+				],
+				italic: [
+					'liberation-fonts/LiberationSans-Italic',
+					'dejavu/DejaVuSans-BoldOblique',
+					'ubuntu/Ubuntu-BI',
+				],
 			},
 		},
 		serif: {
 			normal: {
-				roman: [ 'liberation-fonts/LiberationSerif-Regular', 'dejavu/DejaVuSerif' ],
-				italic: [ 'liberation-fonts/LiberationSerif-Italic', 'dejavu/DejaVuSerif-Oblique' ],
+				roman: [
+					'liberation-fonts/LiberationSerif-Regular',
+					'dejavu/DejaVuSerif',
+				],
+				italic: [
+					'liberation-fonts/LiberationSerif-Italic',
+					'dejavu/DejaVuSerif-Oblique',
+				],
 			},
 			bold: {
-				roman: [ 'liberation-fonts/LiberationSerif-Bold', 'dejavu/DejaVuSerif-Bold' ],
-				italic: [ 'liberation-fonts/LiberationSerif-Italic', 'dejavu/DejaVuSerif-BoldOblique' ],
+				roman: [
+					'liberation-fonts/LiberationSerif-Bold',
+					'dejavu/DejaVuSerif-Bold',
+				],
+				italic: [
+					'liberation-fonts/LiberationSerif-Italic',
+					'dejavu/DejaVuSerif-BoldOblique',
+				],
 			},
 		},
 		mono: {
 			normal: {
-				roman: [ 'liberation-fonts/LiberationMon-Regular', 'dejavu/DejaVuSansMono', 'ubuntu/UbuntuMono-R' ],
-				italic: [ 'liberation-fonts/LiberationMon-Italic',  'dejavu/DejaVuSansMono-Oblique',  'ubuntu/UbuntuMono-I' ],
+				roman: [
+					'liberation-fonts/LiberationMon-Regular',
+					'dejavu/DejaVuSansMono',
+					'ubuntu/UbuntuMono-R',
+				],
+				italic: [
+					'liberation-fonts/LiberationMon-Italic',
+					'dejavu/DejaVuSansMono-Oblique',
+					'ubuntu/UbuntuMono-I',
+				],
 			},
 			bold: {
-				roman: [ 'liberation-fonts/LiberationMono-Bold',  'dejavu/DejaVuSansMono-Bold',  'ubuntu/UbuntuMono-B' ],
-				italic: [ 'liberation-fonts/LiberationMono-Italic',  'dejavu/DejaVuSansMono-BoldOblique',  'ubuntu/UbuntuMono-BI' ],
+				roman: [
+					'liberation-fonts/LiberationMono-Bold',
+					'dejavu/DejaVuSansMono-Bold',
+					'ubuntu/UbuntuMono-B',
+				],
+				italic: [
+					'liberation-fonts/LiberationMono-Italic',
+					'dejavu/DejaVuSansMono-BoldOblique',
+					'ubuntu/UbuntuMono-BI',
+				],
 			},
 		},
 		symbol: {
 			normal: {
 				roman: [],
-				italic: [ /* empty */ ],
+				italic: [
+					/* empty */
+				],
 			},
 			bold: {
-				roman: [ /* empty */ ],
-				italic: [ /* empty */ ],
+				roman: [
+					/* empty */
+				],
+				italic: [
+					/* empty */
+				],
 			},
 		},
 		zapfdingbats: {
 			normal: {
 				roman: [],
-				italic: [ /* empty */ ],
+				italic: [
+					/* empty */
+				],
 			},
 			bold: {
-				roman: [ /* empty */ ],
-				italic: [ /* empty */ ],
+				roman: [
+					/* empty */
+				],
+				italic: [
+					/* empty */
+				],
 			},
 		},
 	},
 	darwin: {
 		sans: {
 			normal: {
-				roman: [ 'Arial' ],
-				italic: [ 'Arial Italic' ],
+				roman: ['Arial'],
+				italic: ['Arial Italic'],
 			},
 			bold: {
-				roman: [ 'Arial Bold' ],
-				italic: [ 'Arial Bold Italic' ],
+				roman: ['Arial Bold'],
+				italic: ['Arial Bold Italic'],
 			},
 		},
 		serif: {
 			normal: {
-				roman: [ 'Times New Roman' ],
-				italic: [ 'Times New Roman Italic' ],
+				roman: ['Times New Roman'],
+				italic: ['Times New Roman Italic'],
 			},
 			bold: {
-				roman: [ 'Times New Roman Bold' ],
-				italic: [ 'Times New Roman Bold Italic' ],
+				roman: ['Times New Roman Bold'],
+				italic: ['Times New Roman Bold Italic'],
 			},
 		},
 		mono: {
 			normal: {
-				roman: [ 'Courier New' ],
-				italic: [ 'Courier New Italic' ],
+				roman: ['Courier New'],
+				italic: ['Courier New Italic'],
 			},
 			bold: {
-				roman: [ 'Courier New Bold' ],
-				italic: [ 'Courier New Bold Italic' ],
+				roman: ['Courier New Bold'],
+				italic: ['Courier New Bold Italic'],
 			},
 		},
 		symbol: {
 			normal: {
-				roman: [ 'Symbol' ],
-				italic: [ /* empty */ ],
+				roman: ['Symbol'],
+				italic: [
+					/* empty */
+				],
 			},
 			bold: {
-				roman: [ /* empty */ ],
-				italic: [ /* empty */ ],
+				roman: [
+					/* empty */
+				],
+				italic: [
+					/* empty */
+				],
 			},
 		},
 		zapfdingbats: {
 			normal: {
-				roman: [ 'ZapfDingbats' ],
-				italic: [ /* empty */ ],
+				roman: ['ZapfDingbats'],
+				italic: [
+					/* empty */
+				],
 			},
 			bold: {
-				roman: [ /* empty */ ],
-				italic: [ /* empty */ ],
+				roman: [
+					/* empty */
+				],
+				italic: [
+					/* empty */
+				],
 			},
 		},
 	},
 	win32: {
 		sans: {
 			normal: {
-				roman: [ 'arial' ],
-				italic: [ 'ariali' ],
+				roman: ['arial'],
+				italic: ['ariali'],
 			},
 			bold: {
-				roman: [ 'arialbd' ],
-				italic: [ 'arialbi' ],
+				roman: ['arialbd'],
+				italic: ['arialbi'],
 			},
 		},
 		serif: {
 			normal: {
-				roman: [ 'times' ],
-				italic: [ 'timesi' ],
+				roman: ['times'],
+				italic: ['timesi'],
 			},
 			bold: {
-				roman: [ 'timesb' ],
-				italic: [ 'timesbi' ],
+				roman: ['timesb'],
+				italic: ['timesbi'],
 			},
 		},
 		mono: {
 			normal: {
-				roman: [ 'cour' ],
-				italic: [ 'couri' ],
+				roman: ['cour'],
+				italic: ['couri'],
 			},
 			bold: {
-				roman: [ 'courb' ],
-				italic: [ 'courbi' ],
+				roman: ['courb'],
+				italic: ['courbi'],
 			},
 		},
 		symbol: {
 			normal: {
-				roman: [ 'symbol' ],
-				italic: [ /* empty */ ],
+				roman: ['symbol'],
+				italic: [
+					/* empty */
+				],
 			},
 			bold: {
-				roman: [ /* empty */ ],
-				italic: [ /* empty */ ],
+				roman: [
+					/* empty */
+				],
+				italic: [
+					/* empty */
+				],
 			},
 		},
 		zapfdingbats: {
 			normal: {
-				roman: [ 'winbats' ],
-				italic: [ /* empty */ ],
+				roman: ['winbats'],
+				italic: [
+					/* empty */
+				],
 			},
 			bold: {
-				roman: [ /* empty */ ],
-				italic: [ /* empty */ ],
+				roman: [
+					/* empty */
+				],
+				italic: [
+					/* empty */
+				],
 			},
 		},
 	},
-}
+};
 
 export class FontLoader {
 	constructor(private readonly platform: OsType | undefined) {}
 
-	public async load(font: FontDescription, fontName: string): Promise<Uint8Array | undefined> {
+	public async load(
+		font: FontDescription,
+		fontName: string,
+	): Promise<Uint8Array | undefined> {
 		const isNode =
 			Object.prototype.toString.call(
 				typeof process !== 'undefined' ? process : 0,
@@ -185,7 +276,7 @@ export class FontLoader {
 			const locations = fontLocations[this.platform] ?? fontLocations.unix;
 			const candidates = map[font.category][font.weight][font.style];
 			const extensions = ['ttf', 'otf'];
-			for (let i = 0; i < candidates.length) {
+			for (let i = 0; i < candidates.length; ++i) {
 				for (let j = 0; j < locations.length; ++j) {
 					for (let k = 0; k < extensions.length; ++k) {
 						const fullname = `${locations[j]}/${candidates[i]}.${extensions[k]}`;

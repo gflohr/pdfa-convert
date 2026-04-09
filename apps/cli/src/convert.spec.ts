@@ -28,11 +28,17 @@ describe('convert', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 
-		const PDFAConvertMock = PDFAConvert as unknown as MockedClass<typeof PDFAConvert>;
+		const PDFAConvertMock = PDFAConvert as unknown as MockedClass<
+			typeof PDFAConvert
+		>;
 
 		convertMock = vi.fn().mockResolvedValue(undefined);
 
-		PDFAConvertMock.mockImplementation(function (this: PDFAConvert, _os?: string, _fontMap?: object) {
+		PDFAConvertMock.mockImplementation(function (
+			this: PDFAConvert,
+			_os?: string,
+			_fontMap?: object,
+		) {
 			this.convert = convertMock;
 		});
 	});

@@ -6,7 +6,12 @@ export type FontMap = Record<
 	string | ArrayBuffer | Uint8Array<ArrayBufferLike>
 >;
 
-export type FontCategory = 'sans' | 'serif' | 'mono' | 'symbol' | 'zapfdingbats';
+export type FontCategory =
+	| 'sans'
+	| 'serif'
+	| 'mono'
+	| 'symbol'
+	| 'zapfdingbats';
 export type FontWeight = 'normal' | 'bold';
 export type FontStyle = 'roman' | 'italic';
 export type FontDescription = {
@@ -231,7 +236,7 @@ export class FontResolver {
 		}
 
 		throw new Error(
-			`The font '${fontName}' is not embedded, no replacement font has been specified, and no fallback font has been found.`
+			`The font '${fontName}' is not embedded, no replacement font has been specified, and no fallback font has been found.`,
 		);
 	}
 
@@ -282,8 +287,16 @@ export class FontResolver {
 
 		// These cannot be replaced.
 		if (desc.category === 'symbol' || desc.category === 'zapfdingbats') {
-			const standardName = desc.category === 'symbol' ? 'Symbol' : 'ZapfDingbats';
-			return [{category: desc.category, weight: 'normal', style: 'roman', standardName }];
+			const standardName =
+				desc.category === 'symbol' ? 'Symbol' : 'ZapfDingbats';
+			return [
+				{
+					category: desc.category,
+					weight: 'normal',
+					style: 'roman',
+					standardName,
+				},
+			];
 		}
 
 		for (const weight in ['normal', 'bold']) {

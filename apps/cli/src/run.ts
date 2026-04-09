@@ -30,15 +30,43 @@ export async function run(argv = process.argv.slice(2)) {
 					programName: Package.name,
 				}),
 			)
+			.option('level', {
+				alias: 'l',
+				type: 'string',
+				describe: gtx._('PDF/A conformance level'),
+				array: false,
+				default: 'PDF/A-3b',
+				choices: ['PDF/A-1b', 'PDF/A-2b', 'PDF/A-3b'],
+			})
+			.option('font', {
+				alias: 'f',
+				type: 'string',
+				describe: gtx._('Font mapping (NAME:PATH)'),
+				array: true,
+				nargs: 1,
+				coerce: (values: string[]) =>
+					values.map((value) => {
+						const [name, path] = value.split(':', 2);
+
+						if (!name || !path) {
+							throw new Error(
+								`Invalid --font value: "${value}". Expected NAME:PATH`,
+							);
+						}
+
+						return { name, path };
+					}),
+			})
 			.version(Package.version)
-			.command('$0 <files..>', gtx._('Process files'), (y) =>
+			.command('$0 <files...>', gtx._('Process PDF files'), (y) =>
 				y.positional('files', {
 					describe: gtx._('PDF documents to process'),
 					type: 'string',
 					array: true,
-					demandOption: true,
+					demandOption: true, // required
 				}),
 			)
+			.usage('$0 [OPTIONS] PDFs...')
 			.alias('V', 'version')
 			.alias('h', 'help')
 			.scriptName(Package.name);
@@ -50,7 +78,7 @@ export async function run(argv = process.argv.slice(2)) {
 		const args = await program.help().epilogue(epilogue).parse();
 
 		try {
-			await convert(args.files);
+			await convert(args.files as string[]);
 		} catch (exception) {
 			console.error(
 				gtx._x('{programName}: conversion failed: {exception}', {

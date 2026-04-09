@@ -30,6 +30,7 @@ export async function run(argv = process.argv.slice(2)) {
 					programName: Package.name,
 				}),
 			)
+			.version(Package.version)
 			.alias('V', 'version')
 			.alias('h', 'help')
 			.scriptName(Package.name);

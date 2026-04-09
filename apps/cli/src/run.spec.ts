@@ -6,14 +6,8 @@ import {
 	type MockInstance,
 	vi,
 } from 'vitest';
+import { Package } from './package.js';
 import { run } from './run.js';
-
-vi.mock('./package.js', () => ({
-	Package: {
-		name: 'pdfa-convert',
-		bugTrackerUrl: 'https://example.com/bugs',
-	},
-}));
 
 describe('pdfa-convert-cli', () => {
 	let consoleSpy: MockInstance<[...string[]], void>;
@@ -26,7 +20,7 @@ describe('pdfa-convert-cli', () => {
 			.mockImplementation((() => {}) as unknown as () => never);
 	});
 
-	it('help', async () => {
+	it('option --help', async () => {
 		const argv = ['--help'];
 
 		await run(argv);
@@ -34,6 +28,15 @@ describe('pdfa-convert-cli', () => {
 		expect(consoleSpy).toHaveBeenCalledWith(
 			expect.stringMatching('Report bugs'),
 		);
+		expect(exitSpy).toHaveBeenCalledWith(0);
+	});
+
+	it('option --version', async () => {
+		const argv = ['--version'];
+
+		await run(argv);
+
+		expect(consoleSpy).toHaveBeenCalledWith(Package.version);
 		expect(exitSpy).toHaveBeenCalledWith(0);
 	});
 });

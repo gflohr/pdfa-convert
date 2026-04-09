@@ -25,8 +25,14 @@
 		"build:types": "tsc --build tsconfig.build.json",
 		"build:js": "rollup -c",
 		"build": "pnpm run build:types && pnpm run build:js",
+		"check": "biome check",
+		"check:fix": "biome check --write",
 		"dev": "rollup -c -w",
-		"test": "vitest"
+		"test": "vitest --run",
+		"test:changed": "vitest --changedSince origin/main --passWithNoTests",
+		"test:watch": "vitest",
+		"test:cov": "vitest --coverage.enabled --run",
+		"test:cov-changed": "vitest --coverage.enabled --run --changed origin/main --passWithNoTests"
 	},
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^25.0.0",

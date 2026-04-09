@@ -6,6 +6,8 @@ import { Textdomain } from '@esgettext/runtime';
 import yargs from 'yargs';
 
 import { Package } from './package.js';
+import { PDFAConvert } from 'pdfa-convert';
+import { convert } from './convert.js';
 
 const gtx = Textdomain.getInstance('pdfa-convert-cli');
 
@@ -40,6 +42,18 @@ export async function run(argv = process.argv.slice(2)) {
 		});
 
 		await program.help().epilogue(epilogue).parse();
+
+		try {
+			await convert();
+		} catch(exception) {
+			console.error(
+				gtx._x('{programName}: conversion failed: {exception}', {
+					programName: Package.name,
+					exception,
+				}),
+			);
+			return 1;
+		}
 
 		return 0;
 	} catch (exception) {

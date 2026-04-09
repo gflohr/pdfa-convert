@@ -49,6 +49,7 @@
 		"esgettext:addlang": "esgettext msginit"
 	},
 	"dependencies": {
+		"@cantoo/pdf-lib": "^2.6.5",
 		"@esgettext/runtime": "^1.3.10",
 		"pdfa-convert": "workspace:*",
 		"yargs": "^18.0.0"
@@ -57,10 +58,11 @@
 		"@esgettext/tools": "^1.3.10",
 		"@types/node": "^25.5.2",
 		"@types/yargs": "^17.0.35",
+		"@vitest/coverage-v8": "^4.1.4",
 		"rimraf": "^6.1.3",
 		"tsx": "^4.21.0",
 		"typescript": "^5.0.0",
-		"vitest": "^1.0.0"
+		"vitest": "^4.1.4"
 	},
 	"engines": {
 		"node": ">=18"

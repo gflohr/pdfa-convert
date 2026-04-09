@@ -5,7 +5,8 @@
 		"rootDir": "src",
 		"module": "ESNext",
 		"target": "ES2022",
-		"moduleResolution": "bundler"
+		"moduleResolution": "bundler",
+		"types": ["node"]
 	},
 	"references": [{ "path": "../../packages/pdfa-convert" }],
 	"include": ["src"],

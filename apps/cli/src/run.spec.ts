@@ -8,35 +8,42 @@ import {
 } from 'vitest';
 import { Package } from './package.js';
 import { run } from './run.js';
+import { exit } from 'node:process';
 
 describe('pdfa-convert-cli', () => {
-	let consoleSpy: MockInstance<[...string[]], void>;
-	let exitSpy: MockInstance<[code?: string | number | null | undefined], never>;
+	let consoleLogSpy: MockInstance<(...args: unknown[]) => void>;
+	let consoleErrorSpy: MockInstance<(...args: unknown[]) => void>;
+	let exitSpy: MockInstance<(...args: [code?: string | number | null | undefined]) => never>;
 
 	beforeEach(() => {
-		consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+		consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+		consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 		exitSpy = vi
 			.spyOn(process, 'exit')
-			.mockImplementation((() => {}) as unknown as () => never);
+			.mockImplementation((() => { throw new Error('process.exit')}) as unknown as () => never);
 	});
 
 	it('option --help', async () => {
 		const argv = ['--help'];
 
-		await run(argv);
+		const exitCode = await run(argv);
 
-		expect(consoleSpy).toHaveBeenCalledWith(
+		expect(exitCode).toBe(2);
+		expect(consoleLogSpy).toHaveBeenCalledWith(
 			expect.stringMatching('Report bugs'),
 		);
 		expect(exitSpy).toHaveBeenCalledWith(0);
+		expect(consoleErrorSpy).toHaveBeenCalledWith(`${Package.name}: unhandled exception: Error: process.exit`);
 	});
 
 	it('option --version', async () => {
 		const argv = ['--version'];
 
-		await run(argv);
+		const exitCode = await run(argv);
 
-		expect(consoleSpy).toHaveBeenCalledWith(Package.version);
+		expect(exitCode).toBe(2);
+		expect(consoleLogSpy).toHaveBeenCalledWith(Package.version);
 		expect(exitSpy).toHaveBeenCalledWith(0);
+		expect(consoleErrorSpy).toHaveBeenCalledWith(`${Package.name}: unhandled exception: Error: process.exit`);
 	});
 });

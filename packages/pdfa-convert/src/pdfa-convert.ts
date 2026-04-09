@@ -1,4 +1,9 @@
-type FontMap = Record<string, string | ArrayBuffer | Uint8Array<ArrayBufferLike>>;
+import type { PDFDocument } from '@cantoo/pdf-lib';
+
+type FontMap = Record<
+	string,
+	string | ArrayBuffer | Uint8Array<ArrayBufferLike>
+>;
 
 /**
  * The `PDFAConvert` class is the wrapper around the PDF/A conversion
@@ -29,9 +34,11 @@ export class PDFAConvert {
 	/**
 	 * Get the font mapping.
 	 */
-	get fontMap(): FontMap{
+	get fontMap(): FontMap {
 		return this._fontMap;
 	}
 
-	async convert() {}
+	async convert(pdfDoc: PDFDocument) {
+		if (!pdfDoc) console.error('no document');
+	}
 }

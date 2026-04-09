@@ -4,10 +4,8 @@ import * as path from 'node:path';
 import * as url from 'node:url';
 import { Textdomain } from '@esgettext/runtime';
 import yargs from 'yargs';
-
-import { Package } from './package.js';
-import { PDFAConvert } from 'pdfa-convert';
 import { convert } from './convert.js';
+import { Package } from './package.js';
 
 const gtx = Textdomain.getInstance('pdfa-convert-cli');
 
@@ -33,6 +31,14 @@ export async function run(argv = process.argv.slice(2)) {
 				}),
 			)
 			.version(Package.version)
+			.command('$0 <files..>', gtx._('Process files'), (y) =>
+				y.positional('files', {
+					describe: gtx._('PDF documents to process'),
+					type: 'string',
+					array: true,
+					demandOption: true,
+				}),
+			)
 			.alias('V', 'version')
 			.alias('h', 'help')
 			.scriptName(Package.name);
@@ -41,11 +47,11 @@ export async function run(argv = process.argv.slice(2)) {
 			url: Package.bugTrackerUrl,
 		});
 
-		await program.help().epilogue(epilogue).parse();
+		const args = await program.help().epilogue(epilogue).parse();
 
 		try {
-			await convert();
-		} catch(exception) {
+			await convert(args.files);
+		} catch (exception) {
 			console.error(
 				gtx._x('{programName}: conversion failed: {exception}', {
 					programName: Package.name,

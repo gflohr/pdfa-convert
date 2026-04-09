@@ -12,7 +12,10 @@
 		"composite": true,
 		"sourceMap": true,
 		"rootDir": ".",
-		"outDir": "dist"
+		"outDir": "dist",
+		"paths": {
+			"pdfa-convert": ["./packages/pdfa-convert/src"]
+		}
 	},
 	"include": [],
 	"exclude": ["node_modules", "dist"],

@@ -25,6 +25,8 @@
 	"scripts": {
 		"prebuild": "rimraf dist && node ./write-package.mjs >src/package.ts",
 		"build": "tsc --build tsconfig.build.json",
+		"check": "biome check",
+		"check:fix": "biome check --write",
 		"prestart": "pnpm run build",
 		"start": "node dist/index.js",
 		"start:dev": "tsx ./src/index.ts",

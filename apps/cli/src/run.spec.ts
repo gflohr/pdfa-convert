@@ -93,6 +93,25 @@ describe('pdfa-convert-cli', () => {
 			};
 			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
 		});
+
+		it('should fix lone hyphen as a positional argument', async () => {
+			const convertSpy = vi
+				.spyOn(convertModule, 'convert')
+				.mockResolvedValue(undefined);
+
+			const exitCode = await run(['-']);
+
+			expect(exitCode).toBe(0);
+			expect(convertSpy).toHaveBeenCalledTimes(1);
+
+			const defaultOptions: ConvertOptions = {
+				input: '-',
+				output: '-',
+				standard: 'PDF/A-3b',
+				fonts: {},
+			};
+			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
+		});
 	});
 
 	describe('font mapping', () => {
@@ -137,6 +156,25 @@ describe('pdfa-convert-cli', () => {
 			expect(convertSpy).not.toHaveBeenCalled();
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
 				expect.stringMatching('invalid font map specification'),
+			);
+		});
+	});
+
+	describe('unexpected exception', () => {
+		it('should exit with code 2 for an unexpected exception', async () => {
+			const consoleLogSpy = vi
+				.spyOn(console, 'log')
+				.mockImplementation(() => {});
+
+			// The exit spy throws an exception. From the program's point of
+			// view, this is an unexpected exception.
+			const argv = ['--version'];
+			const exitCode = await run(argv);
+
+			expect(exitCode).toBe(2);
+			expect(consoleLogSpy).toHaveBeenCalledWith(Package.version);
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				expect.stringMatching('unexpected exception'),
 			);
 		});
 	});

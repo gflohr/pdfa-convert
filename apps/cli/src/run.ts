@@ -79,10 +79,6 @@ export async function run(argv = process.argv.slice(2)) {
 
 		const args = await program.help().epilogue(epilogue).parse();
 
-		// Fix yargs quirk.
-		if (typeof args.file === 'boolean' && args.file) {
-			args.file = '-';
-		}
 		let inputFile: string;
 		if (typeof args.file !== 'undefined' && (args.file as string).length) {
 			inputFile = args.file as string;
@@ -136,7 +132,7 @@ export async function run(argv = process.argv.slice(2)) {
 		return 0;
 	} catch (exception) {
 		console.error(
-			gtx._x('{programName}: unhandled exception: {exception}', {
+			gtx._x('{programName}: unexpected exception: {exception}', {
 				programName: Package.name,
 				exception,
 			}),

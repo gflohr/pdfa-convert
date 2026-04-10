@@ -1,4 +1,4 @@
-import { PDFDict, PDFName, PDFRef, type PDFDocument } from '@cantoo/pdf-lib';
+import { PDFDict, type PDFDocument, PDFName, PDFRef } from '@cantoo/pdf-lib';
 import { FontResolver } from './font-resolver.js';
 
 /**
@@ -21,8 +21,11 @@ export type PDFAConvertOptions = {
 	standard: PDFAStandard;
 };
 
-type Encoding = 'StandardEncoding' | 'MacRomanEncoding' | 'WinAnsiEncoding'
-		| 'MacExpertEncoding';
+type Encoding =
+	| 'StandardEncoding'
+	| 'MacRomanEncoding'
+	| 'WinAnsiEncoding'
+	| 'MacExpertEncoding';
 
 type FontInfo = {
 	baseFont: string;
@@ -77,9 +80,7 @@ export class PDFAConvert {
 			if (!fonts[i].encoding) {
 				const font = fonts[i];
 				const fontDict: PDFDict = pdfDoc.context.lookup(font.ref) as PDFDict;
-				const toUnicode = fontDict.lookup(
-					PDFName.of('ToUnicode')
-				);
+				const toUnicode = fontDict.lookup(PDFName.of('ToUnicode'));
 
 				console.dir(toUnicode);
 			}
@@ -97,7 +98,7 @@ export class PDFAConvert {
 				if (!fontDict) continue;
 
 				const fontInfo: FontInfo = {
-					ref: fontRef
+					ref: fontRef,
 				} as FontInfo;
 				const descriptor = fontDict.lookupMaybe(
 					PDFName.of('FontDescriptor'),
@@ -117,7 +118,10 @@ export class PDFAConvert {
 					// Standard font.
 					const baseFont = fontDict.lookup(PDFName.of('BaseFont'), PDFName);
 					const baseFontName = baseFont?.decodeText() ?? fontName.decodeText();
-					const encoding = fontDict.lookupMaybe(PDFName.of('Encoding'), PDFName);
+					const encoding = fontDict.lookupMaybe(
+						PDFName.of('Encoding'),
+						PDFName,
+					);
 
 					fontInfo.baseFont = baseFontName;
 					fontInfo.encoding = encoding as unknown as Encoding;

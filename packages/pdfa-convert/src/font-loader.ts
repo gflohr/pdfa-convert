@@ -291,7 +291,10 @@ export class FontLoader {
 		}
 	}
 
-	public async loadFromPath(fontName: string, path: string): Promise<Uint8Array> {
+	public async loadFromPath(
+		fontName: string,
+		path: string,
+	): Promise<Uint8Array> {
 		const isNode =
 			Object.prototype.toString.call(
 				typeof process !== 'undefined' ? process : 0,

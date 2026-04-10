@@ -217,7 +217,8 @@ export class FontResolver {
 		if (Object.hasOwn(this.fontMap, canonicalName.toLowerCase())) {
 			const data = this.fontMap[canonicalName.toLowerCase()];
 			if (typeof data === 'string') {
-				this.fontMap[canonicalName.toLowerCase()] = await this.fontLoader.loadFromPath(canonicalName, data);
+				this.fontMap[canonicalName.toLowerCase()] =
+					await this.fontLoader.loadFromPath(canonicalName, data);
 			}
 
 			return this.fontMap[canonicalName.toLowerCase()];
@@ -232,7 +233,8 @@ export class FontResolver {
 			if (Object.hasOwn(this.fontMap, tryName)) {
 				const data = this.fontMap[tryName];
 				if (typeof data === 'string') {
-					this.fontMap[fontName.toLowerCase()] = await this.fontLoader.loadFromPath(fontName, data);
+					this.fontMap[fontName.toLowerCase()] =
+						await this.fontLoader.loadFromPath(fontName, data);
 				}
 
 				return this.fontMap[tryName];

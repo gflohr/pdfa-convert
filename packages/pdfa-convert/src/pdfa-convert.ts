@@ -1,5 +1,6 @@
 import { PDFDict, type PDFDocument, PDFName, PDFRef } from '@cantoo/pdf-lib';
 import { FontResolver } from './font-resolver.js';
+import { PDFTextExtractor } from './pdf-text-extractor.js';
 
 /**
  * PDF/A conformance level and version.
@@ -66,6 +67,8 @@ export class PDFAConvert {
 		}
 
 		const fonts = this.collectFonts(pdfDoc);
+		const extractor = new PDFTextExtractor();
+		extractor.parseDocument(pdfDoc);
 		// For testing, we embed all fonts and not just the missing ones.
 		await this.embedFonts(pdfDoc, fonts);
 	}

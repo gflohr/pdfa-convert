@@ -1,10 +1,6 @@
 import { isStandardFont, StandardFonts } from '@cantoo/pdf-lib';
 import { FontLoader, type OsType } from './font-loader.js';
-
-export type FontMap = Record<
-	string,
-	string | ArrayBuffer | Uint8Array<ArrayBufferLike>
->;
+import type { FontMap } from './pdfa-convert.js';
 
 export type FontCategory =
 	| 'sans'
@@ -208,7 +204,7 @@ export class FontResolver {
 	private readonly fontMap: FontMap = {};
 	private readonly fontLoader: FontLoader;
 
-	constructor(platform: string, fontMap: FontMap) {
+	constructor(platform: string | undefined, fontMap: FontMap) {
 		this.fontLoader = new FontLoader(platform as OsType);
 
 		for (const name in fontMap) {
@@ -217,8 +213,14 @@ export class FontResolver {
 	}
 
 	async resolve(fontName: string): Promise<string | Uint8Array | ArrayBuffer> {
-		if (Object.hasOwn(this.fontMap, fontName.toLowerCase())) {
-			return this.fontMap[fontName.toLowerCase()];
+		const canonicalName = this.canonicalName(fontName);
+		if (Object.hasOwn(this.fontMap, canonicalName.toLowerCase())) {
+			const data = this.fontMap[canonicalName.toLowerCase()];
+			if (typeof data === 'string') {
+				this.fontMap[canonicalName.toLowerCase()] = await this.fontLoader.loadFromPath(canonicalName, data);
+			}
+
+			return this.fontMap[canonicalName.toLowerCase()];
 		}
 
 		const description = this.parseName(fontName);
@@ -228,6 +230,11 @@ export class FontResolver {
 			const desc = searchList[i];
 			const tryName = FontMatrix[desc.category][desc.weight][desc.style];
 			if (Object.hasOwn(this.fontMap, tryName)) {
+				const data = this.fontMap[tryName];
+				if (typeof data === 'string') {
+					this.fontMap[fontName.toLowerCase()] = await this.fontLoader.loadFromPath(fontName, data);
+				}
+
 				return this.fontMap[tryName];
 			}
 
@@ -240,12 +247,20 @@ export class FontResolver {
 		);
 	}
 
-	private parseName(name: string): FontDescription {
-		// Strip leading slash.
-		name = name.replace(/^\//, '');
-
+	private canonicalName(name: string): string {
 		// Strip subset prefix (ABCDEF+).
-		name = name.replace(/^[A-Z]{6}\+-/, '');
+		name = name.replace(/^[A-Z]{6}\+/, '');
+
+		// Strip numerical suffix.
+		name = name.replace(/-[0-9]+$/, '');
+
+		return name;
+	}
+
+	private parseName(name: string): FontDescription {
+		console.log(`parsing name '${name};`);
+		name = this.canonicalName(name);
+		console.log(`canonical: '${name}'`);
 
 		if (isStandardFont(name)) {
 			return FontDescriptionByName[name.toLowerCase()];

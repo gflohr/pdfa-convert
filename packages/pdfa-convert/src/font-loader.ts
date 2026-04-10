@@ -281,12 +281,29 @@ export class FontLoader {
 					for (let k = 0; k < extensions.length; ++k) {
 						const fullname = `${locations[j]}/${candidates[i]}.${extensions[k]}`;
 						try {
+							console.log(`trying to load ${fontName} from ${fullname}`);
 							const fontBytes = await fs.readFile(fullname);
 							if (fontBytes) return fontBytes;
 						} catch {}
 					}
 				}
 			}
+		}
+	}
+
+	public async loadFromPath(fontName: string, path: string): Promise<Uint8Array> {
+		const isNode =
+			Object.prototype.toString.call(
+				typeof process !== 'undefined' ? process : 0,
+			) === '[object process]';
+		if (!isNode || !this.platform) {
+			throw new Error(
+				`The font '${fontName}' is not embedded, and cannot be loaded from the file system.`,
+			);
+		} else {
+			const fs = await import('node:fs/promises');
+
+			return await fs.readFile(path);
 		}
 	}
 }

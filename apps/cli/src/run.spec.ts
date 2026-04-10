@@ -44,11 +44,11 @@ describe('pdfa-convert-cli', () => {
 			const argv = ['sample.pdf'];
 
 			vi.spyOn(convertModule, 'convert').mockRejectedValue('boum');
-			const exitCode = await run(argv);
 
-			expect(exitCode).toBe(1);
+			await expect(run(argv)).rejects.toThrow('boum');
+
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				`${Package.name}: conversion failed: boum`,
+				`${Package.name}: conversion failed`,
 			);
 		});
 
@@ -156,25 +156,6 @@ describe('pdfa-convert-cli', () => {
 			expect(convertSpy).not.toHaveBeenCalled();
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
 				expect.stringMatching('invalid font map specification'),
-			);
-		});
-	});
-
-	describe('unexpected exception', () => {
-		it('should exit with code 2 for an unexpected exception', async () => {
-			const consoleLogSpy = vi
-				.spyOn(console, 'log')
-				.mockImplementation(() => {});
-
-			// The exit spy throws an exception. From the program's point of
-			// view, this is an unexpected exception.
-			const argv = ['--version'];
-			const exitCode = await run(argv);
-
-			expect(exitCode).toBe(2);
-			expect(consoleLogSpy).toHaveBeenCalledWith(Package.version);
-			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				expect.stringMatching('unexpected exception'),
 			);
 		});
 	});

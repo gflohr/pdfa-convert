@@ -1,5 +1,5 @@
 import { isStandardFont, StandardFonts } from '@cantoo/pdf-lib';
-import { FontLoader } from './font-loader.js';
+import { FontLoader, type OsType } from './font-loader.js';
 
 export type FontMap = Record<
 	string,
@@ -209,7 +209,7 @@ export class FontResolver {
 	private readonly fontLoader: FontLoader;
 
 	constructor(platform: string, fontMap: FontMap) {
-		this.fontLoader = new FontLoader(platform);
+		this.fontLoader = new FontLoader(platform as OsType);
 
 		for (const name in fontMap) {
 			this.fontMap[name.toLowerCase()] = fontMap[name];
@@ -288,7 +288,9 @@ export class FontResolver {
 		// These cannot be replaced.
 		if (desc.category === 'symbol' || desc.category === 'zapfdingbats') {
 			const standardName =
-				desc.category === 'symbol' ? 'Symbol' : 'ZapfDingbats';
+				desc.category === 'symbol'
+					? StandardFonts.Symbol
+					: StandardFonts.ZapfDingbats;
 			return [
 				{
 					category: desc.category,

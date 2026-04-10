@@ -3,8 +3,9 @@
 import * as path from 'node:path';
 import * as url from 'node:url';
 import { Textdomain } from '@esgettext/runtime';
+import type { PDFAStandard } from 'pdfa-convert';
 import yargs from 'yargs';
-import { convert } from './convert.js';
+import { type ConvertOptions, convert } from './convert.js';
 import { Package } from './package.js';
 
 const gtx = Textdomain.getInstance('pdfa-convert-cli');
@@ -30,10 +31,23 @@ export async function run(argv = process.argv.slice(2)) {
 					programName: Package.name,
 				}),
 			)
-			.option('level', {
-				alias: 'l',
+			.option('input', {
+				alias: 'i',
 				type: 'string',
-				describe: gtx._('PDF/A conformance level'),
+				describe: gtx._("PDF file to read ('-' for standard input)"),
+				nargs: 1,
+			})
+			.option('output', {
+				alias: 'o',
+				type: 'string',
+				describe: gtx._("PDF file to write ('-' for standard output)"),
+				default: '-',
+				nargs: 1,
+			})
+			.option('standard', {
+				alias: 's',
+				type: 'string',
+				describe: gtx._('PDF/A conformance level and version'),
 				array: false,
 				default: 'PDF/A-3b',
 				choices: ['PDF/A-1b', 'PDF/A-2b', 'PDF/A-3b'],
@@ -41,31 +55,19 @@ export async function run(argv = process.argv.slice(2)) {
 			.option('font', {
 				alias: 'f',
 				type: 'string',
-				describe: gtx._('Font mapping (NAME:PATH)'),
+				describe: gtx._('Font mapping (NAME=PATH)'),
 				array: true,
 				nargs: 1,
-				coerce: (values: string[]) =>
-					values.map((value) => {
-						const [name, path] = value.split(':', 2);
-
-						if (!name || !path) {
-							throw new Error(
-								`Invalid --font value: "${value}". Expected NAME:PATH`,
-							);
-						}
-
-						return { name, path };
-					}),
 			})
 			.version(Package.version)
-			.command('$0 <files...>', gtx._('Process PDF files'), (y) =>
-				y.positional('files', {
+			.command('$0 [file]', gtx._('Process PDF files'), (y) =>
+				y.positional('file', {
 					describe: gtx._('PDF documents to process'),
 					type: 'string',
-					array: true,
-					demandOption: true, // required
+					nargs: 1,
 				}),
 			)
+			.conflicts('file', 'input')
 			.usage('$0 [OPTIONS] PDFs...')
 			.alias('V', 'version')
 			.alias('h', 'help')
@@ -77,8 +79,50 @@ export async function run(argv = process.argv.slice(2)) {
 
 		const args = await program.help().epilogue(epilogue).parse();
 
+		// Fix yargs quirk.
+		if (typeof args.file === 'boolean' && args.file) {
+			args.file = '-';
+		}
+		let inputFile: string;
+		if (typeof args.file !== 'undefined' && (args.file as string).length) {
+			inputFile = args.file as string;
+		} else if (
+			typeof args.input !== 'undefined' &&
+			(args.input as string).length
+		) {
+			inputFile = args.input as string;
+		} else {
+			inputFile = '-';
+		}
+
+		const convertOptions: ConvertOptions = {
+			input: inputFile,
+			output: args.output,
+			standard: args.standard as PDFAStandard,
+			fonts: {},
+		};
+
+		for (let i = 0; args.font && i < args.font.length; ++i) {
+			const [name, path] = args.font[i].split('=', 2);
+			if (typeof path === 'string' && name.length && path.length) {
+				convertOptions.fonts[name] = path;
+			} else {
+				console.error(
+					gtx._x(
+						"{programName}: invalid font map specification '{spec}': expected NAME=PATH.",
+						{
+							programName: Package.name,
+							spec: args.font[i],
+						},
+					),
+				);
+				return 1;
+			}
+			convertOptions.fonts;
+		}
+
 		try {
-			await convert(args.files as string[]);
+			await convert(convertOptions);
 		} catch (exception) {
 			console.error(
 				gtx._x('{programName}: conversion failed: {exception}', {

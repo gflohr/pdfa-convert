@@ -1,14 +1,19 @@
 import type { PDFDocument } from '@cantoo/pdf-lib';
-import type { FontMap } from './font-mapper.js';
+import type { FontMap } from './font-resolver.js';
+
+/**
+ * PDF/A conformance level and version.
+ */
+export type PDFAStandard = 'PDF/A-1b' | 'PDF/A-2b' | 'PDF/A-3b';
 
 /**
  * These options control the conversion.
  */
-type ConvertOptions = {
+export type PDFAConvertOptions = {
 	/**
-	 * The requested PDF/A conformance level, default is 'PDF/A-3b'.
+	 * The requested PDF/A conformance level and version, default is 'PDF/A-3b'.
 	 */
-	level: 'PDF/A-1b' | 'PDF/A-2b' | 'PDF/A-3b';
+	level: PDFAStandard;
 };
 
 /**
@@ -46,7 +51,7 @@ export class PDFAConvert {
 
 	async convert(
 		pdfDoc: PDFDocument,
-		options: ConvertOptions = {} as ConvertOptions,
+		options: PDFAConvertOptions = {} as PDFAConvertOptions,
 	) {
 		options.level ??= 'PDF/A-3b';
 		if (!pdfDoc) console.error('no document');

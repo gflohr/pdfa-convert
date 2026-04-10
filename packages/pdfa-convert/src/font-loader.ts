@@ -5,7 +5,7 @@ import type {
 	FontWeight,
 } from './font-resolver.js';
 
-type OsType = 'unix' | 'darwin' | 'win32';
+export type OsType = 'unix' | 'darwin' | 'win32';
 
 const fontLocations: Record<OsType, string[]> = {
 	unix: ['/usr/share/fonts', '/usr/share/fonts/truetype'],

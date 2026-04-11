@@ -24,7 +24,7 @@
 		"check:fix": "biome check --write",
 		"check:staged": "biome check --staged --write --no-errors-on-unmatched",
 		"start": "pnpm --filter pdfa-convert-cli run start --workspace-root",
-		"start:dev": "pnpm --filter pdfa-convert-cli run start:dev --workspace-root",
+		"start:dev": "pnpm --filter pdfa-convert-cli run start:dev",
 		"test": "pnpm -r run test",
 		"test:cov": "pnpm -r run test:cov",
 		"test:cov-changed": "pnpm -r run test:cov-changed",

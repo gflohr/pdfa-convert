@@ -1,5 +1,5 @@
-import { PDFDict, type PDFDocument, PDFName, PDFRef } from '@cantoo/pdf-lib';
-import { FontResolver } from './font-resolver.js';
+import { PDFArray, PDFDict, type PDFDocument, PDFName, PDFRef } from '@cantoo/pdf-lib';
+import type { Encoding, FontInfo } from './font-resolver.js';
 import { PDFTextExtractor } from './pdf-text-extractor.js';
 
 /**
@@ -22,19 +22,6 @@ export type PDFAConvertOptions = {
 	standard: PDFAStandard;
 };
 
-type Encoding =
-	| 'StandardEncoding'
-	| 'MacRomanEncoding'
-	| 'WinAnsiEncoding'
-	| 'MacExpertEncoding';
-
-type FontInfo = {
-	baseFont: string;
-	ref: PDFRef;
-	embedded: boolean;
-	encoding?: Encoding;
-};
-
 /**
  * The `PDFAConvert` class is the wrapper around the PDF/A conversion
  * functionality.
@@ -50,6 +37,7 @@ export class PDFAConvert {
 	 */
 	constructor(os: string | undefined = undefined, fontMap: FontMap = {}) {
 		this.os = os;
+		console.log(this.os);
 
 		for (const name in fontMap) {
 			this.fontMap[name.toLowerCase()] = fontMap[name];
@@ -67,27 +55,10 @@ export class PDFAConvert {
 		}
 
 		const fonts = this.collectFonts(pdfDoc);
+		console.log(fonts);
 		const extractor = new PDFTextExtractor();
+
 		extractor.parseDocument(pdfDoc);
-		// For testing, we embed all fonts and not just the missing ones.
-		await this.embedFonts(pdfDoc, fonts);
-	}
-
-	private async embedFonts(pdfDoc: PDFDocument, fonts: Record<string, FontInfo>) {
-		const resolver = new FontResolver(this.os, this.fontMap);
-
-		for (const fontName in fonts) {
-			const font = fonts[fontName];
-			console.log(`embedding ${font.baseFont}`);
-			console.log(await resolver.resolve(font.baseFont));
-
-			if (!font.encoding) {
-				const fontDict: PDFDict = pdfDoc.context.lookup(font.ref) as PDFDict;
-				const toUnicode = fontDict.lookup(PDFName.of('ToUnicode'));
-
-				console.dir(toUnicode);
-			}
-		}
 	}
 
 	private collectFonts(pdfDoc: PDFDocument): Record<string, FontInfo> {
@@ -100,9 +71,20 @@ export class PDFAConvert {
 				const fontDict = pdfDoc.context.lookupMaybe(fontRef, PDFDict);
 				if (!fontDict) continue;
 
-				const fontInfo: FontInfo = {
-					ref: fontRef,
-				} as FontInfo;
+				const subtype = fontDict.lookupMaybe(PDFName.of('Subtype'), PDFName);
+				if (!subtype) continue;
+
+				const subtypeName = subtype.decodeText();
+				if (subtypeName === 'Type0') {
+						const info = this.getFontType0Info(pdfDoc, fontName, fontDict, fontRef);
+						if (info) {
+							fonts[fontName.decodeText()] = info;
+							continue;
+						}
+				}
+
+				const fontInfo: FontInfo = { ref: fontRef } as FontInfo;
+
 				const descriptor = fontDict.lookupMaybe(
 					PDFName.of('FontDescriptor'),
 					PDFDict,
@@ -117,7 +99,7 @@ export class PDFAConvert {
 						descriptor.has(PDFName.of('FontFile')) ||
 						descriptor.has(PDFName.of('FontFile2')) ||
 						descriptor.has(PDFName.of('FontFile3'));
-				} else {
+					} else {
 					// Standard font.
 					const baseFont = fontDict.lookup(PDFName.of('BaseFont'), PDFName);
 					const baseFontName = baseFont?.decodeText() ?? fontName.decodeText();
@@ -136,5 +118,32 @@ export class PDFAConvert {
 		}
 
 		return fonts;
+	}
+
+	private getFontType0Info(pdfDoc: PDFDocument, fontName: PDFName, fontDict: PDFDict, fontRef: PDFRef): FontInfo | undefined {
+		const descendantFonts = fontDict.lookup(PDFName.of('DescendantFonts'));
+		if (!(descendantFonts instanceof PDFArray && descendantFonts.size())) return;
+		const descendantFontRef = descendantFonts.get(0);
+		const descendantFontDict = pdfDoc.context.lookupMaybe(descendantFontRef, PDFDict);
+		if (!descendantFontDict) return;
+
+		const descendantFontDescriptor = descendantFontDict.lookup(PDFName.of('FontDescriptor'), PDFDict);
+
+		const embedded =
+			descendantFontDescriptor.has(PDFName.of('FontFile')) ||
+			descendantFontDescriptor.has(PDFName.of('FontFile2')) ||
+			descendantFontDescriptor.has(PDFName.of('FontFile3'));
+		const encoding = fontDict.lookupMaybe(PDFName.of('Encoding'), PDFName)?.decodeText();
+		// FIXME! This is not the name that we want!
+		const name = descendantFontDescriptor.lookup(PDFName.of('FontName'), PDFName);
+		if (!name) return;
+
+		// FIXME! Extract toUnicode!
+		return {
+			ref: fontRef,
+			encoding: encoding as Encoding | undefined,
+			embedded,
+			baseFont: name.decodeText(),
+		};
 	}
 }

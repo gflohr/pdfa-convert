@@ -21,10 +21,7 @@
 	],
 	"sideEffects": false,
 	"scripts": {
-		"prebuild": "rm -rf dist",
-		"build:types": "tsc --build tsconfig.build.json",
-		"build:js": "rollup -c",
-		"build": "pnpm run build:types && pnpm run build:js",
+		"build": "rimraf dist && rollup -c",
 		"check": "biome check",
 		"check:fix": "biome check --write",
 		"dev": "rollup -c -w",

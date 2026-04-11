@@ -1,4 +1,4 @@
-import { isStandardFont, StandardFonts } from '@cantoo/pdf-lib';
+import { isStandardFont, type PDFRef, StandardFonts } from '@cantoo/pdf-lib';
 import { FontLoader, type OsType } from './font-loader.js';
 import type { FontMap } from './pdfa-convert.js';
 
@@ -15,6 +15,19 @@ export type FontDescription = {
 	weight: FontWeight;
 	style: FontStyle;
 	standardName?: StandardFonts;
+};
+
+export type Encoding =
+	| 'StandardEncoding'
+	| 'MacRomanEncoding'
+	| 'WinAnsiEncoding'
+	| 'MacExpertEncoding';
+
+export type FontInfo = {
+	baseFont: string;
+	ref: PDFRef;
+	embedded: boolean;
+	encoding?: Encoding;
 };
 
 const FontDescriptionByName: Record<string, FontDescription> = {

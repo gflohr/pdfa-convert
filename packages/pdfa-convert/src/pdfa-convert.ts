@@ -1,4 +1,10 @@
-import { PDFArray, PDFDict, type PDFDocument, PDFName, PDFRef } from '@cantoo/pdf-lib';
+import {
+	PDFArray,
+	PDFDict,
+	type PDFDocument,
+	PDFName,
+	PDFRef,
+} from '@cantoo/pdf-lib';
 import type { Encoding, FontInfo } from './font-resolver.js';
 import { PDFTextExtractor } from './pdf-text-extractor.js';
 
@@ -76,11 +82,16 @@ export class PDFAConvert {
 
 				const subtypeName = subtype.decodeText();
 				if (subtypeName === 'Type0') {
-						const info = this.getFontType0Info(pdfDoc, fontName, fontDict, fontRef);
-						if (info) {
-							fonts[fontName.decodeText()] = info;
-							continue;
-						}
+					const info = this.getFontType0Info(
+						pdfDoc,
+						fontName,
+						fontDict,
+						fontRef,
+					);
+					if (info) {
+						fonts[fontName.decodeText()] = info;
+						continue;
+					}
 				}
 
 				const fontInfo: FontInfo = { ref: fontRef } as FontInfo;
@@ -99,7 +110,7 @@ export class PDFAConvert {
 						descriptor.has(PDFName.of('FontFile')) ||
 						descriptor.has(PDFName.of('FontFile2')) ||
 						descriptor.has(PDFName.of('FontFile3'));
-					} else {
+				} else {
 					// Standard font.
 					const baseFont = fontDict.lookup(PDFName.of('BaseFont'), PDFName);
 					const baseFontName = baseFont?.decodeText() ?? fontName.decodeText();
@@ -120,30 +131,43 @@ export class PDFAConvert {
 		return fonts;
 	}
 
-	private getFontType0Info(pdfDoc: PDFDocument, fontName: PDFName, fontDict: PDFDict, fontRef: PDFRef): FontInfo | undefined {
+	private getFontType0Info(
+		pdfDoc: PDFDocument,
+		fontName: PDFName,
+		fontDict: PDFDict,
+		fontRef: PDFRef,
+	): FontInfo | undefined {
 		const descendantFonts = fontDict.lookup(PDFName.of('DescendantFonts'));
-		if (!(descendantFonts instanceof PDFArray && descendantFonts.size())) return;
+		if (!(descendantFonts instanceof PDFArray && descendantFonts.size()))
+			return;
 		const descendantFontRef = descendantFonts.get(0);
-		const descendantFontDict = pdfDoc.context.lookupMaybe(descendantFontRef, PDFDict);
+		const descendantFontDict = pdfDoc.context.lookupMaybe(
+			descendantFontRef,
+			PDFDict,
+		);
 		if (!descendantFontDict) return;
 
-		const descendantFontDescriptor = descendantFontDict.lookup(PDFName.of('FontDescriptor'), PDFDict);
+		const descendantFontDescriptor = descendantFontDict.lookup(
+			PDFName.of('FontDescriptor'),
+			PDFDict,
+		);
 
 		const embedded =
 			descendantFontDescriptor.has(PDFName.of('FontFile')) ||
 			descendantFontDescriptor.has(PDFName.of('FontFile2')) ||
 			descendantFontDescriptor.has(PDFName.of('FontFile3'));
-		const encoding = fontDict.lookupMaybe(PDFName.of('Encoding'), PDFName)?.decodeText();
-		// FIXME! This is not the name that we want!
-		const name = descendantFontDescriptor.lookup(PDFName.of('FontName'), PDFName);
-		if (!name) return;
+		const encoding = fontDict
+			.lookupMaybe(PDFName.of('Encoding'), PDFName)
+			?.decodeText();
+
+		console.dir(fontDict);
 
 		// FIXME! Extract toUnicode!
 		return {
 			ref: fontRef,
 			encoding: encoding as Encoding | undefined,
 			embedded,
-			baseFont: name.decodeText(),
+			baseFont: fontName.decodeText(),
 		};
 	}
 }

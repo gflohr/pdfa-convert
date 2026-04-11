@@ -8,13 +8,9 @@ import {
 	type PDFPage,
 	PDFRawStream,
 } from '@cantoo/pdf-lib';
+import { Lexer } from './lexer.js';
 
 type TextCollector = Record<string, string[]>;
-
-type Token = {
-	type: 'string' | 'token';
-	value: number[];
-};
 
 export class PDFTextExtractor {
 	parseDocument(pdfDoc: PDFDocument): TextCollector {
@@ -91,92 +87,9 @@ export class PDFTextExtractor {
 		const decoded = decodePDFRawStream(stream);
 		const bytes = decoded.getBytes(0);
 
-		const tokens: Token[] = [];
-		let token: Token = {
-			type: 'token',
-			value: [],
-		};
-		let state: 'initial' | 'string' | 'hexstring' = 'initial';
-		for (let i = 0; i < bytes.length; ++i) {
-			const byte = bytes[i];
-			if (state === 'initial') {
-				switch (byte) {
-					case 40: // Open parenthesis.
-						tokens.push(token);
-						token = {
-							type: 'string',
-							value: [],
-						};
-						state = 'string';
-						break;
-					case 60: // Left angle bracket.
-						tokens.push(token);
-						token = {
-							type: 'string',
-							value: [],
-						};
-						state = 'hexstring';
-						break;
-					case 37: // Percent (comment).
-						for (let j = i; j < bytes.length; ++j) {
-							if (bytes[j] === 10 || bytes[j] === 13) {
-								i = j + 1;
-								break;
-							}
-						}
-						break;
-					default:
-						if (byte <= 32) {
-							if (token.value.length) {
-								tokens.push(token);
-							}
-							token = { type: 'token', value: [] };
-						} else {
-							token.value.push(byte);
-						}
-						break;
-				}
-			} else if (state === 'string') {
-				switch (byte) {
-					case 92: // Backslash.
-						++i;
-						break;
-					case 41: // End of string.
-						tokens.push(token);
-						token = { type: 'token', value: [] };
-						state = 'initial';
-						break;
-					default:
-						token.value.push(byte);
-						break;
-				}
-			} else if (state === 'hexstring') {
-				if (byte === 62) {
-					const value: number[] = [];
-					for (let j = 0; j < token.value.length - 1; j += 2) {
-						value.push(
-							16 * this.hexCharToNumber(token.value[j]) +
-								this.hexCharToNumber(token.value[j + 1]),
-						);
-					}
-					token.value = [...value];
-					tokens.push(token);
-					token = { type: 'token', value: [] };
-					state = 'initial';
-				} else if (
-					(byte >= 48 && byte <= 57) ||
-					(byte >= 65 && byte <= 70) ||
-					(byte >= 97 && byte <= 102)
-				) {
-					token.value.push(byte);
-				}
-			}
-		}
+		const lexer = new Lexer();
+		const tokens = lexer.tokenize(bytes);
 
-		this.collectTexts(collector, tokens);
-	}
-
-	private collectTexts(collector: TextCollector, tokens: Token[]) {
 		let inText = false;
 		let fontResource = '';
 		for (let i = 1; i < tokens.length; ++i) {
@@ -212,15 +125,5 @@ export class PDFTextExtractor {
 
 	private decodeNumberArray(value: number[]): string {
 		return value.map((c) => String.fromCharCode(c)).join('');
-	}
-
-	private hexCharToNumber(hex: number): number {
-		if (hex >= 97) {
-			return hex - 87;
-		} else if (hex >= 65) {
-			return hex - 55;
-		} else {
-			return hex - 48;
-		}
 	}
 }

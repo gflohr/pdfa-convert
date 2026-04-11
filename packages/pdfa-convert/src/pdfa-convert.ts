@@ -73,15 +73,15 @@ export class PDFAConvert {
 		await this.embedFonts(pdfDoc, fonts);
 	}
 
-	private async embedFonts(pdfDoc: PDFDocument, fonts: FontInfo[]) {
+	private async embedFonts(pdfDoc: PDFDocument, fonts: Record<string, FontInfo>) {
 		const resolver = new FontResolver(this.os, this.fontMap);
 
-		for (let i = 0; i < fonts.length; ++i) {
-			console.log(`embedding ${fonts[i].baseFont}`);
-			console.log(await resolver.resolve(fonts[i].baseFont));
+		for (const fontName in fonts) {
+			const font = fonts[fontName];
+			console.log(`embedding ${font.baseFont}`);
+			console.log(await resolver.resolve(font.baseFont));
 
-			if (!fonts[i].encoding) {
-				const font = fonts[i];
+			if (!font.encoding) {
 				const fontDict: PDFDict = pdfDoc.context.lookup(font.ref) as PDFDict;
 				const toUnicode = fontDict.lookup(PDFName.of('ToUnicode'));
 
@@ -90,8 +90,8 @@ export class PDFAConvert {
 		}
 	}
 
-	private collectFonts(pdfDoc: PDFDocument): FontInfo[] {
-		const fonts: FontInfo[] = [];
+	private collectFonts(pdfDoc: PDFDocument): Record<string, FontInfo> {
+		const fonts: Record<string, FontInfo> = {};
 		for (const page of pdfDoc.getPages()) {
 			const { Font } = page.node.normalizedEntries();
 			for (const [fontName, fontRef] of Font.entries()) {
@@ -131,7 +131,7 @@ export class PDFAConvert {
 					fontInfo.embedded = false;
 				}
 
-				fonts.push(fontInfo);
+				fonts[fontName.decodeText()] = fontInfo;
 			}
 		}
 

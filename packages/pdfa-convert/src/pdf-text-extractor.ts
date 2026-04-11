@@ -62,28 +62,7 @@ export class PDFTextExtractor {
 		const contents = node.get(PDFName.of('Contents'));
 		if (!contents) return;
 
-		if (contents instanceof PDFArray) {
-			for (let i = 0; i < contents.size(); i++) {
-				const item = contents.get(i);
-				const resolved = pdfDoc.context.lookup(item);
-				if (resolved instanceof PDFRawStream) {
-					this.parseStream(resolved);
-				}
-
-				if (resolved instanceof PDFObject) {
-					this.parseRecursively(resolved, pdfDoc);
-				}
-			}
-		} else {
-			const resolved = pdfDoc.context.lookup(contents);
-			if (resolved instanceof PDFRawStream) {
-				this.parseStream(resolved);
-			}
-
-			if (resolved instanceof PDFObject) {
-				this.parseRecursively(resolved, pdfDoc);
-			}
-		}
+		this.parseRecursively(contents, pdfDoc);
 	}
 
 	parseStream(stream: PDFRawStream) {

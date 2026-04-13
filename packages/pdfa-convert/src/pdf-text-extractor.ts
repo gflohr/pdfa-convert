@@ -114,6 +114,8 @@ export class PDFTextExtractor {
 						}
 						break;
 					case 'Tj':
+					case '"':
+					case "'":
 						if (inText) {
 							console.log(tokens[i - 1]);
 						}

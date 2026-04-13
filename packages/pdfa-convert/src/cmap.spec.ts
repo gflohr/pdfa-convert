@@ -33,4 +33,24 @@ endfbchar
 			expect(cmap.lookup(0xdcba)).not.toBeDefined();
 		});
 	});
+
+	describe('Range Mappings', () => {
+		it('should parse range mappings', () => {
+			const source = `
+/PostScript /gibberish
+3 beginfbrange
+<0001> <0002> <00a0>
+<0021> <0022> <0100>
+<0121> <0122> <0200>
+<0200> <a000> <0400>
+endfbchar
+`;
+			const cmap = new CMap(toBytes(source));
+			expect(cmap).toBeDefined();
+			expect(cmap.lookup(0)).not.toBeDefined();
+			expect(cmap.lookup(0x21)).toBe(0x100);
+			expect(cmap.lookup(0x22)).toBe(0x101);
+			expect(cmap.lookup(0x23)).not.toBeDefined();
+		});
+	});
 });

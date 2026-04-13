@@ -26,6 +26,8 @@ export class CMap {
 			const value = this.decodeNumberArray(token.value);
 			if (value === 'beginfbchar') {
 				i += this.consumeMappings(mappings, tokens, 2, i + 1);
+			} else if (value === 'beginfbrange') {
+				i += this.consumeMappings(mappings, tokens, 3, i + 1);
 			}
 		}
 
@@ -39,8 +41,13 @@ export class CMap {
 
 			if (token.type === 'token') {
 				const value = this.decodeNumberArray(token.value);
-				if (value === 'endfbchar') {
+				if (cardinality === 2 && value === 'endfbchar') {
 					if (mappings.length && mappings[mappings.length - 1].length < 2) {
+						mappings.pop();
+					}
+					return i - start + 1;
+				} else if (cardinality === 3 && value === 'endfbrange') {
+					if (mappings.length && mappings[mappings.length - 1].length < 3) {
 						mappings.pop();
 					}
 					return i - start + 1;
@@ -83,15 +90,20 @@ export class CMap {
 		while (high >= low) {
 			const mid = low + ((high - low) >> 1);
 			const mapping = this.mappings[mid];
-			if (glyph > mapping[0]) {
-				low = mid + 1;
+			if (glyph < mapping[0]) {
+				high = mid - 1;
 			} else if (mapping.length > 2) {
-				throw new Error('not yet implemented');
+				if (mapping[0] <= glyph && mapping[1] >= glyph) {
+					// biome-ignore lint/style/noNonNullAssertion: false positive.
+					return glyph - mapping[0] + mapping[2]!;
+				} else {
+					low = mid + 1;
+				}
 			} else {
 				if (mapping[0] === glyph) {
 					return mapping[1];
 				} else {
-					high = mid - 1;
+					low = mid + 1;
 				}
 			}
 		}

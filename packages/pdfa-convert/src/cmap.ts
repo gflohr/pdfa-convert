@@ -1,4 +1,4 @@
-import { Lexer, Token } from './lexer.js';
+import { Lexer, type Token } from './lexer.js';
 
 type Mapping = [number, number] | [number, number, number];
 
@@ -11,8 +11,6 @@ export class CMap {
 		} else {
 			throw new Error(`unsupported CMap source type '${typeof source}'`);
 		}
-
-		console.log(this.mappings);
 	}
 
 	private parse(source: Uint8Array<ArrayBufferLike> | Uint8ClampedArray<ArrayBufferLike>): Mapping[] {
@@ -77,9 +75,25 @@ export class CMap {
 		return value;
 	}
 
+	// The CMap tables can become very big. Instead of a (sparse) array, we
+	// do a binary search over the sorted entries.
 	public lookup(glyph: number): number | undefined {
-		for (let i = 0; i < this.mappings.length; ++i) {
-			if (glyph === this.mappings[i][0]) return this.mappings[i][1];
+		let low = 0;
+		let high = this.mappings.length - 1;
+		while (high >= low) {
+			const mid = low + ((high - low) >> 1);
+			const mapping = this.mappings[mid];
+			if (glyph > mapping[0]) {
+				low = mid + 1;
+			} else if (mapping.length > 2) {
+				throw new Error('not yet implemented');
+			} else {
+				if (mapping[0] === glyph) {
+					return mapping[1];
+				} else {
+					high = mid - 1;
+				}
+			}
 		}
 	}
 }

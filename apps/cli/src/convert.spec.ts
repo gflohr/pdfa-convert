@@ -52,6 +52,7 @@ describe('convert', () => {
 		expect(fs.readFile).toHaveBeenCalledWith('a.pdf');
 
 		expect(PDFDocument.load).toHaveBeenCalledTimes(1);
+		expect(registerFontkitMock).toHaveBeenCalledTimes(1);
 
 		expect(convertMock).toHaveBeenCalledTimes(1);
 	});

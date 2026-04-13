@@ -43,7 +43,8 @@ endfbchar
 <0021> <0022> <0100>
 <0121> <0122> <0200>
 <0200> <a000> <0400>
-endfbchar
+endfbrange
+trailing garbage
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();

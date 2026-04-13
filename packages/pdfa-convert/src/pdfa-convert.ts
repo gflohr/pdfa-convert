@@ -43,7 +43,6 @@ export class PDFAConvert {
 	 */
 	constructor(os: string | undefined = undefined, fontMap: FontMap = {}) {
 		this.os = os;
-		console.log(this.os);
 
 		for (const name in fontMap) {
 			this.fontMap[name.toLowerCase()] = fontMap[name];
@@ -151,14 +150,13 @@ export class PDFAConvert {
 			PDFName.of('FontDescriptor'),
 			PDFDict,
 		);
+		if (!descendantFontDescriptor) return;
 
 		const embedded =
 			descendantFontDescriptor.has(PDFName.of('FontFile')) ||
 			descendantFontDescriptor.has(PDFName.of('FontFile2')) ||
 			descendantFontDescriptor.has(PDFName.of('FontFile3'));
-		const encoding = fontDict
-			.lookupMaybe(PDFName.of('Encoding'), PDFName)
-			?.decodeText();
+		// FIXME! Extract toUnicode!
 
 		console.dir(fontDict);
 

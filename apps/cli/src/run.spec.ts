@@ -40,7 +40,7 @@ describe('pdfa-convert-cli', () => {
 			});
 		});
 
-		it('exit with code 1 if an error occurs', async () => {
+		it('should log exceptions', async () => {
 			const argv = ['sample.pdf'];
 
 			vi.spyOn(convertModule, 'convert').mockRejectedValue('boum');

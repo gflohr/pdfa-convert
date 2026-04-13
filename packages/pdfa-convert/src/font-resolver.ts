@@ -55,25 +55,25 @@ const FontDescriptionByName: Record<string, FontDescription> = {
 		style: 'italic',
 		standardName: StandardFonts.HelveticaBoldOblique,
 	},
-	timesroman: {
+	times: {
 		category: 'serif',
 		weight: 'normal',
 		style: 'roman',
 		standardName: StandardFonts.TimesRoman,
 	},
-	'timesroman-italic': {
+	'times-italic': {
 		category: 'serif',
 		weight: 'normal',
 		style: 'italic',
 		standardName: StandardFonts.TimesRomanItalic,
 	},
-	'timesroman-bold': {
+	'times-bold': {
 		category: 'serif',
 		weight: 'bold',
 		style: 'roman',
 		standardName: StandardFonts.TimesRomanBold,
 	},
-	'timesroman-bolditalic': {
+	'times-bolditalic': {
 		category: 'serif',
 		weight: 'bold',
 		style: 'italic',
@@ -246,7 +246,7 @@ export class FontResolver {
 			if (Object.hasOwn(this.fontMap, tryName)) {
 				const data = this.fontMap[tryName];
 				if (typeof data === 'string') {
-					this.fontMap[fontName.toLowerCase()] =
+					this.fontMap[tryName] =
 						await this.fontLoader.loadFromPath(fontName, data);
 				}
 
@@ -273,9 +273,7 @@ export class FontResolver {
 	}
 
 	private parseName(name: string): FontDescription {
-		console.log(`parsing name '${name};`);
 		name = this.canonicalName(name);
-		console.log(`canonical: '${name}'`);
 
 		if (isStandardFont(name)) {
 			return FontDescriptionByName[name.toLowerCase()];
@@ -331,7 +329,7 @@ export class FontResolver {
 			];
 		}
 
-		for (const weight in ['normal', 'bold']) {
+		for (const weight of ['normal', 'bold']) {
 			if (desc.weight === weight) continue;
 			for (const style in ['roman', 'itallic']) {
 				if (desc.style === style) continue;

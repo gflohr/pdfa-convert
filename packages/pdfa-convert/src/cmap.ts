@@ -84,7 +84,7 @@ export class CMap {
 
 	// The CMap tables can become very big. Instead of a (sparse) array, we
 	// do a binary search over the sorted entries.
-	public lookup(glyph: number): number | undefined {
+	public lookup(glyph: number): [number] | undefined {
 		let low = 0;
 		let high = this.mappings.length - 1;
 		while (high >= low) {
@@ -95,13 +95,13 @@ export class CMap {
 			} else if (mapping.length > 2) {
 				if (mapping[0] <= glyph && mapping[1] >= glyph) {
 					// biome-ignore lint/style/noNonNullAssertion: false positive.
-					return glyph - mapping[0] + mapping[2]!;
+					return [glyph - mapping[0] + mapping[2]!];
 				} else {
 					low = mid + 1;
 				}
 			} else {
 				if (mapping[0] === glyph) {
-					return mapping[1];
+					return [mapping[1]];
 				} else {
 					low = mid + 1;
 				}

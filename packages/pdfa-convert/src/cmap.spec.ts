@@ -25,11 +25,11 @@ endfbchar
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
 			expect(cmap.lookup(0)).not.toBeDefined();
-			expect(cmap.lookup(0x21)).toBe(0x65);
+			expect(cmap.lookup(0x21)).toStrictEqual([0x65]);
 			expect(cmap.lookup(0x22)).not.toBeDefined();
-			expect(cmap.lookup(0xaf)).toBe(0x36);
+			expect(cmap.lookup(0xaf)).toStrictEqual([0x36]);
 			expect(cmap.lookup(0xbf)).not.toBeDefined();
-			expect(cmap.lookup(0xabcd)).toBe(0x1234);
+			expect(cmap.lookup(0xabcd)).toStrictEqual([0x1234]);
 			expect(cmap.lookup(0xdcba)).not.toBeDefined();
 		});
 	});
@@ -49,8 +49,8 @@ trailing garbage
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
 			expect(cmap.lookup(0)).not.toBeDefined();
-			expect(cmap.lookup(0x21)).toBe(0x100);
-			expect(cmap.lookup(0x22)).toBe(0x101);
+			expect(cmap.lookup(0x21)).toStrictEqual([0x100]);
+			expect(cmap.lookup(0x22)).toStrictEqual([0x101]);
 			expect(cmap.lookup(0x23)).not.toBeDefined();
 		});
 	});

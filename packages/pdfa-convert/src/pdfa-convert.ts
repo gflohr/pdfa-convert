@@ -60,7 +60,7 @@ export class PDFAConvert {
 		}
 
 		const fonts = this.collectFonts(pdfDoc);
-		console.log(fonts);
+// console.log(fonts);
 		const extractor = new PDFTextExtractor();
 
 		extractor.parseDocument(pdfDoc);
@@ -151,19 +151,26 @@ export class PDFAConvert {
 			PDFDict,
 		);
 		if (!descendantFontDescriptor) return;
+//console.log('descendant font descriptor:');
+//console.dir(descendantFontDescriptor);
 
 		const embedded =
 			descendantFontDescriptor.has(PDFName.of('FontFile')) ||
 			descendantFontDescriptor.has(PDFName.of('FontFile2')) ||
 			descendantFontDescriptor.has(PDFName.of('FontFile3'));
+
+		const encoding = fontDict.lookupMaybe(PDFName.of('Encoding'), PDFName);
+		if (!encoding) return;
 		// FIXME! Extract toUnicode!
 
-		console.dir(fontDict);
+//console.log('fontDict:');
+//console.dir(fontDict);
 
 		// FIXME! Extract toUnicode!
 		return {
 			ref: fontRef,
-			encoding: encoding as Encoding | undefined,
+			// FIXME! Extract encoding!
+			encoding: encoding.decodeText() as Encoding | undefined,
 			embedded,
 			baseFont: fontName.decodeText(),
 		};

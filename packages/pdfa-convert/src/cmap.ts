@@ -62,9 +62,6 @@ export class CMap {
 			if (token.type === 'token') {
 				const value = this.decodeNumberArray(token.value);
 				if (cardinality === 2 && value === 'endfbchar') {
-					if (mappings.length && mappings[mappings.length - 1].length < 2) {
-						mappings.pop();
-					}
 					return i - start + 1;
 				} else if (
 					cardinality === 2 &&
@@ -73,9 +70,6 @@ export class CMap {
 				) {
 					i += this.consumeLigature(mappings, mapping, tokens, i + 1);
 				} else if (cardinality === 3 && value === 'endfbrange') {
-					if (mappings.length && mappings[mappings.length - 1].length < 3) {
-						mappings.pop();
-					}
 					return i - start + 1;
 				} else if (
 					cardinality === 3 &&
@@ -84,15 +78,12 @@ export class CMap {
 				) {
 					i += this.consumeLigatures(mappings, mapping, tokens, i + 1);
 				}
-			} else if (token.type === 'string') {
+			} else { // String.
 				mapping.push(this.numberArrayToNumber(token.value));
 				if (mapping.length >= cardinality) {
 					mappings.push([...mapping]);
 					(mapping as Array<number>).length = 0;
 				}
-			} else {
-				// biome-ignore lint/complexity/noUselessContinue: JavaScript.
-				continue;
 			}
 		}
 

@@ -1,6 +1,7 @@
 import { isStandardFont, type PDFRef, StandardFonts } from '@cantoo/pdf-lib';
 import { FontLoader, type OsType } from './font-loader.js';
 import type { FontMap } from './pdfa-convert.js';
+import { CMap } from './cmap.js';
 
 export type FontCategory =
 	| 'sans'
@@ -27,7 +28,10 @@ export type FontInfo = {
 	baseFont: string;
 	ref: PDFRef;
 	embedded: boolean;
+	// FIXME! Do not use the encoding but always use a CMap, even for the
+	// standard encodings.
 	encoding?: Encoding;
+	cmap: CMap,
 };
 
 const FontDescriptionByName: Record<string, FontDescription> = {

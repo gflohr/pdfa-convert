@@ -3,10 +3,13 @@ import {
 	PDFDict,
 	type PDFDocument,
 	PDFName,
+	PDFObject,
+	PDFRawStream,
 	PDFRef,
 } from '@cantoo/pdf-lib';
 import type { Encoding, FontInfo } from './font-resolver.js';
 import { PDFTextExtractor } from './pdf-text-extractor.js';
+import { CMap } from './cmap.js';
 
 /**
  * PDF/A conformance level and version.
@@ -151,8 +154,6 @@ export class PDFAConvert {
 			PDFDict,
 		);
 		if (!descendantFontDescriptor) return;
-		//console.log('descendant font descriptor:');
-		//console.dir(descendantFontDescriptor);
 
 		const embedded =
 			descendantFontDescriptor.has(PDFName.of('FontFile')) ||
@@ -163,16 +164,19 @@ export class PDFAConvert {
 		if (!encoding) return;
 		// FIXME! Extract toUnicode!
 
-		//console.log('fontDict:');
-		//console.dir(fontDict);
+		const toUnicodeStream = fontDict.lookup(PDFName.of('ToUnicode'));
+		if (!(toUnicodeStream && toUnicodeStream instanceof PDFRawStream)) return;
 
-		// FIXME! Extract toUnicode!
+		const stream = toUnicodeStream.contents;
+		const cmap = new CMap(stream);
+
 		return {
 			ref: fontRef,
 			// FIXME! Extract encoding!
 			encoding: encoding.decodeText() as Encoding | undefined,
 			embedded,
 			baseFont: fontName.decodeText(),
+			cmap,
 		};
 	}
 }

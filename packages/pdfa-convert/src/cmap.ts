@@ -1,7 +1,10 @@
 import { Lexer, type Token } from './lexer.js';
 
-type Mapping = [number, number] | [number, number, number]
-	| [number, number, number[][]] | [number, number[]];
+type Mapping =
+	| [number, number]
+	| [number, number, number]
+	| [number, number, number[][]]
+	| [number, number[]];
 
 export class CMap {
 	private mappings: Mapping[];
@@ -12,6 +15,10 @@ export class CMap {
 			| Uint8Array<ArrayBufferLike>
 			| Uint8ClampedArray<ArrayBufferLike>,
 	) {
+		if (typeof source === 'string') {
+			source = new TextEncoder().encode(source);
+		}
+
 		if (source instanceof Uint8Array) {
 			this.mappings = [...this.parse(source)].sort((a, b) => a[0] - b[0]);
 		} else {
@@ -59,14 +66,22 @@ export class CMap {
 						mappings.pop();
 					}
 					return i - start + 1;
-				} else if (cardinality === 2 && mapping.length === cardinality - 1 && value === '[') {
-					i += this.consumeLigature(mappings, mapping, tokens, i + 1)
+				} else if (
+					cardinality === 2 &&
+					mapping.length === cardinality - 1 &&
+					value === '['
+				) {
+					i += this.consumeLigature(mappings, mapping, tokens, i + 1);
 				} else if (cardinality === 3 && value === 'endfbrange') {
 					if (mappings.length && mappings[mappings.length - 1].length < 3) {
 						mappings.pop();
 					}
 					return i - start + 1;
-				} else if (cardinality === 3 && mapping.length === cardinality - 1 && value === '[') {
+				} else if (
+					cardinality === 3 &&
+					mapping.length === cardinality - 1 &&
+					value === '['
+				) {
 					i += this.consumeLigatures(mappings, mapping, tokens, i + 1);
 				}
 			} else if (token.type === 'string') {
@@ -94,7 +109,10 @@ export class CMap {
 		for (let i = start; i < tokens.length && i < start + 2; ++i) {
 			const token = tokens[i];
 
-			if (token.type === 'token' && this.decodeNumberArray(token.value) === ']') {
+			if (
+				token.type === 'token' &&
+				this.decodeNumberArray(token.value) === ']'
+			) {
 				mappings.push(mapping);
 				return i - start + 1;
 			} else if (token.type === 'string') {
@@ -119,7 +137,10 @@ export class CMap {
 		for (let i = start; i < tokens.length; ++i) {
 			const token = tokens[i];
 
-			if (token.type === 'token' && this.decodeNumberArray(token.value) === ']') {
+			if (
+				token.type === 'token' &&
+				this.decodeNumberArray(token.value) === ']'
+			) {
 				mappings.push(mapping);
 				return i - start + 1;
 			} else if (token.type === 'string') {
@@ -167,7 +188,7 @@ export class CMap {
 			if (glyph < mapping[0]) {
 				high = mid - 1;
 			} else if (mapping.length > 2) {
-				if (mapping[0] <= glyph && (mapping[1] as number)>= glyph) {
+				if (mapping[0] <= glyph && (mapping[1] as number) >= glyph) {
 					return this.lookupRangeValue(glyph, mapping);
 				} else {
 					low = mid + 1;

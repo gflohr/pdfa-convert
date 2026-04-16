@@ -88,4 +88,34 @@ endfbrange`;
 			expect(cmap.lookup(0x61)).toStrictEqual([0x66, 0x66, 0x6c]);
 		});
 	});
+
+	describe('String source', () => {
+		it('should parse strings', () => {
+			const source = `
+/PostScript /gibberish
+3 beginfbchar
+<0021> <0065>
+<00af> <0036>
+<abcd> <1234>
+endfbchar
+`;
+			const cmap = new CMap(source);
+			expect(cmap).toBeDefined();
+			expect(cmap.lookup(0)).toStrictEqual([]);
+			expect(cmap.lookup(0x21)).toStrictEqual([0x65]);
+			expect(cmap.lookup(0x22)).toStrictEqual([]);
+			expect(cmap.lookup(0xaf)).toStrictEqual([0x36]);
+			expect(cmap.lookup(0xbf)).toStrictEqual([]);
+			expect(cmap.lookup(0xabcd)).toStrictEqual([0x1234]);
+			expect(cmap.lookup(0xdcba)).toStrictEqual([]);
+		});
+
+		it('should bail out on everything else', () => {
+			const source = { foo: 'bar' };
+
+			expect(() => new CMap(source as unknown as string)).toThrow(
+				"unsupported CMap source type 'object'",
+			);
+		});
+	});
 });

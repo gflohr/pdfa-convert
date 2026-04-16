@@ -37,7 +37,7 @@ export class Lexer {
 						++parenLevel;
 						break;
 					case 60: // Left angle bracket.
-						if (token.value.length) tokens.push(token)
+						if (token.value.length) tokens.push(token);
 						token = {
 							type: 'string',
 							value: [],
@@ -89,7 +89,8 @@ export class Lexer {
 						token.value.push(byte);
 						break;
 				}
-			} else { // Hexstring.
+			} else {
+				// Hexstring.
 				if (byte === 62) {
 					const value: number[] = [];
 					for (let j = 0; j < token.value.length - 1; j += 2) {
@@ -101,7 +102,7 @@ export class Lexer {
 					token.value = [...value];
 					// The length of the value should not be checked here so
 					// that empty strings can be encoded.
-					tokens.push(token)
+					tokens.push(token);
 					token = { type: 'token', value: [] };
 					state = 'initial';
 				} else if (

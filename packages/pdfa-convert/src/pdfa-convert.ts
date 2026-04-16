@@ -60,7 +60,7 @@ export class PDFAConvert {
 		}
 
 		const fonts = this.collectFonts(pdfDoc);
-// console.log(fonts);
+		// console.log(fonts);
 		const extractor = new PDFTextExtractor();
 
 		extractor.parseDocument(pdfDoc);
@@ -151,8 +151,8 @@ export class PDFAConvert {
 			PDFDict,
 		);
 		if (!descendantFontDescriptor) return;
-//console.log('descendant font descriptor:');
-//console.dir(descendantFontDescriptor);
+		//console.log('descendant font descriptor:');
+		//console.dir(descendantFontDescriptor);
 
 		const embedded =
 			descendantFontDescriptor.has(PDFName.of('FontFile')) ||
@@ -163,8 +163,8 @@ export class PDFAConvert {
 		if (!encoding) return;
 		// FIXME! Extract toUnicode!
 
-//console.log('fontDict:');
-//console.dir(fontDict);
+		//console.log('fontDict:');
+		//console.dir(fontDict);
 
 		// FIXME! Extract toUnicode!
 		return {

@@ -36,7 +36,7 @@ describe('Lexer', () => {
 			{ type: 'token', value: [49] },
 			{ type: 'token', value: [50] },
 			{ type: 'string', value: [72, 101, 108, 108, 111] },
-			{ type: 'token', value: [34]},
+			{ type: 'token', value: [34] },
 		]);
 	});
 
@@ -53,20 +53,27 @@ describe('Lexer', () => {
 		const lexer = new Lexer();
 		const tokens = lexer.tokenize(toBytes('(Hello (world))'));
 
-		expect(tokens).toEqual([{
-			type: 'string',
-			value: [72, 101, 108, 108, 111, 32, 40, 119, 111, 114, 108, 100, 41],
-		}]);
+		expect(tokens).toEqual([
+			{
+				type: 'string',
+				value: [72, 101, 108, 108, 111, 32, 40, 119, 111, 114, 108, 100, 41],
+			},
+		]);
 	});
 
 	it('handles deeply nested parentheses', () => {
 		const lexer = new Lexer();
 		const tokens = lexer.tokenize(toBytes('(Deeper (and (deeper)))'));
 
-		expect(tokens).toEqual([{
-			type: 'string',
-			value: [68, 101, 101, 112, 101, 114, 32, 40, 97, 110, 100, 32, 40, 100, 101, 101, 112, 101, 114, 41, 41],
-		}]);
+		expect(tokens).toEqual([
+			{
+				type: 'string',
+				value: [
+					68, 101, 101, 112, 101, 114, 32, 40, 97, 110, 100, 32, 40, 100, 101,
+					101, 112, 101, 114, 41, 41,
+				],
+			},
+		]);
 	});
 
 	it('handles empty strings', () => {
@@ -75,14 +82,14 @@ describe('Lexer', () => {
 
 		expect(tokens).toEqual([
 			{
-			type: 'string',
-			value: [],
-		},
+				type: 'string',
+				value: [],
+			},
 			{
-			type: 'token',
-			value: [84, 106],
-		},
-	]);
+				type: 'token',
+				value: [84, 106],
+			},
+		]);
 	});
 
 	it('parses hex strings', () => {

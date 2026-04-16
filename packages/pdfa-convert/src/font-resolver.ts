@@ -246,8 +246,10 @@ export class FontResolver {
 			if (Object.hasOwn(this.fontMap, tryName)) {
 				const data = this.fontMap[tryName];
 				if (typeof data === 'string') {
-					this.fontMap[tryName] =
-						await this.fontLoader.loadFromPath(fontName, data);
+					this.fontMap[tryName] = await this.fontLoader.loadFromPath(
+						fontName,
+						data,
+					);
 				}
 
 				return this.fontMap[tryName];

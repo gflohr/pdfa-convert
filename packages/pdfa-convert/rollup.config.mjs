@@ -10,6 +10,17 @@ function tsPlugin(tsconfig) {
 	});
 }
 
+function onwarn(warning, warn) {
+	if (
+			warning.code === 'CIRCULAR_DEPENDENCY' &&
+			warning.message.includes('/node_modules/@cantoo/pdf-lib/')
+		) {
+		return;
+	}
+
+	warn(warning);
+}
+
 const external = [
 	// Node built-ins
 	'fs',
@@ -27,6 +38,7 @@ export default [
 			sourcemap: true,
 		},
 		external,
+		onwarn,
 		plugins: [
 			json(),
 			tsPlugin('./tsconfig.build.json'),
@@ -43,6 +55,7 @@ export default [
 			exports: 'named',
 		},
 		external,
+		onwarn,
 		plugins: [
 			json(),
 			tsPlugin('./tsconfig.build.json'),
@@ -57,6 +70,7 @@ export default [
 			format: 'esm',
 			sourcemap: true,
 		},
+		onwarn,
 		plugins: [
 			json(),
 			tsPlugin('./tsconfig.build.json'),

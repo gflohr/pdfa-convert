@@ -6823,6 +6823,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	apple: {
 		n: 'apple',
 		u: 0xf8ff,
+		f: [0x1f34f, 0x1f34e],
 	},
 	// APPROACHES THE LIMIT
 	approaches: {
@@ -26589,4 +26590,6 @@ export const unicodeToAdobeGlyph = Object.assign([] as string[], {
 	65507: 'macronmonospace',
 	65509: 'yenmonospace',
 	65510: 'wonmonospace',
+	127822: 'apple',
+	127823: 'apple',
 });

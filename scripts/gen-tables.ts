@@ -35,6 +35,7 @@ async function agl() {
 	});
 
 	await parseGlyphs(glyphs, new URL(aglUrl));
+	manualFallback(glyphs);
 	autoFallback(glyphs);
 
 	const unicodeToAdobeGlyphNames: string[] = [];
@@ -129,6 +130,18 @@ function computeUnicodeName(codes: number | number[]) {
 	if (typeof codes === 'number') codes = [codes];
 
 	return codes.map(c => unicodeName(c) ?? '<unkown character>').join(' + ');
+}
+
+async function manualFallback(glyphs: Record<string, AdobeGlyph>) {
+	const fallbacks = {
+		apple: ['1f34f', '1f34e'],
+	};
+
+	for (const name in fallbacks) {
+		if (glyphs[name]) {
+			glyphs[name].f = (fallbacks as Record<string, string[]>)[name];
+		}
+	}
 }
 
 async function autoFallback(glyphs: Record<string, AdobeGlyph>) {

@@ -38,7 +38,7 @@ export const AppleSymbolEncoding = [
 	'thereexists', // Octal: 0044, decimal: 036, hexadecimal: 0x24
 	'percent', // Octal: 0045, decimal: 037, hexadecimal: 0x25
 	'ampersand', // Octal: 0046, decimal: 038, hexadecimal: 0x26
-	'.notdef', // Octal: 0047, decimal: 039, hexadecimal: 0x27
+	'suchthat', // Octal: 0047, decimal: 039, hexadecimal: 0x27
 	'parenleft', // Octal: 0050, decimal: 040, hexadecimal: 0x28
 	'parenright', // Octal: 0051, decimal: 041, hexadecimal: 0x29
 	'asteriskmath', // Octal: 0052, decimal: 042, hexadecimal: 0x2a
@@ -188,8 +188,8 @@ export const AppleSymbolEncoding = [
 	'equivalence', // Octal: 0272, decimal: 186, hexadecimal: 0xba
 	'approxequal', // Octal: 0273, decimal: 187, hexadecimal: 0xbb
 	'ellipsis', // Octal: 0274, decimal: 188, hexadecimal: 0xbc
-	'.notdef', // Octal: 0275, decimal: 189, hexadecimal: 0xbd
-	'.notdef', // Octal: 0276, decimal: 190, hexadecimal: 0xbe
+	'arrowvertex', // Octal: 0275, decimal: 189, hexadecimal: 0xbd
+	'arrowhorizex', // Octal: 0276, decimal: 190, hexadecimal: 0xbe
 	'carriagereturn', // Octal: 0277, decimal: 191, hexadecimal: 0xbf
 	'aleph', // Octal: 0300, decimal: 192, hexadecimal: 0xc0
 	'Ifraktur', // Octal: 0301, decimal: 193, hexadecimal: 0xc1
@@ -229,31 +229,31 @@ export const AppleSymbolEncoding = [
 	'copyright', // Octal: 0343, decimal: 227, hexadecimal: 0xe3
 	'trademark', // Octal: 0344, decimal: 228, hexadecimal: 0xe4
 	'summation', // Octal: 0345, decimal: 229, hexadecimal: 0xe5
-	'.notdef', // Octal: 0346, decimal: 230, hexadecimal: 0xe6
-	'.notdef', // Octal: 0347, decimal: 231, hexadecimal: 0xe7
-	'.notdef', // Octal: 0350, decimal: 232, hexadecimal: 0xe8
-	'.notdef', // Octal: 0351, decimal: 233, hexadecimal: 0xe9
-	'.notdef', // Octal: 0352, decimal: 234, hexadecimal: 0xea
-	'.notdef', // Octal: 0353, decimal: 235, hexadecimal: 0xeb
-	'.notdef', // Octal: 0354, decimal: 236, hexadecimal: 0xec
-	'.notdef', // Octal: 0355, decimal: 237, hexadecimal: 0xed
-	'.notdef', // Octal: 0356, decimal: 238, hexadecimal: 0xee
-	'.notdef', // Octal: 0357, decimal: 239, hexadecimal: 0xef
+	'parenlefttp', // Octal: 0346, decimal: 230, hexadecimal: 0xe6
+	'parenleftex', // Octal: 0347, decimal: 231, hexadecimal: 0xe7
+	'parenleftbt', // Octal: 0350, decimal: 232, hexadecimal: 0xe8
+	'bracketlefttp', // Octal: 0351, decimal: 233, hexadecimal: 0xe9
+	'bracketleftex', // Octal: 0352, decimal: 234, hexadecimal: 0xea
+	'bracketleftbt', // Octal: 0353, decimal: 235, hexadecimal: 0xeb
+	'bracketlefttp', // Octal: 0354, decimal: 236, hexadecimal: 0xec
+	'bracketleftmid', // Octal: 0355, decimal: 237, hexadecimal: 0xed
+	'bracketleftbt', // Octal: 0356, decimal: 238, hexadecimal: 0xee
+	'braceex', // Octal: 0357, decimal: 239, hexadecimal: 0xef
 	'apple', // Octal: 0360, decimal: 240, hexadecimal: 0xf0
 	'anglebracketright', // Octal: 0361, decimal: 241, hexadecimal: 0xf1
 	'integral', // Octal: 0362, decimal: 242, hexadecimal: 0xf2
 	'integraltp', // Octal: 0363, decimal: 243, hexadecimal: 0xf3
-	'.notdef', // Octal: 0364, decimal: 244, hexadecimal: 0xf4
+	'integralex', // Octal: 0364, decimal: 244, hexadecimal: 0xf4
 	'integralbt', // Octal: 0365, decimal: 245, hexadecimal: 0xf5
-	'.notdef', // Octal: 0366, decimal: 246, hexadecimal: 0xf6
-	'.notdef', // Octal: 0367, decimal: 247, hexadecimal: 0xf7
-	'.notdef', // Octal: 0370, decimal: 248, hexadecimal: 0xf8
-	'.notdef', // Octal: 0371, decimal: 249, hexadecimal: 0xf9
-	'.notdef', // Octal: 0372, decimal: 250, hexadecimal: 0xfa
-	'.notdef', // Octal: 0373, decimal: 251, hexadecimal: 0xfb
-	'.notdef', // Octal: 0374, decimal: 252, hexadecimal: 0xfc
-	'.notdef', // Octal: 0375, decimal: 253, hexadecimal: 0xfd
-	'.notdef', // Octal: 0376, decimal: 254, hexadecimal: 0xfe
+	'parenrighttp', // Octal: 0366, decimal: 246, hexadecimal: 0xf6
+	'parenrightex', // Octal: 0367, decimal: 247, hexadecimal: 0xf7
+	'parenrightbt', // Octal: 0370, decimal: 248, hexadecimal: 0xf8
+	'bracketrighttp', // Octal: 0371, decimal: 249, hexadecimal: 0xf9
+	'bracketrightex', // Octal: 0372, decimal: 250, hexadecimal: 0xfa
+	'bracketrightbt', // Octal: 0373, decimal: 251, hexadecimal: 0xfb
+	'bracerighttp', // Octal: 0374, decimal: 252, hexadecimal: 0xfc
+	'bracerightmid', // Octal: 0375, decimal: 253, hexadecimal: 0xfd
+	'bracerightbt', // Octal: 0376, decimal: 254, hexadecimal: 0xfe
 	'.notdef', // Octal: 0377, decimal: 255, hexadecimal: 0xff
 ];
 

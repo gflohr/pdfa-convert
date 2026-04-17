@@ -239,7 +239,7 @@ export const AdobeSymbolEncoding = [
 	'braceleftmid', // Octal: 0355, decimal: 237, hexadecimal: 0xed
 	'braceleftbt', // Octal: 0356, decimal: 238, hexadecimal: 0xee
 	'braceex', // Octal: 0357, decimal: 239, hexadecimal: 0xef
-	'.notdef', // Octal: 0360, decimal: 240, hexadecimal: 0xf0
+	'apple', // Octal: 0360, decimal: 240, hexadecimal: 0xf0
 	'angleright', // Octal: 0361, decimal: 241, hexadecimal: 0xf1
 	'integral', // Octal: 0362, decimal: 242, hexadecimal: 0xf2
 	'integraltp', // Octal: 0363, decimal: 243, hexadecimal: 0xf3

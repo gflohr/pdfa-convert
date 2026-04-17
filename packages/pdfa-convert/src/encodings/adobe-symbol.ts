@@ -1,3 +1,7 @@
+// This file is generated! Do NOT edit!
+//
+// Edit the file 'gen-tables.ts' in the directory 'scripts' in the project
+// root instead!
 export const AdobeSymbolEncoding = [
 	'.notdef', // Octal: 0000, decimal: 000, hexadecimal: 0x00
 	'.notdef', // Octal: 0001, decimal: 001, hexadecimal: 0x01
@@ -256,4 +260,3 @@ export const AdobeSymbolEncoding = [
 	'bracerightbt', // Octal: 0376, decimal: 254, hexadecimal: 0xfe
 	'.notdef', // Octal: 0377, decimal: 255, hexadecimal: 0xff
 ];
-

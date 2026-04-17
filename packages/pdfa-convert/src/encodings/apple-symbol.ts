@@ -31,7 +31,7 @@ export const AppleSymbolEncoding = [
 	'.notdef', // Octal: 0035, decimal: 029, hexadecimal: 0x1d
 	'.notdef', // Octal: 0036, decimal: 030, hexadecimal: 0x1e
 	'.notdef', // Octal: 0037, decimal: 031, hexadecimal: 0x1f
-	'spacehackarabic', // Octal: 0040, decimal: 032, hexadecimal: 0x20
+	'space', // Octal: 0040, decimal: 032, hexadecimal: 0x20
 	'exclam', // Octal: 0041, decimal: 033, hexadecimal: 0x21
 	'universal', // Octal: 0042, decimal: 034, hexadecimal: 0x22
 	'numbersign', // Octal: 0043, decimal: 035, hexadecimal: 0x23

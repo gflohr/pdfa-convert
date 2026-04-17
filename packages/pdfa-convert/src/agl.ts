@@ -592,6 +592,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	Deltagreek: {
 		n: 'Deltagreek',
 		u: 0x0394,
+		f: [0x2206],
 	},
 	// LATIN CAPITAL LETTER D WITH HOOK
 	Dhook: {
@@ -2263,6 +2264,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	Omega: {
 		n: 'Omega',
 		u: 0x2126,
+		f: [0x03a9],
 	},
 	// CYRILLIC CAPITAL LETTER OMEGA
 	Omegacyrillic: {
@@ -2273,6 +2275,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	Omegagreek: {
 		n: 'Omegagreek',
 		u: 0x03a9,
+		f: [0x2126],
 	},
 	// CYRILLIC CAPITAL LETTER ROUND OMEGA
 	Omegaroundcyrillic: {
@@ -6738,6 +6741,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	anglebracketleft: {
 		n: 'anglebracketleft',
 		u: 0x3008,
+		f: [0x2329],
 	},
 	// PRESENTATION FORM FOR VERTICAL LEFT ANGLE BRACKET
 	anglebracketleftvertical: {
@@ -6758,11 +6762,13 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	angleleft: {
 		n: 'angleleft',
 		u: 0x2329,
+		f: [0x3008],
 	},
 	// RIGHT-POINTING ANGLE BRACKET
 	angleright: {
 		n: 'angleright',
 		u: 0x232a,
+		f: [0x3009],
 	},
 	// ANGSTROM SIGN
 	angstrom: {
@@ -7671,11 +7677,13 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	braceleftbt: {
 		n: 'braceleftbt',
 		u: 0xf8f3,
+		f: [0xf8f0],
 	},
 	// <private-use-F8F2>
 	braceleftmid: {
 		n: 'braceleftmid',
 		u: 0xf8f2,
+		f: [0xf8ef],
 	},
 	// FULLWIDTH LEFT CURLY BRACKET
 	braceleftmonospace: {
@@ -7692,6 +7700,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	bracelefttp: {
 		n: 'bracelefttp',
 		u: 0xf8f1,
+		f: [0xf8ee],
 	},
 	// PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET
 	braceleftvertical: {
@@ -7743,6 +7752,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	bracketleftbt: {
 		n: 'bracketleftbt',
 		u: 0xf8f0,
+		f: [0xf8f3],
 	},
 	// <private-use-F8EF>
 	bracketleftex: {
@@ -7758,6 +7768,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	bracketlefttp: {
 		n: 'bracketlefttp',
 		u: 0xf8ee,
+		f: [0xf8f1],
 	},
 	// RIGHT SQUARE BRACKET
 	bracketright: {
@@ -8615,16 +8626,19 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	copyright: {
 		n: 'copyright',
 		u: 0x00a9,
+		f: [0xf8e9, 0xf6d9],
 	},
 	// <private-use-F8E9>
 	copyrightsans: {
 		n: 'copyrightsans',
 		u: 0xf8e9,
+		f: [0x00a9, 0xf6d9],
 	},
 	// <private-use-F6D9>
 	copyrightserif: {
 		n: 'copyrightserif',
 		u: 0xf6d9,
+		f: [0x00a9, 0xf8e9],
 	},
 	// LEFT CORNER BRACKET
 	cornerbracketleft: {
@@ -9335,6 +9349,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	divisionslash: {
 		n: 'divisionslash',
 		u: 0x2215,
+		f: [0x2044],
 	},
 	// CYRILLIC SMALL LETTER DJE
 	djecyrillic: {
@@ -10864,6 +10879,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	fraction: {
 		n: 'fraction',
 		u: 0x2044,
+		f: [0x2215],
 	},
 	// FRENCH FRANC SIGN
 	franc: {
@@ -12651,6 +12667,7 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	increment: {
 		n: 'increment',
 		u: 0x2206,
+		f: [0x0394],
 	},
 	// INFINITY
 	infinity: {
@@ -17530,16 +17547,19 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	registered: {
 		n: 'registered',
 		u: 0x00ae,
+		f: [0xf8e8, 0xf6da],
 	},
 	// <private-use-F8E8>
 	registersans: {
 		n: 'registersans',
 		u: 0xf8e8,
+		f: [0x00ae, 0xf6da],
 	},
 	// <private-use-F6DA>
 	registerserif: {
 		n: 'registerserif',
 		u: 0xf6da,
+		f: [0x00ae, 0xf8e8],
 	},
 	// ARABIC LETTER REH
 	reharabic: {
@@ -20438,16 +20458,19 @@ export const adobeGlyphs: Record<string, AdobeGlyph> = {
 	trademark: {
 		n: 'trademark',
 		u: 0x2122,
+		f: [0xf8ea, 0xf6db],
 	},
 	// <private-use-F8EA>
 	trademarksans: {
 		n: 'trademarksans',
 		u: 0xf8ea,
+		f: [0x2122, 0xf6db],
 	},
 	// <private-use-F6DB>
 	trademarkserif: {
 		n: 'trademarkserif',
 		u: 0xf6db,
+		f: [0x2122, 0xf8ea],
 	},
 	// LATIN SMALL LETTER T WITH RETROFLEX HOOK
 	tretroflexhook: {

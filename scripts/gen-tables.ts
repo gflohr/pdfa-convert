@@ -1,7 +1,10 @@
 import { unicodeName } from 'unicode-name';
+import { unicodeToAdobeGlyph } from '../packages/pdfa-convert/src/agl.js';
 
 const aglUrl = 'https://raw.githubusercontent.com/adobe-type-tools/agl-aglfn/refs/heads/master/glyphlist.txt';
 const zapfDingbatsUrl = 'https://raw.githubusercontent.com/adobe-type-tools/agl-aglfn/refs/heads/master/zapfdingbats.txt';
+const adobeSymbolUrl = 'https://unicode.org/Public/MAPPINGS/VENDORS/ADOBE/symbol.txt';
+const appleSymbolUrl = 'https://unicode.org/Public/MAPPINGS/VENDORS/APPLE/SYMBOL.TXT';
 
 const header = `// This file is generated! Do NOT edit!
 //
@@ -20,6 +23,9 @@ const command = process.argv[2];
 switch(command) {
 	case 'agl':
 		agl();
+		break;
+	case 'adobe-symbol':
+		adobeSymbol();
 		break;
 	default:
 		console.error('no command or unknown command given');
@@ -50,7 +56,7 @@ async function agl() {
 		const glyph = glyphs[name];
 		glyph.f?.forEach(f => {
 			const codePoint = parseInt(f, 16);
-			unicodeToAdobeGlyphNames[codePoint] ??= name;
+			unicodeToAdobeGlyphNames[codePoint] ??= name === 'spacehackarabic' ? 'space' : name;
 		});
 	}
 
@@ -126,6 +132,30 @@ export const unicodeToAdobeGlyph = Object.assign([] as string[], {`);
 	console.log('});');
 }
 
+async function adobeSymbol(vendor: string) {
+	const data = (await download(new URL('https://unicode.org/Public/MAPPINGS/VENDORS/ADOBE/symbol.txt'))).split('\n');
+
+	const names: string[] = [];
+	for (const line of data) {
+		const [uni, sym] = line.split(/[ \t]+/).map(n => parseInt(n, 16));
+			names[sym] = unicodeToAdobeGlyph[uni];
+	}
+
+	console.log(header);
+	console.log(`\nexport const ${vendor}SymbolEncoding = [`);
+	for (let i = 0; i < 256; ++i) {
+		const name = names[i] ?? '.notdef';
+
+		const comment =
+			`Octal: 0${i.toString(8).padStart(3, '0')}, ` +
+			`decimal: ${i.toString(10).padStart(3, '0')}, ` +
+			`hexadecimal: 0x${i.toString(16).padStart(2, '0')}`;
+		console.log(`\t'${name}', // ${comment}`);
+	}
+
+	console.log('];\n');
+}
+
 function computeUnicodeName(codes: number | number[]) {
 	if (typeof codes === 'number') codes = [codes];
 
@@ -134,12 +164,37 @@ function computeUnicodeName(codes: number | number[]) {
 
 async function manualFallback(glyphs: Record<string, AdobeGlyph>) {
 	const fallbacks = {
-		apple: ['1f34f', '1f34e'],
+		apple: ['1F34F', '1F34E'],
+		anglebracketleft: ['2329'],
+		angelbracketright: ['232A'],
+		angleleft: ['3008'],
+		angleright: ['3009'],
+		bracelefttp: ['F8EE'],
+		braceleftmid: ['F8EF'],
+		braceleftbt: ['F8F0'],
+		bracketlefttp: ['F8F1'],
+		bracketleftmid: ['F8F2'],
+		bracketleftbt: ['F8F3'],
+		registered: ['F8E8', 'F6DA'],
+		registersans: ['00AE', 'F6DA'],
+		registerserif: ['00AE', 'F8E8'],
+		copyright: ['F8E9', 'F6D9'],
+		copyrightsans: ['00A9', 'F6D9'],
+		copyrightserif: ['00A9', 'F8E9'],
+		trademark: ['F8EA', 'F6DB'],
+		trademarksans: ['2122', 'F6DB'],
+		trademarkserif: ['2122', 'F8EA'],
+		Deltagreek: ['2206'],
+		increment: ['0394'],
+		Omegagreek: ['2126'],
+		Omega: ['03A9'],
+		fraction: ['2215'],
+		divisionslash: ['2044'],
 	};
 
 	for (const name in fallbacks) {
 		if (glyphs[name]) {
-			glyphs[name].f = (fallbacks as Record<string, string[]>)[name];
+			glyphs[name].f = (fallbacks as Record<string, string[]>)[name].map(s => s.toLowerCase());
 		}
 	}
 }

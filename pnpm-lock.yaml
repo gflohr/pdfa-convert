@@ -17,6 +17,12 @@ importers:
       '@tsconfig/recommended':
         specifier: ^1.0.13
         version: 1.0.13
+      '@types/node':
+        specifier: ^25.5.2
+        version: 25.5.2
+      '@types/unicode-name':
+        specifier: ^1.1.0
+        version: 1.1.0
       changeset:
         specifier: ^0.2.6
         version: 0.2.6
@@ -26,6 +32,15 @@ importers:
       pnpm:
         specifier: ^10.33.0
         version: 10.33.0
+      tsx:
+        specifier: ^4.21.0
+        version: 4.21.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      unicode-name:
+        specifier: ^1.1.0
+        version: 1.1.0
       vitest:
         specifier: ^4.1.4
         version: 4.1.4(@types/node@25.5.2)(@vitest/coverage-v8@4.1.4)(vite@8.0.8(@types/node@25.5.2)(esbuild@0.27.7)(tsx@4.21.0))
@@ -964,6 +979,9 @@ packages:
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
+  '@types/unicode-name@1.1.0':
+    resolution: {integrity: sha512-mgAvNQ0s+FZqeFZadgH8d2FZsM2Pbo2iLn/E6HtNgPZ7fliJ2cGI7pNB4qIvs2eD7VoWMP0XaTBuhPipdNUV7w==}
+
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
 
@@ -1810,6 +1828,10 @@ packages:
 
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
+
+  unicode-name@1.1.0:
+    resolution: {integrity: sha512-2XBI32vZP6a1tJmMDSUBabiIZuY+1udwZUoS7i5BTSU2c4ELMy6YJrTPF9uvYOVMU4vTMlHH6HG/TsHjCEsazA==}
+    engines: {node: '>=18.20'}
 
   universalify@0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
@@ -2723,6 +2745,8 @@ snapshots:
 
   '@types/resolve@1.20.2': {}
 
+  '@types/unicode-name@1.1.0': {}
+
   '@types/yargs-parser@21.0.3': {}
 
   '@types/yargs@17.0.35':
@@ -3523,6 +3547,8 @@ snapshots:
   underscore@1.13.8: {}
 
   undici-types@7.18.2: {}
+
+  unicode-name@1.1.0: {}
 
   universalify@0.1.2: {}
 

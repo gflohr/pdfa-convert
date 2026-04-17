@@ -35,15 +35,23 @@
 		"prepublish": "pnpm run check:clean && pnpm run test",
 		"clean": "pnpm -r --parallel run clean",
 		"prepare": "husky",
-		"preinstall": "npx only-allow pnpm"
+		"preinstall": "npx only-allow pnpm",
+		"gen": "pnpm run gen:agl",
+		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdfa-convert/src/agl.ts",
+		"postgen:agl": "biome check --write packages/pdfa-convert/src/agl.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.10",
 		"@changesets/cli": "^2.30.0",
 		"@tsconfig/recommended": "^1.0.13",
+		"@types/node": "^25.5.2",
+		"@types/unicode-name": "^1.1.0",
 		"changeset": "^0.2.6",
 		"husky": "^9.1.7",
 		"pnpm": "^10.33.0",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3",
+		"unicode-name": "^1.1.0",
 		"vitest": "^4.1.4"
 	}
 }

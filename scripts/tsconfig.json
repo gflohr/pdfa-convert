@@ -1,0 +1,11 @@
+{
+	"files": [],
+	"compilerOptions": {
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
+		"rootDir": ".",
+		"types": ["node"]
+	},
+	"include": ["."]
+}

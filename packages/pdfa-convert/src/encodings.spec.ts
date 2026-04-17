@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CMap } from './cmap.js';
-import { MacExpertEncodingCmap, MacRomanEncodingCMap, PDFEncodingCMap, StandardEncodingCMap, WinAnsiEncodingCMap } from './encodings.js';
+import { MacExpertEncodingCmap, MacRomanEncodingCMap, PDFEncodingCMap, StandardEncodingCMap, SymbolEncodingCMap, WinAnsiEncodingCMap } from './encodings.js';
 
 describe('Encodings', () => {
 	describe ('StandardEncoding', () => {
@@ -38,7 +38,7 @@ describe('Encodings', () => {
 			expect(MacRomanEncodingCMap.lookup(0xd8)).toStrictEqual([0xff]);
 		});
 
-		it('should map the legacy Apple logo to 0xf8ff', () => {
+		it('should map the proprietary Apple logo to 0xf8ff', () => {
 			expect(MacRomanEncodingCMap.lookup(0xf0)).toStrictEqual([0xf8ff]);
 		});
 	});
@@ -90,6 +90,24 @@ describe('Encodings', () => {
 
 		it('should map 0x61 to a small capital A', () => {
 			expect(MacExpertEncodingCmap.lookup(0x61)).toStrictEqual([0x1d00]);
+		});
+	});
+
+	describe ('SymbolEncoding', () => {
+		it('should have a CMap', () => {
+			expect(SymbolEncodingCMap).toBeInstanceOf(CMap);
+		});
+
+		it('should not have a glyph for backspace', () => {
+			expect(SymbolEncodingCMap.lookup(0x08)).toStrictEqual([]);
+		});
+
+		it('should map an A to a capital alpha', () => {
+			expect(SymbolEncodingCMap.lookup(0x41)).toStrictEqual([0x391]);
+		});
+
+		it('should map the proprietary Apple logo to 0xf8ff', () => {
+			expect(SymbolEncodingCMap.lookup(0xf0)).toStrictEqual([0xf8ff]);
 		});
 	});
 });

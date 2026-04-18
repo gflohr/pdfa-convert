@@ -8,7 +8,6 @@
 		"moduleResolution": "bundler",
 		"types": ["node"]
 	},
-	"references": [{ "path": "../../packages/pdfa-convert" }],
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]
 }

@@ -40,3 +40,4 @@ coverage/
 
 # Test files
 *.pdf
+x-*.ts

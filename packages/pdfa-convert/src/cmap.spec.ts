@@ -14,9 +14,9 @@ describe('CMap', () => {
 		it('should ignore garbage', () => {
 			const source = `
 (misplaced string)
-1 beginfbchar
+1 beginbfchar
 <0021> <0065>
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -26,7 +26,7 @@ endfbchar
 		it('should ignore missing end markers', () => {
 			const source = `
 (misplaced string)
-1 beginfbchar
+1 beginbfchar
 <0021> <0065>
 `;
 			const cmap = new CMap(toBytes(source));
@@ -39,11 +39,11 @@ endfbchar
 		it('should parse single mappings', () => {
 			const source = `
 /PostScript /gibberish
-3 beginfbchar
+3 beginbfchar
 <0021> <0065>
 <00af> <0036>
 <abcd> <1234>
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -58,11 +58,11 @@ endfbchar
 
 		it('should ignore incomplete single mappings', () => {
 			const source = `
-3 beginfbchar
+3 beginbfchar
 <0021> <0065>
 <00af> <0036>
 <abcd>
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -73,12 +73,12 @@ endfbchar
 
 		it('should ignore incomplete range mappings', () => {
 			const source = `
-3 beginfbrange
+3 beginbfrange
 <0001> <0002> <00a0>
 <0021> <0022> <0100>
 <0121> <0122> <0200>
 <0200> <a000>
-endfbrange
+endbfrange
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -88,9 +88,9 @@ endfbrange
 
 		it('should decode BTF16-BE Unicode values', () => {
 			const source = `
-1 beginfbchar
+1 beginbfchar
 <3AF1> <D840DC3E>
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -99,10 +99,10 @@ endfbchar
 
 		it('should ignore invalid surrogate pairs', () => {
 			const source = `
-1 beginfbchar
+1 beginbfchar
 <3AF1> <E840DC3E>
 <3AF2> <D840EC3E>
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -112,9 +112,9 @@ endfbchar
 
 		it('should parse a ligature mapping', () => {
 			const source = `
-1 beginfbchar
+1 beginbfchar
 <0061> [<00660066006C>]
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -125,9 +125,9 @@ endfbchar
 			// We could also try to heal this error, but why bother repairing
 			// broken input?
 			const source = `
-1 beginfbchar
+1 beginbfchar
 <0061> [<00660066006C>
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
@@ -139,12 +139,12 @@ endfbchar
 		it('should parse range mappings', () => {
 			const source = `
 /PostScript /gibberish
-3 beginfbrange
+3 beginbfrange
 <0001> <0002> <00a0>
 <0021> <0022> <0100>
 <0121> <0122> <0200>
 <0200> <a000> <0400>
-endfbrange
+endbfrange
 trailing garbage
 `;
 			const cmap = new CMap(toBytes(source));
@@ -157,9 +157,9 @@ trailing garbage
 
 		it('should parse ligature ranges', () => {
 			const source = `
-beginfbrange
+beginbfrange
 <005f> <0061> [<00660066> <00660069> <00660066006C>]
-endfbrange`;
+endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
 			expect(cmap.lookup(0x5f)).toStrictEqual([0x66, 0x66]);
@@ -170,9 +170,9 @@ endfbrange`;
 
 		it('should ignore out-of-range glyphs', () => {
 			const source = `
-beginfbrange
+beginbfrange
 <005f> <0061> [<00660066> <00660069>]
-endfbrange`;
+endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
 			expect(cmap.lookup(0x5f)).toStrictEqual([0x66, 0x66]);
@@ -182,9 +182,9 @@ endfbrange`;
 
 		it('should discard invalid ligature specifications', () => {
 			const source = `
-beginfbrange
+beginbfrange
 <005f> <0061> I should not be here!
-endfbrange`;
+endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
 			expect(cmap.lookup(0x5f)).toStrictEqual([]);
@@ -196,9 +196,9 @@ endfbrange`;
 			// We could also try to heal this error, but why bother repairing
 			// broken input?
 			const source = `
-beginfbrange
+beginbfrange
 <005f> <0061> [<00660066> <00660069> <00660066006C>
-endfbrange`;
+endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
 			expect(cmap.lookup(0x5f)).toStrictEqual([]);
@@ -211,11 +211,11 @@ endfbrange`;
 		it('should parse strings', () => {
 			const source = `
 /PostScript /gibberish
-3 beginfbchar
+3 beginbfchar
 <0021> <0065>
 <00af> <0036>
 <abcd> <1234>
-endfbchar
+endbfchar
 `;
 			const cmap = new CMap(source);
 			expect(cmap).toBeDefined();

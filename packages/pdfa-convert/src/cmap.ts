@@ -39,9 +39,9 @@ export class CMap {
 			if (token.type !== 'token') continue;
 
 			const value = this.decodeNumberArray(token.value);
-			if (value === 'beginfbchar') {
+			if (value === 'beginbfchar') {
 				i += this.consumeMappings(mappings, tokens, 2, i + 1);
-			} else if (value === 'beginfbrange') {
+			} else if (value === 'beginbfrange') {
 				i += this.consumeMappings(mappings, tokens, 3, i + 1);
 			}
 		}
@@ -61,7 +61,7 @@ export class CMap {
 
 			if (token.type === 'token') {
 				const value = this.decodeNumberArray(token.value);
-				if (cardinality === 2 && value === 'endfbchar') {
+				if (cardinality === 2 && value === 'endbfchar') {
 					return i - start + 1;
 				} else if (
 					cardinality === 2 &&
@@ -69,7 +69,7 @@ export class CMap {
 					value === '['
 				) {
 					i += this.consumeLigature(mappings, mapping, tokens, i + 1);
-				} else if (cardinality === 3 && value === 'endfbrange') {
+				} else if (cardinality === 3 && value === 'endbfrange') {
 					return i - start + 1;
 				} else if (
 					cardinality === 3 &&

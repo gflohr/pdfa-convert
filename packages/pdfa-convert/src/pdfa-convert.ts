@@ -62,11 +62,11 @@ export class PDFAConvert {
 		}
 
 		const fonts = this.collectFonts(pdfDoc);
-		console.log(fonts);
-		// console.log(fonts);
+		console.dir(fonts, { depth: null });
 		const extractor = new PDFTextExtractor();
 
-		extractor.parseDocument(pdfDoc);
+		const textBlocks = extractor.parseDocument(pdfDoc);
+		console.dir(textBlocks);
 	}
 
 	private collectFonts(pdfDoc: PDFDocument): Record<string, FontInfo> {
@@ -82,6 +82,10 @@ export class PDFAConvert {
 				const subtype = fontDict.lookupMaybe(PDFName.of('Subtype'), PDFName);
 				if (!subtype) continue;
 
+				const fontInfo: FontInfo = {
+					ref: fontRef,
+				} as FontInfo;
+
 				const subtypeName = subtype.decodeText();
 				if (subtypeName === 'Type0') {
 					const info = this.getFontType0Info(
@@ -92,11 +96,20 @@ export class PDFAConvert {
 					);
 					if (info) {
 						fonts[fontName.decodeText()] = info;
-						continue;
 					}
+					continue;
+				} else if (subtypeName === 'TrueType') {
+					const info = this.getFontTrueTypeInfo(
+						pdfDoc,
+						fontName,
+						fontDict,
+						fontRef
+					);
+					if (info) {
+						fonts[fontName.decodeText()] = info;
+					}
+					continue;
 				}
-
-				const fontInfo: FontInfo = { ref: fontRef } as FontInfo;
 
 				const descriptor = fontDict.lookupMaybe(
 					PDFName.of('FontDescriptor'),
@@ -133,6 +146,39 @@ export class PDFAConvert {
 		return fonts;
 	}
 
+	private getFontTrueTypeInfo(
+		pdfDoc: PDFDocument,
+		fontName: PDFName,
+		fontDict: PDFDict,
+		fontRef: PDFRef,
+	): FontInfo | undefined {
+		let embedded = false;
+		const fontDescriptor = fontDict.lookup(
+			PDFName.of('FontDescriptor'),
+			PDFDict,
+		);
+		if (fontDescriptor) {
+			embedded =
+				fontDescriptor.has(PDFName.of('FontFile')) ||
+				fontDescriptor.has(PDFName.of('FontFile2')) ||
+				fontDescriptor.has(PDFName.of('FontFile3'));
+		}
+
+		const toUnicodeStream = fontDict.lookup(PDFName.of('ToUnicode'));
+		if (!(toUnicodeStream && toUnicodeStream instanceof PDFRawStream)) return;
+
+		const stream = toUnicodeStream.contents;
+		const cmap = new CMap(stream);
+
+		return {
+			ref: fontRef,
+			embedded,
+			baseFont: fontName.decodeText(),
+			cmap,
+			subtype: 'TrueType',
+		};
+	}
+
 	private getFontType0Info(
 		pdfDoc: PDFDocument,
 		fontName: PDFName,
@@ -160,10 +206,6 @@ export class PDFAConvert {
 			descendantFontDescriptor.has(PDFName.of('FontFile2')) ||
 			descendantFontDescriptor.has(PDFName.of('FontFile3'));
 
-		const encoding = fontDict.lookupMaybe(PDFName.of('Encoding'), PDFName);
-		if (!encoding) return;
-		// FIXME! Extract toUnicode!
-
 		const toUnicodeStream = fontDict.lookup(PDFName.of('ToUnicode'));
 		if (!(toUnicodeStream && toUnicodeStream instanceof PDFRawStream)) return;
 
@@ -172,11 +214,10 @@ export class PDFAConvert {
 
 		return {
 			ref: fontRef,
-			// FIXME! Extract encoding!
-			encoding: encoding.decodeText() as Encoding | undefined,
 			embedded,
 			baseFont: fontName.decodeText(),
 			cmap,
+			subtype: 'Type0',
 		};
 	}
 }

@@ -24,13 +24,14 @@ export type Encoding =
 	| 'WinAnsiEncoding'
 	| 'MacExpertEncoding';
 
+export type FontSubtype = 'Type0' | 'TrueType';
 export type FontInfo = {
 	baseFont: string;
 	ref: PDFRef;
 	embedded: boolean;
 	encoding?: Encoding;
 	cmap: CMap,
-	subtype: 'Type0',
+	subtype: FontSubtype,
 };
 
 const FontDescriptionByName: Record<string, FontDescription> = {

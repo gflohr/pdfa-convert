@@ -11,45 +11,48 @@ import {
 import { Lexer, type Token } from './lexer.js';
 
 type TextBlock = {
-	text: string;
+	glyphs: number[];
+	fontResource: string;
+	pageNumber: number;
 };
-type TextCollector = Record<string, string[]>;
 
 export class PDFTextExtractor {
-	parseDocument(pdfDoc: PDFDocument): TextCollector {
-		const collector: TextCollector = {};
+	parseDocument(pdfDoc: PDFDocument): TextBlock[] {
+		const blocks: TextBlock[] = [];
 		const pages = pdfDoc.getPages();
 		for (let i = 0; i < pages.length; ++i) {
-			this.parsePage(collector, pages[i], pdfDoc);
+			this.parsePage(blocks, pages[i], i, pdfDoc);
 		}
 
-		return collector;
+		return blocks;
 	}
 
 	private parseRecursively(
-		collector: TextCollector,
+		collector: TextBlock[],
 		obj: PDFObject,
+		pageNumber: number,
 		pdfDoc: PDFDocument,
 	) {
 		if (obj instanceof PDFRawStream) {
-			this.parseStream(collector, obj);
-			this.parseDictionary(collector, obj.dict, pdfDoc);
+			this.parseStream(collector, pageNumber, obj);
+			this.parseDictionary(collector, obj.dict, pageNumber, pdfDoc);
 		} else if (obj instanceof PDFDict) {
-			this.parseDictionary(collector, obj, pdfDoc);
+			this.parseDictionary(collector, obj, pageNumber, pdfDoc);
 		} else if (obj instanceof PDFArray) {
 			for (let i = 0; i < obj.size(); ++i) {
 				const item = obj.get(i);
 				const resolved = pdfDoc.context.lookup(item);
 				if (resolved) {
-					this.parseRecursively(collector, resolved, pdfDoc);
+					this.parseRecursively(collector, resolved, pageNumber, pdfDoc);
 				}
 			}
 		}
 	}
 
 	private parseDictionary(
-		collector: TextCollector,
+		collector: TextBlock[],
 		dict: PDFDict,
+		pageNumber: number,
 		pdfDoc: PDFDocument,
 	) {
 		const resources = dict.get(PDFName.of('Resources'));
@@ -68,14 +71,15 @@ export class PDFTextExtractor {
 			const ref = xo.get(key);
 			const resolved = pdfDoc.context.lookup(ref);
 			if (resolved instanceof PDFRawStream) {
-				this.parseStream(collector, resolved);
+				this.parseStream(collector, pageNumber, resolved);
 			}
 		});
 	}
 
 	private parsePage(
-		collector: TextCollector,
+		collector: TextBlock[],
 		page: PDFPage,
+		pageNumber: number,
 		pdfDoc: PDFDocument,
 	) {
 		const node = page.node;
@@ -83,10 +87,10 @@ export class PDFTextExtractor {
 		const contents = node.get(PDFName.of('Contents'));
 		if (!contents) return;
 
-		this.parseRecursively(collector, contents, pdfDoc);
+		this.parseRecursively(collector, contents, pageNumber, pdfDoc);
 	}
 
-	private parseStream(collector: TextCollector, stream: PDFRawStream) {
+	private parseStream(collector: TextBlock[], pageNumber: number, stream: PDFRawStream) {
 		const decoded = decodePDFRawStream(stream);
 		const bytes = decoded.getBytes(0);
 
@@ -102,25 +106,25 @@ export class PDFTextExtractor {
 				switch (value) {
 					case 'BT':
 						inText = true;
-						console.log('start text block');
 						break;
 					case 'ET':
 						inText = false;
 						fontResource = '';
-						console.log('end text block');
 						break;
 					case 'Tf':
 						if (inText && i > 1 && tokens[i - 2].type === 'token') {
 							fontResource = this.decodeNumberArray(tokens[i - 2].value);
-							console.log(`font resource name: ${fontResource}`);
-							collector[fontResource] ??= [];
 						}
 						break;
 					case 'Tj':
 					case '"':
 					case "'":
-						if (inText) {
-							console.log(tokens[i - 1]);
+						if (inText && tokens[i - 1].type === 'string' && fontResource.length) {
+							collector.push({
+								glyphs: tokens[i - 1].value,
+								fontResource,
+								pageNumber,
+							});
 						}
 						break;
 					case 'TJ':
@@ -128,9 +132,16 @@ export class PDFTextExtractor {
 							inText && tokens[i - 1].type === 'token' &&
 							i > 3 &&
 							tokens[i - 1].value.length === 1 &&
-							tokens[i - 1].value[0] === 93) {
+							tokens[i - 1].value[0] === 93 &&
+							fontResource.length) {
 							const textToken = this.extractTJStringArray(tokens, i - 1);
-							console.log(textToken);
+							if (textToken.value.length) {
+								collector.push({
+									glyphs: textToken.value,
+									fontResource,
+									pageNumber,
+								});
+							}
 						}
 						break;
 					default:

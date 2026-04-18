@@ -2,9 +2,6 @@ import { unicodeName } from 'unicode-name';
 import { unicodeToAdobeGlyph } from '../packages/pdfa-convert/src/agl.js';
 
 const aglUrl = 'https://raw.githubusercontent.com/adobe-type-tools/agl-aglfn/refs/heads/master/glyphlist.txt';
-const zapfDingbatsUrl = 'https://raw.githubusercontent.com/adobe-type-tools/agl-aglfn/refs/heads/master/zapfdingbats.txt';
-const adobeSymbolUrl = 'https://unicode.org/Public/MAPPINGS/VENDORS/ADOBE/symbol.txt';
-const appleSymbolUrl = 'https://unicode.org/Public/MAPPINGS/VENDORS/APPLE/SYMBOL.TXT';
 
 const header = `// This file is generated! Do NOT edit!
 //
@@ -23,9 +20,6 @@ const command = process.argv[2];
 switch(command) {
 	case 'agl':
 		agl();
-		break;
-	case 'adobe-symbol':
-		adobeSymbol();
 		break;
 	default:
 		console.error('no command or unknown command given');
@@ -48,7 +42,7 @@ async function agl() {
 	for (const name in glyphs) {
 		const glyph = glyphs[name];
 		if (glyph.u.length > 1) continue;
-		unicodeToAdobeGlyphNames[glyph.u[0]] = name;
+		unicodeToAdobeGlyphNames[glyph.u[0]] = chooseName(unicodeToAdobeGlyphNames[glyph.u[0]], name);
 	}
 
 	// Fill up possible gaps with fallbacks.
@@ -56,7 +50,7 @@ async function agl() {
 		const glyph = glyphs[name];
 		glyph.f?.forEach(f => {
 			const codePoint = parseInt(f, 16);
-			unicodeToAdobeGlyphNames[codePoint] ??= name === 'spacehackarabic' ? 'space' : name;
+			unicodeToAdobeGlyphNames[codePoint] ??= name;
 		});
 	}
 
@@ -132,30 +126,6 @@ export const unicodeToAdobeGlyph = Object.assign([] as string[], {`);
 	console.log('});');
 }
 
-async function adobeSymbol(vendor: string) {
-	const data = (await download(new URL('https://unicode.org/Public/MAPPINGS/VENDORS/ADOBE/symbol.txt'))).split('\n');
-
-	const names: string[] = [];
-	for (const line of data) {
-		const [uni, sym] = line.split(/[ \t]+/).map(n => parseInt(n, 16));
-			names[sym] = unicodeToAdobeGlyph[uni];
-	}
-
-	console.log(header);
-	console.log(`\nexport const ${vendor}SymbolEncoding = [`);
-	for (let i = 0; i < 256; ++i) {
-		const name = names[i] ?? '.notdef';
-
-		const comment =
-			`Octal: 0${i.toString(8).padStart(3, '0')}, ` +
-			`decimal: ${i.toString(10).padStart(3, '0')}, ` +
-			`hexadecimal: 0x${i.toString(16).padStart(2, '0')}`;
-		console.log(`\t'${name}', // ${comment}`);
-	}
-
-	console.log('];\n');
-}
-
 function computeUnicodeName(codes: number | number[]) {
 	if (typeof codes === 'number') codes = [codes];
 
@@ -210,6 +180,28 @@ async function autoFallback(glyphs: Record<string, AdobeGlyph>) {
 			}
 		}
 	});
+}
+
+function chooseName(name1: string, name2: string): string {
+	if (typeof name1 === 'undefined') return name2;
+
+	const count1 = (name1.match(/\d/g) || []).length;
+	const count2 = (name2.match(/\d/g) || []).length;
+
+	if (count1 < count2) {
+		return name1;
+	} else if (count1 > count2) {
+		return name2;
+	}
+
+	if (name1.length < name2.length) {
+		return name1;
+	} else if (name1.length > name2.length) {
+		return name2;
+	}
+
+	// Stable selection.
+	return name1;
 }
 
 async function parseGlyphs(glyphs: Record<string, AdobeGlyph>, url: URL): Promise<void> {

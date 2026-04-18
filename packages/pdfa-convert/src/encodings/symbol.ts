@@ -1,4 +1,9 @@
-export const AppleSymbolEncoding = [
+// This file is generated! Do NOT edit!
+//
+// Edit the file 'gen-tables.ts' in the directory 'scripts' in the project
+// root instead!
+
+export const AdobeSymbolEncoding = [
 	'.notdef', // Octal: 0000, decimal: 000, hexadecimal: 0x00
 	'.notdef', // Octal: 0001, decimal: 001, hexadecimal: 0x01
 	'.notdef', // Octal: 0002, decimal: 002, hexadecimal: 0x02
@@ -31,11 +36,11 @@ export const AppleSymbolEncoding = [
 	'.notdef', // Octal: 0035, decimal: 029, hexadecimal: 0x1d
 	'.notdef', // Octal: 0036, decimal: 030, hexadecimal: 0x1e
 	'.notdef', // Octal: 0037, decimal: 031, hexadecimal: 0x1f
-	'space', // Octal: 0040, decimal: 032, hexadecimal: 0x20
+	'nbspace', // Octal: 0040, decimal: 032, hexadecimal: 0x20
 	'exclam', // Octal: 0041, decimal: 033, hexadecimal: 0x21
-	'universal', // Octal: 0042, decimal: 034, hexadecimal: 0x22
+	'forall', // Octal: 0042, decimal: 034, hexadecimal: 0x22
 	'numbersign', // Octal: 0043, decimal: 035, hexadecimal: 0x23
-	'thereexists', // Octal: 0044, decimal: 036, hexadecimal: 0x24
+	'existential', // Octal: 0044, decimal: 036, hexadecimal: 0x24
 	'percent', // Octal: 0045, decimal: 037, hexadecimal: 0x25
 	'ampersand', // Octal: 0046, decimal: 038, hexadecimal: 0x26
 	'suchthat', // Octal: 0047, decimal: 039, hexadecimal: 0x27
@@ -67,7 +72,7 @@ export const AppleSymbolEncoding = [
 	'Alpha', // Octal: 0101, decimal: 065, hexadecimal: 0x41
 	'Beta', // Octal: 0102, decimal: 066, hexadecimal: 0x42
 	'Chi', // Octal: 0103, decimal: 067, hexadecimal: 0x43
-	'Deltagreek', // Octal: 0104, decimal: 068, hexadecimal: 0x44
+	'Delta', // Octal: 0104, decimal: 068, hexadecimal: 0x44
 	'Epsilon', // Octal: 0105, decimal: 069, hexadecimal: 0x45
 	'Phi', // Octal: 0106, decimal: 070, hexadecimal: 0x46
 	'Gamma', // Octal: 0107, decimal: 071, hexadecimal: 0x47
@@ -86,7 +91,7 @@ export const AppleSymbolEncoding = [
 	'Tau', // Octal: 0124, decimal: 084, hexadecimal: 0x54
 	'Upsilon', // Octal: 0125, decimal: 085, hexadecimal: 0x55
 	'sigmafinal', // Octal: 0126, decimal: 086, hexadecimal: 0x56
-	'Omegagreek', // Octal: 0127, decimal: 087, hexadecimal: 0x57
+	'Ohm', // Octal: 0127, decimal: 087, hexadecimal: 0x57
 	'Xi', // Octal: 0130, decimal: 088, hexadecimal: 0x58
 	'Psi', // Octal: 0131, decimal: 089, hexadecimal: 0x59
 	'Zeta', // Octal: 0132, decimal: 090, hexadecimal: 0x5a
@@ -123,9 +128,9 @@ export const AppleSymbolEncoding = [
 	'psi', // Octal: 0171, decimal: 121, hexadecimal: 0x79
 	'zeta', // Octal: 0172, decimal: 122, hexadecimal: 0x7a
 	'braceleft', // Octal: 0173, decimal: 123, hexadecimal: 0x7b
-	'verticalbar', // Octal: 0174, decimal: 124, hexadecimal: 0x7c
+	'bar', // Octal: 0174, decimal: 124, hexadecimal: 0x7c
 	'braceright', // Octal: 0175, decimal: 125, hexadecimal: 0x7d
-	'tildeoperator', // Octal: 0176, decimal: 126, hexadecimal: 0x7e
+	'similar', // Octal: 0176, decimal: 126, hexadecimal: 0x7e
 	'.notdef', // Octal: 0177, decimal: 127, hexadecimal: 0x7f
 	'.notdef', // Octal: 0200, decimal: 128, hexadecimal: 0x80
 	'.notdef', // Octal: 0201, decimal: 129, hexadecimal: 0x81
@@ -159,17 +164,17 @@ export const AppleSymbolEncoding = [
 	'.notdef', // Octal: 0235, decimal: 157, hexadecimal: 0x9d
 	'.notdef', // Octal: 0236, decimal: 158, hexadecimal: 0x9e
 	'.notdef', // Octal: 0237, decimal: 159, hexadecimal: 0x9f
-	'euro', // Octal: 0240, decimal: 160, hexadecimal: 0xa0
+	'Euro', // Octal: 0240, decimal: 160, hexadecimal: 0xa0
 	'Upsilonhooksymbol', // Octal: 0241, decimal: 161, hexadecimal: 0xa1
 	'minute', // Octal: 0242, decimal: 162, hexadecimal: 0xa2
 	'lessequal', // Octal: 0243, decimal: 163, hexadecimal: 0xa3
-	'fraction', // Octal: 0244, decimal: 164, hexadecimal: 0xa4
+	'divisionslash', // Octal: 0244, decimal: 164, hexadecimal: 0xa4
 	'infinity', // Octal: 0245, decimal: 165, hexadecimal: 0xa5
 	'florin', // Octal: 0246, decimal: 166, hexadecimal: 0xa6
-	'clubsuitblack', // Octal: 0247, decimal: 167, hexadecimal: 0xa7
+	'club', // Octal: 0247, decimal: 167, hexadecimal: 0xa7
 	'diamond', // Octal: 0250, decimal: 168, hexadecimal: 0xa8
-	'heartsuitblack', // Octal: 0251, decimal: 169, hexadecimal: 0xa9
-	'spadesuitblack', // Octal: 0252, decimal: 170, hexadecimal: 0xaa
+	'heart', // Octal: 0251, decimal: 169, hexadecimal: 0xa9
+	'spade', // Octal: 0252, decimal: 170, hexadecimal: 0xaa
 	'arrowboth', // Octal: 0253, decimal: 171, hexadecimal: 0xab
 	'arrowleft', // Octal: 0254, decimal: 172, hexadecimal: 0xac
 	'arrowup', // Octal: 0255, decimal: 173, hexadecimal: 0xad
@@ -196,38 +201,38 @@ export const AppleSymbolEncoding = [
 	'Rfraktur', // Octal: 0302, decimal: 194, hexadecimal: 0xc2
 	'weierstrass', // Octal: 0303, decimal: 195, hexadecimal: 0xc3
 	'timescircle', // Octal: 0304, decimal: 196, hexadecimal: 0xc4
-	'pluscircle', // Octal: 0305, decimal: 197, hexadecimal: 0xc5
+	'circleplus', // Octal: 0305, decimal: 197, hexadecimal: 0xc5
 	'emptyset', // Octal: 0306, decimal: 198, hexadecimal: 0xc6
 	'intersection', // Octal: 0307, decimal: 199, hexadecimal: 0xc7
 	'union', // Octal: 0310, decimal: 200, hexadecimal: 0xc8
 	'superset', // Octal: 0311, decimal: 201, hexadecimal: 0xc9
-	'supersetorequal', // Octal: 0312, decimal: 202, hexadecimal: 0xca
+	'reflexsuperset', // Octal: 0312, decimal: 202, hexadecimal: 0xca
 	'notsubset', // Octal: 0313, decimal: 203, hexadecimal: 0xcb
 	'subset', // Octal: 0314, decimal: 204, hexadecimal: 0xcc
-	'subsetorequal', // Octal: 0315, decimal: 205, hexadecimal: 0xcd
+	'reflexsubset', // Octal: 0315, decimal: 205, hexadecimal: 0xcd
 	'element', // Octal: 0316, decimal: 206, hexadecimal: 0xce
-	'notelementof', // Octal: 0317, decimal: 207, hexadecimal: 0xcf
+	'notelement', // Octal: 0317, decimal: 207, hexadecimal: 0xcf
 	'angle', // Octal: 0320, decimal: 208, hexadecimal: 0xd0
 	'nabla', // Octal: 0321, decimal: 209, hexadecimal: 0xd1
-	'registered', // Octal: 0322, decimal: 210, hexadecimal: 0xd2
-	'copyright', // Octal: 0323, decimal: 211, hexadecimal: 0xd3
-	'trademark', // Octal: 0324, decimal: 212, hexadecimal: 0xd4
+	'registerserif', // Octal: 0322, decimal: 210, hexadecimal: 0xd2
+	'copyrightserif', // Octal: 0323, decimal: 211, hexadecimal: 0xd3
+	'trademarkserif', // Octal: 0324, decimal: 212, hexadecimal: 0xd4
 	'product', // Octal: 0325, decimal: 213, hexadecimal: 0xd5
 	'radical', // Octal: 0326, decimal: 214, hexadecimal: 0xd6
 	'dotmath', // Octal: 0327, decimal: 215, hexadecimal: 0xd7
 	'logicalnot', // Octal: 0330, decimal: 216, hexadecimal: 0xd8
 	'logicaland', // Octal: 0331, decimal: 217, hexadecimal: 0xd9
 	'logicalor', // Octal: 0332, decimal: 218, hexadecimal: 0xda
-	'dblarrowleft', // Octal: 0333, decimal: 219, hexadecimal: 0xdb
-	'arrowleftdbl', // Octal: 0334, decimal: 220, hexadecimal: 0xdc
+	'arrowdblboth', // Octal: 0333, decimal: 219, hexadecimal: 0xdb
+	'arrowdblleft', // Octal: 0334, decimal: 220, hexadecimal: 0xdc
 	'arrowdblup', // Octal: 0335, decimal: 221, hexadecimal: 0xdd
-	'dblarrowright', // Octal: 0336, decimal: 222, hexadecimal: 0xde
+	'arrowdblright', // Octal: 0336, decimal: 222, hexadecimal: 0xde
 	'arrowdbldown', // Octal: 0337, decimal: 223, hexadecimal: 0xdf
 	'lozenge', // Octal: 0340, decimal: 224, hexadecimal: 0xe0
-	'anglebracketleft', // Octal: 0341, decimal: 225, hexadecimal: 0xe1
-	'registered', // Octal: 0342, decimal: 226, hexadecimal: 0xe2
-	'copyright', // Octal: 0343, decimal: 227, hexadecimal: 0xe3
-	'trademark', // Octal: 0344, decimal: 228, hexadecimal: 0xe4
+	'angleleft', // Octal: 0341, decimal: 225, hexadecimal: 0xe1
+	'registersans', // Octal: 0342, decimal: 226, hexadecimal: 0xe2
+	'copyrightsans', // Octal: 0343, decimal: 227, hexadecimal: 0xe3
+	'trademarksans', // Octal: 0344, decimal: 228, hexadecimal: 0xe4
 	'summation', // Octal: 0345, decimal: 229, hexadecimal: 0xe5
 	'parenlefttp', // Octal: 0346, decimal: 230, hexadecimal: 0xe6
 	'parenleftex', // Octal: 0347, decimal: 231, hexadecimal: 0xe7
@@ -235,12 +240,12 @@ export const AppleSymbolEncoding = [
 	'bracketlefttp', // Octal: 0351, decimal: 233, hexadecimal: 0xe9
 	'bracketleftex', // Octal: 0352, decimal: 234, hexadecimal: 0xea
 	'bracketleftbt', // Octal: 0353, decimal: 235, hexadecimal: 0xeb
-	'bracketlefttp', // Octal: 0354, decimal: 236, hexadecimal: 0xec
-	'bracketleftmid', // Octal: 0355, decimal: 237, hexadecimal: 0xed
-	'bracketleftbt', // Octal: 0356, decimal: 238, hexadecimal: 0xee
+	'bracelefttp', // Octal: 0354, decimal: 236, hexadecimal: 0xec
+	'braceleftmid', // Octal: 0355, decimal: 237, hexadecimal: 0xed
+	'braceleftbt', // Octal: 0356, decimal: 238, hexadecimal: 0xee
 	'braceex', // Octal: 0357, decimal: 239, hexadecimal: 0xef
-	'apple', // Octal: 0360, decimal: 240, hexadecimal: 0xf0
-	'anglebracketright', // Octal: 0361, decimal: 241, hexadecimal: 0xf1
+	'.notdef', // Octal: 0360, decimal: 240, hexadecimal: 0xf0
+	'angleright', // Octal: 0361, decimal: 241, hexadecimal: 0xf1
 	'integral', // Octal: 0362, decimal: 242, hexadecimal: 0xf2
 	'integraltp', // Octal: 0363, decimal: 243, hexadecimal: 0xf3
 	'integralex', // Octal: 0364, decimal: 244, hexadecimal: 0xf4
@@ -256,4 +261,3 @@ export const AppleSymbolEncoding = [
 	'bracerightbt', // Octal: 0376, decimal: 254, hexadecimal: 0xfe
 	'.notdef', // Octal: 0377, decimal: 255, hexadecimal: 0xff
 ];
-

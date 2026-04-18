@@ -36,11 +36,9 @@
 		"clean": "pnpm -r --parallel run clean",
 		"prepare": "husky",
 		"preinstall": "npx only-allow pnpm",
-		"gen": "pnpm run gen:agl && pnpm run gen:adobe-symbol",
+		"gen": "pnpm run gen:agl",
 		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdfa-convert/src/agl.ts",
-		"postgen:agl": "biome check --write packages/pdfa-convert/src/agl.ts",
-		"gen:adobe-symbol": "tsx scripts/gen-tables.ts adobe-symbol>packages/pdfa-convert/src/encodings/adobe-symbol.ts",
-		"postgen:adobe-symbol": "biome check --write packages/pdfa-convert/src/encodings/adobe-symbol.ts"
+		"postgen:agl": "biome check --write packages/pdfa-convert/src/agl.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.10",

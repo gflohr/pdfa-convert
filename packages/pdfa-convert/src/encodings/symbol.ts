@@ -1,9 +1,25 @@
-// This file is generated! Do NOT edit!
-//
-// Edit the file 'gen-tables.ts' in the directory 'scripts' in the project
-// root instead!
-
-export const AdobeSymbolEncoding = [
+/**
+  * Array of glyph names in MacExpertEncoding. Since all standard encodings in
+  * the PDF standard are 8-bit-encodings, all arrays have a length of 256.
+  *
+  * You can get the Unicode code point(s) for a particular glyph name like
+  * this:
+  *
+  * ```
+  * import { adobeGlyphs } from 'pdf-lab-core';
+  *
+  * const glyph = adobeGlyphs['Euro'];
+  * const name = glyph.n; // 'Euro'.
+  * const codes = glyph.u;
+  * const fallbackCodes = glyph.f;
+  * const isZapfDingbats = glyph.z;
+  *
+  * All codepoints in the PDF standard encodings map to exactly one Unicode
+  * code point. In other words, none of the corresponding glyphs is a composite
+  * character, and the property `u` will always be of type `number` (and not
+  * `number[]`).
+  */
+export const SymbolEncoding = [
 	'.notdef', // Octal: 0000, decimal: 000, hexadecimal: 0x00
 	'.notdef', // Octal: 0001, decimal: 001, hexadecimal: 0x01
 	'.notdef', // Octal: 0002, decimal: 002, hexadecimal: 0x02
@@ -36,9 +52,9 @@ export const AdobeSymbolEncoding = [
 	'.notdef', // Octal: 0035, decimal: 029, hexadecimal: 0x1d
 	'.notdef', // Octal: 0036, decimal: 030, hexadecimal: 0x1e
 	'.notdef', // Octal: 0037, decimal: 031, hexadecimal: 0x1f
-	'nbspace', // Octal: 0040, decimal: 032, hexadecimal: 0x20
+	'space', // Octal: 0040, decimal: 032, hexadecimal: 0x20
 	'exclam', // Octal: 0041, decimal: 033, hexadecimal: 0x21
-	'forall', // Octal: 0042, decimal: 034, hexadecimal: 0x22
+	'universal', // Octal: 0042, decimal: 034, hexadecimal: 0x22
 	'numbersign', // Octal: 0043, decimal: 035, hexadecimal: 0x23
 	'existential', // Octal: 0044, decimal: 036, hexadecimal: 0x24
 	'percent', // Octal: 0045, decimal: 037, hexadecimal: 0x25
@@ -78,7 +94,7 @@ export const AdobeSymbolEncoding = [
 	'Gamma', // Octal: 0107, decimal: 071, hexadecimal: 0x47
 	'Eta', // Octal: 0110, decimal: 072, hexadecimal: 0x48
 	'Iota', // Octal: 0111, decimal: 073, hexadecimal: 0x49
-	'thetasymbolgreek', // Octal: 0112, decimal: 074, hexadecimal: 0x4a
+	'theta1', // Octal: 0112, decimal: 074, hexadecimal: 0x4a
 	'Kappa', // Octal: 0113, decimal: 075, hexadecimal: 0x4b
 	'Lambda', // Octal: 0114, decimal: 076, hexadecimal: 0x4c
 	'Mu', // Octal: 0115, decimal: 077, hexadecimal: 0x4d
@@ -90,8 +106,8 @@ export const AdobeSymbolEncoding = [
 	'Sigma', // Octal: 0123, decimal: 083, hexadecimal: 0x53
 	'Tau', // Octal: 0124, decimal: 084, hexadecimal: 0x54
 	'Upsilon', // Octal: 0125, decimal: 085, hexadecimal: 0x55
-	'sigmafinal', // Octal: 0126, decimal: 086, hexadecimal: 0x56
-	'Ohm', // Octal: 0127, decimal: 087, hexadecimal: 0x57
+	'sigma1', // Octal: 0126, decimal: 086, hexadecimal: 0x56
+	'Omega', // Octal: 0127, decimal: 087, hexadecimal: 0x57
 	'Xi', // Octal: 0130, decimal: 088, hexadecimal: 0x58
 	'Psi', // Octal: 0131, decimal: 089, hexadecimal: 0x59
 	'Zeta', // Octal: 0132, decimal: 090, hexadecimal: 0x5a
@@ -110,10 +126,10 @@ export const AdobeSymbolEncoding = [
 	'gamma', // Octal: 0147, decimal: 103, hexadecimal: 0x67
 	'eta', // Octal: 0150, decimal: 104, hexadecimal: 0x68
 	'iota', // Octal: 0151, decimal: 105, hexadecimal: 0x69
-	'phisymbolgreek', // Octal: 0152, decimal: 106, hexadecimal: 0x6a
+	'phi1', // Octal: 0152, decimal: 106, hexadecimal: 0x6a
 	'kappa', // Octal: 0153, decimal: 107, hexadecimal: 0x6b
 	'lambda', // Octal: 0154, decimal: 108, hexadecimal: 0x6c
-	'mugreek', // Octal: 0155, decimal: 109, hexadecimal: 0x6d
+	'mu', // Octal: 0155, decimal: 109, hexadecimal: 0x6d
 	'nu', // Octal: 0156, decimal: 110, hexadecimal: 0x6e
 	'omicron', // Octal: 0157, decimal: 111, hexadecimal: 0x6f
 	'pi', // Octal: 0160, decimal: 112, hexadecimal: 0x70
@@ -122,7 +138,7 @@ export const AdobeSymbolEncoding = [
 	'sigma', // Octal: 0163, decimal: 115, hexadecimal: 0x73
 	'tau', // Octal: 0164, decimal: 116, hexadecimal: 0x74
 	'upsilon', // Octal: 0165, decimal: 117, hexadecimal: 0x75
-	'pisymbolgreek', // Octal: 0166, decimal: 118, hexadecimal: 0x76
+	'omega1', // Octal: 0166, decimal: 118, hexadecimal: 0x76
 	'omega', // Octal: 0167, decimal: 119, hexadecimal: 0x77
 	'xi', // Octal: 0170, decimal: 120, hexadecimal: 0x78
 	'psi', // Octal: 0171, decimal: 121, hexadecimal: 0x79
@@ -165,10 +181,10 @@ export const AdobeSymbolEncoding = [
 	'.notdef', // Octal: 0236, decimal: 158, hexadecimal: 0x9e
 	'.notdef', // Octal: 0237, decimal: 159, hexadecimal: 0x9f
 	'Euro', // Octal: 0240, decimal: 160, hexadecimal: 0xa0
-	'Upsilonhooksymbol', // Octal: 0241, decimal: 161, hexadecimal: 0xa1
+	'Upsilon1', // Octal: 0241, decimal: 161, hexadecimal: 0xa1
 	'minute', // Octal: 0242, decimal: 162, hexadecimal: 0xa2
 	'lessequal', // Octal: 0243, decimal: 163, hexadecimal: 0xa3
-	'divisionslash', // Octal: 0244, decimal: 164, hexadecimal: 0xa4
+	'fraction', // Octal: 0244, decimal: 164, hexadecimal: 0xa4
 	'infinity', // Octal: 0245, decimal: 165, hexadecimal: 0xa5
 	'florin', // Octal: 0246, decimal: 166, hexadecimal: 0xa6
 	'club', // Octal: 0247, decimal: 167, hexadecimal: 0xa7
@@ -200,20 +216,20 @@ export const AdobeSymbolEncoding = [
 	'Ifraktur', // Octal: 0301, decimal: 193, hexadecimal: 0xc1
 	'Rfraktur', // Octal: 0302, decimal: 194, hexadecimal: 0xc2
 	'weierstrass', // Octal: 0303, decimal: 195, hexadecimal: 0xc3
-	'timescircle', // Octal: 0304, decimal: 196, hexadecimal: 0xc4
+	'circlemultiply', // Octal: 0304, decimal: 196, hexadecimal: 0xc4
 	'circleplus', // Octal: 0305, decimal: 197, hexadecimal: 0xc5
 	'emptyset', // Octal: 0306, decimal: 198, hexadecimal: 0xc6
 	'intersection', // Octal: 0307, decimal: 199, hexadecimal: 0xc7
 	'union', // Octal: 0310, decimal: 200, hexadecimal: 0xc8
-	'superset', // Octal: 0311, decimal: 201, hexadecimal: 0xc9
+	'propersuperset', // Octal: 0311, decimal: 201, hexadecimal: 0xc9
 	'reflexsuperset', // Octal: 0312, decimal: 202, hexadecimal: 0xca
 	'notsubset', // Octal: 0313, decimal: 203, hexadecimal: 0xcb
-	'subset', // Octal: 0314, decimal: 204, hexadecimal: 0xcc
+	'propersubset', // Octal: 0314, decimal: 204, hexadecimal: 0xcc
 	'reflexsubset', // Octal: 0315, decimal: 205, hexadecimal: 0xcd
 	'element', // Octal: 0316, decimal: 206, hexadecimal: 0xce
 	'notelement', // Octal: 0317, decimal: 207, hexadecimal: 0xcf
 	'angle', // Octal: 0320, decimal: 208, hexadecimal: 0xd0
-	'nabla', // Octal: 0321, decimal: 209, hexadecimal: 0xd1
+	'gradient', // Octal: 0321, decimal: 209, hexadecimal: 0xd1
 	'registerserif', // Octal: 0322, decimal: 210, hexadecimal: 0xd2
 	'copyrightserif', // Octal: 0323, decimal: 211, hexadecimal: 0xd3
 	'trademarkserif', // Octal: 0324, decimal: 212, hexadecimal: 0xd4

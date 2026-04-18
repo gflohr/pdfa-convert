@@ -260,7 +260,7 @@ export const MacRomanEncoding = [
 	'Igrave', // Octal: 0355, decimal: 237, hexadecimal: 0xed.
 	'Oacute', // Octal: 0356, decimal: 238, hexadecimal: 0xee.
 	'Ocircumflex', // Octal: 0357, decimal: 239, hexadecimal: 0xef.
-	'x-apple-logo', // Octal: 0360, decimal: 240, hexadecimal: 0xf0.
+	'apple', // Octal: 0360, decimal: 240, hexadecimal: 0xf0.
 	'Ograve', // Octal: 0361, decimal: 241, hexadecimal: 0xf1.
 	'Uacute', // Octal: 0362, decimal: 242, hexadecimal: 0xf2.
 	'Ucircumflex', // Octal: 0363, decimal: 243, hexadecimal: 0xf3.

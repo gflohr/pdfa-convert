@@ -8,8 +8,11 @@ import {
 	type PDFPage,
 	PDFRawStream,
 } from '@cantoo/pdf-lib';
-import { Lexer } from './lexer.js';
+import { Lexer, type Token } from './lexer.js';
 
+type TextBlock = {
+	text: string;
+};
 type TextCollector = Record<string, string[]>;
 
 export class PDFTextExtractor {
@@ -120,9 +123,38 @@ export class PDFTextExtractor {
 							console.log(tokens[i - 1]);
 						}
 						break;
+					case 'TJ':
+						if (
+							inText && tokens[i - 1].type === 'token' &&
+							i > 3 &&
+							tokens[i - 1].value.length === 1 &&
+							tokens[i - 1].value[0] === 93) {
+							const textToken = this.extractTJStringArray(tokens, i - 1);
+							console.log(textToken);
+						}
+						break;
+					default:
+						break;
 				}
 			}
 		}
+	}
+
+	private extractTJStringArray(tokens: Token[], end: number): Token {
+		const token: Token = {
+			type: 'string',
+			value: [] as number[],
+		};
+
+		for (let i = end - 1; i >= 0; --i) {
+			if (tokens[i].type === 'string') {
+				token.value.unshift(...tokens[i].value);
+			} else if (tokens[i].type === 'token' && tokens[i].value.length === 1 && tokens[i].value[0] === 91) {
+				break;
+			}
+		}
+
+		return token;
 	}
 
 	private decodeNumberArray(value: number[]): string {

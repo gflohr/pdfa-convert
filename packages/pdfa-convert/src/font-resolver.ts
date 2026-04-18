@@ -28,10 +28,9 @@ export type FontInfo = {
 	baseFont: string;
 	ref: PDFRef;
 	embedded: boolean;
-	// FIXME! Do not use the encoding but always use a CMap, even for the
-	// standard encodings.
 	encoding?: Encoding;
 	cmap: CMap,
+	subtype: 'Type0',
 };
 
 const FontDescriptionByName: Record<string, FontDescription> = {

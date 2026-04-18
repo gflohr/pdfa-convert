@@ -3,7 +3,6 @@ import {
 	PDFDict,
 	type PDFDocument,
 	PDFName,
-	PDFObject,
 	PDFRawStream,
 	PDFRef,
 } from '@cantoo/pdf-lib';
@@ -63,6 +62,7 @@ export class PDFAConvert {
 		}
 
 		const fonts = this.collectFonts(pdfDoc);
+		console.log(fonts);
 		// console.log(fonts);
 		const extractor = new PDFTextExtractor();
 

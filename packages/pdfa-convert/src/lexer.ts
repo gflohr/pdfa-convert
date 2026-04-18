@@ -44,6 +44,16 @@ export class Lexer {
 						};
 						state = 'hexstring';
 						break;
+					case 91: // Left square bracket.
+					case 93: // Right square bracket.
+						if (token.value.length) tokens.push(token);
+						tokens.push({ type: 'token', value: [byte] });
+						token = {
+							type: 'token',
+							value: [],
+						};
+						state = 'initial';
+						break;
 					case 37: // Percent (comment).
 						for (let j = i; j < bytes.length; ++j) {
 							if (bytes[j] === 10 || bytes[j] === 13) {

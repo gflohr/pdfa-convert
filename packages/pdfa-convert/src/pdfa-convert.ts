@@ -5,11 +5,11 @@ import {
 	type PDFDocument,
 	PDFName,
 	PDFRawStream,
-	PDFRef,
+	type PDFRef,
 } from '@cantoo/pdf-lib';
-import type { FontInfo, FontSubtype } from './font-resolver.js';
+import { FontResolver, type Encoding, type FontInfo, type FontSubtype } from './text/font-resolver.js';
 import { CMap } from './text/cmap.js';
-import { GlyphExtractor } from './glyph-extractor.js';
+import { GlyphExtractor } from './text/glyph-extractor.js';
 import { SingleByteMapper } from './text/single-byte-mapper.js';
 
 /**
@@ -74,7 +74,8 @@ export class PDFAConvert {
 			if (typeof font === 'undefined') {
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
 			} else if (font.cmap) {
-				text = glyphBlock.glyphs.map(glyph => font.cmap.lookup(glyph)).join('');
+				const cmap = font.cmap;
+				text = glyphBlock.glyphs.map(glyph => cmap.lookup(glyph)).join('');
 			} else if (font.encoding) {
 				const mapper = new SingleByteMapper(font.encoding);
 				text = glyphBlock.glyphs.map(glyph => mapper.lookup(glyph)).join('');
@@ -143,7 +144,7 @@ export class PDFAConvert {
 				fontDescriptor.has(PDFName.of('FontFile3'));
 		}
 
-		const fontInfo = {
+		const fontInfo: FontInfo = {
 			ref: fontRef,
 			embedded,
 			baseFont: fontName.decodeText(),
@@ -158,7 +159,10 @@ export class PDFAConvert {
 
 		const encoding = fontDict.lookup(PDFName.of('Encoding'));
 		if (encoding) {
-			fontInfo.encoding = encoding.decodeText();
+			const encodingName = (encoding as PDFName).decodeText();
+			if (FontResolver.isStandardEncoding(encodingName)) {
+				fontInfo.encoding = encodingName as Encoding;
+			}
 		} else {
 			const baseFont = fontDict.lookupMaybe(PDFName.of('BaseFont'), PDFName);
 			if (baseFont && isStandardFont(baseFont.decodeText())) {

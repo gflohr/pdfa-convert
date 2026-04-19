@@ -8,7 +8,7 @@ import {
 	type PDFPage,
 	PDFRawStream,
 } from '@cantoo/pdf-lib';
-import { Lexer, type Token } from './lexer.js';
+import { Lexer, type Token } from '../lexer.js';
 
 type GlyphBlock = {
 	glyphs: number[];

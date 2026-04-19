@@ -1,7 +1,7 @@
 import { isStandardFont, type PDFRef, StandardFonts } from '@cantoo/pdf-lib';
 import { FontLoader, type OsType } from './font-loader.js';
-import type { FontMap } from './pdfa-convert.js';
-import type { CMap } from './text/cmap.js';
+import type { FontMap } from '../pdfa-convert.js';
+import type { CMap } from './cmap.js';
 
 export type FontCategory =
 	| 'sans'
@@ -18,11 +18,16 @@ export type FontDescription = {
 	standardName?: StandardFonts;
 };
 
-export type Encoding =
-	| 'StandardEncoding'
-	| 'MacRomanEncoding'
-	| 'WinAnsiEncoding'
-	| 'MacExpertEncoding';
+// FIXME! That does not fit here!
+const encodings = [
+  'StandardEncoding',
+  'MacRomanEncoding',
+  'WinAnsiEncoding',
+  'MacExpertEncoding',
+  'SymbolEncoding',
+  'ZapfDingbatsEncoding',
+] as const;
+export type Encoding = typeof encodings[number];
 
 export type FontSubtype = 'Type0' | 'TrueType';
 export type FontInfo = {
@@ -30,8 +35,8 @@ export type FontInfo = {
 	ref: PDFRef;
 	embedded: boolean;
 	encoding?: Encoding;
-	cmap?: CMap,
-	subtype: FontSubtype,
+	cmap?: CMap;
+	subtype: FontSubtype;
 };
 
 const FontDescriptionByName: Record<string, FontDescription> = {
@@ -227,6 +232,10 @@ export class FontResolver {
 		for (const name in fontMap) {
 			this.fontMap[name.toLowerCase()] = fontMap[name];
 		}
+	}
+
+	static isStandardEncoding(encoding: string): boolean {
+		return encodings.map(e => e.toLocaleLowerCase()).includes(encoding.toLowerCase());
 	}
 
 	async resolve(fontName: string): Promise<string | Uint8Array | ArrayBuffer> {

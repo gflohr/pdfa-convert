@@ -1,7 +1,7 @@
 import { isStandardFont, type PDFRef, StandardFonts } from '@cantoo/pdf-lib';
-import { FontLoader, type OsType } from './font-loader.js';
 import type { FontMap } from '../pdfa-convert.js';
 import type { CMap } from './cmap.js';
+import { FontLoader, type OsType } from './font-loader.js';
 
 export type FontCategory =
 	| 'sans'
@@ -20,14 +20,14 @@ export type FontDescription = {
 
 // FIXME! That does not fit here!
 const encodings = [
-  'StandardEncoding',
-  'MacRomanEncoding',
-  'WinAnsiEncoding',
-  'MacExpertEncoding',
-  'SymbolEncoding',
-  'ZapfDingbatsEncoding',
+	'StandardEncoding',
+	'MacRomanEncoding',
+	'WinAnsiEncoding',
+	'MacExpertEncoding',
+	'SymbolEncoding',
+	'ZapfDingbatsEncoding',
 ] as const;
-export type Encoding = typeof encodings[number];
+export type Encoding = (typeof encodings)[number];
 
 export type FontSubtype = 'Type0' | 'TrueType';
 export type FontInfo = {
@@ -235,7 +235,9 @@ export class FontResolver {
 	}
 
 	static isStandardEncoding(encoding: string): boolean {
-		return encodings.map(e => e.toLocaleLowerCase()).includes(encoding.toLowerCase());
+		return encodings
+			.map((e) => e.toLocaleLowerCase())
+			.includes(encoding.toLowerCase());
 	}
 
 	async resolve(fontName: string): Promise<string | Uint8Array | ArrayBuffer> {

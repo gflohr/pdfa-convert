@@ -15,10 +15,7 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'pdf-lab-core': path.resolve(
-				__dirname,
-				'../../packages/core/src',
-			),
+			'pdf-lab-core': path.resolve(__dirname, '../../packages/core/src'),
 		},
 	},
 });

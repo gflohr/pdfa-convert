@@ -1,5 +1,6 @@
 import * as fs from 'node:fs/promises';
 import { PDFDocument } from '@cantoo/pdf-lib';
+// biome-ignore lint/correctness/useImportExtensions: false positive
 import { PDFAConvert } from 'pdf-lab-core';
 import { beforeEach, describe, expect, it, type MockedClass, vi } from 'vitest';
 

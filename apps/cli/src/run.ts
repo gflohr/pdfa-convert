@@ -3,7 +3,7 @@
 import * as path from 'node:path';
 import * as url from 'node:url';
 import { Textdomain } from '@esgettext/runtime';
-import type { PDFAStandard } from 'pdf-lab-core';
+import type { PDFAStandard } from 'pdf-lab-core.js';
 import yargs from 'yargs';
 import { type ConvertOptions, convert } from './convert.js';
 import { Package } from './package.js';

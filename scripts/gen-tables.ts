@@ -1,6 +1,7 @@
 import { unicodeName } from 'unicode-name';
 
-const aglUrl = 'https://raw.githubusercontent.com/adobe-type-tools/agl-aglfn/refs/heads/master/glyphlist.txt';
+const aglUrl =
+	'https://raw.githubusercontent.com/adobe-type-tools/agl-aglfn/refs/heads/master/glyphlist.txt';
 
 const header = `// This file is generated! Do NOT edit!
 //
@@ -16,7 +17,7 @@ export type AdobeGlyph = {
 };
 
 const command = process.argv[2];
-switch(command) {
+switch (command) {
 	case 'agl':
 		agl();
 		break;
@@ -29,7 +30,7 @@ async function agl() {
 	const glyphs: Record<string, AdobeGlyph> = {};
 
 	await parseGlyphs(glyphs, new URL(aglUrl));
-	Object.values(glyphs).forEach(def => {
+	Object.values(glyphs).forEach((def) => {
 		def.z = true;
 	});
 
@@ -41,13 +42,16 @@ async function agl() {
 	for (const name in glyphs) {
 		const glyph = glyphs[name];
 		if (glyph.u.length > 1) continue;
-		unicodeToAdobeGlyphNames[glyph.u[0]] = chooseName(unicodeToAdobeGlyphNames[glyph.u[0]], name);
+		unicodeToAdobeGlyphNames[glyph.u[0]] = chooseName(
+			unicodeToAdobeGlyphNames[glyph.u[0]],
+			name,
+		);
 	}
 
 	// Fill up possible gaps with fallbacks.
 	for (const name in glyphs) {
 		const glyph = glyphs[name];
-		glyph.f?.forEach(f => {
+		glyph.f?.forEach((f) => {
 			const codePoint = parseInt(f, 16);
 			unicodeToAdobeGlyphNames[codePoint] ??= name;
 		});
@@ -89,26 +93,28 @@ export type AdobeGlyph = {
  */
 export const adobeGlyphs: Record<string, AdobeGlyph> = {`);
 
-	Object.keys(glyphs).sort().forEach(name => {
-		const glyph = glyphs[name];
-		const uniName = computeUnicodeName(glyph.u);
-		let optional = '';
-		if (glyph.f) {
-			// biome-ignore lint/style/useTemplate: avoid backslashes.
-			optional += `\n\t\tf: [${glyph.f.map(x => '0x' + x)}],`
-		}
-		if (glyph.z) {
-			optional += `\n\t\tz: true,`
-		}
+	Object.keys(glyphs)
+		.sort()
+		.forEach((name) => {
+			const glyph = glyphs[name];
+			const uniName = computeUnicodeName(glyph.u);
+			let optional = '';
+			if (glyph.f) {
+				// biome-ignore lint/style/useTemplate: avoid backslashes.
+				optional += `\n\t\tf: [${glyph.f.map((x) => '0x' + x)}],`;
+			}
+			if (glyph.z) {
+				optional += `\n\t\tz: true,`;
+			}
 
-		const codes = glyphs[name].c.map(c => `0x${c}`);
-		const u = codes.length > 1 ? `[${codes.join(', ')}]` : codes[0];
-		console.log(`	// ${uniName}
+			const codes = glyphs[name].c.map((c) => `0x${c}`);
+			const u = codes.length > 1 ? `[${codes.join(', ')}]` : codes[0];
+			console.log(`	// ${uniName}
 	${name}: {
 		n: '${name}',
 		u: ${u},${optional}
 	},`);
-	});
+		});
 
 	console.log('};\n');
 
@@ -128,7 +134,7 @@ export const unicodeToAdobeGlyph = Object.assign([] as string[], {`);
 function computeUnicodeName(codes: number | number[]) {
 	if (typeof codes === 'number') codes = [codes];
 
-	return codes.map(c => unicodeName(c) ?? '<unkown character>').join(' + ');
+	return codes.map((c) => unicodeName(c) ?? '<unkown character>').join(' + ');
 }
 
 async function manualFallback(glyphs: Record<string, AdobeGlyph>) {
@@ -163,13 +169,15 @@ async function manualFallback(glyphs: Record<string, AdobeGlyph>) {
 
 	for (const name in fallbacks) {
 		if (glyphs[name]) {
-			glyphs[name].f = (fallbacks as Record<string, string[]>)[name].map(s => s.toLowerCase());
+			glyphs[name].f = (fallbacks as Record<string, string[]>)[name].map((s) =>
+				s.toLowerCase(),
+			);
 		}
 	}
 }
 
 async function autoFallback(glyphs: Record<string, AdobeGlyph>) {
-	Object.values(glyphs).forEach(def => {
+	Object.values(glyphs).forEach((def) => {
 		if (def.n.match(/small$/)) {
 			const regularName = def.n.replace(/small$/, '');
 			if (regularName in glyphs) {
@@ -203,7 +211,10 @@ function chooseName(name1: string, name2: string): string {
 	return name1;
 }
 
-async function parseGlyphs(glyphs: Record<string, AdobeGlyph>, url: URL): Promise<void> {
+async function parseGlyphs(
+	glyphs: Record<string, AdobeGlyph>,
+	url: URL,
+): Promise<void> {
 	const source = await download(new URL(url));
 	const lines = source.split('\n');
 	for (let i = 0; i < lines.length; ++i) {
@@ -216,7 +227,7 @@ async function parseGlyphs(glyphs: Record<string, AdobeGlyph>, url: URL): Promis
 		}
 
 		const c: string[] = codePoint.split(/\s/);
-		const u = c.map(n => parseInt(n, 16));
+		const u = c.map((n) => parseInt(n, 16));
 		glyphs[adobeName] = {
 			n: adobeName,
 			u: u,

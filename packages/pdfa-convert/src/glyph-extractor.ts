@@ -10,15 +10,15 @@ import {
 } from '@cantoo/pdf-lib';
 import { Lexer, type Token } from './lexer.js';
 
-type TextBlock = {
+type GlyphBlock = {
 	glyphs: number[];
 	fontResource: string;
 	pageNumber: number;
 };
 
-export class PDFTextExtractor {
-	parseDocument(pdfDoc: PDFDocument): TextBlock[] {
-		const blocks: TextBlock[] = [];
+export class GlyphExtractor {
+	parseDocument(pdfDoc: PDFDocument): GlyphBlock[] {
+		const blocks: GlyphBlock[] = [];
 		const pages = pdfDoc.getPages();
 		for (let i = 0; i < pages.length; ++i) {
 			this.parsePage(blocks, pages[i], i, pdfDoc);
@@ -28,7 +28,7 @@ export class PDFTextExtractor {
 	}
 
 	private parseRecursively(
-		collector: TextBlock[],
+		collector: GlyphBlock[],
 		obj: PDFObject,
 		pageNumber: number,
 		pdfDoc: PDFDocument,
@@ -50,7 +50,7 @@ export class PDFTextExtractor {
 	}
 
 	private parseDictionary(
-		collector: TextBlock[],
+		collector: GlyphBlock[],
 		dict: PDFDict,
 		pageNumber: number,
 		pdfDoc: PDFDocument,
@@ -77,7 +77,7 @@ export class PDFTextExtractor {
 	}
 
 	private parsePage(
-		collector: TextBlock[],
+		collector: GlyphBlock[],
 		page: PDFPage,
 		pageNumber: number,
 		pdfDoc: PDFDocument,
@@ -90,7 +90,7 @@ export class PDFTextExtractor {
 		this.parseRecursively(collector, contents, pageNumber, pdfDoc);
 	}
 
-	private parseStream(collector: TextBlock[], pageNumber: number, stream: PDFRawStream) {
+	private parseStream(collector: GlyphBlock[], pageNumber: number, stream: PDFRawStream) {
 		const decoded = decodePDFRawStream(stream);
 		const bytes = decoded.getBytes(0);
 
@@ -113,7 +113,7 @@ export class PDFTextExtractor {
 						break;
 					case 'Tf':
 						if (inText && i > 1 && tokens[i - 2].type === 'token') {
-							fontResource = this.decodeNumberArray(tokens[i - 2].value);
+							fontResource = this.decodeNumberArray(tokens[i - 2].value).replace(/^\//, '');
 						}
 						break;
 					case 'Tj':

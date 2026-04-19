@@ -166,11 +166,9 @@ export class CMap {
 	// The CMap tables can become very big. Instead of a (sparse) array, we
 	// do a binary search over the sorted entries.
 	//
-	// If no entry is found, we simply return an empty array. This is
-	// domain-specific. The purpose of this class is to find Unicode code
-	// points present in a text block. An empty array is the natural equivalent
-	// of a glyph with no Unicode value.
-	public lookup(glyph: number): number[] {
+	// If no entry is found, the Unicode replacement character \uFFFD is
+	// returned.
+	public lookup(glyph: number): string {
 		let low = 0;
 		let high = this.mappings.length - 1;
 		while (high >= low) {
@@ -189,7 +187,7 @@ export class CMap {
 					if (typeof mapping[1] === 'number') {
 						return this.decodeUTF16BE(mapping[1]);
 					} else {
-						return mapping[1];
+						return String.fromCharCode(...mapping[1]);
 					}
 				} else {
 					low = mid + 1;
@@ -198,27 +196,27 @@ export class CMap {
 		}
 
 		// Not found.
-		return [];
+		return "\uFFFD";
 	}
 
-	private lookupRangeValue(glyph: number, mapping: Mapping): number[] {
+	private lookupRangeValue(glyph: number, mapping: Mapping): string {
 		if (typeof mapping[2] === 'number') {
 			// biome-ignore lint/style/noNonNullAssertion: false positive.
 			return this.decodeUTF16BE(glyph - mapping[0] + mapping[2]!);
 		} else {
 			const offset = glyph - mapping[0];
 			if (Array.isArray(mapping[2]) && offset < mapping[2].length) {
-				return mapping[2][offset];
+				return String.fromCharCode(...mapping[2][offset]);
 			} else {
-				return [];
+				return "\uFFFD";
 			}
 		}
 	}
 
-	decodeUTF16BE(value: number): number[] {
+	decodeUTF16BE(value: number): string {
 		// Single UTF-16 code unit (BMP)
 		if (value <= 0xffff) {
-			return [value];
+			return String.fromCharCode(value);
 		}
 
 		// Two UTF-16 code units packed into one number
@@ -229,10 +227,10 @@ export class CMap {
 		if (high >= 0xd800 && high <= 0xdbff && low >= 0xdc00 && low <= 0xdfff) {
 			const codePoint = ((high - 0xd800) << 10) + (low - 0xdc00) + 0x10000;
 
-			return [codePoint];
+			return String.fromCharCode(codePoint);
 		}
 
-		// Invalid UTF-16 → ignore
-		return [];
+		// Invalid UTF-16.
+		return "\uFFFD";
 	}
 }

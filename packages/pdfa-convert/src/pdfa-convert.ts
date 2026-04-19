@@ -7,8 +7,8 @@ import {
 	PDFRef,
 } from '@cantoo/pdf-lib';
 import type { Encoding, FontInfo } from './font-resolver.js';
-import { PDFTextExtractor } from './pdf-text-extractor.js';
 import { CMap } from './cmap.js';
+import { GlyphExtractor } from './glyph-extractor.js';
 
 /**
  * PDF/A conformance level and version.
@@ -62,11 +62,25 @@ export class PDFAConvert {
 		}
 
 		const fonts = this.collectFonts(pdfDoc);
-		console.dir(fonts, { depth: null });
-		const extractor = new PDFTextExtractor();
+		const extractor = new GlyphExtractor();
 
-		const textBlocks = extractor.parseDocument(pdfDoc);
-		console.dir(textBlocks);
+		const glyphBlocks = extractor.parseDocument(pdfDoc);
+		for (let i = 0; i < glyphBlocks.length; ++i) {
+			const glyphBlock = glyphBlocks[i];
+			const font = fonts[glyphBlock.fontResource];
+			let text: string;
+			if (typeof font === 'undefined') {
+				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
+			} else if (font.cmap) {
+				text = glyphBlock.glyphs.map(glyph => font.cmap.lookup(glyph)).join('');
+			} else if (font.encoding) {
+				throw new Error('TODO! Convert to text with encoding.')
+			} else {
+				// Hopeless case.
+				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
+			}
+			console.log(`page ${glyphBlock.pageNumber + 1}: ${text}`);
+		}
 	}
 
 	private collectFonts(pdfDoc: PDFDocument): Record<string, FontInfo> {
@@ -82,10 +96,6 @@ export class PDFAConvert {
 				const subtype = fontDict.lookupMaybe(PDFName.of('Subtype'), PDFName);
 				if (!subtype) continue;
 
-				const fontInfo: FontInfo = {
-					ref: fontRef,
-				} as FontInfo;
-
 				const subtypeName = subtype.decodeText();
 				if (subtypeName === 'Type0') {
 					const info = this.getFontType0Info(
@@ -97,10 +107,8 @@ export class PDFAConvert {
 					if (info) {
 						fonts[fontName.decodeText()] = info;
 					}
-					continue;
-				} else if (subtypeName === 'TrueType') {
-					const info = this.getFontTrueTypeInfo(
-						pdfDoc,
+				} else {
+					const info = this.getFontInfo(
 						fontName,
 						fontDict,
 						fontRef
@@ -108,46 +116,14 @@ export class PDFAConvert {
 					if (info) {
 						fonts[fontName.decodeText()] = info;
 					}
-					continue;
 				}
-
-				const descriptor = fontDict.lookupMaybe(
-					PDFName.of('FontDescriptor'),
-					PDFDict,
-				);
-				if (descriptor) {
-					if (!descriptor.has(PDFName.of('FontName'))) continue;
-					const name = descriptor.lookup(PDFName.of('FontName'), PDFName);
-					if (!name) continue;
-					fontInfo.baseFont = name.decodeText();
-
-					fontInfo.embedded =
-						descriptor.has(PDFName.of('FontFile')) ||
-						descriptor.has(PDFName.of('FontFile2')) ||
-						descriptor.has(PDFName.of('FontFile3'));
-				} else {
-					// Standard font.
-					const baseFont = fontDict.lookup(PDFName.of('BaseFont'), PDFName);
-					const baseFontName = baseFont?.decodeText() ?? fontName.decodeText();
-					const encoding = fontDict.lookupMaybe(
-						PDFName.of('Encoding'),
-						PDFName,
-					);
-
-					fontInfo.baseFont = baseFontName;
-					fontInfo.encoding = encoding as unknown as Encoding;
-					fontInfo.embedded = false;
-				}
-
-				fonts[fontName.decodeText()] = fontInfo;
 			}
 		}
 
 		return fonts;
 	}
 
-	private getFontTrueTypeInfo(
-		pdfDoc: PDFDocument,
+	private getFontInfo(
 		fontName: PDFName,
 		fontDict: PDFDict,
 		fontRef: PDFRef,

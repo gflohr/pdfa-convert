@@ -20,7 +20,7 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x21)).toStrictEqual([0x65]);
+			expect(cmap.lookup(0x21)).toBe('e');
 		});
 
 		it('should ignore missing end markers', () => {
@@ -31,7 +31,7 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x21)).toStrictEqual([0x65]);
+			expect(cmap.lookup(0x21)).toBe('e');
 		});
 	});
 
@@ -47,13 +47,13 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0)).toStrictEqual([]);
-			expect(cmap.lookup(0x21)).toStrictEqual([0x65]);
-			expect(cmap.lookup(0x22)).toStrictEqual([]);
-			expect(cmap.lookup(0xaf)).toStrictEqual([0x36]);
-			expect(cmap.lookup(0xbf)).toStrictEqual([]);
-			expect(cmap.lookup(0xabcd)).toStrictEqual([0x1234]);
-			expect(cmap.lookup(0xdcba)).toStrictEqual([]);
+			expect(cmap.lookup(0)).toBe('\uFFFD');
+			expect(cmap.lookup(0x21)).toBe('e');
+			expect(cmap.lookup(0x22)).toBe('\uFFFD');
+			expect(cmap.lookup(0xaf)).toBe('6');
+			expect(cmap.lookup(0xbf)).toBe('\uFFFD');
+			expect(cmap.lookup(0xabcd)).toBe('\u1234');
+			expect(cmap.lookup(0xdcba)).toBe('\uFFFD');
 		});
 
 		it('should ignore incomplete single mappings', () => {
@@ -66,9 +66,9 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x21)).toStrictEqual([0x65]);
-			expect(cmap.lookup(0xaf)).toStrictEqual([0x36]);
-			expect(cmap.lookup(0xabcd)).toStrictEqual([]);
+			expect(cmap.lookup(0x21)).toBe('e');
+			expect(cmap.lookup(0xaf)).toBe('6');
+			expect(cmap.lookup(0xabcd)).toBe('\uFFFD');
 		});
 
 		it('should ignore incomplete range mappings', () => {
@@ -82,8 +82,8 @@ endbfrange
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x22)).toStrictEqual([0x101]);
-			expect(cmap.lookup(0x201)).toStrictEqual([]);
+			expect(cmap.lookup(0x22)).toBe('\u0101');
+			expect(cmap.lookup(0x201)).toBe('\uFFFD');
 		});
 
 		it('should decode BTF16-BE Unicode values', () => {
@@ -94,7 +94,7 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x3af1)).toStrictEqual([0x2003e]);
+			expect(cmap.lookup(0x3af1)).toBe(String.fromCharCode(0x2003e));
 		});
 
 		it('should ignore invalid surrogate pairs', () => {
@@ -106,8 +106,8 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x3af1)).toStrictEqual([]);
-			expect(cmap.lookup(0x3af2)).toStrictEqual([]);
+			expect(cmap.lookup(0x3af1)).toBe('\uFFFD');
+			expect(cmap.lookup(0x3af2)).toBe('\uFFFD');
 		});
 
 		it('should parse a ligature mapping', () => {
@@ -118,7 +118,7 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x61)).toStrictEqual([0x66, 0x66, 0x6c]);
+			expect(cmap.lookup(0x61)).toBe('ffl');
 		});
 
 		it('should discard an invalid ligature', () => {
@@ -131,7 +131,7 @@ endbfchar
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x61)).toStrictEqual([]);
+			expect(cmap.lookup(0x61)).toBe('\uFFFD');
 		});
 	});
 
@@ -149,10 +149,10 @@ trailing garbage
 `;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0)).toStrictEqual([]);
-			expect(cmap.lookup(0x21)).toStrictEqual([0x100]);
-			expect(cmap.lookup(0x22)).toStrictEqual([0x101]);
-			expect(cmap.lookup(0x23)).toStrictEqual([]);
+			expect(cmap.lookup(0)).toBe('\uFFFD');
+			expect(cmap.lookup(0x21)).toBe('\u0100');
+			expect(cmap.lookup(0x22)).toBe('\u0101');
+			expect(cmap.lookup(0x23)).toBe('\uFFFD');
 		});
 
 		it('should parse ligature ranges', () => {
@@ -162,10 +162,10 @@ beginbfrange
 endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x5f)).toStrictEqual([0x66, 0x66]);
-			expect(cmap.lookup(0x60)).toStrictEqual([0x66, 0x69]);
-			expect(cmap.lookup(0x61)).toStrictEqual([0x66, 0x66, 0x6c]);
-			expect(cmap.lookup(0x62)).toStrictEqual([]);
+			expect(cmap.lookup(0x5f)).toBe('ff');
+			expect(cmap.lookup(0x60)).toBe('fi');
+			expect(cmap.lookup(0x61)).toBe('ffl');
+			expect(cmap.lookup(0x62)).toBe('\uFFFD');
 		});
 
 		it('should ignore out-of-range glyphs', () => {
@@ -175,9 +175,9 @@ beginbfrange
 endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x5f)).toStrictEqual([0x66, 0x66]);
-			expect(cmap.lookup(0x60)).toStrictEqual([0x66, 0x69]);
-			expect(cmap.lookup(0x61)).toStrictEqual([]);
+			expect(cmap.lookup(0x5f)).toBe('ff');
+			expect(cmap.lookup(0x60)).toBe('fi');
+			expect(cmap.lookup(0x61)).toBe('\uFFFD');
 		});
 
 		it('should discard invalid ligature specifications', () => {
@@ -187,9 +187,9 @@ beginbfrange
 endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x5f)).toStrictEqual([]);
-			expect(cmap.lookup(0x60)).toStrictEqual([]);
-			expect(cmap.lookup(0x61)).toStrictEqual([]);
+			expect(cmap.lookup(0x5f)).toBe('\uFFFD');
+			expect(cmap.lookup(0x60)).toBe('\uFFFD');
+			expect(cmap.lookup(0x61)).toBe('\uFFFD');
 		});
 
 		it('should discard incomplete ligatures', () => {
@@ -201,9 +201,9 @@ beginbfrange
 endbfrange`;
 			const cmap = new CMap(toBytes(source));
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0x5f)).toStrictEqual([]);
-			expect(cmap.lookup(0x60)).toStrictEqual([]);
-			expect(cmap.lookup(0x61)).toStrictEqual([]);
+			expect(cmap.lookup(0x5f)).toBe('\uFFFD');
+			expect(cmap.lookup(0x60)).toBe('\uFFFD');
+			expect(cmap.lookup(0x61)).toBe('\uFFFD');
 		});
 	});
 
@@ -219,13 +219,13 @@ endbfchar
 `;
 			const cmap = new CMap(source);
 			expect(cmap).toBeDefined();
-			expect(cmap.lookup(0)).toStrictEqual([]);
-			expect(cmap.lookup(0x21)).toStrictEqual([0x65]);
-			expect(cmap.lookup(0x22)).toStrictEqual([]);
-			expect(cmap.lookup(0xaf)).toStrictEqual([0x36]);
-			expect(cmap.lookup(0xbf)).toStrictEqual([]);
-			expect(cmap.lookup(0xabcd)).toStrictEqual([0x1234]);
-			expect(cmap.lookup(0xdcba)).toStrictEqual([]);
+			expect(cmap.lookup(0)).toBe('\uFFFD');
+			expect(cmap.lookup(0x21)).toBe('e');
+			expect(cmap.lookup(0x22)).toBe('\uFFFD');
+			expect(cmap.lookup(0xaf)).toBe('6');
+			expect(cmap.lookup(0xbf)).toBe('\uFFFD');
+			expect(cmap.lookup(0xabcd)).toBe('\u1234');
+			expect(cmap.lookup(0xdcba)).toBe('\uFFFD');
 		});
 
 		it('should bail out on everything else', () => {

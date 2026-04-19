@@ -169,6 +169,19 @@ export class CMap {
 	// If no entry is found, the Unicode replacement character \uFFFD is
 	// returned.
 	public lookup(glyph: number): string {
+		const codepoints = this.lookupCodepoints(glyph);
+		if (codepoints.length) {
+			return codepoints.map(c => String.fromCharCode(c)).join('');
+		} else {
+			return '\uFFFD';
+		}
+	}
+
+	// Does the same as lookup() but returns an array of codepoints. This is
+	// more convenient, when we want to select glyphs from a font, which may
+	// lack glyphs but provide an alternative (for example 'increment' for
+	// 'Delta').
+	public lookupCodepoints(glyph: number): number[] {
 		let low = 0;
 		let high = this.mappings.length - 1;
 		while (high >= low) {
@@ -187,7 +200,7 @@ export class CMap {
 					if (typeof mapping[1] === 'number') {
 						return this.decodeUTF16BE(mapping[1]);
 					} else {
-						return String.fromCharCode(...mapping[1]);
+						return mapping[1];
 					}
 				} else {
 					low = mid + 1;
@@ -196,27 +209,28 @@ export class CMap {
 		}
 
 		// Not found.
-		return "\uFFFD";
+		return [];
 	}
 
-	private lookupRangeValue(glyph: number, mapping: Mapping): string {
+
+	private lookupRangeValue(glyph: number, mapping: Mapping): number[] {
 		if (typeof mapping[2] === 'number') {
 			// biome-ignore lint/style/noNonNullAssertion: false positive.
 			return this.decodeUTF16BE(glyph - mapping[0] + mapping[2]!);
 		} else {
 			const offset = glyph - mapping[0];
 			if (Array.isArray(mapping[2]) && offset < mapping[2].length) {
-				return String.fromCharCode(...mapping[2][offset]);
+				return mapping[2][offset];
 			} else {
-				return "\uFFFD";
+				return [];
 			}
 		}
 	}
 
-	decodeUTF16BE(value: number): string {
+	private decodeUTF16BE(value: number): number[] {
 		// Single UTF-16 code unit (BMP)
 		if (value <= 0xffff) {
-			return String.fromCharCode(value);
+			return [value];
 		}
 
 		// Two UTF-16 code units packed into one number
@@ -225,12 +239,12 @@ export class CMap {
 
 		// Validate surrogate pair
 		if (high >= 0xd800 && high <= 0xdbff && low >= 0xdc00 && low <= 0xdfff) {
-			const codePoint = ((high - 0xd800) << 10) + (low - 0xdc00) + 0x10000;
+			const codepoint = ((high - 0xd800) << 10) + (low - 0xdc00) + 0x10000;
 
-			return String.fromCharCode(codePoint);
+			return [codepoint];
 		}
 
 		// Invalid UTF-16.
-		return "\uFFFD";
+		return [];
 	}
 }

@@ -65,7 +65,7 @@ export const WinAnsiEncoding = [
 	'asterisk', // Octal: 0052, decimal: 042, hexadecimal: 0x2a.
 	'plus', // Octal: 0053, decimal: 043, hexadecimal: 0x2b.
 	'comma', // Octal: 0054, decimal: 044, hexadecimal: 0x2c.
-	'hyphen (5)', // Octal: 0055, decimal: 045, hexadecimal: 0x2d.
+	'hyphen', // Octal: 0055, decimal: 045, hexadecimal: 0x2d.
 	'period', // Octal: 0056, decimal: 046, hexadecimal: 0x2e.
 	'slash', // Octal: 0057, decimal: 047, hexadecimal: 0x2f.
 	'zero', // Octal: 0060, decimal: 048, hexadecimal: 0x30.
@@ -148,7 +148,7 @@ export const WinAnsiEncoding = [
 	'braceright', // Octal: 0175, decimal: 125, hexadecimal: 0x7d.
 	'asciitilde', // Octal: 0176, decimal: 126, hexadecimal: 0x7e.
 	'.notdef', // Octal: 0177, decimal: 127, hexadecimal: 0x7f.
-	'Euro (1)', // Octal: 0200, decimal: 128, hexadecimal: 0x80.
+	'Euro', // Octal: 0200, decimal: 128, hexadecimal: 0x80.
 	'.notdef', // Octal: 0201, decimal: 129, hexadecimal: 0x81.
 	'quotesinglbase', // Octal: 0202, decimal: 130, hexadecimal: 0x82.
 	'florin', // Octal: 0203, decimal: 131, hexadecimal: 0x83.
@@ -162,14 +162,14 @@ export const WinAnsiEncoding = [
 	'guilsinglleft', // Octal: 0213, decimal: 139, hexadecimal: 0x8b.
 	'OE', // Octal: 0214, decimal: 140, hexadecimal: 0x8c.
 	'.notdef', // Octal: 0215, decimal: 141, hexadecimal: 0x8d.
-	'Zcaron (2)', // Octal: 0216, decimal: 142, hexadecimal: 0x8e.
+	'Zcaron', // Octal: 0216, decimal: 142, hexadecimal: 0x8e.
 	'.notdef', // Octal: 0217, decimal: 143, hexadecimal: 0x8f.
 	'.notdef', // Octal: 0220, decimal: 144, hexadecimal: 0x90.
 	'quoteleft', // Octal: 0221, decimal: 145, hexadecimal: 0x91.
 	'quoteright', // Octal: 0222, decimal: 146, hexadecimal: 0x92.
 	'quotedblleft', // Octal: 0223, decimal: 147, hexadecimal: 0x93.
 	'quotedblright', // Octal: 0224, decimal: 148, hexadecimal: 0x94.
-	'bullet (3)', // Octal: 0225, decimal: 149, hexadecimal: 0x95.
+	'bullet', // Octal: 0225, decimal: 149, hexadecimal: 0x95.
 	'endash', // Octal: 0226, decimal: 150, hexadecimal: 0x96.
 	'emdash', // Octal: 0227, decimal: 151, hexadecimal: 0x97.
 	'tilde', // Octal: 0230, decimal: 152, hexadecimal: 0x98.
@@ -178,7 +178,7 @@ export const WinAnsiEncoding = [
 	'guilsinglright', // Octal: 0233, decimal: 155, hexadecimal: 0x9b.
 	'oe', // Octal: 0234, decimal: 156, hexadecimal: 0x9c.
 	'.notdef', // Octal: 0235, decimal: 157, hexadecimal: 0x9d.
-	'zcaron (2)', // Octal: 0236, decimal: 158, hexadecimal: 0x9e.
+	'zcaron', // Octal: 0236, decimal: 158, hexadecimal: 0x9e.
 	'Ydieresis', // Octal: 0237, decimal: 159, hexadecimal: 0x9f.
 	'.notdef', // Octal: 0240, decimal: 160, hexadecimal: 0xa0.
 	'exclamdown', // Octal: 0241, decimal: 161, hexadecimal: 0xa1.
@@ -191,7 +191,7 @@ export const WinAnsiEncoding = [
 	'dieresis', // Octal: 0250, decimal: 168, hexadecimal: 0xa8.
 	'copyright', // Octal: 0251, decimal: 169, hexadecimal: 0xa9.
 	'ordfeminine', // Octal: 0252, decimal: 170, hexadecimal: 0xaa.
-	'guillemotleft (4)', // Octal: 0253, decimal: 171, hexadecimal: 0xab.
+	'guillemotleft', // Octal: 0253, decimal: 171, hexadecimal: 0xab.
 	'logicalnot', // Octal: 0254, decimal: 172, hexadecimal: 0xac.
 	'.notdef', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
 	'registered', // Octal: 0256, decimal: 174, hexadecimal: 0xae.
@@ -207,7 +207,7 @@ export const WinAnsiEncoding = [
 	'cedilla', // Octal: 0270, decimal: 184, hexadecimal: 0xb8.
 	'onesuperior', // Octal: 0271, decimal: 185, hexadecimal: 0xb9.
 	'ordmasculine', // Octal: 0272, decimal: 186, hexadecimal: 0xba.
-	'guillemotright (4)', // Octal: 0273, decimal: 187, hexadecimal: 0xbb.
+	'guillemotright', // Octal: 0273, decimal: 187, hexadecimal: 0xbb.
 	'onequarter', // Octal: 0274, decimal: 188, hexadecimal: 0xbc.
 	'onehalf', // Octal: 0275, decimal: 189, hexadecimal: 0xbd.
 	'threequarters', // Octal: 0276, decimal: 190, hexadecimal: 0xbe.

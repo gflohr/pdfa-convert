@@ -65,7 +65,7 @@ export const StandardEncoding = [
 	'asterisk', // Octal: 0052, decimal: 042, hexadecimal: 0x2a.
 	'plus', // Octal: 0053, decimal: 043, hexadecimal: 0x2b.
 	'comma', // Octal: 0054, decimal: 044, hexadecimal: 0x2c.
-	'hyphen (5)', // Octal: 0055, decimal: 045, hexadecimal: 0x2d.
+	'hyphen', // Octal: 0055, decimal: 045, hexadecimal: 0x2d.
 	'period', // Octal: 0056, decimal: 046, hexadecimal: 0x2e.
 	'slash', // Octal: 0057, decimal: 047, hexadecimal: 0x2f.
 	'zero', // Octal: 0060, decimal: 048, hexadecimal: 0x30.
@@ -191,7 +191,7 @@ export const StandardEncoding = [
 	'currency1', // Octal: 0250, decimal: 168, hexadecimal: 0xa8.
 	'quotesingle', // Octal: 0251, decimal: 169, hexadecimal: 0xa9.
 	'quotedblleft', // Octal: 0252, decimal: 170, hexadecimal: 0xaa.
-	'guillemotleft (4)', // Octal: 0253, decimal: 171, hexadecimal: 0xab.
+	'guillemotleft', // Octal: 0253, decimal: 171, hexadecimal: 0xab.
 	'guilsinglleft', // Octal: 0254, decimal: 172, hexadecimal: 0xac.
 	'guilsinglright', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
 	'fi', // Octal: 0256, decimal: 174, hexadecimal: 0xae.
@@ -203,11 +203,11 @@ export const StandardEncoding = [
 	'periodcentered', // Octal: 0264, decimal: 180, hexadecimal: 0xb4.
 	'.notdef', // Octal: 0265, decimal: 181, hexadecimal: 0xb5.
 	'paragraph', // Octal: 0266, decimal: 182, hexadecimal: 0xb6.
-	'bullet (3)', // Octal: 0267, decimal: 183, hexadecimal: 0xb7.
+	'bullet', // Octal: 0267, decimal: 183, hexadecimal: 0xb7.
 	'quotesinglbase', // Octal: 0270, decimal: 184, hexadecimal: 0xb8.
 	'quotedblbase', // Octal: 0271, decimal: 185, hexadecimal: 0xb9.
 	'quotedblright', // Octal: 0272, decimal: 186, hexadecimal: 0xba.
-	'guillemotright (4)', // Octal: 0273, decimal: 187, hexadecimal: 0xbb.
+	'guillemotright', // Octal: 0273, decimal: 187, hexadecimal: 0xbb.
 	'ellipsis', // Octal: 0274, decimal: 188, hexadecimal: 0xbc.
 	'perthousand', // Octal: 0275, decimal: 189, hexadecimal: 0xbd.
 	'.notdef', // Octal: 0276, decimal: 190, hexadecimal: 0xbe.

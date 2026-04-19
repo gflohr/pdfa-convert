@@ -1,5 +1,5 @@
-import { Lexer, type Token } from './lexer.js';
-import type { GlyphMapper } from './text/glyph-mapper.js';
+import { Lexer, type Token } from '../lexer.js';
+import type { GlyphMapper } from './glyph-mapper.js';
 
 type Mapping =
 	| [number, number]

@@ -6,9 +6,10 @@ import {
 	PDFRawStream,
 	PDFRef,
 } from '@cantoo/pdf-lib';
-import type { Encoding, FontInfo } from './font-resolver.js';
-import { CMap } from './cmap.js';
+import type { FontInfo } from './font-resolver.js';
+import { CMap } from './text/cmap.js';
 import { GlyphExtractor } from './glyph-extractor.js';
+import { SingleByteMapper } from './text/single-byte-mapper.js';
 
 /**
  * PDF/A conformance level and version.
@@ -74,7 +75,8 @@ export class PDFAConvert {
 			} else if (font.cmap) {
 				text = glyphBlock.glyphs.map(glyph => font.cmap.lookup(glyph)).join('');
 			} else if (font.encoding) {
-				throw new Error('TODO! Convert to text with encoding.')
+				const mapper = new SingleByteMapper(font.encoding);
+				text = glyphBlock.glyphs.map(glyph => mapper.lookup(glyph)).join('');
 			} else {
 				// Hopeless case.
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');

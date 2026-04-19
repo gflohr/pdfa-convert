@@ -1,7 +1,7 @@
 import { isStandardFont, type PDFRef, StandardFonts } from '@cantoo/pdf-lib';
 import { FontLoader, type OsType } from './font-loader.js';
 import type { FontMap } from './pdfa-convert.js';
-import { CMap } from './cmap.js';
+import type { CMap } from './text/cmap.js';
 
 export type FontCategory =
 	| 'sans'

@@ -52,7 +52,7 @@ export const MacExpertEncoding = [
 	'.notdef', // Octal: 0035, decicmal: 029, hexadecimal: 0x1d
 	'.notdef', // Octal: 0036, decicmal: 030, hexadecimal: 0x1e
 	'.notdef', // Octal: 0037, decicmal: 031, hexadecimal: 0x1f
-	'.notdef', // Octal: 0040, decicmal: 032, hexadecimal: 0x20
+	'space', // Octal: 0040, decicmal: 032, hexadecimal: 0x20
 	'exclamsmall', // Octal: 0041, decicmal: 033, hexadecimal: 0x21
 	'Hungarumlautsmall', // Octal: 0042, decicmal: 034, hexadecimal: 0x22
 	'centoldstyle', // Octal: 0043, decicmal: 035, hexadecimal: 0x23

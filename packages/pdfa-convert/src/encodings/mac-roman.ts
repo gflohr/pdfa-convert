@@ -65,7 +65,7 @@ export const MacRomanEncoding = [
 	'asterisk', // Octal: 0052, decimal: 042, hexadecimal: 0x2a.
 	'plus', // Octal: 0053, decimal: 043, hexadecimal: 0x2b.
 	'comma', // Octal: 0054, decimal: 044, hexadecimal: 0x2c.
-	'hyphen (5)', // Octal: 0055, decimal: 045, hexadecimal: 0x2d.
+	'hyphen', // Octal: 0055, decimal: 045, hexadecimal: 0x2d.
 	'period', // Octal: 0056, decimal: 046, hexadecimal: 0x2e.
 	'slash', // Octal: 0057, decimal: 047, hexadecimal: 0x2f.
 	'zero', // Octal: 0060, decimal: 048, hexadecimal: 0x30.
@@ -185,7 +185,7 @@ export const MacRomanEncoding = [
 	'cent', // Octal: 0242, decimal: 162, hexadecimal: 0xa2.
 	'sterling', // Octal: 0243, decimal: 163, hexadecimal: 0xa3.
 	'section', // Octal: 0244, decimal: 164, hexadecimal: 0xa4.
-	'bullet (3)', // Octal: 0245, decimal: 165, hexadecimal: 0xa5.
+	'bullet', // Octal: 0245, decimal: 165, hexadecimal: 0xa5.
 	'paragraph', // Octal: 0246, decimal: 166, hexadecimal: 0xa6.
 	'germandbls', // Octal: 0247, decimal: 167, hexadecimal: 0xa7.
 	'registered', // Octal: 0250, decimal: 168, hexadecimal: 0xa8.
@@ -219,8 +219,8 @@ export const MacRomanEncoding = [
 	'florin', // Octal: 0304, decimal: 196, hexadecimal: 0xc4.
 	'.notdef', // Octal: 0305, decimal: 197, hexadecimal: 0xc5.
 	'.notdef', // Octal: 0306, decimal: 198, hexadecimal: 0xc6.
-	'guillemotleft (4)', // Octal: 0307, decimal: 199, hexadecimal: 0xc7.
-	'guillemotright (4)', // Octal: 0310, decimal: 200, hexadecimal: 0xc8.
+	'guillemotleft', // Octal: 0307, decimal: 199, hexadecimal: 0xc7.
+	'guillemotright', // Octal: 0310, decimal: 200, hexadecimal: 0xc8.
 	'ellipsis', // Octal: 0311, decimal: 201, hexadecimal: 0xc9.
 	'.notdef', // Octal: 0312, decimal: 202, hexadecimal: 0xca.
 	'Agrave', // Octal: 0313, decimal: 203, hexadecimal: 0xcb.

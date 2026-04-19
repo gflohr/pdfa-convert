@@ -148,20 +148,20 @@ export const ZapfDingbatsEncoding = [
 	'a99', // Octal: 0175, decimal: 125, hexadecimal: 0x7d
 	'a100', // Octal: 0176, decimal: 126, hexadecimal: 0x7e
 	'.notdef', // Octal: 0177, decimal: 127, hexadecimal: 0x7f
-	'.notdef', // Octal: 0200, decimal: 128, hexadecimal: 0x80
-	'.notdef', // Octal: 0201, decimal: 129, hexadecimal: 0x81
-	'.notdef', // Octal: 0202, decimal: 130, hexadecimal: 0x82
-	'.notdef', // Octal: 0203, decimal: 131, hexadecimal: 0x83
-	'.notdef', // Octal: 0204, decimal: 132, hexadecimal: 0x84
-	'.notdef', // Octal: 0205, decimal: 133, hexadecimal: 0x85
-	'.notdef', // Octal: 0206, decimal: 134, hexadecimal: 0x86
-	'.notdef', // Octal: 0207, decimal: 135, hexadecimal: 0x87
-	'.notdef', // Octal: 0210, decimal: 136, hexadecimal: 0x88
-	'.notdef', // Octal: 0211, decimal: 137, hexadecimal: 0x89
-	'.notdef', // Octal: 0212, decimal: 138, hexadecimal: 0x8a
-	'.notdef', // Octal: 0213, decimal: 139, hexadecimal: 0x8b
-	'.notdef', // Octal: 0214, decimal: 140, hexadecimal: 0x8c
-	'.notdef', // Octal: 0215, decimal: 141, hexadecimal: 0x8d
+	'a89', // Octal: 0200, decimal: 128, hexadecimal: 0x80
+	'a90', // Octal: 0201, decimal: 129, hexadecimal: 0x81
+	'a93', // Octal: 0202, decimal: 130, hexadecimal: 0x82
+	'a94', // Octal: 0203, decimal: 131, hexadecimal: 0x83
+	'a91', // Octal: 0204, decimal: 132, hexadecimal: 0x84
+	'a92', // Octal: 0205, decimal: 133, hexadecimal: 0x85
+	'a205', // Octal: 0206, decimal: 134, hexadecimal: 0x86
+	'a85', // Octal: 0207, decimal: 135, hexadecimal: 0x87
+	'a206', // Octal: 0210, decimal: 136, hexadecimal: 0x88
+	'a86', // Octal: 0211, decimal: 137, hexadecimal: 0x89
+	'a87', // Octal: 0212, decimal: 138, hexadecimal: 0x8a
+	'a88', // Octal: 0213, decimal: 139, hexadecimal: 0x8b
+	'a95', // Octal: 0214, decimal: 140, hexadecimal: 0x8c
+	'a96', // Octal: 0215, decimal: 141, hexadecimal: 0x8d
 	'.notdef', // Octal: 0216, decimal: 142, hexadecimal: 0x8e
 	'.notdef', // Octal: 0217, decimal: 143, hexadecimal: 0x8f
 	'.notdef', // Octal: 0220, decimal: 144, hexadecimal: 0x90

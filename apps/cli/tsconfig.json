@@ -6,7 +6,10 @@
 		"module": "ESNext",
 		"target": "ES2022",
 		"moduleResolution": "bundler",
-		"types": ["node"]
+		"types": ["node"],
+		"paths": {
+			"pdf-lab-core": ["../../packages/core/dist"]
+		}
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]

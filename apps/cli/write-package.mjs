@@ -11,7 +11,7 @@ const packageJsonPath = join(directory, 'package.json');
 const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 
 console.log(`export namespace Package {
-	export const name = 'pdfa-convert';
+	export const name = 'pdf-lab';
 	export const bugTrackerUrl = '${pkg.bugs.url}';
 	export const version = '${pkg.version}';
 	export const authorName = '${pkg.author.name}';

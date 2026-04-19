@@ -3,12 +3,12 @@
 import * as path from 'node:path';
 import * as url from 'node:url';
 import { Textdomain } from '@esgettext/runtime';
-import type { PDFAStandard } from 'pdfa-convert';
+import type { PDFAStandard } from 'pdf-lab-core';
 import yargs from 'yargs';
 import { type ConvertOptions, convert } from './convert.js';
 import { Package } from './package.js';
 
-const gtx = Textdomain.getInstance('pdfa-convert-cli');
+const gtx = Textdomain.getInstance('pdfa-convert');
 
 export async function run(argv = process.argv.slice(2)) {
 	const __filename = url.fileURLToPath(import.meta.url);

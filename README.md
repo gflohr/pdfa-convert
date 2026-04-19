@@ -9,8 +9,27 @@ In the future, it will hopefully help with these things:
 * replacing/embedding fonts in PDFs
 * subsetting fonts in PDFs
 * manipulation of XMP metadata in PDFs
-* extraction of textual content from PDFs
+* allow access to the Adobe Glyph List Specification
 * ...
 
 The software is written in TypeScript. It consists of a command-line
 interface and a library.
+
+## Current State
+
+### Text Extraction
+
+The software can extract text from many, but not all PDFs:
+
+```
+pnpm install
+cd apps/cli
+pnpm start:dev PATH_TO_PDF
+```
+
+Missing:
+
+* Encodings with "differences".
+
+Documents using legacy CJL fonts/encodings may work or not.
+

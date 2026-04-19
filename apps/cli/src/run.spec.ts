@@ -11,7 +11,7 @@ import * as convertModule from './convert.js';
 import { Package } from './package.js';
 import { run } from './run.js';
 
-describe('pdfa-convert-cli', () => {
+describe('pdf-lab-cli', () => {
 	let consoleErrorSpy: MockInstance<(...args: unknown[]) => void>;
 
 	beforeEach(() => {

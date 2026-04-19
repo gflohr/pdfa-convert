@@ -1,5 +1,4 @@
 import { unicodeName } from 'unicode-name';
-import { unicodeToAdobeGlyph } from '../packages/pdfa-convert/src/agl.js';
 
 const aglUrl = 'https://raw.githubusercontent.com/adobe-type-tools/agl-aglfn/refs/heads/master/glyphlist.txt';
 
@@ -29,7 +28,7 @@ switch(command) {
 async function agl() {
 	const glyphs: Record<string, AdobeGlyph> = {};
 
-	await parseGlyphs(glyphs, new URL(zapfDingbatsUrl));
+	await parseGlyphs(glyphs, new URL(aglUrl));
 	Object.values(glyphs).forEach(def => {
 		def.z = true;
 	});

@@ -1,8 +1,8 @@
 {
-	"name": "pdfa-convert-monorepo",
+	"name": "pdf-lab-monorepo",
 	"private": true,
 	"description": "Convert PDFs to PDF/A-1b, PDF/A-2b, or PDF/A-3b",
-	"homepage": "https://gflohr.github.io/pdfa-convert#readme",
+	"homepage": "https://gflohr.github.io/pdf-lab/#readme",
 	"keywords": [
 		"PDF",
 		"PDF/A",
@@ -23,8 +23,8 @@
 		"check": "biome check",
 		"check:fix": "biome check --write",
 		"check:staged": "biome check --staged --write --no-errors-on-unmatched",
-		"start": "pnpm --filter pdfa-convert-cli run start --workspace-root",
-		"start:dev": "pnpm --filter pdfa-convert-cli run start:dev",
+		"start": "pnpm --filter pdf-lab run start --workspace-root",
+		"start:dev": "pnpm --filter pdf-lab run start:dev",
 		"test": "pnpm -r run test",
 		"test:cov": "pnpm -r run test:cov",
 		"test:cov-changed": "pnpm -r run test:cov-changed",
@@ -37,8 +37,8 @@
 		"prepare": "husky",
 		"preinstall": "npx only-allow pnpm",
 		"gen": "pnpm run gen:agl",
-		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdfa-convert/src/agl.ts",
-		"postgen:agl": "biome check --write packages/pdfa-convert/src/agl.ts"
+		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdf-lab-cre/src/agl.ts",
+		"postgen:agl": "biome check --write packages/pdf-lab-core/src/agl.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.10",

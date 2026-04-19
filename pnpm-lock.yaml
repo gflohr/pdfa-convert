@@ -56,9 +56,9 @@ importers:
       '@pdf-lib/fontkit':
         specifier: ^1.1.1
         version: 1.1.1
-      pdfa-convert:
+      pdf-lab-core:
         specifier: workspace:*
-        version: link:../../packages/pdfa-convert
+        version: link:../../packages/core
       yargs:
         specifier: ^18.0.0
         version: 18.0.0
@@ -88,7 +88,7 @@ importers:
         specifier: ^4.1.4
         version: 4.1.4(@types/node@25.5.2)(@vitest/coverage-v8@4.1.4)(vite@8.0.8(@types/node@25.5.2)(esbuild@0.27.7)(tsx@4.21.0))
 
-  packages/pdfa-convert:
+  packages/core:
     dependencies:
       '@cantoo/pdf-lib':
         specifier: ^2.6.5

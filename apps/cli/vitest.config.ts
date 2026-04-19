@@ -15,9 +15,9 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'pdfa-convert': path.resolve(
+			'pdf-lab-core': path.resolve(
 				__dirname,
-				'../../packages/pdfa-convert/src',
+				'../../packages/core/src',
 			),
 		},
 	},

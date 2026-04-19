@@ -2,10 +2,7 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"sourceMap": true,
-		"outDir": "dist",
-		"paths": {
-			"pdfa-convert": ["../../packages/pdfa-convert/dist"]
-		}
+		"outDir": "dist"
 	},
 	"include": ["src"],
 	"exclude": ["src/**/*.spec.ts"]

@@ -1,4 +1,5 @@
 import {
+	isStandardFont,
 	PDFArray,
 	PDFDict,
 	type PDFDocument,
@@ -90,7 +91,6 @@ export class PDFAConvert {
 		for (const page of pdfDoc.getPages()) {
 			const { Font } = page.node.normalizedEntries();
 			for (const [fontName, fontRef] of Font.entries()) {
-console.log(`font name: ${fontName}`);
 				const fontDict = pdfDoc.context.lookupMaybe(fontRef, PDFDict);
 				if (!fontDict) continue;
 
@@ -159,6 +159,18 @@ console.log(`font name: ${fontName}`);
 		const encoding = fontDict.lookup(PDFName.of('Encoding'));
 		if (encoding) {
 			fontInfo.encoding = encoding.decodeText();
+		} else {
+			const baseFont = fontDict.lookupMaybe(PDFName.of('BaseFont'), PDFName);
+			if (baseFont && isStandardFont(baseFont.decodeText())) {
+				const baseFontName = baseFont.decodeText();
+				if (baseFontName === 'Symbol') {
+					fontInfo.encoding = 'SymbolEncoding';
+				} else if (baseFontName === 'ZapfDingbats') {
+					fontInfo.encoding = 'ZapfDingbatsEncoding';
+				} else {
+					fontInfo.encoding = 'StandardEncoding';
+				}
+			}
 		}
 
 		return fontInfo;

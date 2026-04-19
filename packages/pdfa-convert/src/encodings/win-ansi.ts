@@ -180,11 +180,11 @@ export const WinAnsiEncoding = [
 	'.notdef', // Octal: 0235, decimal: 157, hexadecimal: 0x9d.
 	'zcaron', // Octal: 0236, decimal: 158, hexadecimal: 0x9e.
 	'Ydieresis', // Octal: 0237, decimal: 159, hexadecimal: 0x9f.
-	'.notdef', // Octal: 0240, decimal: 160, hexadecimal: 0xa0.
+	'nbspace', // Octal: 0240, decimal: 160, hexadecimal: 0xa0.
 	'exclamdown', // Octal: 0241, decimal: 161, hexadecimal: 0xa1.
 	'cent', // Octal: 0242, decimal: 162, hexadecimal: 0xa2.
 	'sterling', // Octal: 0243, decimal: 163, hexadecimal: 0xa3.
-	'currency1', // Octal: 0244, decimal: 164, hexadecimal: 0xa4.
+	'Euro', // Octal: 0244, decimal: 164, hexadecimal: 0xa4.
 	'yen', // Octal: 0245, decimal: 165, hexadecimal: 0xa5.
 	'brokenbar', // Octal: 0246, decimal: 166, hexadecimal: 0xa6.
 	'section', // Octal: 0247, decimal: 167, hexadecimal: 0xa7.
@@ -193,7 +193,7 @@ export const WinAnsiEncoding = [
 	'ordfeminine', // Octal: 0252, decimal: 170, hexadecimal: 0xaa.
 	'guillemotleft', // Octal: 0253, decimal: 171, hexadecimal: 0xab.
 	'logicalnot', // Octal: 0254, decimal: 172, hexadecimal: 0xac.
-	'.notdef', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
+	'sfthyphen', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
 	'registered', // Octal: 0256, decimal: 174, hexadecimal: 0xae.
 	'macron', // Octal: 0257, decimal: 175, hexadecimal: 0xaf.
 	'degree', // Octal: 0260, decimal: 176, hexadecimal: 0xb0.

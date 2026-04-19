@@ -6,7 +6,7 @@ import {
 	PDFRawStream,
 	PDFRef,
 } from '@cantoo/pdf-lib';
-import type { FontInfo } from './font-resolver.js';
+import type { FontInfo, FontSubtype } from './font-resolver.js';
 import { CMap } from './text/cmap.js';
 import { GlyphExtractor } from './glyph-extractor.js';
 import { SingleByteMapper } from './text/single-byte-mapper.js';
@@ -90,8 +90,7 @@ export class PDFAConvert {
 		for (const page of pdfDoc.getPages()) {
 			const { Font } = page.node.normalizedEntries();
 			for (const [fontName, fontRef] of Font.entries()) {
-				if (!(fontRef instanceof PDFRef)) continue;
-
+console.log(`font name: ${fontName}`);
 				const fontDict = pdfDoc.context.lookupMaybe(fontRef, PDFDict);
 				if (!fontDict) continue;
 
@@ -104,16 +103,17 @@ export class PDFAConvert {
 						pdfDoc,
 						fontName,
 						fontDict,
-						fontRef,
+						fontRef as PDFRef,
 					);
 					if (info) {
 						fonts[fontName.decodeText()] = info;
 					}
 				} else {
 					const info = this.getFontInfo(
+						subtypeName,
 						fontName,
 						fontDict,
-						fontRef
+						fontRef as PDFRef,
 					);
 					if (info) {
 						fonts[fontName.decodeText()] = info;
@@ -126,12 +126,13 @@ export class PDFAConvert {
 	}
 
 	private getFontInfo(
+		subtypeName: string,
 		fontName: PDFName,
 		fontDict: PDFDict,
 		fontRef: PDFRef,
 	): FontInfo | undefined {
 		let embedded = false;
-		const fontDescriptor = fontDict.lookup(
+		const fontDescriptor = fontDict.lookupMaybe(
 			PDFName.of('FontDescriptor'),
 			PDFDict,
 		);
@@ -142,19 +143,25 @@ export class PDFAConvert {
 				fontDescriptor.has(PDFName.of('FontFile3'));
 		}
 
-		const toUnicodeStream = fontDict.lookup(PDFName.of('ToUnicode'));
-		if (!(toUnicodeStream && toUnicodeStream instanceof PDFRawStream)) return;
-
-		const stream = toUnicodeStream.contents;
-		const cmap = new CMap(stream);
-
-		return {
+		const fontInfo = {
 			ref: fontRef,
 			embedded,
 			baseFont: fontName.decodeText(),
-			cmap,
-			subtype: 'TrueType',
+			subtype: subtypeName as FontSubtype,
 		};
+
+		const toUnicodeStream = fontDict.lookup(PDFName.of('ToUnicode'));
+		if (toUnicodeStream && toUnicodeStream instanceof PDFRawStream) {
+			const stream = toUnicodeStream.contents;
+			fontInfo.cmap = new CMap(stream);
+		}
+
+		const encoding = fontDict.lookup(PDFName.of('Encoding'));
+		if (encoding) {
+			fontInfo.encoding = encoding.decodeText();
+		}
+
+		return fontInfo;
 	}
 
 	private getFontType0Info(

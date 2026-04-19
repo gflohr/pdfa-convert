@@ -30,7 +30,7 @@ export type FontInfo = {
 	ref: PDFRef;
 	embedded: boolean;
 	encoding?: Encoding;
-	cmap: CMap,
+	cmap?: CMap,
 	subtype: FontSubtype,
 };
 

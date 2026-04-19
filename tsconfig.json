@@ -9,13 +9,13 @@
 		"moduleResolution": "Node",
 		"skipLibCheck": true,
 		"declaration": true,
-		"composite": true,
 		"sourceMap": true,
 		"rootDir": ".",
 		"outDir": "dist",
 		"paths": {
 			"pdfa-convert": ["./packages/pdfa-convert/src"]
-		}
+		},
+		"types": ["node"]
 	},
 	"include": [],
 	"exclude": ["node_modules", "dist"],

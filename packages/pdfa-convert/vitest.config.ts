@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -12,13 +11,5 @@ export default defineConfig({
 		clearMocks: true,
 		restoreMocks: true,
 		mockReset: true,
-	},
-	resolve: {
-		alias: {
-			'pdfa-convert': path.resolve(
-				__dirname,
-				'../../packages/pdfa-convert/src',
-			),
-		},
 	},
 });

@@ -1,4 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
@@ -7,6 +8,17 @@ function tsPlugin(tsconfig) {
 		tsconfig,
 		exclude: ['**/*.spec.ts'],
 	});
+}
+
+function onwarn(warning, warn) {
+	if (
+		warning.code === 'CIRCULAR_DEPENDENCY' &&
+		warning.message.includes('/node_modules/@cantoo/pdf-lib/')
+	) {
+		return;
+	}
+
+	warn(warning);
 }
 
 const external = [
@@ -26,7 +38,13 @@ export default [
 			sourcemap: true,
 		},
 		external,
-		plugins: [tsPlugin('./tsconfig.build.json'), nodeResolve(), commonjs()],
+		onwarn,
+		plugins: [
+			json(),
+			tsPlugin('./tsconfig.build.json'),
+			nodeResolve(),
+			commonjs(),
+		],
 	},
 	{
 		input: 'src/index.ts',
@@ -37,7 +55,13 @@ export default [
 			exports: 'named',
 		},
 		external,
-		plugins: [tsPlugin('./tsconfig.build.json'), nodeResolve(), commonjs()],
+		onwarn,
+		plugins: [
+			json(),
+			tsPlugin('./tsconfig.build.json'),
+			nodeResolve(),
+			commonjs(),
+		],
 	},
 	{
 		input: 'src/index.ts',
@@ -46,7 +70,9 @@ export default [
 			format: 'esm',
 			sourcemap: true,
 		},
+		onwarn,
 		plugins: [
+			json(),
 			tsPlugin('./tsconfig.build.json'),
 			nodeResolve({
 				browser: true,

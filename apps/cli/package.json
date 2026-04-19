@@ -24,7 +24,7 @@
 	],
 	"scripts": {
 		"prebuild": "rimraf dist && node ./write-package.mjs >src/package.ts",
-		"build": "tsc --build tsconfig.build.json",
+		"build": "tsc --project tsconfig.build.json",
 		"check": "biome check",
 		"check:fix": "biome check --write",
 		"prestart": "pnpm run build",
@@ -66,6 +66,6 @@
 		"vitest": "^4.1.4"
 	},
 	"engines": {
-		"node": ">=18"
+		"node": ">=20"
 	}
 }

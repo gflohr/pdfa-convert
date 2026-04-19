@@ -79,7 +79,8 @@ export class CMap implements GlyphMapper {
 				) {
 					i += this.consumeLigatures(mappings, mapping, tokens, i + 1);
 				}
-			} else { // String.
+			} else {
+				// String.
 				mapping.push(this.numberArrayToNumber(token.value));
 				if (mapping.length >= cardinality) {
 					mappings.push([...mapping]);
@@ -172,7 +173,7 @@ export class CMap implements GlyphMapper {
 	public lookup(glyph: number): string {
 		const codepoints = this.lookupCodepoints(glyph);
 		if (codepoints.length) {
-			return codepoints.map(c => String.fromCharCode(c)).join('');
+			return codepoints.map((c) => String.fromCharCode(c)).join('');
 		} else {
 			return '\uFFFD';
 		}
@@ -212,7 +213,6 @@ export class CMap implements GlyphMapper {
 		// Not found.
 		return [];
 	}
-
 
 	private lookupRangeValue(glyph: number, mapping: Mapping): number[] {
 		if (typeof mapping[2] === 'number') {

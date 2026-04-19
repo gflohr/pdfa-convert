@@ -1,13 +1,14 @@
 import * as fs from 'node:fs/promises';
 import { PDFDocument } from '@cantoo/pdf-lib';
-import { PDFAConvert } from 'pdfa-convert';
+// biome-ignore lint/correctness/useImportExtensions: false positive
+import { PDFAConvert } from 'pdf-lab-core';
 import { beforeEach, describe, expect, it, type MockedClass, vi } from 'vitest';
 
 vi.mock('node:fs/promises', () => ({
 	readFile: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3])),
 }));
 
-vi.mock('pdfa-convert');
+vi.mock('pdf-lab-core');
 vi.mock('@pdf-lib/fontkit', () => ({ default: {} }));
 
 import { type ConvertOptions, convert } from './convert.js';

@@ -7,8 +7,13 @@ import {
 	PDFRawStream,
 	type PDFRef,
 } from '@cantoo/pdf-lib';
-import { FontResolver, type Encoding, type FontInfo, type FontSubtype } from './text/font-resolver.js';
 import { CMap } from './text/cmap.js';
+import {
+	type Encoding,
+	type FontInfo,
+	FontResolver,
+	type FontSubtype,
+} from './text/font-resolver.js';
 import { GlyphExtractor } from './text/glyph-extractor.js';
 import { SingleByteMapper } from './text/single-byte-mapper.js';
 
@@ -75,10 +80,10 @@ export class PDFAConvert {
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
 			} else if (font.cmap) {
 				const cmap = font.cmap;
-				text = glyphBlock.glyphs.map(glyph => cmap.lookup(glyph)).join('');
+				text = glyphBlock.glyphs.map((glyph) => cmap.lookup(glyph)).join('');
 			} else if (font.encoding) {
 				const mapper = new SingleByteMapper(font.encoding);
-				text = glyphBlock.glyphs.map(glyph => mapper.lookup(glyph)).join('');
+				text = glyphBlock.glyphs.map((glyph) => mapper.lookup(glyph)).join('');
 			} else {
 				// Hopeless case.
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');

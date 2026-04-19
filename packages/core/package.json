@@ -1,5 +1,5 @@
 {
-	"name": "pdfa-convert",
+	"name": "pdf-lab-core",
 	"version": "0.1.0",
 	"description": "Convert PDFs to PDF/A format (Node.js and browser compatible)",
 	"license": "WTFPL",

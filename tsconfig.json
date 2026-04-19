@@ -13,11 +13,11 @@
 		"rootDir": ".",
 		"outDir": "dist",
 		"paths": {
-			"pdfa-convert": ["./packages/pdfa-convert/src"]
+			"pdf-lab-core": ["./packages/pdf-lab/src"]
 		},
 		"types": ["node"]
 	},
 	"include": [],
 	"exclude": ["node_modules", "dist"],
-	"references": [{ "path": "packages/pdfa-convert" }, { "path": "apps/cli" }]
+	"references": [{ "path": "packages/core" }, { "path": "apps/cli" }]
 }

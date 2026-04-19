@@ -90,7 +90,11 @@ export class GlyphExtractor {
 		this.parseRecursively(collector, contents, pageNumber, pdfDoc);
 	}
 
-	private parseStream(collector: GlyphBlock[], pageNumber: number, stream: PDFRawStream) {
+	private parseStream(
+		collector: GlyphBlock[],
+		pageNumber: number,
+		stream: PDFRawStream,
+	) {
 		const decoded = decodePDFRawStream(stream);
 		const bytes = decoded.getBytes(0);
 
@@ -113,13 +117,19 @@ export class GlyphExtractor {
 						break;
 					case 'Tf':
 						if (inText && i > 1 && tokens[i - 2].type === 'token') {
-							fontResource = this.decodeNumberArray(tokens[i - 2].value).replace(/^\//, '');
+							fontResource = this.decodeNumberArray(
+								tokens[i - 2].value,
+							).replace(/^\//, '');
 						}
 						break;
 					case 'Tj':
 					case '"':
 					case "'":
-						if (inText && tokens[i - 1].type === 'string' && fontResource.length) {
+						if (
+							inText &&
+							tokens[i - 1].type === 'string' &&
+							fontResource.length
+						) {
 							collector.push({
 								glyphs: tokens[i - 1].value,
 								fontResource,
@@ -129,11 +139,13 @@ export class GlyphExtractor {
 						break;
 					case 'TJ':
 						if (
-							inText && tokens[i - 1].type === 'token' &&
+							inText &&
+							tokens[i - 1].type === 'token' &&
 							i > 3 &&
 							tokens[i - 1].value.length === 1 &&
 							tokens[i - 1].value[0] === 93 &&
-							fontResource.length) {
+							fontResource.length
+						) {
 							const textToken = this.extractTJStringArray(tokens, i - 1);
 							if (textToken.value.length) {
 								collector.push({
@@ -160,7 +172,11 @@ export class GlyphExtractor {
 		for (let i = end - 1; i >= 0; --i) {
 			if (tokens[i].type === 'string') {
 				token.value.unshift(...tokens[i].value);
-			} else if (tokens[i].type === 'token' && tokens[i].value.length === 1 && tokens[i].value[0] === 91) {
+			} else if (
+				tokens[i].type === 'token' &&
+				tokens[i].value.length === 1 &&
+				tokens[i].value[0] === 91
+			) {
 				break;
 			}
 		}

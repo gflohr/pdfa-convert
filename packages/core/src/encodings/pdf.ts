@@ -1,24 +1,24 @@
 /**
-  * Array of glyph names in PDFEncoding. Since all standard encodings in
-  * the PDF standard are 8-bit-encodings, all arrays have a length of 256.
-  *
-  * You can get the Unicode code point(s) for a particular glyph name like
-  * this:
-  *
-  * ```
-  * import { adobeGlyphs } from 'pdf-lab-core';
-  *
-  * const glyph = adobeGlyphs['Euro'];
-  * const name = glyph.n; // 'Euro'.
-  * const codes = glyph.u;
-  * const fallbackCodes = glyph.f;
-  * const isZapfDingbats = glyph.z;
-  *
-  * All codepoints in the PDF standard encodings map to exactly one Unicode
-  * code point. In other words, none of the corresponding glyphs is a composite
-  * character, and the property `u` will always be of type `number` (and not
-  * `number[]`).
-  */
+ * Array of glyph names in PDFEncoding. Since all standard encodings in
+ * the PDF standard are 8-bit-encodings, all arrays have a length of 256.
+ *
+ * You can get the Unicode code point(s) for a particular glyph name like
+ * this:
+ *
+ * ```
+ * import { adobeGlyphs } from 'pdf-lab-core';
+ *
+ * const glyph = adobeGlyphs['Euro'];
+ * const name = glyph.n; // 'Euro'.
+ * const codes = glyph.u;
+ * const fallbackCodes = glyph.f;
+ * const isZapfDingbats = glyph.z;
+ *
+ * All codepoints in the PDF standard encodings map to exactly one Unicode
+ * code point. In other words, none of the corresponding glyphs is a composite
+ * character, and the property `u` will always be of type `number` (and not
+ * `number[]`).
+ */
 export const PDFEncoding = [
 	'.notdef', // Octal: 0000, decimal: 000, hexadecimal: 0x00.
 	'.notdef', // Octal: 0001, decimal: 001, hexadecimal: 0x01.

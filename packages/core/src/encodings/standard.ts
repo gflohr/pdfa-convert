@@ -1,25 +1,25 @@
 /**
-  * Array of glyph names in WinAnsiEncoding. Since all standard encodings in
-  * the PDF standard are 8-bit-encodings, all arrays have a length of 256.
-  *
-  * You can get the Unicode code point(s) for a particular glyph name like
-  * this:
-  *
-  * ```
-  * import { adobeGlyphs } from 'pdf-lab-core';
-  *
-  * const glyph = adobeGlyphs['Euro'];
-  * const name = glyph.n; // 'Euro'.
-  * const codes = glyph.u;
-  * const fallbackCodes = glyph.f;
-  * const isZapfDingbats = glyph.z;
-  *
-  * All codepoints in the PDF standard encodings map to exactly one Unicode
-  * code point. In other words, none of the corresponding glyphs is a composite
-  * character, and the property `u` will always be of type `number` (and not
-  * `number[]`).
-  */
-export const WinAnsiEncoding = [
+ * Array of glyph names in StandardEncoding. Since all standard encodings in
+ * the PDF standard are 8-bit-encodings, all arrays have a length of 256.
+ *
+ * You can get the Unicode code point(s) for a particular glyph name like
+ * this:
+ *
+ * ```
+ * import { adobeGlyphs } from 'pdf-lab-core';
+ *
+ * const glyph = adobeGlyphs['Euro'];
+ * const name = glyph.n; // 'Euro'.
+ * const codes = glyph.u;
+ * const fallbackCodes = glyph.f;
+ * const isZapfDingbats = glyph.z;
+ *
+ * All codepoints in the PDF standard encodings map to exactly one Unicode
+ * code point. In other words, none of the corresponding glyphs is a composite
+ * character, and the property `u` will always be of type `number` (and not
+ * `number[]`).
+ */
+export const StandardEncoding = [
 	'.notdef', // Octal: 0000, decimal: 000, hexadecimal: 0x00.
 	'.notdef', // Octal: 0001, decimal: 001, hexadecimal: 0x01.
 	'.notdef', // Octal: 0002, decimal: 002, hexadecimal: 0x02.
@@ -59,7 +59,7 @@ export const WinAnsiEncoding = [
 	'dollar', // Octal: 0044, decimal: 036, hexadecimal: 0x24.
 	'percent', // Octal: 0045, decimal: 037, hexadecimal: 0x25.
 	'ampersand', // Octal: 0046, decimal: 038, hexadecimal: 0x26.
-	'quotesingle', // Octal: 0047, decimal: 039, hexadecimal: 0x27.
+	'quoteright', // Octal: 0047, decimal: 039, hexadecimal: 0x27.
 	'parenleft', // Octal: 0050, decimal: 040, hexadecimal: 0x28.
 	'parenright', // Octal: 0051, decimal: 041, hexadecimal: 0x29.
 	'asterisk', // Octal: 0052, decimal: 042, hexadecimal: 0x2a.
@@ -116,7 +116,7 @@ export const WinAnsiEncoding = [
 	'bracketright', // Octal: 0135, decimal: 093, hexadecimal: 0x5d.
 	'asciicircum', // Octal: 0136, decimal: 094, hexadecimal: 0x5e.
 	'underscore', // Octal: 0137, decimal: 095, hexadecimal: 0x5f.
-	'grave', // Octal: 0140, decimal: 096, hexadecimal: 0x60.
+	'quoteleft', // Octal: 0140, decimal: 096, hexadecimal: 0x60.
 	'a', // Octal: 0141, decimal: 097, hexadecimal: 0x61.
 	'b', // Octal: 0142, decimal: 098, hexadecimal: 0x62.
 	'c', // Octal: 0143, decimal: 099, hexadecimal: 0x63.
@@ -148,132 +148,132 @@ export const WinAnsiEncoding = [
 	'braceright', // Octal: 0175, decimal: 125, hexadecimal: 0x7d.
 	'asciitilde', // Octal: 0176, decimal: 126, hexadecimal: 0x7e.
 	'.notdef', // Octal: 0177, decimal: 127, hexadecimal: 0x7f.
-	'Euro', // Octal: 0200, decimal: 128, hexadecimal: 0x80.
+	'.notdef', // Octal: 0200, decimal: 128, hexadecimal: 0x80.
 	'.notdef', // Octal: 0201, decimal: 129, hexadecimal: 0x81.
-	'quotesinglbase', // Octal: 0202, decimal: 130, hexadecimal: 0x82.
-	'florin', // Octal: 0203, decimal: 131, hexadecimal: 0x83.
-	'quotedblbase', // Octal: 0204, decimal: 132, hexadecimal: 0x84.
-	'ellipsis', // Octal: 0205, decimal: 133, hexadecimal: 0x85.
-	'dagger', // Octal: 0206, decimal: 134, hexadecimal: 0x86.
-	'daggerdbl', // Octal: 0207, decimal: 135, hexadecimal: 0x87.
-	'circumflex', // Octal: 0210, decimal: 136, hexadecimal: 0x88.
-	'perthousand', // Octal: 0211, decimal: 137, hexadecimal: 0x89.
-	'Scaron', // Octal: 0212, decimal: 138, hexadecimal: 0x8a.
-	'guilsinglleft', // Octal: 0213, decimal: 139, hexadecimal: 0x8b.
-	'OE', // Octal: 0214, decimal: 140, hexadecimal: 0x8c.
+	'.notdef', // Octal: 0202, decimal: 130, hexadecimal: 0x82.
+	'.notdef', // Octal: 0203, decimal: 131, hexadecimal: 0x83.
+	'.notdef', // Octal: 0204, decimal: 132, hexadecimal: 0x84.
+	'.notdef', // Octal: 0205, decimal: 133, hexadecimal: 0x85.
+	'.notdef', // Octal: 0206, decimal: 134, hexadecimal: 0x86.
+	'.notdef', // Octal: 0207, decimal: 135, hexadecimal: 0x87.
+	'.notdef', // Octal: 0210, decimal: 136, hexadecimal: 0x88.
+	'.notdef', // Octal: 0211, decimal: 137, hexadecimal: 0x89.
+	'.notdef', // Octal: 0212, decimal: 138, hexadecimal: 0x8a.
+	'.notdef', // Octal: 0213, decimal: 139, hexadecimal: 0x8b.
+	'.notdef', // Octal: 0214, decimal: 140, hexadecimal: 0x8c.
 	'.notdef', // Octal: 0215, decimal: 141, hexadecimal: 0x8d.
-	'Zcaron', // Octal: 0216, decimal: 142, hexadecimal: 0x8e.
+	'.notdef', // Octal: 0216, decimal: 142, hexadecimal: 0x8e.
 	'.notdef', // Octal: 0217, decimal: 143, hexadecimal: 0x8f.
 	'.notdef', // Octal: 0220, decimal: 144, hexadecimal: 0x90.
-	'quoteleft', // Octal: 0221, decimal: 145, hexadecimal: 0x91.
-	'quoteright', // Octal: 0222, decimal: 146, hexadecimal: 0x92.
-	'quotedblleft', // Octal: 0223, decimal: 147, hexadecimal: 0x93.
-	'quotedblright', // Octal: 0224, decimal: 148, hexadecimal: 0x94.
-	'bullet', // Octal: 0225, decimal: 149, hexadecimal: 0x95.
-	'endash', // Octal: 0226, decimal: 150, hexadecimal: 0x96.
-	'emdash', // Octal: 0227, decimal: 151, hexadecimal: 0x97.
-	'tilde', // Octal: 0230, decimal: 152, hexadecimal: 0x98.
-	'trademark', // Octal: 0231, decimal: 153, hexadecimal: 0x99.
-	'scaron', // Octal: 0232, decimal: 154, hexadecimal: 0x9a.
-	'guilsinglright', // Octal: 0233, decimal: 155, hexadecimal: 0x9b.
-	'oe', // Octal: 0234, decimal: 156, hexadecimal: 0x9c.
+	'.notdef', // Octal: 0221, decimal: 145, hexadecimal: 0x91.
+	'.notdef', // Octal: 0222, decimal: 146, hexadecimal: 0x92.
+	'.notdef', // Octal: 0223, decimal: 147, hexadecimal: 0x93.
+	'.notdef', // Octal: 0224, decimal: 148, hexadecimal: 0x94.
+	'.notdef', // Octal: 0225, decimal: 149, hexadecimal: 0x95.
+	'.notdef', // Octal: 0226, decimal: 150, hexadecimal: 0x96.
+	'.notdef', // Octal: 0227, decimal: 151, hexadecimal: 0x97.
+	'.notdef', // Octal: 0230, decimal: 152, hexadecimal: 0x98.
+	'.notdef', // Octal: 0231, decimal: 153, hexadecimal: 0x99.
+	'.notdef', // Octal: 0232, decimal: 154, hexadecimal: 0x9a.
+	'.notdef', // Octal: 0233, decimal: 155, hexadecimal: 0x9b.
+	'.notdef', // Octal: 0234, decimal: 156, hexadecimal: 0x9c.
 	'.notdef', // Octal: 0235, decimal: 157, hexadecimal: 0x9d.
-	'zcaron', // Octal: 0236, decimal: 158, hexadecimal: 0x9e.
-	'Ydieresis', // Octal: 0237, decimal: 159, hexadecimal: 0x9f.
-	'nbspace', // Octal: 0240, decimal: 160, hexadecimal: 0xa0.
+	'.notdef', // Octal: 0236, decimal: 158, hexadecimal: 0x9e.
+	'.notdef', // Octal: 0237, decimal: 159, hexadecimal: 0x9f.
+	'.notdef', // Octal: 0240, decimal: 160, hexadecimal: 0xa0.
 	'exclamdown', // Octal: 0241, decimal: 161, hexadecimal: 0xa1.
 	'cent', // Octal: 0242, decimal: 162, hexadecimal: 0xa2.
 	'sterling', // Octal: 0243, decimal: 163, hexadecimal: 0xa3.
-	'Euro', // Octal: 0244, decimal: 164, hexadecimal: 0xa4.
+	'fraction', // Octal: 0244, decimal: 164, hexadecimal: 0xa4.
 	'yen', // Octal: 0245, decimal: 165, hexadecimal: 0xa5.
-	'brokenbar', // Octal: 0246, decimal: 166, hexadecimal: 0xa6.
+	'florin', // Octal: 0246, decimal: 166, hexadecimal: 0xa6.
 	'section', // Octal: 0247, decimal: 167, hexadecimal: 0xa7.
-	'dieresis', // Octal: 0250, decimal: 168, hexadecimal: 0xa8.
-	'copyright', // Octal: 0251, decimal: 169, hexadecimal: 0xa9.
-	'ordfeminine', // Octal: 0252, decimal: 170, hexadecimal: 0xaa.
+	'currency1', // Octal: 0250, decimal: 168, hexadecimal: 0xa8.
+	'quotesingle', // Octal: 0251, decimal: 169, hexadecimal: 0xa9.
+	'quotedblleft', // Octal: 0252, decimal: 170, hexadecimal: 0xaa.
 	'guillemotleft', // Octal: 0253, decimal: 171, hexadecimal: 0xab.
-	'logicalnot', // Octal: 0254, decimal: 172, hexadecimal: 0xac.
-	'sfthyphen', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
-	'registered', // Octal: 0256, decimal: 174, hexadecimal: 0xae.
-	'macron', // Octal: 0257, decimal: 175, hexadecimal: 0xaf.
-	'degree', // Octal: 0260, decimal: 176, hexadecimal: 0xb0.
-	'plusminus', // Octal: 0261, decimal: 177, hexadecimal: 0xb1.
-	'twosuperior', // Octal: 0262, decimal: 178, hexadecimal: 0xb2.
-	'threesuperior', // Octal: 0263, decimal: 179, hexadecimal: 0xb3.
-	'acute', // Octal: 0264, decimal: 180, hexadecimal: 0xb4.
-	'mu', // Octal: 0265, decimal: 181, hexadecimal: 0xb5.
+	'guilsinglleft', // Octal: 0254, decimal: 172, hexadecimal: 0xac.
+	'guilsinglright', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
+	'fi', // Octal: 0256, decimal: 174, hexadecimal: 0xae.
+	'fl', // Octal: 0257, decimal: 175, hexadecimal: 0xaf.
+	'.notdef', // Octal: 0260, decimal: 176, hexadecimal: 0xb0.
+	'endash', // Octal: 0261, decimal: 177, hexadecimal: 0xb1.
+	'dagger', // Octal: 0262, decimal: 178, hexadecimal: 0xb2.
+	'daggerdbl', // Octal: 0263, decimal: 179, hexadecimal: 0xb3.
+	'periodcentered', // Octal: 0264, decimal: 180, hexadecimal: 0xb4.
+	'.notdef', // Octal: 0265, decimal: 181, hexadecimal: 0xb5.
 	'paragraph', // Octal: 0266, decimal: 182, hexadecimal: 0xb6.
-	'periodcentered', // Octal: 0267, decimal: 183, hexadecimal: 0xb7.
-	'cedilla', // Octal: 0270, decimal: 184, hexadecimal: 0xb8.
-	'onesuperior', // Octal: 0271, decimal: 185, hexadecimal: 0xb9.
-	'ordmasculine', // Octal: 0272, decimal: 186, hexadecimal: 0xba.
+	'bullet', // Octal: 0267, decimal: 183, hexadecimal: 0xb7.
+	'quotesinglbase', // Octal: 0270, decimal: 184, hexadecimal: 0xb8.
+	'quotedblbase', // Octal: 0271, decimal: 185, hexadecimal: 0xb9.
+	'quotedblright', // Octal: 0272, decimal: 186, hexadecimal: 0xba.
 	'guillemotright', // Octal: 0273, decimal: 187, hexadecimal: 0xbb.
-	'onequarter', // Octal: 0274, decimal: 188, hexadecimal: 0xbc.
-	'onehalf', // Octal: 0275, decimal: 189, hexadecimal: 0xbd.
-	'threequarters', // Octal: 0276, decimal: 190, hexadecimal: 0xbe.
+	'ellipsis', // Octal: 0274, decimal: 188, hexadecimal: 0xbc.
+	'perthousand', // Octal: 0275, decimal: 189, hexadecimal: 0xbd.
+	'.notdef', // Octal: 0276, decimal: 190, hexadecimal: 0xbe.
 	'questiondown', // Octal: 0277, decimal: 191, hexadecimal: 0xbf.
-	'Agrave', // Octal: 0300, decimal: 192, hexadecimal: 0xc0.
-	'Aacute', // Octal: 0301, decimal: 193, hexadecimal: 0xc1.
-	'Acircumflex', // Octal: 0302, decimal: 194, hexadecimal: 0xc2.
-	'Atilde', // Octal: 0303, decimal: 195, hexadecimal: 0xc3.
-	'Adieresis', // Octal: 0304, decimal: 196, hexadecimal: 0xc4.
-	'Aring', // Octal: 0305, decimal: 197, hexadecimal: 0xc5.
-	'AE', // Octal: 0306, decimal: 198, hexadecimal: 0xc6.
-	'Ccedilla', // Octal: 0307, decimal: 199, hexadecimal: 0xc7.
-	'Egrave', // Octal: 0310, decimal: 200, hexadecimal: 0xc8.
-	'Eacute', // Octal: 0311, decimal: 201, hexadecimal: 0xc9.
-	'Ecircumflex', // Octal: 0312, decimal: 202, hexadecimal: 0xca.
-	'Edieresis', // Octal: 0313, decimal: 203, hexadecimal: 0xcb.
-	'Igrave', // Octal: 0314, decimal: 204, hexadecimal: 0xcc.
-	'Iacute', // Octal: 0315, decimal: 205, hexadecimal: 0xcd.
-	'Icircumflex', // Octal: 0316, decimal: 206, hexadecimal: 0xce.
-	'Idieresis', // Octal: 0317, decimal: 207, hexadecimal: 0xcf.
-	'Eth', // Octal: 0320, decimal: 208, hexadecimal: 0xd0.
-	'Ntilde', // Octal: 0321, decimal: 209, hexadecimal: 0xd1.
-	'Ograve', // Octal: 0322, decimal: 210, hexadecimal: 0xd2.
-	'Oacute', // Octal: 0323, decimal: 211, hexadecimal: 0xd3.
-	'Ocircumflex', // Octal: 0324, decimal: 212, hexadecimal: 0xd4.
-	'Otilde', // Octal: 0325, decimal: 213, hexadecimal: 0xd5.
-	'Odieresis', // Octal: 0326, decimal: 214, hexadecimal: 0xd6.
-	'multiply', // Octal: 0327, decimal: 215, hexadecimal: 0xd7.
-	'Oslash', // Octal: 0330, decimal: 216, hexadecimal: 0xd8.
-	'Ugrave', // Octal: 0331, decimal: 217, hexadecimal: 0xd9.
-	'Uacute', // Octal: 0332, decimal: 218, hexadecimal: 0xda.
-	'Ucircumflex', // Octal: 0333, decimal: 219, hexadecimal: 0xdb.
-	'Udieresis', // Octal: 0334, decimal: 220, hexadecimal: 0xdc.
-	'Yacute', // Octal: 0335, decimal: 221, hexadecimal: 0xdd.
-	'Thorn', // Octal: 0336, decimal: 222, hexadecimal: 0xde.
-	'germandbls', // Octal: 0337, decimal: 223, hexadecimal: 0xdf.
-	'agrave', // Octal: 0340, decimal: 224, hexadecimal: 0xe0.
-	'aacute', // Octal: 0341, decimal: 225, hexadecimal: 0xe1.
-	'acircumflex', // Octal: 0342, decimal: 226, hexadecimal: 0xe2.
-	'atilde', // Octal: 0343, decimal: 227, hexadecimal: 0xe3.
-	'adieresis', // Octal: 0344, decimal: 228, hexadecimal: 0xe4.
-	'aring', // Octal: 0345, decimal: 229, hexadecimal: 0xe5.
-	'ae', // Octal: 0346, decimal: 230, hexadecimal: 0xe6.
-	'ccedilla', // Octal: 0347, decimal: 231, hexadecimal: 0xe7.
-	'egrave', // Octal: 0350, decimal: 232, hexadecimal: 0xe8.
-	'eacute', // Octal: 0351, decimal: 233, hexadecimal: 0xe9.
-	'ecircumflex', // Octal: 0352, decimal: 234, hexadecimal: 0xea.
-	'edieresis', // Octal: 0353, decimal: 235, hexadecimal: 0xeb.
-	'igrave', // Octal: 0354, decimal: 236, hexadecimal: 0xec.
-	'iacute', // Octal: 0355, decimal: 237, hexadecimal: 0xed.
-	'icircumflex', // Octal: 0356, decimal: 238, hexadecimal: 0xee.
-	'idieresis', // Octal: 0357, decimal: 239, hexadecimal: 0xef.
-	'eth', // Octal: 0360, decimal: 240, hexadecimal: 0xf0.
-	'ntilde', // Octal: 0361, decimal: 241, hexadecimal: 0xf1.
-	'ograve', // Octal: 0362, decimal: 242, hexadecimal: 0xf2.
-	'oacute', // Octal: 0363, decimal: 243, hexadecimal: 0xf3.
-	'ocircumflex', // Octal: 0364, decimal: 244, hexadecimal: 0xf4.
-	'otilde', // Octal: 0365, decimal: 245, hexadecimal: 0xf5.
-	'odieresis', // Octal: 0366, decimal: 246, hexadecimal: 0xf6.
-	'divide', // Octal: 0367, decimal: 247, hexadecimal: 0xf7.
-	'oslash', // Octal: 0370, decimal: 248, hexadecimal: 0xf8.
-	'ugrave', // Octal: 0371, decimal: 249, hexadecimal: 0xf9.
-	'uacute', // Octal: 0372, decimal: 250, hexadecimal: 0xfa.
-	'ucircumflex', // Octal: 0373, decimal: 251, hexadecimal: 0xfb.
-	'udieresis', // Octal: 0374, decimal: 252, hexadecimal: 0xfc.
-	'yacute', // Octal: 0375, decimal: 253, hexadecimal: 0xfd.
-	'thorn', // Octal: 0376, decimal: 254, hexadecimal: 0xfe.
-	'ydieresis', // Octal: 0377, decimal: 255, hexadecimal: 0xff.
+	'.notdef', // Octal: 0300, decimal: 192, hexadecimal: 0xc0.
+	'grave', // Octal: 0301, decimal: 193, hexadecimal: 0xc1.
+	'acute', // Octal: 0302, decimal: 194, hexadecimal: 0xc2.
+	'circumflex', // Octal: 0303, decimal: 195, hexadecimal: 0xc3.
+	'tilde', // Octal: 0304, decimal: 196, hexadecimal: 0xc4.
+	'macron', // Octal: 0305, decimal: 197, hexadecimal: 0xc5.
+	'breve', // Octal: 0306, decimal: 198, hexadecimal: 0xc6.
+	'dotaccent', // Octal: 0307, decimal: 199, hexadecimal: 0xc7.
+	'dieresis', // Octal: 0310, decimal: 200, hexadecimal: 0xc8.
+	'.notdef', // Octal: 0311, decimal: 201, hexadecimal: 0xc9.
+	'ring', // Octal: 0312, decimal: 202, hexadecimal: 0xca.
+	'cedilla', // Octal: 0313, decimal: 203, hexadecimal: 0xcb.
+	'.notdef', // Octal: 0314, decimal: 204, hexadecimal: 0xcc.
+	'hungarumlaut', // Octal: 0315, decimal: 205, hexadecimal: 0xcd.
+	'ogonek', // Octal: 0316, decimal: 206, hexadecimal: 0xce.
+	'caron', // Octal: 0317, decimal: 207, hexadecimal: 0xcf.
+	'emdash', // Octal: 0320, decimal: 208, hexadecimal: 0xd0.
+	'.notdef', // Octal: 0321, decimal: 209, hexadecimal: 0xd1.
+	'.notdef', // Octal: 0322, decimal: 210, hexadecimal: 0xd2.
+	'.notdef', // Octal: 0323, decimal: 211, hexadecimal: 0xd3.
+	'.notdef', // Octal: 0324, decimal: 212, hexadecimal: 0xd4.
+	'.notdef', // Octal: 0325, decimal: 213, hexadecimal: 0xd5.
+	'.notdef', // Octal: 0326, decimal: 214, hexadecimal: 0xd6.
+	'.notdef', // Octal: 0327, decimal: 215, hexadecimal: 0xd7.
+	'.notdef', // Octal: 0330, decimal: 216, hexadecimal: 0xd8.
+	'.notdef', // Octal: 0331, decimal: 217, hexadecimal: 0xd9.
+	'.notdef', // Octal: 0332, decimal: 218, hexadecimal: 0xda.
+	'.notdef', // Octal: 0333, decimal: 219, hexadecimal: 0xdb.
+	'.notdef', // Octal: 0334, decimal: 220, hexadecimal: 0xdc.
+	'.notdef', // Octal: 0335, decimal: 221, hexadecimal: 0xdd.
+	'.notdef', // Octal: 0336, decimal: 222, hexadecimal: 0xde.
+	'.notdef', // Octal: 0337, decimal: 223, hexadecimal: 0xdf.
+	'.notdef', // Octal: 0340, decimal: 224, hexadecimal: 0xe0.
+	'AE', // Octal: 0341, decimal: 225, hexadecimal: 0xe1.
+	'.notdef', // Octal: 0342, decimal: 226, hexadecimal: 0xe2.
+	'ordfeminine', // Octal: 0343, decimal: 227, hexadecimal: 0xe3.
+	'.notdef', // Octal: 0344, decimal: 228, hexadecimal: 0xe4.
+	'.notdef', // Octal: 0345, decimal: 229, hexadecimal: 0xe5.
+	'.notdef', // Octal: 0346, decimal: 230, hexadecimal: 0xe6.
+	'.notdef', // Octal: 0347, decimal: 231, hexadecimal: 0xe7.
+	'Lslash', // Octal: 0350, decimal: 232, hexadecimal: 0xe8.
+	'Oslash', // Octal: 0351, decimal: 233, hexadecimal: 0xe9.
+	'OE', // Octal: 0352, decimal: 234, hexadecimal: 0xea.
+	'ordmasculine', // Octal: 0353, decimal: 235, hexadecimal: 0xeb.
+	'.notdef', // Octal: 0354, decimal: 236, hexadecimal: 0xec.
+	'.notdef', // Octal: 0355, decimal: 237, hexadecimal: 0xed.
+	'.notdef', // Octal: 0356, decimal: 238, hexadecimal: 0xee.
+	'.notdef', // Octal: 0357, decimal: 239, hexadecimal: 0xef.
+	'.notdef', // Octal: 0360, decimal: 240, hexadecimal: 0xf0.
+	'ae', // Octal: 0361, decimal: 241, hexadecimal: 0xf1.
+	'.notdef', // Octal: 0362, decimal: 242, hexadecimal: 0xf2.
+	'.notdef', // Octal: 0363, decimal: 243, hexadecimal: 0xf3.
+	'.notdef', // Octal: 0364, decimal: 244, hexadecimal: 0xf4.
+	'dotlessi', // Octal: 0365, decimal: 245, hexadecimal: 0xf5.
+	'.notdef', // Octal: 0366, decimal: 246, hexadecimal: 0xf6.
+	'.notdef', // Octal: 0367, decimal: 247, hexadecimal: 0xf7.
+	'lslash', // Octal: 0370, decimal: 248, hexadecimal: 0xf8.
+	'oslash', // Octal: 0371, decimal: 249, hexadecimal: 0xf9.
+	'oe', // Octal: 0372, decimal: 250, hexadecimal: 0xfa.
+	'germandbls', // Octal: 0373, decimal: 251, hexadecimal: 0xfb.
+	'.notdef', // Octal: 0374, decimal: 252, hexadecimal: 0xfc.
+	'.notdef', // Octal: 0375, decimal: 253, hexadecimal: 0xfd.
+	'.notdef', // Octal: 0376, decimal: 254, hexadecimal: 0xfe.
+	'.notdef', // Octal: 0377, decimal: 255, hexadecimal: 0xff.
 ];

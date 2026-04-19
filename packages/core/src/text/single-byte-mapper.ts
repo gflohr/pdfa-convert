@@ -12,7 +12,7 @@ export class SingleByteMapper implements GlyphMapper {
 	private readonly encoding: string[];
 
 	constructor(encodingName: string) {
-		switch(encodingName.toLowerCase()) {
+		switch (encodingName.toLowerCase()) {
 			case 'macexpertencoding':
 				this.encoding = MacExpertEncoding;
 				break;
@@ -42,7 +42,7 @@ export class SingleByteMapper implements GlyphMapper {
 	public lookup(glyph: number): string {
 		const codepoints = this.lookupCodepoints(glyph);
 		if (codepoints.length) {
-			return codepoints.map(c => String.fromCharCode(c)).join('');
+			return codepoints.map((c) => String.fromCharCode(c)).join('');
 		} else {
 			return '\uFFFD';
 		}

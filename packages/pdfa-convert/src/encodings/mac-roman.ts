@@ -193,36 +193,36 @@ export const MacRomanEncoding = [
 	'trademark', // Octal: 0252, decimal: 170, hexadecimal: 0xaa.
 	'acute', // Octal: 0253, decimal: 171, hexadecimal: 0xab.
 	'dieresis', // Octal: 0254, decimal: 172, hexadecimal: 0xac.
-	'.notdef', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
+	'notequal', // Octal: 0255, decimal: 173, hexadecimal: 0xad.
 	'AE', // Octal: 0256, decimal: 174, hexadecimal: 0xae.
 	'Oslash', // Octal: 0257, decimal: 175, hexadecimal: 0xaf.
-	'.notdef', // Octal: 0260, decimal: 176, hexadecimal: 0xb0.
+	'infinity', // Octal: 0260, decimal: 176, hexadecimal: 0xb0.
 	'plusminus', // Octal: 0261, decimal: 177, hexadecimal: 0xb1.
-	'.notdef', // Octal: 0262, decimal: 178, hexadecimal: 0xb2.
-	'.notdef', // Octal: 0263, decimal: 179, hexadecimal: 0xb3.
+	'lessequal', // Octal: 0262, decimal: 178, hexadecimal: 0xb2.
+	'greaterequal', // Octal: 0263, decimal: 179, hexadecimal: 0xb3.
 	'yen', // Octal: 0264, decimal: 180, hexadecimal: 0xb4.
 	'mu', // Octal: 0265, decimal: 181, hexadecimal: 0xb5.
-	'.notdef', // Octal: 0266, decimal: 182, hexadecimal: 0xb6.
-	'.notdef', // Octal: 0267, decimal: 183, hexadecimal: 0xb7.
-	'.notdef', // Octal: 0270, decimal: 184, hexadecimal: 0xb8.
-	'.notdef', // Octal: 0271, decimal: 185, hexadecimal: 0xb9.
-	'.notdef', // Octal: 0272, decimal: 186, hexadecimal: 0xba.
+	'partialdiff', // Octal: 0266, decimal: 182, hexadecimal: 0xb6.
+	'summation', // Octal: 0267, decimal: 183, hexadecimal: 0xb7.
+	'product', // Octal: 0270, decimal: 184, hexadecimal: 0xb8.
+	'pi', // Octal: 0271, decimal: 185, hexadecimal: 0xb9.
+	'integral', // Octal: 0272, decimal: 186, hexadecimal: 0xba.
 	'ordfeminine', // Octal: 0273, decimal: 187, hexadecimal: 0xbb.
 	'ordmasculine', // Octal: 0274, decimal: 188, hexadecimal: 0xbc.
-	'.notdef', // Octal: 0275, decimal: 189, hexadecimal: 0xbd.
+	'omega', // Octal: 0275, decimal: 189, hexadecimal: 0xbd.
 	'ae', // Octal: 0276, decimal: 190, hexadecimal: 0xbe.
 	'oslash', // Octal: 0277, decimal: 191, hexadecimal: 0xbf.
 	'questiondown', // Octal: 0300, decimal: 192, hexadecimal: 0xc0.
 	'exclamdown', // Octal: 0301, decimal: 193, hexadecimal: 0xc1.
 	'logicalnot', // Octal: 0302, decimal: 194, hexadecimal: 0xc2.
-	'.notdef', // Octal: 0303, decimal: 195, hexadecimal: 0xc3.
+	'radical', // Octal: 0303, decimal: 195, hexadecimal: 0xc3.
 	'florin', // Octal: 0304, decimal: 196, hexadecimal: 0xc4.
-	'.notdef', // Octal: 0305, decimal: 197, hexadecimal: 0xc5.
-	'.notdef', // Octal: 0306, decimal: 198, hexadecimal: 0xc6.
+	'approxequal', // Octal: 0305, decimal: 197, hexadecimal: 0xc5.
+	'Delta', // Octal: 0306, decimal: 198, hexadecimal: 0xc6.
 	'guillemotleft', // Octal: 0307, decimal: 199, hexadecimal: 0xc7.
 	'guillemotright', // Octal: 0310, decimal: 200, hexadecimal: 0xc8.
 	'ellipsis', // Octal: 0311, decimal: 201, hexadecimal: 0xc9.
-	'.notdef', // Octal: 0312, decimal: 202, hexadecimal: 0xca.
+	'nbspace', // Octal: 0312, decimal: 202, hexadecimal: 0xca.
 	'Agrave', // Octal: 0313, decimal: 203, hexadecimal: 0xcb.
 	'Atilde', // Octal: 0314, decimal: 204, hexadecimal: 0xcc.
 	'Otilde', // Octal: 0315, decimal: 205, hexadecimal: 0xcd.
@@ -235,11 +235,11 @@ export const MacRomanEncoding = [
 	'quoteleft', // Octal: 0324, decimal: 212, hexadecimal: 0xd4.
 	'quoteright', // Octal: 0325, decimal: 213, hexadecimal: 0xd5.
 	'divide', // Octal: 0326, decimal: 214, hexadecimal: 0xd6.
-	'.notdef', // Octal: 0327, decimal: 215, hexadecimal: 0xd7.
+	'lozenge', // Octal: 0327, decimal: 215, hexadecimal: 0xd7.
 	'ydieresis', // Octal: 0330, decimal: 216, hexadecimal: 0xd8.
 	'Ydieresis', // Octal: 0331, decimal: 217, hexadecimal: 0xd9.
 	'fraction', // Octal: 0332, decimal: 218, hexadecimal: 0xda.
-	'currency1', // Octal: 0333, decimal: 219, hexadecimal: 0xdb.
+	'Euro1', // Octal: 0333, decimal: 219, hexadecimal: 0xdb.
 	'guilsinglleft', // Octal: 0334, decimal: 220, hexadecimal: 0xdc.
 	'guilsinglright', // Octal: 0335, decimal: 221, hexadecimal: 0xdd.
 	'fi', // Octal: 0336, decimal: 222, hexadecimal: 0xde.

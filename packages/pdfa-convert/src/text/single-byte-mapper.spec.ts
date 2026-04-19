@@ -69,8 +69,8 @@ describe('8-bit mappers', () => {
 			expect(mapper.lookup(0xa7)).toBe('ß');
 		});
 
-		it('should not find character 0xb8', () => {
-			expect(mapper.lookup(0xb8)).toBe('\uFFFD');
+		it('should not find character 0x1a', () => {
+			expect(mapper.lookup(0x1a)).toBe('\uFFFD');
 		})
 	});
 

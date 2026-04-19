@@ -1,4 +1,5 @@
 import { Lexer, type Token } from './lexer.js';
+import type { GlyphMapper } from './text/glyph-mapper.js';
 
 type Mapping =
 	| [number, number]
@@ -6,7 +7,7 @@ type Mapping =
 	| [number, number, number[][]]
 	| [number, number[]];
 
-export class CMap {
+export class CMap implements GlyphMapper {
 	private mappings: Mapping[];
 
 	constructor(

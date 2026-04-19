@@ -19,7 +19,7 @@
   * character, and the property `u` will always be of type `number` (and not
   * `number[]`).
   */
-export const $encoding = [
+export const MacExpertEncoding = [
 	'.notdef', // Octal: 0000, decicmal: 000, hexadecimal: 0x00
 	'.notdef', // Octal: 0001, decicmal: 001, hexadecimal: 0x01
 	'.notdef', // Octal: 0002, decicmal: 002, hexadecimal: 0x02

@@ -1,3 +1,4 @@
+import { adobeGlyphs } from '../agl.js';
 import { MacExpertEncoding } from '../single-byte-encodings/mac-expert.js';
 import { MacRomanEncoding } from '../single-byte-encodings/mac-roman.js';
 import { PDFEncoding } from '../single-byte-encodings/pdf.js';
@@ -5,7 +6,6 @@ import { StandardEncoding } from '../single-byte-encodings/standard.js';
 import { SymbolEncoding } from '../single-byte-encodings/symbol.js';
 import { WinAnsiEncoding } from '../single-byte-encodings/win-ansi.js';
 import { ZapfDingbatsEncoding } from '../single-byte-encodings/zapf-dingbats.js';
-import { adobeGlyphs } from '../agl.js';
 import type { GlyphMapper } from './glyph-mapper.js';
 
 export class SingleByteEncodingMapper implements GlyphMapper {

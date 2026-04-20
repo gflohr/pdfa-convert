@@ -9,6 +9,7 @@ import yargs from 'yargs';
 import type { Command } from './command.js';
 import { Text } from './commands/text.js';
 import { defaultOptions } from './default-options.js';
+import { loadPDF } from './load-pdf.js';
 import { Package } from './package.js';
 
 const commandNames = ['text'];
@@ -83,7 +84,8 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
 					) {
 						argv.input = '-';
 					}
-					exitCode = await command.run(argv);
+					const pdfDoc = await loadPDF(argv.input as string);
+					exitCode = await command.run(pdfDoc, argv);
 				},
 			});
 		}

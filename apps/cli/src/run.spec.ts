@@ -1,3 +1,4 @@
+import type { PDFDocument } from '@cantoo/pdf-lib';
 import {
 	beforeEach,
 	describe,
@@ -6,10 +7,20 @@ import {
 	type MockInstance,
 	vi,
 } from 'vitest';
-import { Text } from './commands/text.js';
-import type { ConvertOptions } from './convert.js';
-import * as convertModule from './convert.js';
+import { loadPDF } from './load-pdf.js';
 import { Package } from './package.js';
+
+vi.mock('node:fs/promises', () => ({
+	readFile: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3])),
+}));
+vi.mock('./load-pdf.js', () => ({
+	loadPDF: vi.fn().mockResolvedValue({
+		pdf: true,
+		registerFontkit: vi.fn(() => {}),
+	} as unknown as PDFDocument),
+}));
+
+import { Text } from './commands/text.js';
 import { run } from './run.js';
 
 describe('pdf-lab-cli', () => {
@@ -20,44 +31,53 @@ describe('pdf-lab-cli', () => {
 	});
 
 	describe('normal operation', () => {
-		it('convert files', async () => {
+		it('should run the command', async () => {
 			const argv = ['text', 'sample.pdf'];
 
-			const convertSpy = vi
-				.spyOn(convertModule, 'convert')
+			const doRunSpy = vi
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
-			const exitCode = await run(argv);
 
-			expect(exitCode).toBe(0);
-			expect(convertSpy).toHaveBeenCalledTimes(1);
-			expect(convertSpy).toHaveBeenCalledWith({
-				input: 'sample.pdf',
-			});
+			await run(argv);
+
+			expect(doRunSpy).toHaveBeenCalledTimes(1);
 		});
 
 		it('should log exceptions', async () => {
 			const argv = ['text', 'sample.pdf'];
 
-			vi.spyOn(convertModule, 'convert').mockRejectedValue('boum');
-			await run(argv);
+			const doRunSpy = vi
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
+				.mockRejectedValue('boum');
 
+			const exitCode = await run(argv);
+
+			expect(exitCode).toBe(1);
+			expect(doRunSpy).toHaveBeenCalledTimes(1);
+			expect(loadPDF).toHaveBeenCalledWith('sample.pdf');
 			expect(consoleErrorSpy).toHaveBeenCalledWith(`${Package.name}: boum`);
 		});
 
 		it('should use defaults', async () => {
-			const convertSpy = vi
-				.spyOn(convertModule, 'convert')
+			const doRunSpy = vi
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
 
 			const exitCode = await run(['text']);
 
 			expect(exitCode).toBe(0);
-			expect(convertSpy).toHaveBeenCalledTimes(1);
+			expect(doRunSpy).toHaveBeenCalledTimes(1);
 
-			const defaultOptions: ConvertOptions = {
-				input: '-',
-			};
-			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
+			expect(loadPDF).toHaveBeenCalledWith('-');
 		});
 
 		it('should allow a custom synopsis', async () => {
@@ -88,35 +108,33 @@ describe('pdf-lab-cli', () => {
 		});
 
 		it('should honour command-line options', async () => {
-			const convertSpy = vi
-				.spyOn(convertModule, 'convert')
+			const doRunSpy = vi
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
 
 			const exitCode = await run(['text', '--input=example.pdf']);
 
 			expect(exitCode).toBe(0);
-			expect(convertSpy).toHaveBeenCalledTimes(1);
-
-			const defaultOptions: ConvertOptions = {
-				input: 'example.pdf',
-			};
-			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
+			expect(doRunSpy).toHaveBeenCalledTimes(1);
+			expect(loadPDF).toHaveBeenCalledWith('example.pdf');
 		});
 
-		it('should fix lone hyphen as a positional argument', async () => {
-			const convertSpy = vi
-				.spyOn(convertModule, 'convert')
+		it('should fix a lone hyphen as a positional argument', async () => {
+			const doRunSpy = vi
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
 
 			const exitCode = await run(['text', '-']);
 
 			expect(exitCode).toBe(0);
-			expect(convertSpy).toHaveBeenCalledTimes(1);
-
-			const defaultOptions: ConvertOptions = {
-				input: '-',
-			};
-			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
+			expect(doRunSpy).toHaveBeenCalledTimes(1);
+			expect(loadPDF).toHaveBeenCalledWith('-');
 		});
 
 		it('should re-throw exceptions', async () => {

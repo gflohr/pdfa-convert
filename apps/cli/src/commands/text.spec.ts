@@ -1,3 +1,6 @@
+import type { PDFDocument } from '@cantoo/pdf-lib';
+// biome-ignore lint/correctness/useImportExtensions: false positive.
+import { TextExtractor } from 'pdf-lab-core';
 import {
 	afterEach,
 	beforeEach,
@@ -9,17 +12,22 @@ import {
 } from 'vitest';
 import type { Arguments } from 'yargs';
 import { coerceOptions } from '../optspec.js';
-import { Text } from './text.js';
 
 vi.mock('../optspec.js');
-vi.mock('../convert.js', () => ({
-	convert: vi.fn(),
+vi.mock('./load-pdf.js', () => ({
+	loadPDF: vi.fn().mockResolvedValue({
+		pdf: true,
+		registerFontkit: vi.fn(() => {}),
+	} as unknown as PDFDocument),
 }));
 
-import { convert } from '../convert.js';
+import { Text } from './text.js';
 
 describe('Text Command', () => {
 	let text: Text;
+	const pdfDoc = {
+		registerFontkit: vi.fn(),
+	} as unknown as PDFDocument;
 
 	beforeEach(() => {
 		text = new Text();
@@ -46,21 +54,25 @@ describe('Text Command', () => {
 
 	it('run() should return 1 if coerceOptions fails', async () => {
 		(coerceOptions as Mock).mockReturnValue(false);
+		const pdfDoc = {} as PDFDocument;
 
-		const result = await text.run({} as Arguments);
+		const result = await text.run(pdfDoc, {} as Arguments);
 
 		expect(result).toBe(1);
 	});
 
-	it('run() should call doRun and return 0 on success', async () => {
+	it('run() should call extract and return 0 on success', async () => {
 		(coerceOptions as Mock).mockReturnValue(true);
-		const doRunSpy = vi
-			.spyOn(text as unknown as { doRun: () => Promise<void> }, 'doRun')
+		const extractMock = vi
+			.spyOn(
+				TextExtractor.prototype as unknown as { extract: () => Promise<void> },
+				'extract',
+			)
 			.mockResolvedValue(undefined);
 
-		const result = await text.run({} as Arguments);
+		const result = await new Text().run(pdfDoc, {} as Arguments);
 
-		expect(doRunSpy).toHaveBeenCalled();
+		expect(extractMock).toHaveBeenCalledTimes(1);
 		expect(result).toBe(0);
 	});
 
@@ -76,7 +88,7 @@ describe('Text Command', () => {
 			.spyOn(console, 'error')
 			.mockImplementation(() => {});
 
-		const result = await text.run({} as Arguments);
+		const result = await text.run(pdfDoc, {} as Arguments);
 
 		expect(consoleErrorSpy).toHaveBeenCalledWith('pdf-lab: Error: test error');
 		expect(result).toBe(1);
@@ -93,13 +105,22 @@ describe('Text Command', () => {
 			consoleErrorSpy.mockRestore();
 		});
 
-		it('should call convert', async () => {
-			const options = { input: 'sample.pdf' } as unknown as Arguments;
+		it('should call extract', async () => {
+			const extractMock = vi
+				.spyOn(
+					TextExtractor.prototype as unknown as {
+						extract: () => Promise<void>;
+					},
+					'extract',
+				)
+				.mockResolvedValue(undefined);
 
-			await text.run(options);
+			const options = {} as unknown as Arguments;
 
-			expect(convert).toHaveBeenCalledTimes(1);
-			expect(convert).toHaveBeenCalledWith(options);
+			await text.run(pdfDoc, options);
+
+			expect(extractMock).toHaveBeenCalledTimes(1);
+			expect(extractMock).toHaveBeenCalledWith(pdfDoc);
 		});
 	});
 });

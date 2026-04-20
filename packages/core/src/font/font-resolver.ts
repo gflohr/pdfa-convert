@@ -1,6 +1,6 @@
 import { isStandardFont, type PDFRef, StandardFonts } from '@cantoo/pdf-lib';
+import type { CMapMapper } from '../encoding/mappers/cmap-mapper.js';
 import { FontLoader, type OsType } from './font-loader.js';
-import { CMapMapper } from '../encoding/mappers/cmap-mapper.js';
 
 export type FontCategory =
 	| 'sans'

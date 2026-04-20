@@ -1,8 +1,10 @@
+import type { PDFDocument } from '@cantoo/pdf-lib';
 import { Textdomain } from '@esgettext/runtime';
+import fontkit from '@pdf-lib/fontkit';
+// biome-ignore lint/correctness/useImportExtensions: false positive.
+import { TextExtractor } from 'pdf-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
-
 import type { Command } from '../command.js';
-import { type ConvertOptions, convert } from '../convert.js';
 import { defaultOptions } from '../default-options.js';
 import { coerceOptions, type OptSpec } from '../optspec.js';
 import { Package } from '../package.js';
@@ -26,23 +28,21 @@ export class Text implements Command {
 		return options;
 	}
 
-	private async doRun(configOptions: ConfigOptions) {
-		const convertOptions: ConvertOptions = {
-			input: configOptions.input as string,
-		};
+	private async doRun(pdfDoc: PDFDocument) {
+		const extractor = new TextExtractor();
 
-		await convert(convertOptions);
+		pdfDoc.registerFontkit(fontkit);
+
+		await extractor.extract(pdfDoc);
 	}
 
-	public async run(argv: Arguments): Promise<number> {
-		const configOptions = argv as unknown as ConfigOptions;
-
+	public async run(pdfDoc: PDFDocument, argv: Arguments): Promise<number> {
 		if (!coerceOptions(argv, options)) {
 			return 1;
 		}
 
 		try {
-			await this.doRun(configOptions);
+			await this.doRun(pdfDoc);
 			return 0;
 		} catch (e) {
 			console.error(

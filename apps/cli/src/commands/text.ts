@@ -6,6 +6,10 @@ import { type ConvertOptions, convert } from '../convert.js';
 import { defaultOptions } from '../default-options.js';
 import { coerceOptions, type OptSpec } from '../optspec.js';
 import { Package } from '../package.js';
+import type { PDFDocument } from '@cantoo/pdf-lib';
+// biome-ignore lint/correctness/useImportExtensions: false positive.
+import { TextExtractor } from 'pdf-lab-core';
+import fontkit from '@pdf-lib/fontkit';
 
 const gtx = Textdomain.getInstance('pdf-lab');
 
@@ -26,15 +30,19 @@ export class Text implements Command {
 		return options;
 	}
 
-	private async doRun(configOptions: ConfigOptions) {
+	private async doRun(pdfDoc: PDFDocument, configOptions: ConfigOptions) {
 		const convertOptions: ConvertOptions = {
 			input: configOptions.input as string,
 		};
 
-		await convert(convertOptions);
+		const extractor = new TextExtractor();
+
+		pdfDoc.registerFontkit(fontkit);
+
+		await extractor.extract(pdfDoc);
 	}
 
-	public async run(argv: Arguments): Promise<number> {
+	public async run(pdfDoc: PDFDocument, argv: Arguments): Promise<number> {
 		const configOptions = argv as unknown as ConfigOptions;
 
 		if (!coerceOptions(argv, options)) {
@@ -42,7 +50,7 @@ export class Text implements Command {
 		}
 
 		try {
-			await this.doRun(configOptions);
+			await this.doRun(pdfDoc, configOptions);
 			return 0;
 		} catch (e) {
 			console.error(

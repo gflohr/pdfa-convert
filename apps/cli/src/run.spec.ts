@@ -6,6 +6,7 @@ import {
 	type MockInstance,
 	vi,
 } from 'vitest';
+import { Text } from './commands/text.js';
 import type { ConvertOptions } from './convert.js';
 import * as convertModule from './convert.js';
 import { Package } from './package.js';
@@ -16,14 +17,11 @@ describe('pdf-lab-cli', () => {
 
 	beforeEach(() => {
 		consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-		vi.spyOn(process, 'exit').mockImplementation((() => {
-			throw new Error('process.exit');
-		}) as unknown as () => never);
 	});
 
 	describe('normal operation', () => {
 		it('convert files', async () => {
-			const argv = ['sample.pdf'];
+			const argv = ['text', 'sample.pdf'];
 
 			const convertSpy = vi
 				.spyOn(convertModule, 'convert')
@@ -34,22 +32,16 @@ describe('pdf-lab-cli', () => {
 			expect(convertSpy).toHaveBeenCalledTimes(1);
 			expect(convertSpy).toHaveBeenCalledWith({
 				input: 'sample.pdf',
-				output: '-',
-				standard: 'PDF/A-3b',
-				fonts: {},
 			});
 		});
 
 		it('should log exceptions', async () => {
-			const argv = ['sample.pdf'];
+			const argv = ['text', 'sample.pdf'];
 
 			vi.spyOn(convertModule, 'convert').mockRejectedValue('boum');
+			await run(argv);
 
-			await expect(run(argv)).rejects.toThrow('boum');
-
-			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				`${Package.name}: conversion failed`,
-			);
+			expect(consoleErrorSpy).toHaveBeenCalledWith(`${Package.name}: boum`);
 		});
 
 		it('should use defaults', async () => {
@@ -57,18 +49,42 @@ describe('pdf-lab-cli', () => {
 				.spyOn(convertModule, 'convert')
 				.mockResolvedValue(undefined);
 
-			const exitCode = await run([]);
+			const exitCode = await run(['text']);
 
 			expect(exitCode).toBe(0);
 			expect(convertSpy).toHaveBeenCalledTimes(1);
 
 			const defaultOptions: ConvertOptions = {
 				input: '-',
-				output: '-',
-				standard: 'PDF/A-3b',
-				fonts: {},
 			};
 			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
+		});
+
+		it('should allow a custom synopsis', async () => {
+			const consoleLogSpy: MockInstance<(...args: unknown[]) => void> = vi
+				.spyOn(console, 'log')
+				.mockImplementation(() => {});
+			const processExitSpy: MockInstance<(...args: unknown[]) => never> = vi
+				.spyOn(process, 'exit')
+				.mockImplementation(() => {
+					throw new Error('exit');
+				});
+			const synopsisSpy = vi.fn().mockReturnValueOnce('help yourself');
+			Object.defineProperty(Text.prototype, 'synopsis', {
+				value: synopsisSpy,
+				configurable: true,
+			});
+
+			await expect(run(['text', '--help'])).rejects.toThrow('exit');
+
+			expect(synopsisSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith(
+				expect.stringMatching(/help yourself/),
+			);
+
+			delete (Text.prototype as { synopsis?: unknown }).synopsis;
+			processExitSpy.mockRestore();
 		});
 
 		it('should honour command-line options', async () => {
@@ -76,20 +92,13 @@ describe('pdf-lab-cli', () => {
 				.spyOn(convertModule, 'convert')
 				.mockResolvedValue(undefined);
 
-			const exitCode = await run([
-				'--input=example.pdf',
-				'--output=converted.pdf',
-				'--standard=PDF/A-2b',
-			]);
+			const exitCode = await run(['text', '--input=example.pdf']);
 
 			expect(exitCode).toBe(0);
 			expect(convertSpy).toHaveBeenCalledTimes(1);
 
 			const defaultOptions: ConvertOptions = {
 				input: 'example.pdf',
-				output: 'converted.pdf',
-				standard: 'PDF/A-2b',
-				fonts: {},
 			};
 			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
 		});
@@ -99,63 +108,30 @@ describe('pdf-lab-cli', () => {
 				.spyOn(convertModule, 'convert')
 				.mockResolvedValue(undefined);
 
-			const exitCode = await run(['-']);
+			const exitCode = await run(['text', '-']);
 
 			expect(exitCode).toBe(0);
 			expect(convertSpy).toHaveBeenCalledTimes(1);
 
 			const defaultOptions: ConvertOptions = {
 				input: '-',
-				output: '-',
-				standard: 'PDF/A-3b',
-				fonts: {},
-			};
-			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
-		});
-	});
-
-	describe('font mapping', () => {
-		it('should accept font mappings', async () => {
-			const convertSpy = vi
-				.spyOn(convertModule, 'convert')
-				.mockResolvedValue(undefined);
-
-			const argv = [
-				'--font=Helvetica=h.ttf',
-				'--font=Courier=c.otf',
-				'--font',
-				'Times Roman=t.ttf',
-			];
-			const exitCode = await run(argv);
-
-			expect(exitCode).toBe(0);
-			expect(convertSpy).toHaveBeenCalledTimes(1);
-
-			const defaultOptions: ConvertOptions = {
-				input: '-',
-				output: '-',
-				standard: 'PDF/A-3b',
-				fonts: {
-					Helvetica: 'h.ttf',
-					Courier: 'c.otf',
-					'Times Roman': 't.ttf',
-				},
 			};
 			expect(convertSpy).toHaveBeenCalledWith(defaultOptions);
 		});
 
-		it('should reject invalid font mappings', async () => {
-			const convertSpy = vi
-				.spyOn(convertModule, 'convert')
-				.mockResolvedValue(undefined);
+		it('should re-throw exceptions', async () => {
+			const optionsSpy = vi
+				.spyOn(Text.prototype, 'options')
+				.mockImplementation(() => {
+					throw new Error('boum');
+				});
 
-			const argv = ['--font=Times Roman|t.ttf', '--font=Helvetica:h.ttf'];
-			const exitCode = await run(argv);
+			await expect(run(['text'])).rejects.toThrow('boum');
 
-			expect(exitCode).toBe(1);
-			expect(convertSpy).not.toHaveBeenCalled();
+			expect(optionsSpy).toHaveBeenCalledTimes(1);
+			expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				expect.stringMatching('invalid font map specification'),
+				'pdf-lab: unhandled exception: Error: boum',
 			);
 		});
 	});

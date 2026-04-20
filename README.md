@@ -24,7 +24,7 @@ The software can extract text from many, but not all PDFs:
 ```
 pnpm install
 cd apps/cli
-pnpm start:dev PATH_TO_PDF
+pnpm start:dev text PATH_TO_PDF
 ```
 
 Missing:

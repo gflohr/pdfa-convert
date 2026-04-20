@@ -42,7 +42,6 @@ export type PDFAConvertOptions = {
  * functionality.
  */
 export class PDFAConvert {
-	private readonly os: string | undefined;
 	private readonly fontMap: FontMap = {};
 	/**
 	 * Instantiate a PDF/A converter.
@@ -50,9 +49,7 @@ export class PDFAConvert {
 	 * @param os the operating system as returned by os.platform() or undefined for the browser
 	 * @param fontMap a map of font names to font data
 	 */
-	constructor(os: string | undefined = undefined, fontMap: FontMap = {}) {
-		this.os = os;
-
+	constructor(fontMap: FontMap = {}) {
 		for (const name in fontMap) {
 			this.fontMap[name.toLowerCase()] = fontMap[name];
 		}

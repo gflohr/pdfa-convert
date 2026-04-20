@@ -1,132 +1,107 @@
-#!/usr/bin/env node
-
 import * as path from 'node:path';
-import * as url from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { Textdomain } from '@esgettext/runtime';
-import type { PDFAStandard } from 'pdf-lab-core.js';
+import * as v from 'valibot';
+import '@valibot/i18n/de';
+import type { Arguments, Argv } from 'yargs';
 import yargs from 'yargs';
-import { type ConvertOptions, convert } from './convert.js';
+
+import type { Command } from './command.js';
+import { Text } from './commands/text.js';
+import { defaultOptions } from './default-options.js';
 import { Package } from './package.js';
 
-const gtx = Textdomain.getInstance('pdfa-convert');
+const commandNames = ['text'];
 
-export async function run(argv = process.argv.slice(2)) {
-	const __filename = url.fileURLToPath(import.meta.url);
-	const __dirname = path.dirname(__filename);
-	const localePath = path.join(__dirname, 'locale');
+const gtx = Textdomain.getInstance('pdf-lab');
+v.setGlobalConfig({ lang: Textdomain.locale });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const localePath = path.join(__dirname, 'locale');
+
+export async function run(argv = process.argv.slice(2)): Promise<number> {
 	gtx.bindtextdomain(localePath);
-
-	// Initialize localization
 	await gtx.resolve();
 
-	const ulocale = Textdomain.locale.replace('-', '_');
+	try {
+		let exitCode = 0;
+		const ulocale = Textdomain.locale.replace('-', '_');
 
-	const program = yargs(argv)
-		.locale(ulocale)
-		.strict()
-		.showHelpOnFail(
-			false,
-			gtx._x("Try '{programName} --help' for more information!", {
-				programName: Package.name,
-			}),
-		)
-		.option('input', {
-			alias: 'i',
-			type: 'string',
-			describe: gtx._("PDF file to read ('-' for standard input)"),
-			nargs: 1,
-		})
-		.option('output', {
-			alias: 'o',
-			type: 'string',
-			describe: gtx._("PDF file to write ('-' for standard output)"),
-			default: '-',
-			nargs: 1,
-		})
-		.option('standard', {
-			alias: 's',
-			type: 'string',
-			describe: gtx._('PDF/A conformance level and version'),
-			array: false,
-			default: 'PDF/A-3b',
-			choices: ['PDF/A-1b', 'PDF/A-2b', 'PDF/A-3b'],
-		})
-		.option('font', {
-			alias: 'f',
-			type: 'string',
-			describe: gtx._('Font mapping (NAME=PATH)'),
-			array: true,
-			nargs: 1,
-		})
-		.version(Package.version)
-		.command('$0 [file]', gtx._('Process PDF files'), (y) =>
-			y.positional('file', {
-				describe: gtx._('PDF documents to process'),
-				type: 'string',
-				nargs: 1,
-			}),
-		)
-		.conflicts('file', 'input')
-		.usage('$0 [OPTIONS] PDFs...')
-		.alias('V', 'version')
-		.alias('h', 'help')
-		.scriptName(Package.name);
+		const commands: { [key: string]: Command } = {
+			text: new Text(),
+		};
 
-	const epilogue = gtx._x('Report bugs in the bugtracker at\n{url}!', {
-		url: Package.bugTrackerUrl,
-	});
-
-	const args = await program.help().epilogue(epilogue).parse();
-
-	let inputFile: string;
-	if (typeof args.file !== 'undefined' && (args.file as string).length) {
-		inputFile = args.file as string;
-	} else if (
-		typeof args.input !== 'undefined' &&
-		(args.input as string).length
-	) {
-		inputFile = args.input as string;
-	} else {
-		inputFile = '-';
-	}
-
-	const convertOptions: ConvertOptions = {
-		input: inputFile,
-		output: args.output,
-		standard: args.standard as PDFAStandard,
-		fonts: {},
-	};
-
-	for (let i = 0; args.font && i < args.font.length; ++i) {
-		const [name, path] = args.font[i].split('=', 2);
-		if (typeof path === 'string' && name.length && path.length) {
-			convertOptions.fonts[name] = path;
-		} else {
-			console.error(
+		const program = yargs(argv)
+			.locale(ulocale)
+			.strict()
+			.showHelpOnFail(
+				false,
 				gtx._x(
-					"{programName}: invalid font map specification '{spec}': expected NAME=PATH.",
+					"Try '{programName} --help' or '{programName} COMMAND --help' for more information!",
 					{
 						programName: Package.name,
-						spec: args.font[i],
 					},
 				),
-			);
-			return 1;
-		}
-		convertOptions.fonts;
-	}
+			)
+			.alias('V', 'version')
+			.alias('h', 'help')
+			.demandCommand(1, gtx._('Error: No command given.'))
+			.scriptName(Package.name);
 
-	try {
-		await convert(convertOptions);
+		for (const name of commandNames) {
+			const command = commands[name];
+
+			const commandName = command.synopsis
+				? `${name} ${command.synopsis()}`
+				: `${name} [PDF]`;
+
+			program.command({
+				command: commandName,
+				aliases: command.aliases(),
+				describe: command.description(),
+				builder: (argv: Argv) => {
+					const options = { ...defaultOptions, ...command.options() };
+					const builder = argv.options(options);
+
+					return builder
+						.positional('file', {
+							describe: gtx._('Input file'),
+							type: 'string',
+							nargs: 1,
+						})
+						.conflicts('input', 'PDF');
+				},
+				handler: async (argv: Arguments) => {
+					argv._.shift();
+
+					if (typeof argv.PDF !== 'undefined' && (argv.PDF as string).length) {
+						argv.input = argv.PDF;
+					} else if (
+						typeof argv.input === 'undefined' ||
+						!(argv.input as string).length
+					) {
+						argv.input = '-';
+					}
+					exitCode = await command.run(argv);
+				},
+			});
+		}
+		const epilogue = gtx._x('Report bugs in the bugtracker at\n{url}!', {
+			url: Package.bugTrackerUrl,
+		});
+
+		await program.help().epilogue(epilogue).parse();
+
+		return exitCode;
 	} catch (exception) {
 		console.error(
-			gtx._x('{programName}: conversion failed', {
+			gtx._x('{programName}: unhandled exception: {exception}', {
 				programName: Package.name,
+				exception,
 			}),
 		);
 
 		throw exception;
 	}
-
-	return 0;
 }

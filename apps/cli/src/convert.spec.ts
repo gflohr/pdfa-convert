@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import { PDFDocument } from '@cantoo/pdf-lib';
 // biome-ignore lint/correctness/useImportExtensions: false positive
-import { PDFAConvert } from 'pdf-lab-core';
+import { TextExtractor } from 'pdf-lab-core';
 import { beforeEach, describe, expect, it, type MockedClass, vi } from 'vitest';
 
 vi.mock('node:fs/promises', () => ({
@@ -19,7 +19,7 @@ import { type ConvertOptions, convert } from './convert.js';
 import { readStdin } from './read-stdin.js';
 
 describe('convert', () => {
-	let convertMock: (...args: unknown[]) => Promise<void>;
+	let extractMock: (...args: unknown[]) => Promise<void>;
 	const registerFontkitMock = vi.fn();
 
 	beforeEach(() => {
@@ -30,14 +30,14 @@ describe('convert', () => {
 			registerFontkit: registerFontkitMock,
 		} as unknown as PDFDocument);
 
-		const PDFAConvertMock = PDFAConvert as unknown as MockedClass<
-			typeof PDFAConvert
+		const TextExtractorMock = TextExtractor as unknown as MockedClass<
+			typeof TextExtractor
 		>;
 
-		convertMock = vi.fn().mockResolvedValue(undefined);
+		extractMock = vi.fn().mockResolvedValue(undefined);
 
-		PDFAConvertMock.mockImplementation(function (this: PDFAConvert) {
-			this.convert = convertMock;
+		TextExtractorMock.mockImplementation(function (this: TextExtractor) {
+			this.extract = extractMock;
 		});
 	});
 
@@ -54,7 +54,7 @@ describe('convert', () => {
 		expect(PDFDocument.load).toHaveBeenCalledTimes(1);
 		expect(registerFontkitMock).toHaveBeenCalledTimes(1);
 
-		expect(convertMock).toHaveBeenCalledTimes(1);
+		expect(extractMock).toHaveBeenCalledTimes(1);
 	});
 
 	it('reads from standard input', async () => {
@@ -69,6 +69,6 @@ describe('convert', () => {
 		expect(PDFDocument.load).toHaveBeenCalledTimes(1);
 		expect(registerFontkitMock).toHaveBeenCalledTimes(1);
 
-		expect(convertMock).toHaveBeenCalledTimes(1);
+		expect(extractMock).toHaveBeenCalledTimes(1);
 	});
 });

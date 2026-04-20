@@ -15,7 +15,7 @@ export type ConfigOptions = InferredOptionTypes<typeof allOptions>;
 
 export class Text implements Command {
 	description(): string {
-		return gtx._('List and describe supported formats.');
+		return gtx._('Extract text from a PDF document.');
 	}
 
 	aliases(): Array<string> {

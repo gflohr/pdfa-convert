@@ -1,1 +1,1 @@
-export * from './pdfa-convert.js';
+export * from './pdf/text-extractor.js';

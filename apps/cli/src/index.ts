@@ -10,12 +10,15 @@ import yargs from 'yargs';
 
 import type { Command } from './command.js';
 import { Text } from './commands/text.js';
+import type { OptSpec } from './optspec.js';
 import { Package } from './package.js';
+import { defaultOptions } from './default-options.js';
 
 const commandNames = ['text'];
 
 const gtx = Textdomain.getInstance('pdf-lab');
 v.setGlobalConfig({ lang: Textdomain.locale });
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const localePath = path.join(__dirname, 'locale');
@@ -51,22 +54,32 @@ gtx.resolve()
 
 			const commandName = command.synopsis
 				? `${name} ${command.synopsis()}`
-				: `${name} [input]`;
+				: `${name} [PDF]`;
 
 			program.command({
 				command: commandName,
 				aliases: command.aliases(),
 				describe: command.description(),
 				builder: (argv: Argv) => {
-					return command.build(argv)
-						.positional('input', {
+					const options = { ...defaultOptions, ...command.options() };
+					const builder = argv.options(options);
+
+					return builder
+						.positional('file', {
 							describe: gtx._('Input file'),
 							type: 'string',
 							nargs: 1,
-						});
+						})
+						.conflicts('input', 'PDF');
 				},
 				handler: async (argv: Arguments) => {
 					argv._.shift();
+
+					if (typeof argv.PDF !== 'undefined' && (argv.PDF as string).length) {
+						argv.input = argv.PDF;
+					} else if (typeof argv.input === 'undefined' || !(argv.input as string).length) {
+						argv.input = '-';
+					}
 					exitCode = await command.run(argv);
 				},
 			});

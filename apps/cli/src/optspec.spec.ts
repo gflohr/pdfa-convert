@@ -58,4 +58,15 @@ describe('coerceOptions', () => {
 			),
 		);
 	});
+
+	it('should ignore undefined option values', () => {
+		const args = { testOption: undefined };
+		const optspecs: { [key: string]: OptSpec } = {
+			'test-option': { multi: true },
+		};
+
+		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(
+			true,
+		);
+	});
 });

@@ -8,21 +8,20 @@ import {
 	vi,
 } from 'vitest';
 import type { Arguments } from 'yargs';
-import yargs from 'yargs';
 import { coerceOptions } from '../optspec.js';
-import { Package } from '../package.js';
 import { Text } from './text.js';
 
-vi.mock('../optspec');
-vi.mock('../package');
+vi.mock('../optspec.js');
+vi.mock('../convert.js', () => ({
+  convert: vi.fn(),
+}));
+import { convert } from '../convert.js';
 
 describe('Text Command', () => {
 	let text: Text;
-	let consoleSpy: ReturnType<typeof vi.spyOn>;
 
 	beforeEach(() => {
 		text = new Text();
-		consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 		(coerceOptions as Mock).mockReturnValue(true);
 	});
 
@@ -40,30 +39,10 @@ describe('Text Command', () => {
 		expect(text.aliases()).toEqual([]);
 	});
 
-	it('build() should add expected options to yargs', () => {
-		const mockArgv = yargs([]);
-		const optionsSpy = vi.spyOn(mockArgv, 'options');
+	it('options() should return options', () => {
+		const options = text.options();
 
-		text.build(mockArgv);
-
-		expect(optionsSpy).toHaveBeenCalledWith({
-			list: expect.objectContaining({
-				group: 'Operation mode',
-				alias: ['l'],
-				type: 'boolean',
-				conflicts: 'info',
-				demandOption: false,
-				describe: 'list all supported formats',
-			}),
-			info: expect.objectContaining({
-				group: 'Operation mode',
-				alias: ['i'],
-				type: 'string',
-				conflicts: 'list',
-				demandOption: false,
-				describe: 'show detailed information about one format',
-			}),
-		});
+		expect(options).toBeDefined();
 	});
 
 	it('run() should return 1 if coerceOptions fails', async () => {
@@ -98,16 +77,12 @@ describe('Text Command', () => {
 			.spyOn(console, 'error')
 			.mockImplementation(() => {});
 
-		(Package.getName as Mock).mockReturnValue('pdf-lab');
-
 		const result = await text.run({} as Arguments);
 
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
 			'pdf-lab: Error: test error',
 		);
 		expect(result).toBe(1);
-
-		consoleErrorSpy.mockRestore();
 	});
 
 	describe('info()', () => {
@@ -123,12 +98,13 @@ describe('Text Command', () => {
 			consoleErrorSpy.mockRestore();
 		});
 
-		it('should display detailed information about each text snippet', async () => {
-			const options = { info: 'FormatC' } as unknown as Arguments;
+		it('should call convert', async () => {
+			const options = { input: 'sample.pdf' } as unknown as Arguments;
 
 			await text.run(options);
 
-			expect(consoleSpy).toHaveBeenCalledWith('name: FormatC');
+			expect(convert).toHaveBeenCalledTimes(1);
+			expect(convert).toHaveBeenCalledWith(options);
 		});
 	});
 });

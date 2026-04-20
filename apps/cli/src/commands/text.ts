@@ -1,25 +1,17 @@
 import { Textdomain } from '@esgettext/runtime';
-import type { Arguments, Argv, InferredOptionTypes } from 'yargs';
+import type { Arguments, InferredOptionTypes } from 'yargs';
 
 import type { Command } from '../command.js';
+import { type ConvertOptions, convert } from '../convert.js';
 import { coerceOptions, type OptSpec } from '../optspec.js';
 import { Package } from '../package.js';
+import { defaultOptions } from '../default-options.js';
 
 const gtx = Textdomain.getInstance('pdf-lab');
 
-const options: {
-	input: OptSpec,
-} = {
-	input: {
-		group: gtx._('Input file location'),
-		alias: ['i'],
-		type: 'string',
-		nargs: 1,
-		default: '-',
-	},
-};
-
-export type ConfigOptions = InferredOptionTypes<typeof options>;
+const options = {};
+const allOptions = { ...defaultOptions, ...options };
+export type ConfigOptions = InferredOptionTypes<typeof allOptions>;
 
 export class Text implements Command {
 	description(): string {
@@ -30,12 +22,16 @@ export class Text implements Command {
 		return [];
 	}
 
-	build(argv: Argv): Argv<object> {
-		return argv.options(options);
+	options(): Record<string, OptSpec> {
+		return options;
 	}
 
 	private async doRun(configOptions: ConfigOptions) {
-		console.log(configOptions);
+		const convertOptions: ConvertOptions = {
+			input: configOptions.input as string,
+		};
+
+		await convert(convertOptions);
 	}
 
 	public async run(argv: Arguments): Promise<number> {

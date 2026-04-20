@@ -42,15 +42,16 @@ describe('PDF loading', () => {
 		const mockDoc = { title: 'Mock PDF' };
 
 		vi.mocked(fs.readFile).mockResolvedValue(mockBuffer);
-		vi.mocked(PDFDocument.load).mockResolvedValue(mockDoc as any);
+		vi.mocked(PDFDocument.load).mockResolvedValue(
+			mockDoc as unknown as PDFDocument,
+		);
 
 		const result = await loadPDF('test.pdf');
 
 		expect(fs.readFile).toHaveBeenCalledWith('test.pdf');
-		expect(PDFDocument.load).toHaveBeenCalledWith(
-			new Uint8Array(mockBuffer),
-			{ ignoreEncryption: true }
-		);
+		expect(PDFDocument.load).toHaveBeenCalledWith(new Uint8Array(mockBuffer), {
+			ignoreEncryption: true,
+		});
 		expect(result).toBe(mockDoc);
 	});
 
@@ -58,7 +59,9 @@ describe('PDF loading', () => {
 		const { loadPDF } = await import('./load-pdf.js');
 		const mockDoc = { title: 'Stdin PDF' };
 
-		vi.mocked(PDFDocument.load).mockResolvedValue(mockDoc as any);
+		vi.mocked(PDFDocument.load).mockResolvedValue(
+			mockDoc as unknown as PDFDocument,
+		);
 
 		const result = await loadPDF('-');
 
@@ -66,10 +69,9 @@ describe('PDF loading', () => {
 		const expectedBytes = new Uint8Array(Buffer.from('Hello world!'));
 
 		expect(fs.readFile).not.toHaveBeenCalled();
-		expect(PDFDocument.load).toHaveBeenCalledWith(
-			expectedBytes,
-			{ ignoreEncryption: true }
-		);
+		expect(PDFDocument.load).toHaveBeenCalledWith(expectedBytes, {
+			ignoreEncryption: true,
+		});
 		expect(result).toBe(mockDoc);
 	});
 });

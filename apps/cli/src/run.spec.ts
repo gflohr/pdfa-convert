@@ -1,3 +1,4 @@
+import type { PDFDocument } from '@cantoo/pdf-lib';
 import {
 	beforeEach,
 	describe,
@@ -6,9 +7,8 @@ import {
 	type MockInstance,
 	vi,
 } from 'vitest';
-import { Package } from './package.js';
 import { loadPDF } from './load-pdf.js';
-import type { PDFDocument } from '@cantoo/pdf-lib';
+import { Package } from './package.js';
 
 vi.mock('node:fs/promises', () => ({
 	readFile: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3])),
@@ -35,7 +35,10 @@ describe('pdf-lab-cli', () => {
 			const argv = ['text', 'sample.pdf'];
 
 			const doRunSpy = vi
-				.spyOn(Text.prototype as unknown as { doRun: () => Promise<void> }, 'doRun')
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
 
 			await run(argv);
@@ -47,7 +50,10 @@ describe('pdf-lab-cli', () => {
 			const argv = ['text', 'sample.pdf'];
 
 			const doRunSpy = vi
-				.spyOn(Text.prototype as unknown as { doRun: () => Promise<void> }, 'doRun')
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockRejectedValue('boum');
 
 			const exitCode = await run(argv);
@@ -60,7 +66,10 @@ describe('pdf-lab-cli', () => {
 
 		it('should use defaults', async () => {
 			const doRunSpy = vi
-				.spyOn(Text.prototype as unknown as { doRun: () => Promise<void> }, 'doRun')
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
 
 			const exitCode = await run(['text']);
@@ -100,7 +109,10 @@ describe('pdf-lab-cli', () => {
 
 		it('should honour command-line options', async () => {
 			const doRunSpy = vi
-				.spyOn(Text.prototype as unknown as { doRun: () => Promise<void> }, 'doRun')
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
 
 			const exitCode = await run(['text', '--input=example.pdf']);
@@ -112,7 +124,10 @@ describe('pdf-lab-cli', () => {
 
 		it('should fix a lone hyphen as a positional argument', async () => {
 			const doRunSpy = vi
-				.spyOn(Text.prototype as unknown as { doRun: () => Promise<void> }, 'doRun')
+				.spyOn(
+					Text.prototype as unknown as { doRun: () => Promise<void> },
+					'doRun',
+				)
 				.mockResolvedValue(undefined);
 
 			const exitCode = await run(['text', '-']);

@@ -9,8 +9,8 @@ import yargs from 'yargs';
 import type { Command } from './command.js';
 import { Text } from './commands/text.js';
 import { defaultOptions } from './default-options.js';
-import { Package } from './package.js';
 import { loadPDF } from './load-pdf.js';
+import { Package } from './package.js';
 
 const commandNames = ['text'];
 

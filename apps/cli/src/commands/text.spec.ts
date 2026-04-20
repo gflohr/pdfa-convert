@@ -1,3 +1,6 @@
+import type { PDFDocument } from '@cantoo/pdf-lib';
+// biome-ignore lint/correctness/useImportExtensions: false positive.
+import { TextExtractor } from 'pdf-lab-core';
 import {
 	afterEach,
 	beforeEach,
@@ -9,8 +12,6 @@ import {
 } from 'vitest';
 import type { Arguments } from 'yargs';
 import { coerceOptions } from '../optspec.js';
-import { PDFDocument } from '@cantoo/pdf-lib';
-import { TextExtractor } from 'pdf-lab-core';
 
 vi.mock('../optspec.js');
 vi.mock('./load-pdf.js', () => ({
@@ -63,7 +64,10 @@ describe('Text Command', () => {
 	it('run() should call extract and return 0 on success', async () => {
 		(coerceOptions as Mock).mockReturnValue(true);
 		const extractMock = vi
-			.spyOn(TextExtractor.prototype as unknown as { extract: () => Promise<void> }, 'extract')
+			.spyOn(
+				TextExtractor.prototype as unknown as { extract: () => Promise<void> },
+				'extract',
+			)
 			.mockResolvedValue(undefined);
 
 		const result = await new Text().run(pdfDoc, {} as Arguments);
@@ -103,7 +107,12 @@ describe('Text Command', () => {
 
 		it('should call extract', async () => {
 			const extractMock = vi
-				.spyOn(TextExtractor.prototype as unknown as { extract: () => Promise<void> }, 'extract')
+				.spyOn(
+					TextExtractor.prototype as unknown as {
+						extract: () => Promise<void>;
+					},
+					'extract',
+				)
 				.mockResolvedValue(undefined);
 
 			const options = {} as unknown as Arguments;

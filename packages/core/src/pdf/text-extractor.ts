@@ -8,6 +8,7 @@ import {
 	type PDFRef,
 } from '@cantoo/pdf-lib';
 import { CMapMapper } from '../encoding/mappers/cmap-mapper.js';
+import { SingleByteEncodingMapper } from '../encoding/mappers/single-byte-encoding-mapper.js';
 import {
 	type Encoding,
 	type FontInfo,
@@ -15,13 +16,12 @@ import {
 	type FontSubtype,
 } from '../font/font-resolver.js';
 import { GlyphExtractor } from '../pdf/glyph-extractor.js';
-import { SingleByteEncodingMapper } from '../encoding/mappers/single-byte-encoding-mapper.js';
 
 /**
  * The `TextExtractor` implements text extraction from PDF documents.
  */
 export class TextExtractor {
-	async extract(pdfDoc: PDFDocument,) {
+	async extract(pdfDoc: PDFDocument) {
 		if (!pdfDoc) {
 			throw new Error('No document!');
 		}
@@ -38,7 +38,9 @@ export class TextExtractor {
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
 			} else if (font.cmapMapper) {
 				const cmapMapper = font.cmapMapper;
-				text = glyphBlock.glyphs.map((glyph) => cmapMapper.lookup(glyph)).join('');
+				text = glyphBlock.glyphs
+					.map((glyph) => cmapMapper.lookup(glyph))
+					.join('');
 			} else if (font.encoding) {
 				const mapper = new SingleByteEncodingMapper(font.encoding);
 				text = glyphBlock.glyphs.map((glyph) => mapper.lookup(glyph)).join('');

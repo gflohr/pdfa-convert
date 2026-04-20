@@ -102,6 +102,6 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
 			}),
 		);
 
-		return 2;
+		throw exception;
 	}
 }

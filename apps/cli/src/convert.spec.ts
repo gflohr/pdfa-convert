@@ -11,7 +11,12 @@ vi.mock('node:fs/promises', () => ({
 vi.mock('pdf-lab-core');
 vi.mock('@pdf-lib/fontkit', () => ({ default: {} }));
 
+vi.mock('./read-stdin.js', () => ({
+	readStdin: vi.fn().mockResolvedValue(new TextEncoder().encode('%PDF-1.7')),
+}));
+
 import { type ConvertOptions, convert } from './convert.js';
+import { readStdin } from './read-stdin.js';
 
 describe('convert', () => {
 	let convertMock: (...args: unknown[]) => Promise<void>;
@@ -19,6 +24,7 @@ describe('convert', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		vi.resetAllMocks();
 
 		vi.spyOn(PDFDocument, 'load').mockResolvedValue({
 			registerFontkit: registerFontkitMock,
@@ -30,27 +36,35 @@ describe('convert', () => {
 
 		convertMock = vi.fn().mockResolvedValue(undefined);
 
-		PDFAConvertMock.mockImplementation(function (
-			this: PDFAConvert,
-			_os?: string,
-			_fontMap?: object,
-		) {
+		PDFAConvertMock.mockImplementation(function (this: PDFAConvert) {
 			this.convert = convertMock;
 		});
 	});
 
-	it('reads files, loads PDFs, registers fontkit, and converts', async () => {
+	it('reads files, loads PDFs, registers fontkit, and extracts text', async () => {
 		const options: ConvertOptions = {
 			input: 'a.pdf',
-			output: '-',
-			standard: 'PDF/A-3b',
-			fonts: {},
 		};
 
 		await convert(options);
 
 		expect(fs.readFile).toHaveBeenCalledTimes(1);
 		expect(fs.readFile).toHaveBeenCalledWith('a.pdf');
+
+		expect(PDFDocument.load).toHaveBeenCalledTimes(1);
+		expect(registerFontkitMock).toHaveBeenCalledTimes(1);
+
+		expect(convertMock).toHaveBeenCalledTimes(1);
+	});
+
+	it('reads from standard input', async () => {
+		const options: ConvertOptions = {
+			input: '-',
+		};
+
+		await convert(options);
+
+		expect(readStdin).toHaveBeenCalledTimes(1);
 
 		expect(PDFDocument.load).toHaveBeenCalledTimes(1);
 		expect(registerFontkitMock).toHaveBeenCalledTimes(1);

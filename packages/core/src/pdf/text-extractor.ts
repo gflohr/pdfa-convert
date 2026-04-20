@@ -7,60 +7,21 @@ import {
 	PDFRawStream,
 	type PDFRef,
 } from '@cantoo/pdf-lib';
-import { CMap } from './text/cmap.js';
+import { CMapMapper } from '../encoding/mappers/cmap-mapper.js';
 import {
 	type Encoding,
 	type FontInfo,
 	FontResolver,
 	type FontSubtype,
-} from './text/font-resolver.js';
-import { GlyphExtractor } from './text/glyph-extractor.js';
-import { SingleByteMapper } from './text/single-byte-mapper.js';
+} from '../font/font-resolver.js';
+import { GlyphExtractor } from '../pdf/glyph-extractor.js';
+import { SingleByteEncodingMapper } from '../encoding/mappers/single-byte-encoding-mapper.js';
 
 /**
- * PDF/A conformance level and version.
+ * The `TextExtractor` implements text extraction from PDF documents.
  */
-export type PDFAStandard = 'PDF/A-1b' | 'PDF/A-2b' | 'PDF/A-3b';
-
-export type FontMap = Record<
-	string,
-	string | ArrayBuffer | Uint8Array<ArrayBufferLike>
->;
-
-/**
- * These options control the conversion.
- */
-export type PDFAConvertOptions = {
-	/**
-	 * The requested PDF/A conformance level and version, default is 'PDF/A-3b'.
-	 */
-	standard: PDFAStandard;
-};
-
-/**
- * The `PDFAConvert` class is the wrapper around the PDF/A conversion
- * functionality.
- */
-export class PDFAConvert {
-	private readonly fontMap: FontMap = {};
-	/**
-	 * Instantiate a PDF/A converter.
-	 *
-	 * @param os the operating system as returned by os.platform() or undefined for the browser
-	 * @param fontMap a map of font names to font data
-	 */
-	constructor(fontMap: FontMap = {}) {
-		for (const name in fontMap) {
-			this.fontMap[name.toLowerCase()] = fontMap[name];
-		}
-	}
-
-	async convert(
-		pdfDoc: PDFDocument,
-		options: PDFAConvertOptions = {} as PDFAConvertOptions,
-	) {
-		options.standard ??= 'PDF/A-3b';
-
+export class TextExtractor {
+	async extract(pdfDoc: PDFDocument,) {
 		if (!pdfDoc) {
 			throw new Error('No document!');
 		}
@@ -75,11 +36,11 @@ export class PDFAConvert {
 			let text: string;
 			if (typeof font === 'undefined') {
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
-			} else if (font.cmap) {
-				const cmap = font.cmap;
-				text = glyphBlock.glyphs.map((glyph) => cmap.lookup(glyph)).join('');
+			} else if (font.cmapMapper) {
+				const cmapMapper = font.cmapMapper;
+				text = glyphBlock.glyphs.map((glyph) => cmapMapper.lookup(glyph)).join('');
 			} else if (font.encoding) {
-				const mapper = new SingleByteMapper(font.encoding);
+				const mapper = new SingleByteEncodingMapper(font.encoding);
 				text = glyphBlock.glyphs.map((glyph) => mapper.lookup(glyph)).join('');
 			} else {
 				// Hopeless case.
@@ -89,6 +50,7 @@ export class PDFAConvert {
 		}
 	}
 
+	// FIXME! This must be moved to a FontCollector class.
 	private collectFonts(pdfDoc: PDFDocument): Record<string, FontInfo> {
 		const fonts: Record<string, FontInfo> = {};
 		for (const page of pdfDoc.getPages()) {
@@ -156,7 +118,7 @@ export class PDFAConvert {
 		const toUnicodeStream = fontDict.lookup(PDFName.of('ToUnicode'));
 		if (toUnicodeStream && toUnicodeStream instanceof PDFRawStream) {
 			const stream = toUnicodeStream.contents;
-			fontInfo.cmap = new CMap(stream);
+			fontInfo.cmapMapper = new CMapMapper(stream);
 		}
 
 		const encoding = fontDict.lookup(PDFName.of('Encoding'));
@@ -213,13 +175,13 @@ export class PDFAConvert {
 		if (!(toUnicodeStream && toUnicodeStream instanceof PDFRawStream)) return;
 
 		const stream = toUnicodeStream.contents;
-		const cmap = new CMap(stream);
+		const cmapMapper = new CMapMapper(stream);
 
 		return {
 			ref: fontRef,
 			embedded,
 			baseFont: fontName.decodeText(),
-			cmap,
+			cmapMapper,
 			subtype: 'Type0',
 		};
 	}

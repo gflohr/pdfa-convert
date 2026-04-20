@@ -31,7 +31,7 @@ describe('Text Command', () => {
 	});
 
 	it('description() should return a valid description', () => {
-		expect(text.description()).toBe('List and describe supported formats.');
+		expect(text.description()).toBe('Extract text from a PDF document.');
 	});
 
 	it('aliases() should return an empty array', () => {

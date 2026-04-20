@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { PDFAConvert } from './pdfa-convert.js';
+import { TextExtractor } from './text-extractor.js';
 
 describe('PDFAConvert', () => {
 	it('should instantiate the class', () => {
-		expect(new PDFAConvert()).toBeDefined();
+		expect(new TextExtractor()).toBeDefined();
 	});
 });

@@ -2,7 +2,7 @@ import * as fs from 'node:fs/promises';
 import { PDFDocument } from '@cantoo/pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 // biome-ignore lint/correctness/useImportExtensions: false positive
-import { PDFAConvert } from 'pdf-lab-core';
+import { TextExtractor } from 'pdf-lab-core';
 import { readStdin } from './read-stdin.js';
 
 export type ConvertOptions = {
@@ -10,7 +10,7 @@ export type ConvertOptions = {
 };
 
 export async function convert(options: ConvertOptions) {
-	const converter = new PDFAConvert();
+	const extractor = new TextExtractor();
 
 	const pdfBytes =
 		options.input === '-'
@@ -21,5 +21,5 @@ export async function convert(options: ConvertOptions) {
 	});
 	pdfDoc.registerFontkit(fontkit);
 
-	await converter.convert(pdfDoc);
+	await extractor.extract(pdfDoc);
 }

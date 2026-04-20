@@ -1,57 +1,57 @@
 import { describe, expect, it } from 'vitest';
-import { SingleByteMapper } from './single-byte-mapper.js';
+import { SingleByteEncodingMapper } from './single-byte-encoding-mapper.js';
 
 describe('8-bit mappers', () => {
 	describe('basic', () => {
 		it('should support the MacExpert encoding', () => {
-			const mapper = new SingleByteMapper('MacExpertEncoding');
+			const mapper = new SingleByteEncodingMapper('MacExpertEncoding');
 
 			expect(mapper).toBeDefined();
-			expect(mapper).toBeInstanceOf(SingleByteMapper);
+			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
 		});
 
 		it('should support the MacRoman encoding', () => {
-			const mapper = new SingleByteMapper('MacRomanEncoding');
+			const mapper = new SingleByteEncodingMapper('MacRomanEncoding');
 
 			expect(mapper).toBeDefined();
-			expect(mapper).toBeInstanceOf(SingleByteMapper);
+			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
 		});
 
 		it('should support the PDF encoding', () => {
-			const mapper = new SingleByteMapper('PDFEncoding');
+			const mapper = new SingleByteEncodingMapper('PDFEncoding');
 
 			expect(mapper).toBeDefined();
-			expect(mapper).toBeInstanceOf(SingleByteMapper);
+			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
 		});
 
 		it('should support the Standard encoding', () => {
-			const mapper = new SingleByteMapper('StandardEncoding');
+			const mapper = new SingleByteEncodingMapper('StandardEncoding');
 
 			expect(mapper).toBeDefined();
-			expect(mapper).toBeInstanceOf(SingleByteMapper);
+			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
 		});
 
 		it('should support the Symbol encoding', () => {
-			const mapper = new SingleByteMapper('SymbolEncoding');
+			const mapper = new SingleByteEncodingMapper('SymbolEncoding');
 
 			expect(mapper).toBeDefined();
-			expect(mapper).toBeInstanceOf(SingleByteMapper);
+			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
 		});
 
 		it('should support the WinAnsi encoding', () => {
-			const mapper = new SingleByteMapper('WinAnsiEncoding');
+			const mapper = new SingleByteEncodingMapper('WinAnsiEncoding');
 
 			expect(mapper).toBeDefined();
-			expect(mapper).toBeInstanceOf(SingleByteMapper);
+			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
 		});
 
 		it('should throw an exception for unknown encodings', () => {
-			expect(() => new SingleByteMapper('AtariST')).toThrow();
+			expect(() => new SingleByteEncodingMapper('AtariST')).toThrow();
 		});
 	});
 
 	describe('MacExpert encoding', () => {
-		const mapper = new SingleByteMapper('MacExpertEncoding');
+		const mapper = new SingleByteEncodingMapper('MacExpertEncoding');
 
 		it('should map a comma', () => {
 			expect(mapper.lookup(0x2c)).toBe(',');
@@ -63,7 +63,7 @@ describe('8-bit mappers', () => {
 	});
 
 	describe('MacRoman encoding', () => {
-		const mapper = new SingleByteMapper('MacRomanEncoding');
+		const mapper = new SingleByteEncodingMapper('MacRomanEncoding');
 
 		it('should map a German double s', () => {
 			expect(mapper.lookup(0xa7)).toBe('ß');
@@ -75,7 +75,7 @@ describe('8-bit mappers', () => {
 	});
 
 	describe('PDF encoding', () => {
-		const mapper = new SingleByteMapper('PDFEncoding');
+		const mapper = new SingleByteEncodingMapper('PDFEncoding');
 
 		it('should map a trademark sign', () => {
 			expect(mapper.lookup(0x92)).toBe('™');
@@ -87,7 +87,7 @@ describe('8-bit mappers', () => {
 	});
 
 	describe('Standard encoding', () => {
-		const mapper = new SingleByteMapper('StandardEncoding');
+		const mapper = new SingleByteEncodingMapper('StandardEncoding');
 
 		it('should map a perthousand sign', () => {
 			expect(mapper.lookup(0xbd)).toBe('‰');
@@ -99,7 +99,7 @@ describe('8-bit mappers', () => {
 	});
 
 	describe('Symbol encoding', () => {
-		const mapper = new SingleByteMapper('SymbolEncoding');
+		const mapper = new SingleByteEncodingMapper('SymbolEncoding');
 
 		it('should map a Greek capital Omega', () => {
 			expect(mapper.lookup(0x57)).toBe('Ω');
@@ -111,7 +111,7 @@ describe('8-bit mappers', () => {
 	});
 
 	describe('WinAnsi encoding', () => {
-		const mapper = new SingleByteMapper('WinAnsiEncoding');
+		const mapper = new SingleByteEncodingMapper('WinAnsiEncoding');
 
 		it('should map a Euro sign', () => {
 			expect(mapper.lookup(0x80)).toBe('€');
@@ -123,7 +123,7 @@ describe('8-bit mappers', () => {
 	});
 
 	describe('ZapfDingbats encoding', () => {
-		const mapper = new SingleByteMapper('ZapfDingbatsEncoding');
+		const mapper = new SingleByteEncodingMapper('ZapfDingbatsEncoding');
 
 		it('should map a scissors sign', () => {
 			expect(mapper.lookup(0x24)).toBe('✄');

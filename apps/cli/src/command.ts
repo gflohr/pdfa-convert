@@ -1,4 +1,4 @@
-import type { Arguments, Argv } from 'yargs';
+import type { Arguments } from 'yargs';
 import type { OptSpec } from './optspec.js';
 
 export interface Command {

@@ -12,9 +12,9 @@
 //
 // Any ideas on how to test that are welcome.
 
-import { once } from 'events';
-import * as stream from 'stream';
-import * as util from 'util';
+import { once } from 'node:events';
+import * as stream from 'node:stream';
+import * as util from 'node:util';
 
 const CHUNK_SIZE = 16 * 1024;
 

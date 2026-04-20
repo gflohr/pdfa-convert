@@ -13,8 +13,9 @@ import { Text } from './text.js';
 
 vi.mock('../optspec.js');
 vi.mock('../convert.js', () => ({
-  convert: vi.fn(),
+	convert: vi.fn(),
 }));
+
 import { convert } from '../convert.js';
 
 describe('Text Command', () => {
@@ -30,9 +31,7 @@ describe('Text Command', () => {
 	});
 
 	it('description() should return a valid description', () => {
-		expect(text.description()).toBe(
-			'List and describe supported formats.',
-		);
+		expect(text.description()).toBe('List and describe supported formats.');
 	});
 
 	it('aliases() should return an empty array', () => {
@@ -79,9 +78,7 @@ describe('Text Command', () => {
 
 		const result = await text.run({} as Arguments);
 
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			'pdf-lab: Error: test error',
-		);
+		expect(consoleErrorSpy).toHaveBeenCalledWith('pdf-lab: Error: test error');
 		expect(result).toBe(1);
 	});
 
@@ -89,9 +86,7 @@ describe('Text Command', () => {
 		let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 		beforeEach(() => {
-			consoleErrorSpy = vi
-				.spyOn(console, 'error')
-				.mockImplementation(() => {});
+			consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 		});
 
 		afterEach(() => {

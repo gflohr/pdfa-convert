@@ -4,7 +4,7 @@ import type { OptSpec } from './optspec.js';
 const gtx = Textdomain.getInstance('pdf-lab');
 
 export const defaultOptions: {
-	input: OptSpec,
+	input: OptSpec;
 } = {
 	input: {
 		group: gtx._('Input file location'),

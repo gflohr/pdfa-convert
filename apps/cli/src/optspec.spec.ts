@@ -10,9 +10,7 @@ describe('coerceOptions', () => {
 	let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 	beforeEach(() => {
-		consoleErrorSpy = vi
-			.spyOn(console, 'error')
-			.mockImplementation(() => {});
+		consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 	});
 
 	afterEach(() => {
@@ -25,9 +23,7 @@ describe('coerceOptions', () => {
 			'test-option': { multi: true },
 		};
 
-		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(
-			true,
-		);
+		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(true);
 		expect(args.testOption).toEqual(['value']);
 	});
 
@@ -37,9 +33,7 @@ describe('coerceOptions', () => {
 			'test-option': { multi: false },
 		};
 
-		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(
-			true,
-		);
+		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(true);
 		expect(args.testOption).toBe('value');
 	});
 
@@ -49,9 +43,7 @@ describe('coerceOptions', () => {
 			'test-option': { multi: false },
 		};
 
-		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(
-			false,
-		);
+		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(false);
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
 			expect.stringContaining(
 				"Error: The option 'test-option' cannot be specified more than once!",
@@ -65,8 +57,6 @@ describe('coerceOptions', () => {
 			'test-option': { multi: true },
 		};
 
-		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(
-			true,
-		);
+		expect(coerceOptions(args as unknown as Arguments, optspecs)).toBe(true);
 	});
 });

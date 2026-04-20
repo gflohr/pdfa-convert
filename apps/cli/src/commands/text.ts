@@ -3,9 +3,9 @@ import type { Arguments, InferredOptionTypes } from 'yargs';
 
 import type { Command } from '../command.js';
 import { type ConvertOptions, convert } from '../convert.js';
+import { defaultOptions } from '../default-options.js';
 import { coerceOptions, type OptSpec } from '../optspec.js';
 import { Package } from '../package.js';
-import { defaultOptions } from '../default-options.js';
 
 const gtx = Textdomain.getInstance('pdf-lab');
 

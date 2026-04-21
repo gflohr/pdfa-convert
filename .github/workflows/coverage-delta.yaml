@@ -1,7 +1,9 @@
 name: Coverage Delta
 
 on:
-  pull_request:
+  push:
+    branches:
+      - '**'
 
 jobs:
   coverage:
@@ -50,6 +52,7 @@ jobs:
         run: |
           set -euo pipefail
           node compare-coverage.mjs | tee coverage-delta.md
+          cat coverage-delta.md
 
       - name: Upload coverage delta
         uses: actions/upload-artifact@v7

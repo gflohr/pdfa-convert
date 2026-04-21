@@ -52,7 +52,6 @@ jobs:
         run: |
           set -euo pipefail
           pnpm run cov:compare | tee coverage-delta.md
-          cat coverage-delta.md
 
       - name: Upload coverage delta
         uses: actions/upload-artifact@v7

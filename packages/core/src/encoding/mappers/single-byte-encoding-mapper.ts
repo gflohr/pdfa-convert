@@ -1,7 +1,7 @@
 import { adobeGlyphs } from '../agl.js';
 import { MacExpertEncoding } from '../single-byte-encodings/mac-expert.js';
 import { MacRomanEncoding } from '../single-byte-encodings/mac-roman.js';
-import { PDFEncoding } from '../single-byte-encodings/pdf.js';
+import { PDFDocEncoding } from '../single-byte-encodings/pdf-doc.js';
 import { StandardEncoding } from '../single-byte-encodings/standard.js';
 import { SymbolEncoding } from '../single-byte-encodings/symbol.js';
 import { WinAnsiEncoding } from '../single-byte-encodings/win-ansi.js';
@@ -19,8 +19,8 @@ export class SingleByteEncodingMapper implements GlyphMapper {
 			case 'macromanencoding':
 				this.encoding = MacRomanEncoding;
 				break;
-			case 'pdfencoding':
-				this.encoding = PDFEncoding;
+			case 'pdfdocencoding':
+				this.encoding = PDFDocEncoding;
 				break;
 			case 'standardencoding':
 				this.encoding = StandardEncoding;

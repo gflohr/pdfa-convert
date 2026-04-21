@@ -28,7 +28,7 @@
 		"test": "pnpm -r run test",
 		"test:cov": "pnpm -r run test:cov",
 		"test:cov-changed": "pnpm -r run test:cov-changed",
-		"test:watch": "pnpm-r run test:watch",
+		"test:watch": "pnpm -r run test:watch",
 		"aggregate-coverage": "node scripts/aggregate-coverage.mjs",
 		"release": "HUSKY=0 pnpm changeset publish",
 		"prerelease": "pnpm install && pnpm run build && pnpm run test",
@@ -38,7 +38,7 @@
 		"prepare": "husky",
 		"preinstall": "npx only-allow pnpm",
 		"gen": "pnpm run gen:agl",
-		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdf-lab-cre/src/agl.ts",
+		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdf-lab-core/src/agl.ts",
 		"postgen:agl": "biome check --write packages/pdf-lab-core/src/agl.ts"
 	},
 	"devDependencies": {

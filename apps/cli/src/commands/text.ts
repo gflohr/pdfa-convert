@@ -31,7 +31,8 @@ export class Text implements Command {
 	private async doRun(pdfDoc: PDFDocument) {
 		const extractor = new TextExtractor();
 
-		await extractor.extract(pdfDoc);
+		const blocks = await extractor.extract(pdfDoc);
+		console.dir(blocks, { depth: null });
 	}
 
 	public async run(pdfDoc: PDFDocument, argv: Arguments): Promise<number> {

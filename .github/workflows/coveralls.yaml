@@ -43,4 +43,4 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          fail-on-error: false
+          files: packages/*/coverage/lcov.info apps/*/coverage/lcov.info

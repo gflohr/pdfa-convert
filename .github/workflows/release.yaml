@@ -38,11 +38,11 @@ jobs:
       - name: Show changeset status
         run: npx changeset status
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: pnpm run release
-        env:
-          HUSKY: 0
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Create Release Pull Request or Publish to npm
+#        id: changesets
+#        uses: changesets/action@v1
+#        with:
+#          publish: pnpm run release
+#        env:
+#          HUSKY: 0
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

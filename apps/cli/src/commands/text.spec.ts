@@ -17,7 +17,6 @@ vi.mock('../optspec.js');
 vi.mock('./load-pdf.js', () => ({
 	loadPDF: vi.fn().mockResolvedValue({
 		pdf: true,
-		registerFontkit: vi.fn(() => {}),
 	} as unknown as PDFDocument),
 }));
 
@@ -25,9 +24,7 @@ import { Text } from './text.js';
 
 describe('Text Command', () => {
 	let text: Text;
-	const pdfDoc = {
-		registerFontkit: vi.fn(),
-	} as unknown as PDFDocument;
+	const pdfDoc = {} as unknown as PDFDocument;
 
 	beforeEach(() => {
 		text = new Text();

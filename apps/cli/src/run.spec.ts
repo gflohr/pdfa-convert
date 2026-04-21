@@ -16,7 +16,6 @@ vi.mock('node:fs/promises', () => ({
 vi.mock('./load-pdf.js', () => ({
 	loadPDF: vi.fn().mockResolvedValue({
 		pdf: true,
-		registerFontkit: vi.fn(() => {}),
 	} as unknown as PDFDocument),
 }));
 

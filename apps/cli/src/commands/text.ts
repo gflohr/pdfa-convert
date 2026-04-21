@@ -31,8 +31,6 @@ export class Text implements Command {
 	private async doRun(pdfDoc: PDFDocument) {
 		const extractor = new TextExtractor();
 
-		pdfDoc.registerFontkit(fontkit);
-
 		await extractor.extract(pdfDoc);
 	}
 

@@ -17,8 +17,8 @@ describe('8-bit mappers', () => {
 			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
 		});
 
-		it('should support the PDF encoding', () => {
-			const mapper = new SingleByteEncodingMapper('PDFEncoding');
+		it('should support the PDFDoc encoding', () => {
+			const mapper = new SingleByteEncodingMapper('PDFDocEncoding');
 
 			expect(mapper).toBeDefined();
 			expect(mapper).toBeInstanceOf(SingleByteEncodingMapper);
@@ -75,7 +75,7 @@ describe('8-bit mappers', () => {
 	});
 
 	describe('PDF encoding', () => {
-		const mapper = new SingleByteEncodingMapper('PDFEncoding');
+		const mapper = new SingleByteEncodingMapper('PDFDocEncoding');
 
 		it('should map a trademark sign', () => {
 			expect(mapper.lookup(0x92)).toBe('™');

@@ -41,3 +41,4 @@ coverage/
 # Test files
 *.pdf
 x-*.ts
+/coverage-summary.json

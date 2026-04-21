@@ -5,6 +5,9 @@ on:
     branches:
       - '**'
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
     name: Test on ${{ matrix.os }} with Node.js ${{ matrix.node-version }}

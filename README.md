@@ -11,6 +11,16 @@
 This project is currently a work in progress. It is a supplement
 to the Cantoo fork of [pdf-lib](https://github.com/cantoo-scribe/pdf-lib).
 
+- [PDF-Lab](#pdf-lab)
+	- [Description](#description)
+	- [Current State](#current-state)
+		- [Text Extraction](#text-extraction)
+	- [Limitations and Caveats](#limitations-and-caveats)
+		- [CJK Scripts](#cjk-scripts)
+		- [Encoding Differences are Not Supported](#encoding-differences-are-not-supported)
+
+## Description
+
 In the future, it will hopefully help with these things:
 
 * upgrading regular PDFs to PDF/A-1b, PDF/A-2b, or PDF/A-3b
@@ -35,9 +45,14 @@ cd apps/cli
 pnpm start:dev text PATH_TO_PDF
 ```
 
-Missing:
+## Limitations and Caveats
 
-* Encodings with "differences".
+### CJK Scripts
 
-Documents using legacy CJL fonts/encodings may work or not.
+Documents that use CJK scripts will probably not work.
+
+### Encoding Differences are Not Supported
+
+The PDF specification allows referencing a base encoding and patching it.
+Implemented requires test documents that use this feature.
 

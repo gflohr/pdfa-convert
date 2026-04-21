@@ -18,10 +18,30 @@ import {
 import { GlyphExtractor } from '../pdf/glyph-extractor.js';
 
 /**
+ * A block of text extracted from a `PDFDocument`.
+ */
+export type TextBlock = {
+	/**
+	 * The extracted text.
+	 */
+	text: string;
+
+	/**
+	 * The font information.
+	 */
+	font: FontInfo;
+
+	/**
+	 * The page number where the snippet was found.
+	 */
+	pageNumber: number;
+};
+
+/**
  * The `TextExtractor` implements text extraction from PDF documents.
  */
 export class TextExtractor {
-	async extract(pdfDoc: PDFDocument) {
+	async extract(pdfDoc: PDFDocument): Promise<TextBlock[]> {
 		if (!pdfDoc) {
 			throw new Error('No document!');
 		}
@@ -30,6 +50,7 @@ export class TextExtractor {
 		const extractor = new GlyphExtractor();
 
 		const glyphBlocks = extractor.parseDocument(pdfDoc);
+		const textBlocks: TextBlock[] = [];
 		for (let i = 0; i < glyphBlocks.length; ++i) {
 			const glyphBlock = glyphBlocks[i];
 			const font = fonts[glyphBlock.fontResource];
@@ -48,8 +69,15 @@ export class TextExtractor {
 				// Hopeless case.
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
 			}
-			console.log(`page ${glyphBlock.pageNumber + 1}: ${text}`);
+
+			textBlocks.push({
+				text,
+				font,
+				pageNumber: glyphBlock.pageNumber,
+			});
 		}
+
+		return textBlocks;
 	}
 
 	// FIXME! This must be moved to a FontCollector class.
@@ -92,6 +120,16 @@ export class TextExtractor {
 		return fonts;
 	}
 
+	private getFontName(baseName: string): string {
+		// Strip subset prefix (ABCDEF+).
+		let fontName = baseName.replace(/^[A-Z]{6}\+/, '');
+
+		// Strip numerical suffix.
+		fontName = fontName.replace(/-[0-9]+$/, '');
+
+		return fontName;
+	}
+
 	private getFontInfo(
 		subtypeName: string,
 		fontName: PDFName,
@@ -110,10 +148,12 @@ export class TextExtractor {
 				fontDescriptor.has(PDFName.of('FontFile3'));
 		}
 
+		const baseFont = fontName.decodeText();
 		const fontInfo: FontInfo = {
 			ref: fontRef,
 			embedded,
-			baseFont: fontName.decodeText(),
+			baseFont,
+			fontName: this.getFontName(baseFont),
 			subtype: subtypeName as FontSubtype,
 		};
 
@@ -179,10 +219,12 @@ export class TextExtractor {
 		const stream = toUnicodeStream.contents;
 		const cmapMapper = new CMapMapper(stream);
 
+		const baseFont = fontName.decodeText();
 		return {
 			ref: fontRef,
 			embedded,
-			baseFont: fontName.decodeText(),
+			baseFont,
+			fontName: this.getFontName(baseFont),
 			cmapMapper,
 			subtype: 'Type0',
 		};

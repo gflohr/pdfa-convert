@@ -34,12 +34,41 @@ const encodings = [
 export type Encoding = (typeof encodings)[number];
 
 export type FontSubtype = 'Type0' | 'TrueType';
+
+/**
+ * Information about a font.
+ */
 export type FontInfo = {
+	/**
+	 * The BaseFont. This often contains subset identifiers or a numbered
+	 * suffix.
+	 */
 	baseFont: string;
+	/**
+	 * The normalized font name without the subset identifier or numbered
+	 * suffix.
+	 */
+	fontName: string;
+	/**
+	 * The reference to the font dictionary.
+	 */
 	ref: PDFRef;
+	/**
+	 * The indicator for embedded fonts.
+	 */
 	embedded: boolean;
+	/**
+	 * The optional encoding.
+	 */
 	encoding?: Encoding;
+	// FIXME! This should become a type GlyphMapper.
+	/**
+	 * The optional glyph mapper.
+	 */
 	cmapMapper?: CMapMapper;
+	/**
+	 * The font subtype.
+	 */
 	subtype: FontSubtype;
 };
 

@@ -35,7 +35,7 @@ jobs:
         run: pnpm run test:cov
 
       - name: Aggregate coverage data
-        run: pnpm run aggregate-coverage
+        run: pnpm run cov:aggregate
 
       - name: Save PR coverage
         run: cp coverage-summary.json pr-coverage.json
@@ -51,7 +51,7 @@ jobs:
       - name: Compare coverage
         run: |
           set -euo pipefail
-          node compare-coverage.mjs | tee coverage-delta.md
+          pnpm run cov:compare | tee coverage-delta.md
           cat coverage-delta.md
 
       - name: Upload coverage delta

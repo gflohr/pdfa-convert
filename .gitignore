@@ -41,6 +41,3 @@ coverage/
 # Test files
 *.pdf
 x-*.ts
-
-# Aggregated coverage data.
-coverage-summary.json

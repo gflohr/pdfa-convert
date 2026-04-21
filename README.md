@@ -54,5 +54,4 @@ Documents that use CJK scripts will probably not work.
 ### Encoding Differences are Not Supported
 
 The PDF specification allows referencing a base encoding and patching it.
-Implemented requires test documents that use this feature.
-
+Implementing support for this requires test documents that use the feature.

@@ -1,0 +1,58 @@
+name: Coverage Delta
+
+on:
+  pull_request:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Run tests with coverage (PR)
+        run: pnpm run test:cov
+
+      - name: Aggregate coverage data
+        run: pnpm run aggregate-coverage
+
+      - name: Save PR coverage
+        run: cp coverage-summary.json pr-coverage.json
+
+      - name: Download main coverage
+        uses: dawidd6/action-download-artifact@v19
+        with:
+          workflow: coveralls.yaml
+          branch: main
+          name: coverage-main
+          path: .
+
+      - name: Compare coverage
+        run: |
+          set -euo pipefail
+          node compare-coverage.mjs | tee coverage-delta.md
+
+      - name: Upload coverage delta
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-delta
+          path: coverage-delta.md

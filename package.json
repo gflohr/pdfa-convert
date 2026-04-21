@@ -28,7 +28,8 @@
 		"test": "pnpm -r run test",
 		"test:cov": "pnpm -r run test:cov",
 		"test:cov-changed": "pnpm -r run test:cov-changed",
-		"test:watch": "pnpm-r run test:watch",
+		"test:watch": "pnpm -r run test:watch",
+		"aggregate-coverage": "node scripts/aggregate-coverage.mjs",
 		"release": "HUSKY=0 pnpm changeset publish",
 		"prerelease": "pnpm install && pnpm run build && pnpm run test",
 		"check:clean": "./check-clean && pnpm -r --parallel run check:clean",
@@ -37,7 +38,7 @@
 		"prepare": "husky",
 		"preinstall": "npx only-allow pnpm",
 		"gen": "pnpm run gen:agl",
-		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdf-lab-cre/src/agl.ts",
+		"gen:agl": "tsx scripts/gen-tables.ts agl>packages/pdf-lab-core/src/agl.ts",
 		"postgen:agl": "biome check --write packages/pdf-lab-core/src/agl.ts"
 	},
 	"devDependencies": {
@@ -47,7 +48,9 @@
 		"@types/node": "^25.5.2",
 		"@types/unicode-name": "^1.1.0",
 		"changeset": "^0.2.6",
+		"glob": "^13.0.6",
 		"husky": "^9.1.7",
+		"js-yaml": "^4.1.1",
 		"pnpm": "^10.33.0",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",

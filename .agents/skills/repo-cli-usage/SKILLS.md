@@ -1,7 +1,7 @@
 ---
 name: repo-cli-usage
 description: >
-  Provides AI agents with instructions for using the `e-invoice-eu` CLI. Includes
+  Provides AI agents with instructions for using the `pdf-lab` CLI. Includes
   installation, help commands, and detailed guidance for each CLI command.
 ---
 

@@ -1,0 +1,46 @@
+name: Upload Coverage to Coveralls
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  test:
+    name: Test on ubuntu-latest with Node.js 22
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Test with coverage
+        run: pnpm run test:cov
+
+      - name: Aggregate coverage
+        run: node aggregate-coverage.mjs
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-main
+          path: coverage-summary.json
+
+      - name: Upload coverage
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: packages/*/coverage/lcov.info apps/*/coverage/lcov.info

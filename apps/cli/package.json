@@ -1,5 +1,5 @@
 {
-	"name": "pdf-labl",
+	"name": "pdf-lab",
 	"version": "0.1.0",
 	"description": "CLI for converting PDFs to PDF/A",
 	"type": "module",

@@ -32,9 +32,6 @@ jobs:
       - name: Run tests with coverage (PR)
         run: pnpm run test:cov
 
-      - name: Aggregate coverage (PR)
-        run: node scripts/aggregate-coverage.mjs
-
       - name: Save PR coverage
         run: cp coverage-summary.json pr-coverage.json
 

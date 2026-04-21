@@ -33,6 +33,10 @@ for (let pattern of workspaceGlobs) {
 	roots.push(...globSync(pattern));
 }
 
+if (roots.length === 0) {
+	throw new Error('No coverage directories found for workspace packages.');
+}
+
 const total = {
 	lines: { covered: 0, total: 0 },
 };
@@ -47,8 +51,11 @@ for (const root of roots) {
 	total.lines.total += lines.total;
 }
 
-const pct =
-	total.lines.total > 0 ? (total.lines.covered / total.lines.total) * 100 : 0;
+if (total.lines.total <= 0) {
+	throw new Error('No instrumented lines found in coverage summaries.');
+}
+
+const pct = (total.lines.covered / total.lines.total) * 100;
 
 fs.writeFileSync(
 	'coverage-summary.json',

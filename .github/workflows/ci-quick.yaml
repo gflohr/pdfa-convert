@@ -23,6 +23,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+
+      - name: List Linux Fonts
+        if: matrix.os == 'ubuntu-latest'
+        run: ls -R /usr/share/fonts
+
+      - name: List macOS Fonts
+        if: matrix.os == 'macos-latest'
+        run: ls -R /System/Library/Fonts
+
+      - name: List MS-DOS Fonts
+        if: matrix.os == 'windows-latest'
+        run: dir /s C:\\Windows\\Fonts
+
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:

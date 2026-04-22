@@ -33,6 +33,7 @@ jobs:
         run: ls -R /System/Library/Fonts
 
       - name: List MS-DOS Fonts
+        shell: cmd # We need the crap shell!
         if: matrix.os == 'windows-latest'
         run: dir /s C:\\Windows\\Fonts
 

@@ -35,7 +35,7 @@ jobs:
       - name: List MS-DOS Fonts
         shell: cmd # We need the crap shell!
         if: matrix.os == 'windows-latest'
-        run: dir /s C:\\Windows\\Fonts
+        run: dir /s C:\Windows\Fonts
 
       - name: Set up Node.js
         uses: actions/setup-node@v6

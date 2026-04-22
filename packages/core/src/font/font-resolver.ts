@@ -33,7 +33,8 @@ const encodings = [
 ] as const;
 export type Encoding = (typeof encodings)[number];
 
-export type FontSubtype = 'Type0' | 'TrueType';
+export type FontSubtype = 'Type0' | 'Type1' | 'MMType1' | 'Type3' |
+	'TrueType' | 'CIDFontType0' | 'CIDFontType2';
 
 /**
  * Information about a font.

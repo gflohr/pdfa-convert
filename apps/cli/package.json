@@ -31,7 +31,7 @@
 		"start": "node dist/index.js",
 		"start:dev": "tsx ./src/index.ts",
 		"pretest": "node ./write-package.mjs >src/package.ts",
-		"test": "vitest --run",
+		"test": "vitest --environment=node --run",
 		"pretest:changed": "node ./write-package.mjs >src/package.ts",
 		"test:changed": "vitest --changedSince origin/main --passWithNoTests",
 		"pretest:watch": "node ./write-package.mjs >src/package.ts",
@@ -59,6 +59,7 @@
 	},
 	"devDependencies": {
 		"@esgettext/tools": "^1.3.10",
+		"@types/js-yaml": "^4.0.9",
 		"@types/node": "^25.5.2",
 		"@types/yargs": "^17.0.35",
 		"@vitest/coverage-v8": "^4.1.4",

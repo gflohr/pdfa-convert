@@ -16,6 +16,7 @@ import {
 	type FontSubtype,
 } from '../font/font-resolver.js';
 import { GlyphExtractor } from '../pdf/glyph-extractor.js';
+import { makePDFDocument } from './make-pdf-document.js';
 
 /**
  * A block of text extracted from a `PDFDocument`.
@@ -41,10 +42,10 @@ export type TextBlock = {
  * The `TextExtractor` implements text extraction from PDF documents.
  */
 export class TextExtractor {
-	async extract(pdfDoc: PDFDocument): Promise<TextBlock[]> {
-		if (!pdfDoc) {
-			throw new Error('No document!');
-		}
+	async extract(
+		pdfDoc: PDFDocument | string | ArrayBuffer | Uint8Array<ArrayBufferLike>,
+	): Promise<TextBlock[]> {
+		pdfDoc = await makePDFDocument(pdfDoc);
 
 		const fonts = this.collectFonts(pdfDoc);
 		const extractor = new GlyphExtractor();

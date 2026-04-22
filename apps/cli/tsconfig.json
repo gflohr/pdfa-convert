@@ -8,7 +8,7 @@
 		"moduleResolution": "bundler",
 		"types": ["node"],
 		"paths": {
-			"pdf-lab-core": ["../../packages/core/dist"]
+			"pdf-lab-core": ["../../packages/core/src"]
 		}
 	},
 	"include": ["src"],

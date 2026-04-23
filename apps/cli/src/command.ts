@@ -5,5 +5,5 @@ export interface Command {
 	description(): string;
 	aliases(): string[];
 	options(): Record<string, OptSpec>;
-	run(pdfDoc: Buffer, argv: Arguments): Promise<number>;
+	run(pdfyBytes: Buffer, argv: Arguments): Promise<number>;
 }

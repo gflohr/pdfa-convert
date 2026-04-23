@@ -1,4 +1,3 @@
-import type { PDFDocument } from '@cantoo/pdf-lib';
 import { Textdomain } from '@esgettext/runtime';
 import * as yaml from 'js-yaml';
 // biome-ignore lint/correctness/useImportExtensions: false positive.
@@ -53,10 +52,10 @@ export class Text implements Command {
 		return options;
 	}
 
-	private async doRun(pdfDoc: PDFDocument, configOptions: ConfigOptions) {
+	private async doRun(input: Buffer, configOptions: ConfigOptions) {
 		const extractor = new TextExtractor();
 
-		const blocks = await extractor.extract(pdfDoc);
+		const blocks = await extractor.extract(input);
 		if (configOptions.format === 'text') {
 			console.log(blocks.map((b) => b.text).join('\n'));
 			return;
@@ -85,7 +84,7 @@ export class Text implements Command {
 		}
 	}
 
-	public async run(pdfDoc: PDFDocument, argv: Arguments): Promise<number> {
+	public async run(input: Buffer, argv: Arguments): Promise<number> {
 		const configOptions = argv as unknown as ConfigOptions;
 
 		if (!coerceOptions(argv, options)) {
@@ -93,7 +92,7 @@ export class Text implements Command {
 		}
 
 		try {
-			await this.doRun(pdfDoc, configOptions);
+			await this.doRun(input, configOptions);
 			return 0;
 		} catch (e) {
 			console.error(

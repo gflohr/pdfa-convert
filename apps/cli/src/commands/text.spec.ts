@@ -1,4 +1,5 @@
-import { type PDFDocument, PDFRef } from '@cantoo/pdf-lib';
+import { PDFRef } from '@cantoo/pdf-lib';
+import * as yaml from 'js-yaml';
 // biome-ignore lint/correctness/useImportExtensions: false positive.
 import { type TextBlock, TextExtractor } from 'pdf-lab-core';
 import {
@@ -10,15 +11,12 @@ import {
 	type Mock,
 	vi,
 } from 'vitest';
-import * as yaml from 'js-yaml';
 import type { Arguments } from 'yargs';
 import { coerceOptions } from '../optspec.js';
 
 vi.mock('../optspec.js');
-vi.mock('./load-pdf.js', () => ({
-	loadPDF: vi.fn().mockResolvedValue({
-		pdf: true,
-	} as unknown as PDFDocument),
+vi.mock('./load-input.js', () => ({
+	loadInput: vi.fn().mockResolvedValue(new Uint8Array()),
 }));
 
 import { Text } from './text.js';
@@ -26,7 +24,6 @@ import { Text } from './text.js';
 describe('Text Command', () => {
 	let consoleLogSpy: ReturnType<typeof vi.spyOn>;
 	let text: Text;
-	const pdfDoc = {} as unknown as PDFDocument;
 
 	beforeEach(() => {
 		text = new Text();
@@ -54,9 +51,7 @@ describe('Text Command', () => {
 
 	it('run() should return 1 if coerceOptions fails', async () => {
 		(coerceOptions as Mock).mockReturnValue(false);
-		const pdfDoc = {} as PDFDocument;
-
-		const result = await text.run(pdfDoc, {} as Arguments);
+		const result = await text.run(Buffer.from(''), {} as Arguments);
 
 		expect(result).toBe(1);
 	});
@@ -72,7 +67,7 @@ describe('Text Command', () => {
 			)
 			.mockResolvedValue([]);
 
-		const result = await new Text().run(pdfDoc, {} as Arguments);
+		const result = await new Text().run(Buffer.from(''), {} as Arguments);
 
 		expect(extractMock).toHaveBeenCalledTimes(1);
 		expect(result).toBe(0);
@@ -90,42 +85,42 @@ describe('Text Command', () => {
 			.spyOn(console, 'error')
 			.mockImplementation(() => {});
 
-		const result = await text.run(pdfDoc, {} as Arguments);
+		const result = await text.run(Buffer.from(''), {} as Arguments);
 
 		expect(consoleErrorSpy).toHaveBeenCalledWith('pdf-lab: Error: test error');
 		expect(result).toBe(1);
 	});
 
 	describe('output format', () => {
-			const textBlocks: TextBlock[] = [
-				{
-					text: 'The quick brown fox jumps over 13 lazy dogs.',
-					font: {
-						ref: PDFRef.of(42),
-						baseFont: 'Helvetica-1234',
-						fontName: 'Helvetica',
-						embedded: false,
-						subtype: 'Type1',
-						encoding: 'MacRomanEncoding',
-					},
-					pageNumber: 0,
+		const textBlocks: TextBlock[] = [
+			{
+				text: 'The quick brown fox jumps over 13 lazy dogs.',
+				font: {
+					ref: PDFRef.of(42),
+					baseFont: 'Helvetica-1234',
+					fontName: 'Helvetica',
+					embedded: false,
+					subtype: 'Type1',
+					encoding: 'MacRomanEncoding',
 				},
-				{
-					text: 'Бързата кафява лисица прескача 13 мързеливи кучета.',
-					font: {
-						ref: PDFRef.of(42),
-						baseFont: 'Helvetica-Oblique-1234',
-						fontName: 'Helvetica-Oblique',
-						embedded: false,
-						subtype: 'Type1',
-					},
-					pageNumber: 0,
+				pageNumber: 0,
+			},
+			{
+				text: 'Бързата кафява лисица прескача 13 мързеливи кучета.',
+				font: {
+					ref: PDFRef.of(42),
+					baseFont: 'Helvetica-Oblique-1234',
+					fontName: 'Helvetica-Oblique',
+					embedded: false,
+					subtype: 'Type1',
 				},
-			];
+				pageNumber: 0,
+			},
+		];
 		const textBlocksDto = structuredClone<TextBlock[]>(textBlocks);
 
 		// Patch the object.
-		textBlocksDto.forEach(block => {
+		textBlocksDto.forEach((block) => {
 			block.font.ref = block.font.ref.tag as unknown as PDFRef;
 		});
 		textBlocksDto[1].font.encoding = '[custom]' as unknown as undefined;
@@ -141,11 +136,11 @@ describe('Text Command', () => {
 				.mockResolvedValue(textBlocks);
 
 			const options = { format: 'text' } as unknown as Arguments;
-
-			await text.run(pdfDoc, options);
+			const pdfBytes = Buffer.from('');
+			await text.run(pdfBytes, options);
 
 			expect(extractMock).toHaveBeenCalledTimes(1);
-			expect(extractMock).toHaveBeenCalledWith(pdfDoc);
+			expect(extractMock).toHaveBeenCalledWith(pdfBytes);
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 
 			const expected = `The quick brown fox jumps over 13 lazy dogs.
@@ -165,10 +160,11 @@ describe('Text Command', () => {
 
 			const options = { format: 'yaml' } as unknown as Arguments;
 
-			await text.run(pdfDoc, options);
+			const pdfBytes = Buffer.from('');
+			await text.run(pdfBytes, options);
 
 			expect(extractMock).toHaveBeenCalledTimes(1);
-			expect(extractMock).toHaveBeenCalledWith(pdfDoc);
+			expect(extractMock).toHaveBeenCalledWith(pdfBytes);
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 
 			const output = yaml.load(consoleLogSpy.mock.calls[0][0]);
@@ -187,10 +183,11 @@ describe('Text Command', () => {
 
 			const options = { format: 'json' } as unknown as Arguments;
 
-			await text.run(pdfDoc, options);
+			const pdfBytes = Buffer.from('');
+			await text.run(pdfBytes, options);
 
 			expect(extractMock).toHaveBeenCalledTimes(1);
-			expect(extractMock).toHaveBeenCalledWith(pdfDoc);
+			expect(extractMock).toHaveBeenCalledWith(pdfBytes);
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 
 			const output = JSON.parse(consoleLogSpy.mock.calls[0][0]);

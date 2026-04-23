@@ -30,7 +30,6 @@
 		"test:cov-changed": "pnpm -r run test:cov-changed",
 		"test:watch": "pnpm -r run test:watch",
 		"cov:aggregate": "node scripts/aggregate-coverage.mjs",
-		"cov:compare": "node scripts/compare-coverage.mjs",
 		"release": "HUSKY=0 pnpm changeset publish",
 		"prerelease": "pnpm install && pnpm run build && pnpm run test",
 		"check:clean": "./check-clean && pnpm -r --parallel run check:clean",

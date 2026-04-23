@@ -42,10 +42,17 @@ export type TextBlock = {
  * The `TextExtractor` implements text extraction from PDF documents.
  */
 export class TextExtractor {
+	/**
+	 * Extract text from a PDF document. This is best effort, and may not
+	 * catch all text blocks.
+	 *
+	 * @param input the input as a PDFDocument, PDF raw data bytes, or a base 64 encoded string (or data URI) with the PDF bytes.
+	 * @returns an array of the text blocks found
+	 */
 	async extract(
-		pdfDoc: PDFDocument | string | ArrayBuffer | Uint8Array<ArrayBufferLike>,
+		input: PDFDocument | string | ArrayBuffer | Uint8Array<ArrayBufferLike>,
 	): Promise<TextBlock[]> {
-		pdfDoc = await makePDFDocument(pdfDoc);
+		const pdfDoc = await makePDFDocument(input);
 
 		const fonts = this.collectFonts(pdfDoc);
 		const extractor = new GlyphExtractor();

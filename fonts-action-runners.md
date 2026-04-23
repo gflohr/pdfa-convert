@@ -5,7 +5,7 @@ our GitHub actions use.
 
 - [Fonts Available in Action Runners](#fonts-available-in-action-runners)
 	- [Linux (Ubuntu)](#linux-ubuntu)
-	- [MacOS](#macos)
+	- [macOS](#macos)
 	- [MS-DOS](#ms-dos)
 
 ## Linux (Ubuntu)
@@ -84,7 +84,7 @@ LiberationSerif-Regular.ttf
 NotoColorEmoji.ttf
 ```
 
-## MacOS
+## macOS
 
 Command: `ls -R /System/Library/Fonts`
 

@@ -25,11 +25,21 @@ pnpm build                      # Build for publishing (all packages)
 
 ## Code Conventions
 
+### General
+
 - **ESM with `.js` extensions** in imports
-- **`type` over `interface`** for object shapes
+- **`type` over `interface`** for object shapes without any methods
 - **JSDoc required** on exported functions (first overload only for overload sets)
 - **`// @__NO_SIDE_EFFECTS__`** before pure factory functions for tree-shaking
 - **Tabs for indentation, spaces for formatting**
+
+### `Type` vs `interface`
+
+* Use `Type` by default for all type definitions.
+* Use `interface` only for object shapes that are intended to be extended or implemented (e.g. class contracts, public APIs).
+* Use `interface` when declaration merging is required.
+* Use `type` for unions, intersections, mapped types, and aliases (including primitives).
+* Avoid mixing `Type` and `interface` arbitrarily; prefer consistency across the codebase.
 
 ## Other Rules
 

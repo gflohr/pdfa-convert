@@ -1,6 +1,10 @@
 name: Coverage Comment
 
 on:
+  pull_request:
+  push:
+    branches:
+      - '**'
   workflow_run:
     workflows: ["Coverage Delta"]
     types:

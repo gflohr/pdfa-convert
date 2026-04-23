@@ -2,7 +2,7 @@
 [![price](https://img.shields.io/badge/price-FREE-green)](https://github.com/gflohr/pdf-lab/blob/main/LICENSE)
 [![coverage](https://img.shields.io/coverallsCoverage/github/gflohr/pdf-lab?branch=main)](https://coveralls.io/github/gflohr/pdf-lab?branch=main)
 [![stand with](https://img.shields.io/badge/stand%20with-Ukraine🇺🇦-ffc107)](https://www.standwithukraineeurope.com/en/)
-<!-- Later: -->
+<!-- Disabled until package is documented and published. -->
 <!--[![downloads](https://img.shields.io/npm/dw/%40pdf-lab%2Fcore)](https://www.npmjs.com/package/@pdf-lab/core)-->
 <!--[![documentation](https://img.shields.io/badge/documentation-read-green)](https://gflohr.github.io/pdf-lab)-->
 

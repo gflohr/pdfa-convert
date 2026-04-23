@@ -33,7 +33,7 @@ export type ConfigOptions = InferredOptionTypes<typeof allOptions>;
 
 export class FontCommand implements Command {
 	description(): string {
-		return gtx._('List, embed, remove fonts from a PDF document.');
+		return gtx._('List fonts from a PDF document.');
 	}
 
 	aliases(): Array<string> {

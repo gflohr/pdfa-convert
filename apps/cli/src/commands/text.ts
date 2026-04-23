@@ -61,21 +61,18 @@ export class Text implements Command {
 			return;
 		}
 
-		const fontsDto: OutputTextBlock[] = [];
-		blocks.forEach((block) => {
-			fontsDto.push({
-				text: block.text,
-				font: {
-					ref: block.font.ref.tag,
-					baseFont: block.font.baseFont,
-					fontName: block.font.fontName,
-					embedded: block.font.embedded,
-					subtype: block.font.subtype,
-					encoding: block.font.encoding ?? '[custom]',
-				},
-				pageNumber: block.pageNumber,
-			});
-		});
+		const fontsDto: OutputTextBlock[] = blocks.map((block) => ({
+			text: block.text,
+			font: {
+				ref: block.font.ref.tag,
+				baseFont: block.font.baseFont,
+				fontName: block.font.fontName,
+				embedded: block.font.embedded,
+				subtype: block.font.subtype,
+				encoding: block.font.encoding ?? '[custom]',
+			},
+			pageNumber: block.pageNumber,
+		}));
 
 		if (configOptions.format === 'yaml') {
 			console.log(yaml.dump(fontsDto));

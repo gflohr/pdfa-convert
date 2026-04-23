@@ -1,5 +1,5 @@
 import * as fs from 'node:fs/promises';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockStdin = vi.hoisted(() => {
 	const chunks = [
@@ -29,6 +29,10 @@ vi.mock('node:fs/promises', () => ({
 }));
 
 describe('PDF loading', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	it('should load a PDF from the file system', async () => {
 		const { loadInput } = await import('./load-input.js');
 		const mockBuffer = Buffer.from('fake-pdf-content');
@@ -38,7 +42,7 @@ describe('PDF loading', () => {
 		const result = await loadInput('test.pdf');
 
 		expect(fs.readFile).toHaveBeenCalledWith('test.pdf');
-		expect(result).toStrictEqual(Buffer.from(result));
+		expect(result).toStrictEqual(mockBuffer);
 	});
 
 	it('should load a PDF from stdin when filename is "-"', async () => {

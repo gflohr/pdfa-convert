@@ -1,6 +1,5 @@
 import { PDFRef } from '@cantoo/pdf-lib';
 import * as yaml from 'js-yaml';
-// biome-ignore lint/correctness/useImportExtensions: false positive.
 import { type TextBlock, TextExtractor } from 'pdf-lab-core';
 import {
 	afterEach,

@@ -2,9 +2,7 @@ name: Coverage Delta
 
 on:
   pull_request:
-  push:
-    branches:
-      - '**'
+    types: [opened, synchronize, reopened]
 
 jobs:
   coverage:

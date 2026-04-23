@@ -7,12 +7,13 @@ import type { Arguments, Argv } from 'yargs';
 import yargs from 'yargs';
 
 import type { Command } from './command.js';
+import { Font } from './commands/font.js';
 import { Text } from './commands/text.js';
 import { defaultOptions } from './default-options.js';
 import { loadInput } from './load-input.js';
 import { Package } from './package.js';
 
-const commandNames = ['text'];
+const commandNames = ['font', 'text'];
 
 const gtx = Textdomain.getInstance('pdf-lab');
 v.setGlobalConfig({ lang: Textdomain.locale });
@@ -31,6 +32,7 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
 
 		const commands: { [key: string]: Command } = {
 			text: new Text(),
+			font: new Font(),
 		};
 
 		const program = yargs(argv)

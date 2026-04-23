@@ -5,7 +5,6 @@ import type { FontInfo } from './font/types.js';
 export class PDFLab {
 	private fonts: Map<string, FontInfo> | undefined;
 
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: later
 	private constructor(private readonly pdfDoc: PDFDocument) {}
 
 	/**
@@ -84,7 +83,7 @@ export class PDFLab {
 
 	public collectFonts(): Map<string, FontInfo> {
 		if (!this.fonts) {
-			this.fonts = fontCollector.collectFonts();
+			this.fonts = fontCollector.collectFonts(this.pdfDoc);
 		}
 
 		return this.fonts;

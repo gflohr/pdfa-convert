@@ -14,7 +14,7 @@ export const StandardEncodings = [
 /**
  * The pre-defined PDF encodings.
  */
-export type Encoding = (typeof encodings)[number];
+export type Encoding = (typeof StandardEncodings)[number];
 
 /**
  * The possible font subtypes.

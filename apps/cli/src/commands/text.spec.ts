@@ -12,13 +12,12 @@ import {
 } from 'vitest';
 import type { Arguments } from 'yargs';
 import { coerceOptions } from '../optspec.js';
+import { Text } from './text.js';
 
 vi.mock('../optspec.js');
 vi.mock('./load-input.js', () => ({
 	loadInput: vi.fn().mockResolvedValue(new Uint8Array()),
 }));
-
-import { Text } from './text.js';
 
 describe('Text Command', () => {
 	let consoleLogSpy: ReturnType<typeof vi.spyOn>;

@@ -62,6 +62,14 @@ export class TextExtractor {
 		for (let i = 0; i < glyphBlocks.length; ++i) {
 			const glyphBlock = glyphBlocks[i];
 			const font = fonts[glyphBlock.fontResource];
+			// This should be verified. Will a PDF viewer fall back to a
+			// default font (Helvetica), if the font informatin is missing?
+			//
+			// On the other hand, working around such a broken document is
+			// probably not worth the hassle. Making the font optional in the
+			// type definition will complicate things.
+			if (!font) continue;
+
 			let text: string;
 			if (typeof font === 'undefined') {
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');

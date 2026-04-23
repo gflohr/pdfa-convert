@@ -31,7 +31,7 @@ const options: {
 const allOptions = { ...defaultOptions, ...options };
 export type ConfigOptions = InferredOptionTypes<typeof allOptions>;
 
-export class Font implements Command {
+export class FontCommand implements Command {
 	description(): string {
 		return gtx._('List, embed, remove fonts from a PDF document.');
 	}

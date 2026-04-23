@@ -7,8 +7,8 @@ import type { Arguments, Argv } from 'yargs';
 import yargs from 'yargs';
 
 import type { Command } from './command.js';
-import { Font } from './commands/font.js';
-import { Text } from './commands/text.js';
+import { FontCommand } from './commands/font.js';
+import { TextCommand } from './commands/text.js';
 import { defaultOptions } from './default-options.js';
 import { loadInput } from './load-input.js';
 import { Package } from './package.js';
@@ -31,8 +31,8 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
 		const ulocale = Textdomain.locale.replace('-', '_');
 
 		const commands: { [key: string]: Command } = {
-			text: new Text(),
-			font: new Font(),
+			text: new TextCommand(),
+			font: new FontCommand(),
 		};
 
 		const program = yargs(argv)

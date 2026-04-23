@@ -39,7 +39,7 @@ type OutputTextBlock = {
 	pageNumber: number;
 };
 
-export class Text implements Command {
+export class TextCommand implements Command {
 	description(): string {
 		return gtx._('Extract text from a PDF document.');
 	}

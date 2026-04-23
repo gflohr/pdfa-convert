@@ -281,7 +281,6 @@ export class FontLoader {
 					for (let k = 0; k < extensions.length; ++k) {
 						const fullname = `${locations[j]}/${candidates[i]}.${extensions[k]}`;
 						try {
-							console.log(`trying to load ${fontName} from ${fullname}`);
 							const fontBytes = await fs.readFile(fullname);
 							if (fontBytes) return fontBytes;
 						} catch {}

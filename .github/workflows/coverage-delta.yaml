@@ -2,6 +2,7 @@ name: Coverage Delta
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   coverage:
@@ -33,7 +34,7 @@ jobs:
         run: pnpm run test:cov
 
       - name: Aggregate coverage data
-        run: pnpm run aggregate-coverage
+        run: pnpm run cov:aggregate
 
       - name: Save PR coverage
         run: cp coverage-summary.json pr-coverage.json
@@ -49,7 +50,7 @@ jobs:
       - name: Compare coverage
         run: |
           set -euo pipefail
-          node compare-coverage.mjs | tee coverage-delta.md
+          node scripts/compare-coverage.mjs | tee coverage-delta.md
 
       - name: Upload coverage delta
         uses: actions/upload-artifact@v7

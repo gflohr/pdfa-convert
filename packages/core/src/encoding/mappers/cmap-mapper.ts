@@ -36,7 +36,7 @@ export class CMapMapper implements GlyphMapper {
 		const mappings: Mapping[] = [];
 
 		for (let i = 0; i < tokens.length; ++i) {
-			const token = tokens[i];
+			const token = tokens[i]!;
 			if (token.type !== 'token') continue;
 
 			const value = this.decodeNumberArray(token.value);
@@ -58,7 +58,7 @@ export class CMapMapper implements GlyphMapper {
 	): number {
 		const mapping: Mapping = [] as unknown as Mapping;
 		for (let i = start; i < tokens.length; ++i) {
-			const token = tokens[i];
+			const token = tokens[i]!;
 
 			if (token.type === 'token') {
 				const value = this.decodeNumberArray(token.value);
@@ -100,7 +100,7 @@ export class CMapMapper implements GlyphMapper {
 	): number {
 		(mapping[1] as number[]) = [];
 		for (let i = start; i < tokens.length && i < start + 2; ++i) {
-			const token = tokens[i];
+			const token = tokens[i]!;
 
 			if (
 				token.type === 'token' &&
@@ -111,8 +111,8 @@ export class CMapMapper implements GlyphMapper {
 			} else if (token.type === 'string') {
 				// Convert the Uint8 into an array of 16-bit values.
 				const v = token.value;
-				for (let j = 0; j < v.length; j += 2) {
-					(mapping[1] as number[]).push((v[j] << 8) | v[j + 1]);
+				for (let j = 0; j < v.length - 1; j += 2) {
+					(mapping[1] as number[]).push((v[j]! << 8) | v[j + 1]!);
 				}
 			}
 		}
@@ -128,7 +128,7 @@ export class CMapMapper implements GlyphMapper {
 	): number {
 		mapping[2] = [];
 		for (let i = start; i < tokens.length; ++i) {
-			const token = tokens[i];
+			const token = tokens[i]!;
 
 			if (
 				token.type === 'token' &&
@@ -140,8 +140,8 @@ export class CMapMapper implements GlyphMapper {
 				// Convert the Uint8 into an array of 16-bit values.
 				const words: number[] = [];
 				const v = token.value;
-				for (let j = 0, k = 0; j < v.length; j += 2, ++k) {
-					words[k] = (v[j] << 8) | v[j + 1];
+				for (let j = 0, k = 0; j < v.length - 1; j += 2, ++k) {
+					words[k] = (v[j]! << 8) | v[j + 1]!;
 				}
 				mapping[2].push(words);
 			}
@@ -188,7 +188,7 @@ export class CMapMapper implements GlyphMapper {
 		let high = this.mappings.length - 1;
 		while (high >= low) {
 			const mid = low + ((high - low) >> 1);
-			const mapping = this.mappings[mid];
+			const mapping = this.mappings[mid]!;
 			if (glyph < mapping[0]) {
 				high = mid - 1;
 			} else if (mapping.length > 2) {
@@ -216,12 +216,11 @@ export class CMapMapper implements GlyphMapper {
 
 	private lookupRangeValue(glyph: number, mapping: Mapping): number[] {
 		if (typeof mapping[2] === 'number') {
-			// biome-ignore lint/style/noNonNullAssertion: false positive.
 			return this.decodeUTF16BE(glyph - mapping[0] + mapping[2]!);
 		} else {
 			const offset = glyph - mapping[0];
 			if (Array.isArray(mapping[2]) && offset < mapping[2].length) {
-				return mapping[2][offset];
+				return mapping[2][offset]!;
 			} else {
 				return [];
 			}

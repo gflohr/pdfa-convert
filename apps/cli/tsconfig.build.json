@@ -2,7 +2,10 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"sourceMap": true,
-		"outDir": "dist"
+		"outDir": "dist",
+		"paths": {
+			"pdf-lab-core": ["../../packages/core/dist/index.js"]
+		}
 	},
 	"include": ["src"],
 	"exclude": ["src/**/*.spec.ts"]

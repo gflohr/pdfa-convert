@@ -16,23 +16,59 @@ import {
 	type FontSubtype,
 } from '../font/font-resolver.js';
 import { GlyphExtractor } from '../pdf/glyph-extractor.js';
+import { makePDFDocument } from './make-pdf-document.js';
+
+/**
+ * A block of text extracted from a `PDFDocument`.
+ */
+export type TextBlock = {
+	/**
+	 * The extracted text.
+	 */
+	text: string;
+
+	/**
+	 * The font information.
+	 */
+	font: FontInfo;
+
+	/**
+	 * The page number where the snippet was found.
+	 */
+	pageNumber: number;
+};
 
 /**
  * The `TextExtractor` implements text extraction from PDF documents.
  */
 export class TextExtractor {
-	async extract(pdfDoc: PDFDocument) {
-		if (!pdfDoc) {
-			throw new Error('No document!');
-		}
+	/**
+	 * Extract text from a PDF document. This is best effort, and may not
+	 * catch all text blocks.
+	 *
+	 * @param input the input as a PDFDocument, PDF raw data bytes, or a base 64 encoded string (or data URI) with the PDF bytes.
+	 * @returns an array of the text blocks found
+	 */
+	async extract(
+		input: PDFDocument | string | ArrayBuffer | Uint8Array<ArrayBufferLike>,
+	): Promise<TextBlock[]> {
+		const pdfDoc = await makePDFDocument(input);
 
 		const fonts = this.collectFonts(pdfDoc);
 		const extractor = new GlyphExtractor();
 
 		const glyphBlocks = extractor.parseDocument(pdfDoc);
-		for (let i = 0; i < glyphBlocks.length; ++i) {
-			const glyphBlock = glyphBlocks[i];
+		const textBlocks: TextBlock[] = [];
+		for (const glyphBlock of glyphBlocks) {
 			const font = fonts[glyphBlock.fontResource];
+			// This should be verified. Will a PDF viewer fall back to a
+			// default font (Helvetica), if the font informatin is missing?
+			//
+			// On the other hand, working around such a broken document is
+			// probably not worth the hassle. Making the font optional in the
+			// type definition will complicate things.
+			if (!font) continue;
+
 			let text: string;
 			if (typeof font === 'undefined') {
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
@@ -48,8 +84,15 @@ export class TextExtractor {
 				// Hopeless case.
 				text = glyphBlock.glyphs.map(() => '\uFFFD').join('');
 			}
-			console.log(`page ${glyphBlock.pageNumber + 1}: ${text}`);
+
+			textBlocks.push({
+				text,
+				font,
+				pageNumber: glyphBlock.pageNumber,
+			});
 		}
+
+		return textBlocks;
 	}
 
 	// FIXME! This must be moved to a FontCollector class.
@@ -92,6 +135,16 @@ export class TextExtractor {
 		return fonts;
 	}
 
+	private getFontName(baseName: string): string {
+		// Strip subset prefix (ABCDEF+).
+		let fontName = baseName.replace(/^[A-Z]{6}\+/, '');
+
+		// Strip numerical suffix.
+		fontName = fontName.replace(/-[0-9]+$/, '');
+
+		return fontName;
+	}
+
 	private getFontInfo(
 		subtypeName: string,
 		fontName: PDFName,
@@ -110,10 +163,12 @@ export class TextExtractor {
 				fontDescriptor.has(PDFName.of('FontFile3'));
 		}
 
+		const baseFont = fontName.decodeText();
 		const fontInfo: FontInfo = {
 			ref: fontRef,
 			embedded,
-			baseFont: fontName.decodeText(),
+			baseFont,
+			fontName: this.getFontName(baseFont),
 			subtype: subtypeName as FontSubtype,
 		};
 
@@ -179,10 +234,12 @@ export class TextExtractor {
 		const stream = toUnicodeStream.contents;
 		const cmapMapper = new CMapMapper(stream);
 
+		const baseFont = fontName.decodeText();
 		return {
 			ref: fontRef,
 			embedded,
-			baseFont: fontName.decodeText(),
+			baseFont,
+			fontName: this.getFontName(baseFont),
 			cmapMapper,
 			subtype: 'Type0',
 		};

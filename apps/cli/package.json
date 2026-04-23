@@ -31,7 +31,7 @@
 		"start": "node dist/index.js",
 		"start:dev": "tsx ./src/index.ts",
 		"pretest": "node ./write-package.mjs >src/package.ts",
-		"test": "vitest --run",
+		"test": "vitest --environment=node --run",
 		"pretest:changed": "node ./write-package.mjs >src/package.ts",
 		"test:changed": "vitest --changedSince origin/main --passWithNoTests",
 		"pretest:watch": "node ./write-package.mjs >src/package.ts",
@@ -49,7 +49,6 @@
 		"esgettext:addlang": "esgettext msginit"
 	},
 	"dependencies": {
-		"@cantoo/pdf-lib": "^2.6.5",
 		"@esgettext/runtime": "^1.3.10",
 		"@pdf-lib/fontkit": "^1.1.1",
 		"@valibot/i18n": "^1.1.0",
@@ -58,7 +57,9 @@
 		"yargs": "^18.0.0"
 	},
 	"devDependencies": {
+		"@cantoo/pdf-lib": "^2.6.5",
 		"@esgettext/tools": "^1.3.10",
+		"@types/js-yaml": "^4.0.9",
 		"@types/node": "^25.6.0",
 		"@types/yargs": "^17.0.35",
 		"@vitest/coverage-v8": "^4.1.4",

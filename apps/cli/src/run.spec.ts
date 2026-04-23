@@ -1,4 +1,3 @@
-import type { PDFDocument } from '@cantoo/pdf-lib';
 import {
 	beforeEach,
 	describe,
@@ -7,17 +6,14 @@ import {
 	type MockInstance,
 	vi,
 } from 'vitest';
-import { loadPDF } from './load-pdf.js';
+import { loadInput } from './load-input.js';
 import { Package } from './package.js';
 
 vi.mock('node:fs/promises', () => ({
 	readFile: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3])),
 }));
-vi.mock('./load-pdf.js', () => ({
-	loadPDF: vi.fn().mockResolvedValue({
-		pdf: true,
-		registerFontkit: vi.fn(() => {}),
-	} as unknown as PDFDocument),
+vi.mock('./load-input.js', () => ({
+	loadInput: vi.fn().mockResolvedValue(new Uint8Array()),
 }));
 
 import { Text } from './commands/text.js';
@@ -60,7 +56,7 @@ describe('pdf-lab-cli', () => {
 
 			expect(exitCode).toBe(1);
 			expect(doRunSpy).toHaveBeenCalledTimes(1);
-			expect(loadPDF).toHaveBeenCalledWith('sample.pdf');
+			expect(loadInput).toHaveBeenCalledWith('sample.pdf');
 			expect(consoleErrorSpy).toHaveBeenCalledWith(`${Package.name}: boum`);
 		});
 
@@ -77,7 +73,7 @@ describe('pdf-lab-cli', () => {
 			expect(exitCode).toBe(0);
 			expect(doRunSpy).toHaveBeenCalledTimes(1);
 
-			expect(loadPDF).toHaveBeenCalledWith('-');
+			expect(loadInput).toHaveBeenCalledWith('-');
 		});
 
 		it('should allow a custom synopsis', async () => {
@@ -119,7 +115,7 @@ describe('pdf-lab-cli', () => {
 
 			expect(exitCode).toBe(0);
 			expect(doRunSpy).toHaveBeenCalledTimes(1);
-			expect(loadPDF).toHaveBeenCalledWith('example.pdf');
+			expect(loadInput).toHaveBeenCalledWith('example.pdf');
 		});
 
 		it('should fix a lone hyphen as a positional argument', async () => {
@@ -134,7 +130,7 @@ describe('pdf-lab-cli', () => {
 
 			expect(exitCode).toBe(0);
 			expect(doRunSpy).toHaveBeenCalledTimes(1);
-			expect(loadPDF).toHaveBeenCalledWith('-');
+			expect(loadInput).toHaveBeenCalledWith('-');
 		});
 
 		it('should re-throw exceptions', async () => {

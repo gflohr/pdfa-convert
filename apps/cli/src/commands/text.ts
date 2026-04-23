@@ -1,6 +1,5 @@
-import type { PDFDocument } from '@cantoo/pdf-lib';
 import { Textdomain } from '@esgettext/runtime';
-import fontkit from '@pdf-lib/fontkit';
+import * as yaml from 'js-yaml';
 // biome-ignore lint/correctness/useImportExtensions: false positive.
 import { TextExtractor } from 'pdf-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
@@ -11,9 +10,34 @@ import { Package } from '../package.js';
 
 const gtx = Textdomain.getInstance('pdf-lab');
 
-const options = {};
+const options: {
+	format: OptSpec;
+} = {
+	format: {
+		group: gtx._('Output format'),
+		alias: ['f'],
+		type: 'string',
+		choices: ['text', 'json', 'yaml'],
+		default: 'text',
+		describe: gtx._('the output format'),
+	},
+};
+
 const allOptions = { ...defaultOptions, ...options };
 export type ConfigOptions = InferredOptionTypes<typeof allOptions>;
+
+type OutputTextBlock = {
+	text: string;
+	font: {
+		ref: string;
+		embedded: boolean;
+		baseFont: string;
+		fontName: string;
+		subtype: string;
+		encoding: string;
+	};
+	pageNumber: number;
+};
 
 export class Text implements Command {
 	description(): string {
@@ -28,21 +52,44 @@ export class Text implements Command {
 		return options;
 	}
 
-	private async doRun(pdfDoc: PDFDocument) {
+	private async doRun(input: Buffer, configOptions: ConfigOptions) {
 		const extractor = new TextExtractor();
 
-		pdfDoc.registerFontkit(fontkit);
+		const blocks = await extractor.extract(input);
+		if (configOptions.format === 'text') {
+			console.log(blocks.map((b) => b.text).join('\n'));
+			return;
+		}
 
-		await extractor.extract(pdfDoc);
+		const fontsDto: OutputTextBlock[] = blocks.map((block) => ({
+			text: block.text,
+			font: {
+				ref: block.font.ref.tag,
+				baseFont: block.font.baseFont,
+				fontName: block.font.fontName,
+				embedded: block.font.embedded,
+				subtype: block.font.subtype,
+				encoding: block.font.encoding ?? '[custom]',
+			},
+			pageNumber: block.pageNumber,
+		}));
+
+		if (configOptions.format === 'yaml') {
+			console.log(yaml.dump(fontsDto));
+		} else {
+			console.log(JSON.stringify(fontsDto));
+		}
 	}
 
-	public async run(pdfDoc: PDFDocument, argv: Arguments): Promise<number> {
+	public async run(input: Buffer, argv: Arguments): Promise<number> {
+		const configOptions = argv as unknown as ConfigOptions;
+
 		if (!coerceOptions(argv, options)) {
 			return 1;
 		}
 
 		try {
-			await this.doRun(pdfDoc);
+			await this.doRun(input, configOptions);
 			return 0;
 		} catch (e) {
 			console.error(

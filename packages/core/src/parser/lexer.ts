@@ -24,7 +24,7 @@ export class Lexer {
 		};
 
 		for (let i = 0; i < bytes.length; ++i) {
-			const byte = bytes[i];
+			const byte = bytes[i]!;
 			if (state === 'initial') {
 				switch (byte) {
 					case 40: // Open parenthesis.
@@ -105,8 +105,8 @@ export class Lexer {
 					const value: number[] = [];
 					for (let j = 0; j < token.value.length - 1; j += 2) {
 						value.push(
-							16 * this.hexCharToNumber(token.value[j]) +
-								this.hexCharToNumber(token.value[j + 1]),
+							16 * this.hexCharToNumber(token.value[j]!) +
+								this.hexCharToNumber(token.value[j + 1]!),
 						);
 					}
 					token.value = [...value];

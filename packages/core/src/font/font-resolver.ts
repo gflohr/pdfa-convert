@@ -33,13 +33,49 @@ const encodings = [
 ] as const;
 export type Encoding = (typeof encodings)[number];
 
-export type FontSubtype = 'Type0' | 'TrueType';
+export type FontSubtype =
+	| 'Type0'
+	| 'Type1'
+	| 'MMType1'
+	| 'Type3'
+	| 'TrueType'
+	| 'CIDFontType0'
+	| 'CIDFontType2';
+
+/**
+ * Information about a font.
+ */
 export type FontInfo = {
+	/**
+	 * The BaseFont. This often contains subset identifiers or a numbered
+	 * suffix.
+	 */
 	baseFont: string;
+	/**
+	 * The normalized font name without the subset identifier or numbered
+	 * suffix.
+	 */
+	fontName: string;
+	/**
+	 * The reference to the font dictionary.
+	 */
 	ref: PDFRef;
+	/**
+	 * The indicator for embedded fonts.
+	 */
 	embedded: boolean;
+	/**
+	 * The optional encoding.
+	 */
 	encoding?: Encoding;
+	// FIXME! This should become a type GlyphMapper.
+	/**
+	 * The optional glyph mapper.
+	 */
 	cmapMapper?: CMapMapper;
+	/**
+	 * The font subtype.
+	 */
 	subtype: FontSubtype;
 };
 
@@ -234,7 +270,7 @@ export class FontResolver {
 		this.fontLoader = new FontLoader(platform as OsType);
 
 		for (const name in fontMap) {
-			this.fontMap[name.toLowerCase()] = fontMap[name];
+			this.fontMap[name.toLowerCase()] = fontMap[name]!;
 		}
 	}
 
@@ -253,14 +289,14 @@ export class FontResolver {
 					await this.fontLoader.loadFromPath(canonicalName, data);
 			}
 
-			return this.fontMap[canonicalName.toLowerCase()];
+			return this.fontMap[canonicalName.toLowerCase()]!;
 		}
 
 		const description = this.parseName(fontName);
 		const searchList = this.createSearchList(description);
 
 		for (let i = 0; i < searchList.length; ++i) {
-			const desc = searchList[i];
+			const desc = searchList[i]!;
 			const tryName = FontMatrix[desc.category][desc.weight][desc.style];
 			if (Object.hasOwn(this.fontMap, tryName)) {
 				const data = this.fontMap[tryName];
@@ -271,7 +307,7 @@ export class FontResolver {
 					);
 				}
 
-				return this.fontMap[tryName];
+				return this.fontMap[tryName]!;
 			}
 
 			const fontBytes = await this.fontLoader.load(desc, fontName);
@@ -297,7 +333,7 @@ export class FontResolver {
 		name = this.canonicalName(name);
 
 		if (isStandardFont(name)) {
-			return FontDescriptionByName[name.toLowerCase()];
+			return FontDescriptionByName[name.toLowerCase()]!;
 		}
 
 		// Heuristic parse.

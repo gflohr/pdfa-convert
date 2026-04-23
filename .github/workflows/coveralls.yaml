@@ -31,7 +31,7 @@ jobs:
         run: pnpm run test:cov
 
       - name: Aggregate coverage
-        run: pnpm run aggregate-coverage
+        run: pnpm run cov:aggregate
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v7

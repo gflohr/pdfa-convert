@@ -55,7 +55,6 @@ describe('Text Command', () => {
 	});
 
 	it('run() should call extract and return 0 on success', async () => {
-		(coerceOptions as Mock).mockReturnValue(true);
 		const extractMock = vi
 			.spyOn(
 				TextExtractor.prototype as unknown as {
@@ -72,7 +71,6 @@ describe('Text Command', () => {
 	});
 
 	it('run() should return 1 and log an error if doRun throws', async () => {
-		(coerceOptions as Mock).mockReturnValue(true);
 		const error = new Error('test error');
 		vi.spyOn(
 			text as unknown as { doRun: () => Promise<void> },
@@ -121,7 +119,7 @@ describe('Text Command', () => {
 		textBlocksDto.forEach((block) => {
 			block.font.ref = block.font.ref.tag as unknown as PDFRef;
 		});
-		textBlocksDto[1].font.encoding = '[custom]' as unknown as undefined;
+		textBlocksDto[1]!.font.encoding = '[custom]' as unknown as undefined;
 
 		it('should output text only', async () => {
 			const extractMock = vi

@@ -24,6 +24,9 @@
 						"forceJsExtensions": true
 					}
 				}
+			},
+			"style": {
+				"noNonNullAssertion": "off"
 			}
 		}
 	},

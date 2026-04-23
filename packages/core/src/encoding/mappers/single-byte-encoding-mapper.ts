@@ -53,7 +53,7 @@ export class SingleByteEncodingMapper implements GlyphMapper {
 			throw new Error(`glyph ID ${glyph} out of range`);
 		}
 
-		const name = this.encoding[glyph];
+		const name = this.encoding[glyph]!;
 		if (name === '.notdef') return [];
 
 		const adobeGlyph = adobeGlyphs[name];

@@ -14,7 +14,7 @@ export function coerceOptions(
 	optspecs: { [optname: string]: OptSpec },
 ): boolean {
 	for (const optname in optspecs) {
-		const optspec = optspecs[optname];
+		const optspec = optspecs[optname]!;
 		const optkey = optname.replace(/-(.)/g, (_, group1) =>
 			group1.toUpperCase(),
 		);

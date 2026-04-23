@@ -21,7 +21,7 @@ export class GlyphExtractor {
 		const blocks: GlyphBlock[] = [];
 		const pages = pdfDoc.getPages();
 		for (let i = 0; i < pages.length; ++i) {
-			this.parsePage(blocks, pages[i], i, pdfDoc);
+			this.parsePage(blocks, pages[i]!, i, pdfDoc);
 		}
 
 		return blocks;
@@ -104,7 +104,7 @@ export class GlyphExtractor {
 		let inText = false;
 		let fontResource = '';
 		for (let i = 1; i < tokens.length; ++i) {
-			const token = tokens[i];
+			const token = tokens[i]!;
 			if (token.type === 'token') {
 				const value = this.decodeNumberArray(token.value);
 				switch (value) {
@@ -116,9 +116,9 @@ export class GlyphExtractor {
 						fontResource = '';
 						break;
 					case 'Tf':
-						if (inText && i > 1 && tokens[i - 2].type === 'token') {
+						if (inText && i > 1 && tokens[i - 2]!.type === 'token') {
 							fontResource = this.decodeNumberArray(
-								tokens[i - 2].value,
+								tokens[i - 2]!.value,
 							).replace(/^\//, '');
 						}
 						break;
@@ -127,11 +127,11 @@ export class GlyphExtractor {
 					case "'":
 						if (
 							inText &&
-							tokens[i - 1].type === 'string' &&
+							tokens[i - 1]!.type === 'string' &&
 							fontResource.length
 						) {
 							collector.push({
-								glyphs: tokens[i - 1].value,
+								glyphs: tokens[i - 1]!.value,
 								fontResource,
 								pageNumber,
 							});
@@ -140,10 +140,10 @@ export class GlyphExtractor {
 					case 'TJ':
 						if (
 							inText &&
-							tokens[i - 1].type === 'token' &&
+							tokens[i - 1]!.type === 'token' &&
 							i > 3 &&
-							tokens[i - 1].value.length === 1 &&
-							tokens[i - 1].value[0] === 93 &&
+							tokens[i - 1]!.value.length === 1 &&
+							tokens[i - 1]!.value[0] === 93 &&
 							fontResource.length
 						) {
 							const textToken = this.extractTJStringArray(tokens, i - 1);
@@ -170,12 +170,13 @@ export class GlyphExtractor {
 		};
 
 		for (let i = end - 1; i >= 0; --i) {
-			if (tokens[i].type === 'string') {
-				token.value.unshift(...tokens[i].value);
+			const token = tokens[i]!;
+			if (token.type === 'string') {
+				token.value.unshift(...token.value);
 			} else if (
-				tokens[i].type === 'token' &&
-				tokens[i].value.length === 1 &&
-				tokens[i].value[0] === 91
+				token.type === 'token' &&
+				token.value.length === 1 &&
+				token.value[0] === 91
 			) {
 				break;
 			}

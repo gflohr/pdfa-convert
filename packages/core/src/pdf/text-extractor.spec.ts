@@ -20,8 +20,9 @@ describe('Text Extraction', () => {
 		});
 
 		it('should find the document headline first', () => {
-			const headline = textBlocks[0];
+			const headline = textBlocks[0]!;
 
+			expect(headline).toBeDefined();
 			expect(headline.text).toBe('Standard 14 Fonts Demo');
 			expect(headline.pageNumber).toBe(0);
 			expect(headline.font.fontName).toBe('Helvetica-Bold');

@@ -59,8 +59,7 @@ export class TextExtractor {
 
 		const glyphBlocks = extractor.parseDocument(pdfDoc);
 		const textBlocks: TextBlock[] = [];
-		for (let i = 0; i < glyphBlocks.length; ++i) {
-			const glyphBlock = glyphBlocks[i];
+		for (const glyphBlock of glyphBlocks) {
 			const font = fonts[glyphBlock.fontResource];
 			// This should be verified. Will a PDF viewer fall back to a
 			// default font (Helvetica), if the font informatin is missing?

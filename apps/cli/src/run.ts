@@ -51,7 +51,7 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
 			.scriptName(Package.name);
 
 		for (const name of commandNames) {
-			const command = commands[name];
+			const command = commands[name]!;
 
 			const commandName = command.synopsis
 				? `${name} ${command.synopsis()}`

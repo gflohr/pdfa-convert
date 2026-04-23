@@ -270,7 +270,7 @@ export class FontResolver {
 		this.fontLoader = new FontLoader(platform as OsType);
 
 		for (const name in fontMap) {
-			this.fontMap[name.toLowerCase()] = fontMap[name];
+			this.fontMap[name.toLowerCase()] = fontMap[name]!;
 		}
 	}
 
@@ -289,14 +289,14 @@ export class FontResolver {
 					await this.fontLoader.loadFromPath(canonicalName, data);
 			}
 
-			return this.fontMap[canonicalName.toLowerCase()];
+			return this.fontMap[canonicalName.toLowerCase()]!;
 		}
 
 		const description = this.parseName(fontName);
 		const searchList = this.createSearchList(description);
 
 		for (let i = 0; i < searchList.length; ++i) {
-			const desc = searchList[i];
+			const desc = searchList[i]!;
 			const tryName = FontMatrix[desc.category][desc.weight][desc.style];
 			if (Object.hasOwn(this.fontMap, tryName)) {
 				const data = this.fontMap[tryName];
@@ -307,7 +307,7 @@ export class FontResolver {
 					);
 				}
 
-				return this.fontMap[tryName];
+				return this.fontMap[tryName]!;
 			}
 
 			const fontBytes = await this.fontLoader.load(desc, fontName);
@@ -333,7 +333,7 @@ export class FontResolver {
 		name = this.canonicalName(name);
 
 		if (isStandardFont(name)) {
-			return FontDescriptionByName[name.toLowerCase()];
+			return FontDescriptionByName[name.toLowerCase()]!;
 		}
 
 		// Heuristic parse.

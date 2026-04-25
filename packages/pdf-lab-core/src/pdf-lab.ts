@@ -12,10 +12,10 @@ export class PDFLab {
 	 * normalizes them into a single canonical `@cantoo/pdf-lib` document
 	 * representation.
 	 *
-	 * This method performs a **distillation step** to ensure that the returned
+	 * This method performs a pre-processing step to ensure that the returned
 	 * `PDFDocument` has a consistent internal object graph.
 	 *
-	 * ## Why Distillation is Required
+	 * ## Why
 	 *
 	 * PDF libraries such as `pdf-lib` (and forks like `@cantoo/pdf-lib`) rely
 	 * heavily on runtime identity checks such as `instanceof PDFDict`,
@@ -34,7 +34,7 @@ export class PDFLab {
 	 * the active `@cantoo/pdf-lib` runtime, ensuring consistent prototype
 	 * chains and reliable `instanceof` behavior.
 	 *
-	 * ## Distillation behavior
+	 * ## Behaviour
 	 *
 	 * - If a raw PDF input is provided (base 64 encoded string, data URI, or binary), it is directly loaded.
 	 * - If a `PDFDocument` from another runtime instance is detected, it is
@@ -49,7 +49,7 @@ export class PDFLab {
 	 * `PDFDocument` instance.
 	 * @returns A normalized `PDFLab` instance backed by a canonical PDF document.
 	 */
-	static async distill(
+	static async from (
 		input: PDFDocument | string | ArrayBuffer | Uint8Array<ArrayBufferLike>,
 	): Promise<PDFLab> {
 		let pdfDoc: PDFDocument;

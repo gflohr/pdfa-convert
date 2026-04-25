@@ -17,11 +17,11 @@ async function makePDFLab(): Promise<PDFLab> {
 }
 
 describe('PDFLab', () => {
-	describe('distill', () => {
+	describe('from', () => {
 		it('returns the same instance if given a real PDFDocument', async () => {
 			const doc = await PDFDocument.create();
 
-			const result = await PDFLab.distill(doc);
+			const result = await PDFLab.from(doc);
 
 			expect(result).toBeInstanceOf(PDFLab);
 		});
@@ -30,7 +30,7 @@ describe('PDFLab', () => {
 			const doc = await PDFDocument.create();
 			const bytes = await doc.save();
 
-			const result = await PDFLab.distill(bytes);
+			const result = await PDFLab.from(bytes);
 
 			expect(result).toBeInstanceOf(PDFLab);
 		});
@@ -40,7 +40,7 @@ describe('PDFLab', () => {
 			const bytes = await doc.save();
 			const base64 = Buffer.from(bytes).toString('base64');
 
-			const result = await PDFLab.distill(base64);
+			const result = await PDFLab.from(base64);
 
 			expect(result).toBeInstanceOf(PDFLab);
 		});
@@ -55,13 +55,13 @@ describe('PDFLab', () => {
 				save: doc.save.bind(doc),
 			};
 
-			const result = await PDFLab.distill(foreignDoc as unknown as PDFDocument);
+			const result = await PDFLab.from(foreignDoc as unknown as PDFDocument);
 
 			expect(result).not.toBe(foreignDoc);
 		});
 
 		it('throws for invalid input', async () => {
-			await expect(PDFLab.distill(123 as unknown as string)).rejects.toThrow(
+			await expect(PDFLab.from(123 as unknown as string)).rejects.toThrow(
 				/input must be/,
 			);
 		});
@@ -72,7 +72,7 @@ describe('PDFLab', () => {
 			const bytes = new Uint8Array([37, 80, 68, 70]); // "%PDF" minimal header
 
 			try {
-				await PDFLab.distill(bytes);
+				await PDFLab.from(bytes);
 			} catch {
 				// ignore parse error, we only care that load was called
 			}

@@ -61,7 +61,7 @@ export class FontCommand implements Command {
 	}
 
 	private async doRun(input: Buffer, configOptions: ConfigOptions) {
-		const lab = await PDFLab.distill(input);
+		const lab = await PDFLab.from(input);
 
 		if (configOptions.list) {
 			this.listFonts(lab, configOptions.format as string);

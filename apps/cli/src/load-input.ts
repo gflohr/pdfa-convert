@@ -7,9 +7,7 @@ import { stdin } from 'node:process';
  * @param filename the filename of the PDF or '-' for standard inut
  * @returns a `Buffer` with the input Bytes.
  */
-export async function loadInput(
-	filename: string,
-): Promise<Buffer> {
+export async function loadInput(filename: string): Promise<Buffer> {
 	return filename === '-' ? readStdin() : fs.readFile(filename);
 }
 

@@ -61,7 +61,7 @@ export class TextCommand implements Command {
 			return;
 		}
 
-		const fontsDto: OutputTextBlock[] = blocks.map((block) => ({
+		const textBlocksDto: OutputTextBlock[] = blocks.map((block) => ({
 			text: block.text,
 			font: {
 				ref: block.font.ref.tag,
@@ -75,9 +75,9 @@ export class TextCommand implements Command {
 		}));
 
 		if (configOptions.format === 'yaml') {
-			console.log(yaml.dump(fontsDto));
+			console.log(yaml.dump(textBlocksDto));
 		} else {
-			console.log(JSON.stringify(fontsDto));
+			console.log(JSON.stringify(textBlocksDto));
 		}
 	}
 

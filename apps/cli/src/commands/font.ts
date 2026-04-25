@@ -1,10 +1,12 @@
 import { Textdomain } from '@esgettext/runtime';
+import * as yaml from 'js-yaml';
 import { PDFLab } from 'pdf-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
 import { coerceOptions, type OptSpec } from '../optspec.js';
 import { Package } from '../package.js';
+import { toFontInfoDto } from '../util/font-info-dto.js';
 
 const gtx = Textdomain.getInstance('pdf-lab');
 
@@ -57,7 +59,13 @@ export class FontCommand implements Command {
 			return;
 		}
 
-		throw new Error('boum');
+		const fontsDto = [...fonts.values()].map(toFontInfoDto);
+
+		if (format === 'yaml') {
+			console.log(yaml.dump(fontsDto));
+		} else {
+			console.log(JSON.stringify(fontsDto));
+		}
 	}
 
 	private async doRun(input: Buffer, configOptions: ConfigOptions) {

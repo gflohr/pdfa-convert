@@ -49,7 +49,7 @@ export class PDFLab {
 	 * `PDFDocument` instance.
 	 * @returns A normalized `PDFLab` instance backed by a canonical PDF document.
 	 */
-	static async from (
+	static async from(
 		input: PDFDocument | string | ArrayBuffer | Uint8Array<ArrayBufferLike>,
 	): Promise<PDFLab> {
 		let pdfDoc: PDFDocument;

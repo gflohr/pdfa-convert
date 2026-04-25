@@ -11,9 +11,15 @@ importers:
       '@biomejs/biome':
         specifier: 2.4.12
         version: 2.4.12
+      '@cantoo/pdf-lib':
+        specifier: ^2.6.5
+        version: 2.6.5
       '@changesets/cli':
         specifier: ^2.31.0
         version: 2.31.0(@types/node@25.6.0)
+      '@pdf-lib/fontkit':
+        specifier: ^1.1.1
+        version: 1.1.1
       '@tsconfig/recommended':
         specifier: ^1.0.13
         version: 1.0.13

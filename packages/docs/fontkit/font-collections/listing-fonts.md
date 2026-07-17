@@ -75,5 +75,7 @@ for (const font of ttc) {
 }
 ```
 
+:::
+
 The fonts are decoded and loaded into memory in the moment that you access
 them.

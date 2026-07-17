@@ -58,7 +58,11 @@ export default defineConfig({
 										link: '/fontkit/font-collections/listing-fonts'
 									},
 								],
-							}
+							},
+							{
+								text: 'Legacy API',
+								link: '/fontkit/legacy-api',
+							},
 						],
 					},
 					{

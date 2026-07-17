@@ -9,31 +9,31 @@ You can load a font file like this:
 == TypeScript
 ```TypeScript
 import * as fs from 'node:fs';
-import fontkit, { BoundingBox } from '@pdf-lab/fontkit';
+import { BoundingBox, TrueTypeFont } from '@pdf-lab/fontkit';
 
 const bytes = fs.readFileSync('Helvetica.ttf');
-const font = fontkit.create(bytes);
+const font = new TrueTypeFont(bytes);
 const bbox = new BoundingBox(5, 3, 25, 30);
 ```
 
 == ES6
 ```JavaScript
 import * as fs from 'node:fs';
-import fontkit, { BoundingBox } from '@pdf-lab/fontkit';
+import { BoundingBox, TrueTypeFont } from '@pdf-lab/fontkit';
 
 const bytes = fs.readFileSync('Helvetica.ttf');
-const font = fontkit.create(bytes);
+const font = new TrueTypeFont(bytes);
 const bbox = new BoundingBox(5, 3, 25, 30);
 ```
 
 == CommonJS
 ```JavaScript
 const fs = require('fs');
-const fontkit = require('@pdf-lab/fontkit');
+const { TrueTypeFont } = require('@pdf-lab/fontkit');
 
 const bytes = fs.readFileSync('Helvetica.ttf');
-const font = fontkit.create(bytes);
-const bbox = new fontkit.BoundingBox(5, 3, 25, 30);
+const font = new TrueTypeFont(bytes);
+const bbox = new BoundingBox(5, 3, 25, 30);
 ```
 
 == UMD

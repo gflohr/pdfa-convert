@@ -10,8 +10,9 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-        "import": "./dist/fontkit.esm.js",
-        "default": "./dist/fontkit.umd.js"
+			"import": "./dist/fontkit.esm.js",
+			"require": "./dist/fontkit.cjs",
+			"default": "./dist/fontkit.umd.js"
 		}
 	},
 	"scripts": {

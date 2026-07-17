@@ -2,6 +2,8 @@
 
 You can load a font file like this:
 
+<!-- FIXME! Do not use the legacy API here! -->
+
 :::tabs key:language variant:code
 
 == TypeScript

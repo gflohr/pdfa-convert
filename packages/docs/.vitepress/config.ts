@@ -51,7 +51,13 @@ export default defineConfig({
 						items: [
 							{
 								text: 'Font Collections',
-								link: '/fontkit/font-collections'
+								link: '/fontkit/font-collections',
+								items: [
+									{
+										text: 'Listing Fonts',
+										link: '/fontkit/font-collections/listing-fonts'
+									},
+								],
 							}
 						],
 					},

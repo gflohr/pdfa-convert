@@ -14,3 +14,16 @@ In general, you run the scripts through `tsx`:
 ```shell
 pnpm exec tsx ./src/fontkit/collection-list-fonts.ts
 ```
+
+## Vanilla JavaScript
+
+Almost all examples are written in TypeScript.
+
+For modern JavaScript, see
+[`collection-list-fonts.mjs`](./src/fontkit/collection-list-fonts.mjs) as an
+example. Essentially, you have to delete all TypeScript specific stuff.
+
+For CommonJS, see
+[`collection-list-fonts.cjs`](./src/fontkit/collection-list-fonts.cjs) as an
+example. You also have to remove all TypeScript specific stuff, and
+additionally use the legacy JavaScript features.

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import fontkitTypedocSidebar from '../fontkit/api/typedoc-sidebar.json';
+import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -8,6 +9,11 @@ export default defineConfig({
 	description: "High-quality PDF tools for Node and the Browser",
 	// FIXME! This seems to be a bug in the TypeDoc Markdown plug-in.
 	ignoreDeadLinks: true,
+	markdown: {
+		config(md) {
+			md.use(tabsMarkdownPlugin)
+		},
+	},
 	themeConfig: {
 		// https://vitepress.dev/reference/default-theme-config
 		nav: [

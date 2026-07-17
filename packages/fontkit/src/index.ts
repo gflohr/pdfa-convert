@@ -26,6 +26,7 @@ export * from './layout/index.js';
 export * from './open-type/index.js';
 export * from './open-type-font.js';
 export * from './sfnt-font.js';
+export * from './sfnt-font-collection.js';
 export * from './subset/index.js';
 export * from './tables/index.js';
 export * from './true-type-collection.js';

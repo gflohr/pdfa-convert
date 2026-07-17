@@ -861,3 +861,10 @@ export class TrueTypeFont<
 		return this as TrueTypeSubsetFont;
 	}
 }
+
+/**
+ * The class TTFFont is a compatibility alias for {@link TrueTypeFont}
+ *
+ * @deprecated Use {@link TrueTypeFont} instead!
+ */
+export class TTFFont extends TrueTypeFont {}

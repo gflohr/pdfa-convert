@@ -47,6 +47,15 @@ export default defineConfig({
 						],
 					},
 					{
+						text: 'Usage/Examples',
+						items: [
+							{
+								text: 'Font Collections',
+								link: '/fontkit/font-collections'
+							}
+						],
+					},
+					{
 						text: 'API',
 						items: fontkitTypedocSidebar,
 					},

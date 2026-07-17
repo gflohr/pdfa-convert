@@ -1,4 +1,5 @@
 import * as r from 'restructure';
+import type { SFNTFontCollection } from './sfnt-font-collection.js';
 import { TrueTypeFont } from './true-type-font.js';
 import { asciiDecoder } from './utils.js';
 
@@ -42,7 +43,7 @@ const TTCHeader = new r.VersionedStruct<TTCTable.Header>(
 	ttcHeaderFields,
 );
 
-export class TrueTypeCollection {
+export class TrueTypeCollection implements SFNTFontCollection {
 	private stream: r.DecodeStream;
 	private header: TTCTable.Header;
 

@@ -31,7 +31,7 @@ export class LayoutEngine {
 	public layout(
 		str: string | Glyph[],
 		features: OpenType.Features | OpenType.FeatureTag[] = [],
-		script?: Script.UnicodeScript,
+		script?: Script.OpenTypeTag,
 		language?: string,
 		direction?: BidiDirection,
 	): GlyphRun {
@@ -40,7 +40,7 @@ export class LayoutEngine {
 		if (typeof str === 'string') {
 			// Attempt to detect the script from the string if not provided.
 			if (script == null) {
-				script = Script.forString(str) as Script.UnicodeScript;
+				script = Script.forString(str);
 			}
 
 			glyphs = this.font.glyphsForString(str);
@@ -52,7 +52,7 @@ export class LayoutEngine {
 					codePoints.push(...glyph.codePoints);
 				}
 
-				script = Script.forCodePoints(codePoints) as Script.UnicodeScript;
+				script = Script.forCodePoints(codePoints);
 			}
 
 			glyphs = str;

@@ -3,7 +3,7 @@ import type { SFNTFont } from './sfnt-font';
 /**
  * A file container for multiple {@link SFNTFont} programs.
  */
-export interface SFNTFontCollection {
+export interface FontCollection {
 	/**
 	 * A lazily loaded array of fonts contained in the collection.
 	 */

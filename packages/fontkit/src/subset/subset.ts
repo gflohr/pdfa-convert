@@ -1,5 +1,6 @@
+import type { Font } from '../font.js';
 import type { Glyph } from '../glyph/glyph.js';
-import type { SFNTFont, SFNTFontDirectory } from '../sfnt-font.js';
+import type { SFNTDirectory } from '../tables/directory.js';
 
 /** @deprecated call the encode() method of {@link Subset} synchronously instead! */
 export interface SubsetStream {
@@ -10,7 +11,7 @@ export abstract class Subset {
 	protected readonly glyphs: number[];
 	private readonly mapping: Record<number, number>;
 
-	constructor(protected readonly font: SFNTFont<SFNTFontDirectory>) {
+	constructor(protected readonly font: Font<SFNTDirectory>) {
 		this.font = font;
 		this.glyphs = [];
 		this.mapping = {};

@@ -1,13 +1,13 @@
 import assert from 'node:assert';
 import * as path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { SFNTFont } from '../src/index.js';
+import type { Font } from '../src/index.js';
 import fontkit from './helpers.js';
 
 const datadir = path.resolve(import.meta.dirname, './data');
 
 describe('shaping', () => {
-	const fontCache: Record<string, SFNTFont> = {};
+	const fontCache: Record<string, Font> = {};
 	const test = (
 		description: string,
 		font: string,

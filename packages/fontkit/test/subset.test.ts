@@ -3,7 +3,6 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as r from 'restructure';
 import { describe, expect, it } from 'vitest';
-import type { CFFFont } from '../src/cff/cff-font.js';
 import { CFFGlyph } from '../src/glyph/cff-glyph.js';
 import { CFF1Font } from '../src/index.js';
 import type { OpenTypePostScriptFont } from '../src/open-type-font.js';

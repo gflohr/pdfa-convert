@@ -163,7 +163,7 @@ export interface WOFF2Directory extends SFNTDirectory {
 	metaOrigLength: number;
 	privOffset: number;
 	privLength: number;
-	/** Satisfies the SFNTFontDirectory requirement */
+	/** Satisfies the SFNTDirectory requirement */
 	tables: Record<string, WOFF2DirectoryEntry>;
 }
 

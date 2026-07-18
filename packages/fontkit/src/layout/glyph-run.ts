@@ -1,6 +1,5 @@
 import { BoundingBox } from '../glyph/bounding-box.js';
 import type { Glyph } from '../glyph/glyph.js';
-import type { UnicodeScript } from '../layout/script.js';
 import * as Script from '../layout/script.js';
 import type { OpenType } from '../tables/open-type.js';
 import type { GlyphPosition } from './glyph-position.js';
@@ -35,12 +34,13 @@ export class GlyphRun {
 	constructor(
 		public glyphs: Glyph[],
 		features: OpenType.FeatureTag[] | OpenType.Features,
-		public readonly script?: UnicodeScript,
+		public readonly script?: Script.OpenTypeTag,
 		language?: string,
 		direction?: 'ltr' | 'rtl',
 	) {
 		this._positions = null;
 		this.script = script;
+
 		this.language = language || null;
 		this.direction = direction || Script.direction(script);
 

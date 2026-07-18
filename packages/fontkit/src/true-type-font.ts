@@ -4,6 +4,7 @@ import { fontkit } from './base.js';
 import type { CFF1Font } from './cff/cff1-font.js';
 import { CmapProcessor } from './cmap-processor.js';
 import type {
+	Font,
 	NamedVariation,
 	NamedVariations,
 	VariationAxes,
@@ -28,12 +29,15 @@ import {
 	requiredOpenTypeTables,
 	requiredOpenTypeTrueTypeTables,
 } from './open-type-font.js';
-import type { SFNTFont, SFNTFontDirectory } from './sfnt-font.js';
 import { CFFSubset } from './subset/cff-subset.js';
 import type { Subset } from './subset/subset.js';
 import { TrueTypeSubset } from './subset/true-type-subset.js';
 import type { AAT } from './tables/aat.js';
-import type { SFNTDirectoryEntry, SFNTTableMap } from './tables/directory.js';
+import type {
+	SFNTDirectory,
+	SFNTDirectoryEntry,
+	SFNTTableMap,
+} from './tables/directory.js';
 import { directory } from './tables/directory.js';
 import { tables } from './tables/index.js';
 import type { nameTable } from './tables/name.js';
@@ -94,9 +98,8 @@ export type ExtensionTables = Omit<SFNTTableMap, CoreTableKey>;
  */
 export type FontTableField = CoreTables & ExtensionTables;
 
-export interface TrueTypeFont<
-	TDirectory extends SFNTFontDirectory = SFNTFontDirectory,
-> extends SFNTFont,
+export interface TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
+	extends Font,
 		FontTableField {
 	directory: TDirectory;
 }
@@ -106,9 +109,8 @@ export interface TrueTypeFont<
  * It supports TrueType, and PostScript glyphs, and several color glyph formats.
  */
 // biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Merged with FontTableFields to map table layout properties dynamically via the constructor loop.
-export class TrueTypeFont<
-	TDirectory extends SFNTFontDirectory = SFNTFontDirectory,
-> implements SFNTFont
+export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
+	implements Font
 {
 	public stream: r.DecodeStream;
 	private variationCoords: number[] | null;
@@ -547,7 +549,7 @@ export class TrueTypeFont<
 	public layout(
 		str: string,
 		userFeatures?: OpenType.Features | OpenType.FeatureTag[],
-		script?: Script.UnicodeScript,
+		script?: Script.OpenTypeTag,
 		language?: string,
 		direction?: BidiDirection,
 	): GlyphRun {

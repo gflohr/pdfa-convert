@@ -1,5 +1,5 @@
 import * as r from 'restructure';
-import type { SFNTFontCollection } from './sfnt-font-collection.js';
+import type { FontCollection } from './font-collection.js';
 import { TrueTypeFont } from './true-type-font.js';
 
 const DFontName = new r.String(r.uint8);
@@ -78,7 +78,7 @@ const dfontHeaderFields = {
 };
 const dFontHeader = new r.Struct<DFontHeader>(dfontHeaderFields);
 
-export class DFont implements SFNTFontCollection {
+export class DFont implements FontCollection {
 	private readonly stream: r.DecodeStream;
 	private readonly header: DFontHeader;
 	private readonly sfnt?: ResourceTypeEntry;

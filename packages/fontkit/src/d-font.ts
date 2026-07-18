@@ -78,7 +78,14 @@ const dfontHeaderFields = {
 };
 const dFontHeader = new r.Struct<DFontHeader>(dfontHeaderFields);
 
+export interface DFont extends FontCollection {
+	readonly type: 'DFont';
+}
+
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
 export class DFont implements FontCollection {
+	public readonly type: 'DFont' = 'DFont';
+
 	private readonly stream: r.DecodeStream;
 	private readonly header: DFontHeader;
 	private readonly sfnt?: ResourceTypeEntry;

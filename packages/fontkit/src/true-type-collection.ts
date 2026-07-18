@@ -43,7 +43,14 @@ const TTCHeader = new r.VersionedStruct<TTCTable.Header>(
 	ttcHeaderFields,
 );
 
+export interface TrueTypeCollection extends FontCollection {
+	readonly type: 'TTC';
+}
+
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
 export class TrueTypeCollection implements FontCollection {
+	public readonly type: 'TTC' = 'TTC';
+
 	private stream: r.DecodeStream;
 	private header: TTCTable.Header;
 

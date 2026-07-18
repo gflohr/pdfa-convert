@@ -110,14 +110,14 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	 *
 	 * @returns the font with an update
 	 */
-	asAATFont(decode?: boolean): AATFont | null;
+	asAATFont(): AATFont | null;
 
 	/**
 	 * Attempts to view this font as an {@link TrueTypeSubsetFont} font.
 	 *
 	 * @returns the font with an update
 	 */
-	asTrueTypeSubsetFont(decode?: boolean): TrueTypeSubsetFont | null;
+	asTrueTypeSubsetFont(): TrueTypeSubsetFont | null;
 
 	/**
 	 * Character to Glyph Index Mapping Table. Maps characters to internal
@@ -421,61 +421,61 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	/**
 	 * The font’s [ascender](https://en.wikipedia.org/wiki/Ascender_(typography)).
 	 */
-	ascent: number | undefined;
+	get ascent(): number | undefined;
 
 	/**
 	 * The font’s [descender](https://en.wikipedia.org/wiki/Descender).
 	 */
-	descent: number | undefined;
+	get descent(): number | undefined;
 
 	/**
 	 * The line gap, i.e. amount of space that should be included between lines.
 	 */
-	lineGap: number | undefined;
+	get lineGap(): number | undefined;
 
 	/**
 	 * The offset from the normal underline position that should be used.
 	 */
-	underlinePosition: number | undefined;
+	get underlinePosition(): number | undefined;
 
 	/**
 	 * The weight of the underline that should be used.
 	 */
-	underlineThickness: number | undefined;
+	get underlineThickness(): number | undefined;
 
 	/**
 	 * If this is an italic font, the angle the cursor should be drawn at to
 	 * match the font design.
 	 */
-	italicAngle: number | undefined;
+	get italicAngle(): number | undefined;
 
 	/**
 	 * The height of capital letters above the baseline.
 	 * See [here](https://en.wikipedia.org/wiki/Cap_height) for more details.
 	 */
-	capHeight: number | undefined;
+	get capHeight(): number | undefined;
 
 	/**
 	 * The height of lowercase letters in the font.
 	 * See [here](https://en.wikipedia.org/wiki/X-height) for more details.
 	 */
-	xHeight: number;
+	get xHeight(): number;
 
 	/**
 	 * The total count of glyph indexes present in the font mapping.
 	 */
-	numGlyphs: number | undefined;
+	get numGlyphs(): number | undefined;
 
 	/**
 	 * The size of the font's internal coordinate grid in units per em.
 	 * Defaults to 1000, if all other attempts to calculate the value fail.
 	 */
-	unitsPerEm: number;
+	get unitsPerEm(): number;
 
 	/**
 	 * The font’s bounding box, i.e. the box that encloses all glyphs in the font.
 	 */
-	bbox: Readonly<BoundingBox> | undefined;
+	get bbox(): Readonly<BoundingBox> | undefined;
 
 	/**
 	 * An array of all of the unicode code points supported by the font.
@@ -546,7 +546,7 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	/**
 	 * An array of all OpenType feature tags supported by the font.
 	 */
-	availableFeatures: OpenType.FeatureTag[];
+	get availableFeatures(): OpenType.FeatureTag[];
 
 	/**
 	 * An array of all OpenType feature tags supported by the font for a given

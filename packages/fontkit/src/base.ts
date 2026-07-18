@@ -1,11 +1,10 @@
 import * as r from 'restructure';
-import type { DFont } from './d-font.js';
+import type { SFNTFont } from './sfnt-font.js';
+import type { SFNTFontCollection } from './sfnt-font-collection.js';
 import type { TrueTypeCollection } from './true-type-collection.js';
-import type { TrueTypeFont } from './true-type-font.js';
-import { SFNTFontCollection } from './sfnt-font-collection.js';
 
 export interface FontContainerInstance {
-	getFont(postscriptName: string): TrueTypeFont | null;
+	getFont(postscriptName: string): SFNTFont | null;
 }
 
 /**
@@ -35,7 +34,7 @@ const formats: FontContainer[] = [];
  * ### Why Deprecated?
  *
  * * The `fontkit.create` factory relies on runtime structural probing to determine
- * whether a byte stream is an {@link TrueTypeFont}, a {@link TrueTypeCollection},
+ * whether a byte stream is a {@link TrueTypeFont}, a {@link TrueTypeCollection},
  * or a {@link DFont}. This approach introduces two critical drawbacks:
  *
  * 1. **Ambiguity:** It forces a vague union return type, requiring consumers to write manual
@@ -98,12 +97,14 @@ export const fontkit = {
 	 * @param postscriptName the optional PostScript name
 	 * @returns the font or font collection
 	 *
-	 * @deprecated Instantiate one of the class constructors {@link TrueTypeFont},
+	 * @deprecated Instantiate one of the class constructors
+	 * {@link TrueTypeFont}, {@link WOFFFont}, {@link WOFF2Font},
+	 * {@link TrueTypeCollection}, {@link DFont}.
 	 */
 	create: (
 		bytes: Uint8Array,
 		postscriptName?: string,
-	): TrueTypeFont | SFNTFontCollection | null => {
+	): SFNTFont | SFNTFontCollection | null => {
 		const buffer = Buffer.from(bytes);
 		for (let i = 0; i < formats.length; i++) {
 			const format = formats[i];
@@ -113,7 +114,7 @@ export const fontkit = {
 					return font.getFont(postscriptName);
 				}
 
-				return font as TrueTypeFont | SFNTFontCollection;
+				return font as SFNTFont | SFNTFontCollection;
 			}
 		}
 		throw new Error('Unknown font format');

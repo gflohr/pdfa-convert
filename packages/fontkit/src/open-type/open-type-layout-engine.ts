@@ -1,8 +1,8 @@
 import type { GlyphPosition } from '../layout/glyph-position.js';
 import type { GlyphRun } from '../layout/glyph-run.js';
 import type { OpenTypeTag } from '../layout/script.js';
+import type { SFNTBaseFont } from '../sfnt-base-font.js';
 import type { OpenType } from '../tables/open-type.js';
-import type { TrueTypeFont } from '../true-type-font.js';
 import { GlyphInfo } from './glyph-info.js';
 import { GPOSProcessor } from './gpos-processor.js';
 import { GSUBProcessor } from './gsub-processor.js';
@@ -11,7 +11,7 @@ import * as Shapers from './shapers/index.js';
 import { ShapingPlan } from './shaping-plan.js';
 
 export class OpenTypeLayoutEngine<T> {
-	private font: TrueTypeFont;
+	private font: SFNTBaseFont;
 	private glyphInfos: GlyphInfo<T>[] | null;
 	private plan: ShapingPlan<T> | null;
 	/** @internal */
@@ -19,7 +19,7 @@ export class OpenTypeLayoutEngine<T> {
 	private gposProcessor: GPOSProcessor<T> | null;
 	private shaper: typeof DefaultShaper | undefined | null;
 
-	constructor(font: TrueTypeFont) {
+	constructor(font: SFNTBaseFont) {
 		this.font = font;
 		this.glyphInfos = null;
 		this.plan = null;

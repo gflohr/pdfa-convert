@@ -1,8 +1,8 @@
 import type { GlyphPosition } from '../layout/glyph-position.js';
 import type { BidiDirection } from '../layout/glyph-run.js';
 import type { OpenTypeTag, UnicodeScript } from '../layout/script.js';
+import type { SFNTBaseFont } from '../sfnt-base-font.js';
 import type { OpenType } from '../tables/open-type.js';
-import type { TrueTypeFont } from '../true-type-font.js';
 import type { GlyphInfo } from './glyph-info.js';
 import type { OpenTypeProcessor } from './open-type-processor.js';
 import type { IndicConfig } from './shapers/indic-data.js';
@@ -16,7 +16,7 @@ type FeatureShape =
 	  };
 
 export type ShapingFunction<T = null> = (
-	font: TrueTypeFont,
+	font: SFNTBaseFont,
 	glyphs: GlyphInfo<T>[],
 	plan: ShapingPlan<T>,
 ) => void;
@@ -39,7 +39,7 @@ export class ShapingPlan<T = null> {
 	public isOldSpec?: boolean;
 
 	constructor(
-		public font: TrueTypeFont,
+		public font: SFNTBaseFont,
 		public readonly script?: OpenTypeTag,
 		direction: BidiDirection = 'ltr',
 	) {

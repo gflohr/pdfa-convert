@@ -2,7 +2,7 @@ import * as base64 from 'base64-arraybuffer';
 import StateMachine from 'dfa';
 import pako from 'pako';
 import UnicodeTrie from 'unicode-trie';
-import type { TrueTypeFont } from '../../true-type-font.js';
+import type { SFNTBaseFont } from '../../sfnt-base-font.js';
 import { GlyphInfo } from '../glyph-info.js';
 import type { ShapingFunction, ShapingPlan } from '../shaping-plan.js';
 import { DefaultShaper } from './default-shaper.js';
@@ -123,7 +123,7 @@ function useCategory(glyph: UniversalGlyphInfo): number {
 	return trie.get(glyph.codePoints[0]);
 }
 
-function setupSyllables(_font: TrueTypeFont, glyphs: UniversalGlyphInfo[]) {
+function setupSyllables(_font: SFNTBaseFont, glyphs: UniversalGlyphInfo[]) {
 	let syllable = 0;
 	for (const [start, end, tags] of stateMachine.match(
 		glyphs.map(useCategory),
@@ -149,7 +149,7 @@ function setupSyllables(_font: TrueTypeFont, glyphs: UniversalGlyphInfo[]) {
 }
 
 function clearSubstitutionFlags(
-	_font: TrueTypeFont,
+	_font: SFNTBaseFont,
 	glyphs: UniversalGlyphInfo[],
 ) {
 	for (const glyph of glyphs) {
@@ -157,7 +157,7 @@ function clearSubstitutionFlags(
 	}
 }
 
-function recordRphf(_font: TrueTypeFont, glyphs: UniversalGlyphInfo[]) {
+function recordRphf(_font: SFNTBaseFont, glyphs: UniversalGlyphInfo[]) {
 	for (const glyph of glyphs) {
 		if (glyph.substituted && glyph.features.rphf) {
 			// Mark a substituted repha.
@@ -166,7 +166,7 @@ function recordRphf(_font: TrueTypeFont, glyphs: UniversalGlyphInfo[]) {
 	}
 }
 
-function recordPref(_font: TrueTypeFont, glyphs: UniversalGlyphInfo[]) {
+function recordPref(_font: SFNTBaseFont, glyphs: UniversalGlyphInfo[]) {
 	for (const glyph of glyphs) {
 		if (glyph.substituted) {
 			// Mark a substituted pref as VPre, as they behave the same way.
@@ -175,7 +175,7 @@ function recordPref(_font: TrueTypeFont, glyphs: UniversalGlyphInfo[]) {
 	}
 }
 
-function reorder(font: TrueTypeFont, glyphs: UniversalGlyphInfo[]) {
+function reorder(font: SFNTBaseFont, glyphs: UniversalGlyphInfo[]) {
 	const dottedCircle = font.glyphForCodePoint(0x25cc)?.id;
 	if (!dottedCircle) {
 		throw new Error(

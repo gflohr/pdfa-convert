@@ -1,7 +1,7 @@
+import type { SFNTBaseFont } from '../sfnt-base-font.js';
 import type { fvarTable } from '../tables/fvar.js';
 import type { gvarTable } from '../tables/gvar.js';
 import type { OpenTypeVariation } from '../tables/variations.js';
-import type { TrueTypeFont } from '../true-type-font.js';
 import type { Point } from './true-type-glyph.js';
 
 const TUPLES_SHARE_POINT_NUMBERS = 0x8000;
@@ -50,7 +50,7 @@ interface MetricVariationTable {
  * @internal
  */
 export class GlyphVariationProcessor {
-	private font: TrueTypeFont;
+	private font: SFNTBaseFont;
 	private fvar: fvarTable.fvar;
 	public _normalizedCoords: number[];
 	private blendVectors = new Map<
@@ -58,7 +58,7 @@ export class GlyphVariationProcessor {
 		number[]
 	>();
 
-	constructor(font: TrueTypeFont, coords: number[]) {
+	constructor(font: SFNTBaseFont, coords: number[]) {
 		// Fail fast if the font isn't a variable font
 		if (!font.fvar) {
 			throw new Error(

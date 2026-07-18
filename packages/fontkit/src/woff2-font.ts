@@ -8,19 +8,26 @@ import {
 	TrueTypeGlyph,
 } from './glyph/true-type-glyph.js';
 import { WOFF2Glyph } from './glyph/woff2-glyph.js';
+import { SFNTBaseFont } from './sfnt-base-font.js';
 import type { SFNTDirectoryEntry } from './tables/directory.js';
 import type { tables } from './tables/index.js';
 import type { WOFF2Directory } from './tables/woff2-directory.js';
 import { woff2DirectoryStruct } from './tables/woff2-directory.js';
-import { TrueTypeFont } from './true-type-font.js';
 import type { TrueTypeSubsetFont } from './true-type-subset-font.js';
 import { asciiDecoder } from './utils.js';
+
+export interface WOFF2Font {
+	readonly type: 'WOFF2';
+}
 
 /**
  * Subclass of TrueTypeFont that represents a TTF/OTF font compressed by WOFF2
  * See spec here: http://www.w3.org/TR/WOFF2/
  */
-export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
+export class WOFF2Font extends SFNTBaseFont<WOFF2Directory> {
+	public readonly type: 'WOFF2' = 'WOFF2';
+
 	private dataPos?: number;
 	// Do NOT initialise this inline (e.g., `= false`).
 	//

@@ -78,7 +78,7 @@ export const fontkit = {
 	/**
 	 * Create an instance of a font or a font collection.
 	 *
-	 * For a {@link TrueTypeCollection} or {@link DFont}, you may specify the
+	 * For a {@link SFNTFontCollection}, you may specify the
 	 * PostScript name of one of the fonts contained in the collection.
 	 * Otherwise, you get the collection itself. You can then get the list
 	 * of included fonts with the method `getFonts`.
@@ -97,9 +97,9 @@ export const fontkit = {
 	 * @param postscriptName the optional PostScript name
 	 * @returns the font or font collection
 	 *
-	 * @deprecated Instantiate one of the class constructors
+	 * @deprecated Use one of the designated class constructors
 	 * {@link TrueTypeFont}, {@link WOFFFont}, {@link WOFF2Font},
-	 * {@link TrueTypeCollection}, {@link DFont}.
+	 * {@link TrueTypeCollection}, {@link DFont} instead!
 	 */
 	create: (
 		bytes: Uint8Array,

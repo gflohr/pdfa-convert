@@ -2,6 +2,7 @@ import * as r from 'restructure';
 import type { FontCollection } from './font-collection.js';
 import { TrueTypeFont } from './true-type-font.js';
 import { asciiDecoder } from './utils.js';
+import { SFNTBaseFont } from './sfnt-base-font.js';
 
 export namespace TTCTable {
 	export interface HeaderV1 {
@@ -90,7 +91,7 @@ export class TrueTypeCollection implements FontCollection {
 		return null;
 	}
 
-	public get fonts(): TrueTypeFont[] {
+	public get fonts(): SFNTBaseFont[] {
 		const fonts = [];
 		for (const offset of this.header.offsets) {
 			const stream = new r.DecodeStream(this.stream.buffer);

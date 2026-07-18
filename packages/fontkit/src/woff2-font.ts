@@ -16,16 +16,29 @@ import { woff2DirectoryStruct } from './tables/woff2-directory.js';
 import type { TrueTypeSubsetFont } from './true-type-subset-font.js';
 import { asciiDecoder } from './utils.js';
 
+/** @internal */
 export interface WOFF2Font {
 	readonly type: 'WOFF2';
 }
 
 /**
- * Subclass of TrueTypeFont that represents a TTF/OTF font compressed by WOFF2
+ * A WOFF2Font represents a compressed TTF/OTF font.
  * See spec here: http://www.w3.org/TR/WOFF2/
+
+* When instantiated, a `WOFF2Font` is uncompressed and decoded on the fly and
+ * after that functionally identical to a {@link TrueTypeFont}.
+ *
+ * Note that the `WOFFFont` class does not extend the class
+ * {@link TrueTypeFont} but the common abstract base class
+ * {@link SFNTBaseClass}.
  */
 // biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
 export class WOFF2Font extends SFNTBaseFont<WOFF2Directory> {
+	/**
+	 * Discriminating property.
+	 *
+	 * @see {@link SFNTFont}
+	 */
 	public readonly type: 'WOFF2' = 'WOFF2';
 
 	private dataPos?: number;

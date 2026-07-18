@@ -104,16 +104,30 @@ export interface SFNTBaseFont extends Font, FontTableField {}
 /**
  * This is the base class for all SFNT-based font formats in fontkit.
  * It supports TrueType, and PostScript glyphs, and several color glyph formats.
+ *
+ * It is functionally identical to a {@link TrueTypeFont} but lacks the
+ * discriminating `type` property.
+ *
+ * @see {@link SFNTFont}
+ * @see {@link TrueTypeFont#type}
+ * @see {@link WOFFFont#type}
+ * @see {@link WOFF2Font#type}
  */
-export class SFNTBaseFont<TDirectory extends SFNTDirectory = SFNTDirectory>
+export abstract class SFNTBaseFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	implements Font<TDirectory>
 {
+	/** internal */
 	public stream: r.DecodeStream;
 	private variationCoords: number[] | null;
 	private directoryPos: number;
 	private tables: SFNTTableMap = {} as SFNTTableMap;
 	protected glyphs: Record<number, Glyph> = {};
+	/** @internal */
 	public directory: TDirectory;
+
+	/**
+	 * The default language as an ISO 639-1 code ('en', 'fr', ...).
+	 */
 	public defaultLanguage: string | null;
 
 	// Those variables are lazily instantiated by their respctive getters, and
@@ -126,13 +140,37 @@ export class SFNTBaseFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	private _namedVariations!: NamedVariations;
 	private _variationProcessor!: GlyphVariationProcessor | null;
 
-	public outlines = '';
+	/**
+	 * Determines the type of glyph outlines based on the presence of the
+	 * required tables.
+	 *
+	 * Fonts without the core OpenType tables are identified
+	 * by an empty string (@see {@link OpenTypeNoOutlinesFont}).
+	 *
+	 * If all core OpenType tables are present, the outline type is either
+	 * 'TrueType' if the `loca` table is present, or `PostScript` if either
+	 * `CFF ` or `CFF2` are present, 'none' otherwise.
+	 *
+	 * @see {@link OpenTypeTrueTypeFont}
+	 * @see {@link OpenTypePostScriptFont}
+	 */
+	public outlines: 'TrueType' | 'PostScript' | 'none' | '' = '';
+
+	/**
+	 * Discriminator for the different flavours of
+	 * {@link OpenTypePostScriptFont}.
+	 *
+	 * If the `CFF2` table is present, outline version is 2, if the `CFF `
+	 * table is present, it is 1. For fonts that do not have PostScript,
+	 * outlines, the value is 0.
+	 */
 	public outlineVersion = 0;
 
 	// Infers all other table properties (cmap, head, OS/2, etc.) via the
 	// interface heritage.
 	[key: string]: unknown;
 
+	/** @internal */
 	public static probe(buffer: Uint8Array): boolean {
 		const format = asciiDecoder.decode(buffer.slice(0, 4));
 		return (
@@ -142,6 +180,16 @@ export class SFNTBaseFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 		);
 	}
 
+	/**
+	 * Instantiates a font object from binary font data. You can either pass
+	 * in a `Uint8Array` or `DecodeStream` from the restructure library
+	 * (@see https://github.com/foliojs/restructure).
+	 *
+	 * @param streamOrBuffer binary font data
+	 * @param variationCoords Normalized design coordinates (typically ranging
+	 *   from -1.0 to 1.0) used to select a specific instance within a variable
+	 *   font's design space.
+	 */
 	constructor(
 		streamOrBuffer: Uint8Array | r.DecodeStream,
 		variationCoords: number[] | null = null,

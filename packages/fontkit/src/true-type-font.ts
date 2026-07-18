@@ -3,15 +3,7 @@ import { type AATFont, requiredAATTables } from './aat/aat-font.js';
 import { fontkit } from './base.js';
 import type { CFF1Font } from './cff/cff1-font.js';
 import { CmapProcessor } from './cmap-processor.js';
-import type {
-	Font,
-	NamedVariation,
-	NamedVariations,
-	VariationAxes,
-	VariationAxis,
-	VariationCoordinates,
-	VariationSettings,
-} from './font.js';
+import type { Font } from './font.js';
 import { BoundingBox } from './glyph/bounding-box.js';
 import { CFFGlyph } from './glyph/cff-glyph.js';
 import { COLRGlyph } from './glyph/colr-glyph.js';
@@ -47,6 +39,29 @@ import {
 	type TrueTypeSubsetFont,
 } from './true-type-subset-font.js';
 import { asciiDecoder } from './utils.js';
+
+export interface VariationAxis {
+	axisTag: string;
+	min: number;
+	default: number;
+	max: number;
+	flags: number;
+	nameID: number;
+	name: string;
+}
+
+export interface VariationAxes {
+	wght?: VariationAxis;
+	wdth?: VariationAxis;
+}
+
+export type NamedVariation = Record<string, number>;
+
+export type NamedVariations = Record<string, NamedVariation>;
+
+export type VariationCoordinates = Record<string, number>;
+
+export type VariationSettings = Record<string, number>;
 
 export type LayoutFeatures = OpenType.Features | AAT.Features;
 
@@ -98,6 +113,7 @@ export type ExtensionTables = Omit<SFNTTableMap, CoreTableKey>;
  */
 export type FontTableField = CoreTables & ExtensionTables;
 
+/** @internal */
 export interface TrueTypeFont extends Font, FontTableField {}
 
 /**

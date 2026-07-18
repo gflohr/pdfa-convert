@@ -56,29 +56,6 @@ import type { vheaTable } from './tables/vhea.js';
 import type { vmtxTable } from './tables/vmtx.js';
 import type { TrueTypeSubsetFont } from './true-type-subset-font.js';
 
-export interface VariationAxis {
-	axisTag: string;
-	min: number;
-	default: number;
-	max: number;
-	flags: number;
-	nameID: number;
-	name: string;
-}
-
-export interface VariationAxes {
-	wght?: VariationAxis;
-	wdth?: VariationAxis;
-}
-
-export type NamedVariation = Record<string, number>;
-
-export type NamedVariations = Record<string, NamedVariation>;
-
-export type VariationCoordinates = Record<string, number>;
-
-export type VariationSettings = Record<string, number>;
-
 /**
  * Baseline interface representing an unvalidated SFNT-based layout.
  * Every table property is considered nullable by default. As a consequence,
@@ -86,6 +63,8 @@ export type VariationSettings = Record<string, number>;
  * the font object with {@link Font["asOpenTypeFont"]} to an
  * {@link OpenTypeFont}, which guarantees the presence of the 8 core tables,
  * and 0-2 outline tables.
+ *
+ * @deprecated This interface is unnecessary. Use {@link TrueTypeFont} as a type instead!
  */
 export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	/**

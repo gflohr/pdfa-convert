@@ -1,11 +1,11 @@
 import type { GlyphPosition } from '../layout/glyph-position.js';
 import type { BidiDirection } from '../layout/glyph-run.js';
 import * as Script from '../layout/script.js';
-import type { SFNTBaseFont } from '../sfnt-base-font.js';
 import type { GPOSTable } from '../tables/GPOS.js';
 import type { GSUBTable } from '../tables/GSUB.js';
 import type { OpenType } from '../tables/open-type.js';
 import type { OpenTypeVariation } from '../tables/variations.js';
+import type { TrueTypeFont } from '../true-type-font.js';
 import type { GlyphInfo } from './glyph-info.js';
 import { GlyphIterator } from './glyph-iterator.js';
 
@@ -17,7 +17,7 @@ type MatcherFunction<T> = (
 ) => boolean;
 
 export class OpenTypeProcessor<T> {
-	protected font: SFNTBaseFont;
+	protected font: TrueTypeFont;
 	private table: GPOSTable.GPOS | GSUBTable.GSUB;
 	private script: OpenType.Script | null;
 	private scriptTag: string | null;
@@ -32,7 +32,7 @@ export class OpenTypeProcessor<T> {
 	protected direction: BidiDirection | undefined;
 	protected glyphIterator: GlyphIterator<T> | undefined;
 
-	constructor(font: SFNTBaseFont, table: GPOSTable.GPOS | GSUBTable.GSUB) {
+	constructor(font: TrueTypeFont, table: GPOSTable.GPOS | GSUBTable.GSUB) {
 		this.font = font;
 		this.table = table;
 

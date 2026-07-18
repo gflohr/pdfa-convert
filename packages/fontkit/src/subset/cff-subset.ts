@@ -5,7 +5,7 @@ import { standardStrings } from '../cff/cff-standard-strings.js';
 import { cffTop } from '../cff/cff-top.js';
 import type { CFF1Font } from '../cff/cff1-font.js';
 import { CFFGlyph } from '../glyph/cff-glyph.js';
-import type { SFNTBaseFont } from '../sfnt-base-font.js';
+import type { TrueTypeFont } from '../true-type-font.js';
 import { Subset } from './subset.js';
 
 export interface CFFSubsetCharset extends PropertyDescriptor {
@@ -19,7 +19,7 @@ export class CFFSubset extends Subset {
 	private gsubrs?: Uint8Array[];
 	private strings?: string[];
 
-	constructor(protected font: SFNTBaseFont) {
+	constructor(protected font: TrueTypeFont) {
 		super(font);
 
 		const cff = this.font['CFF '];

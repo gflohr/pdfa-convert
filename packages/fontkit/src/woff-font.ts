@@ -1,8 +1,8 @@
 import * as r from 'restructure';
 import inflate from 'tiny-inflate';
-import { SFNTBaseFont } from './sfnt-base-font.js';
 import type { WOFFDirectory } from './tables/woff-directory.js';
 import { woffDirectoryStruct } from './tables/woff-directory.js';
+import { TrueTypeFont } from './true-type-font.js';
 import { asciiDecoder } from './utils.js';
 
 /** @internal */
@@ -21,7 +21,7 @@ export interface WOFFFont {
  * {@link SFNTBaseClass}.
  */
 // biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
-export class WOFFFont extends SFNTBaseFont<WOFFDirectory> {
+export class WOFFFont extends TrueTypeFont<WOFFDirectory> {
 	/**
 	 * Discriminating property.
 	 *

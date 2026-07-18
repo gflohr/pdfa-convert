@@ -1,4 +1,4 @@
-import type { SFNTBaseFont } from '../../sfnt-base-font.js';
+import type { TrueTypeFont } from '../../true-type-font.js';
 import { GlyphInfo } from '../glyph-info.js';
 import type { ShapingPlan } from '../shaping-plan.js';
 import { DefaultShaper } from './default-shaper.js';
@@ -215,7 +215,7 @@ const STATE_TABLE: StateTable = [
 ];
 
 function getGlyph(
-	font: SFNTBaseFont,
+	font: TrueTypeFont,
 	code: number,
 	features: Record<string, boolean>,
 ): GlyphInfo {
@@ -227,7 +227,7 @@ function getGlyph(
 	);
 }
 
-function decompose(glyphs: GlyphInfo[], i: number, font: SFNTBaseFont): number {
+function decompose(glyphs: GlyphInfo[], i: number, font: TrueTypeFont): number {
 	const glyph = glyphs[i];
 	const code = glyph.codePoints[0];
 
@@ -266,7 +266,7 @@ function decompose(glyphs: GlyphInfo[], i: number, font: SFNTBaseFont): number {
 	return i + insert.length - 1;
 }
 
-function compose(glyphs: GlyphInfo[], i: number, font: SFNTBaseFont) {
+function compose(glyphs: GlyphInfo[], i: number, font: TrueTypeFont) {
 	const glyph = glyphs[i];
 	const code = glyphs[i].codePoints[0];
 	const type = getType(code);
@@ -356,7 +356,7 @@ function getLength(code: number): number {
 function reorderToneMark(
 	glyphs: GlyphInfo[],
 	i: number,
-	font: SFNTBaseFont,
+	font: TrueTypeFont,
 ): GlyphInfo[] | undefined {
 	const glyph = glyphs[i];
 	const code = glyphs[i].codePoints[0];
@@ -378,7 +378,7 @@ function reorderToneMark(
 function insertDottedCircle(
 	glyphs: GlyphInfo[],
 	i: number,
-	font: SFNTBaseFont,
+	font: TrueTypeFont,
 ) {
 	const glyph = glyphs[i];
 	const code = glyphs[i].codePoints[0];

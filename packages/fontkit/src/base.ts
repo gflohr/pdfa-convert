@@ -1,10 +1,10 @@
 import * as r from 'restructure';
-import type { SFNTFont } from './sfnt-font.js';
-import type { SFNTFontCollection } from './sfnt-font-collection.js';
+import type { FontCollection } from './font-collection.js';
 import type { TrueTypeCollection } from './true-type-collection.js';
+import type { TrueTypeFont } from './true-type-font.js';
 
 export interface FontContainerInstance {
-	getFont(postscriptName: string): SFNTFont | null;
+	getFont(postscriptName: string): TrueTypeFont | null;
 }
 
 /**
@@ -104,7 +104,7 @@ export const fontkit = {
 	create: (
 		bytes: Uint8Array,
 		postscriptName?: string,
-	): SFNTFont | SFNTFontCollection | null => {
+	): TrueTypeFont | FontCollection | null => {
 		const buffer = Buffer.from(bytes);
 		for (let i = 0; i < formats.length; i++) {
 			const format = formats[i];
@@ -114,7 +114,7 @@ export const fontkit = {
 					return font.getFont(postscriptName);
 				}
 
-				return font as SFNTFont | SFNTFontCollection;
+				return font as TrueTypeFont | FontCollection;
 			}
 		}
 		throw new Error('Unknown font format');

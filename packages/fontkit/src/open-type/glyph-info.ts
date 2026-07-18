@@ -1,6 +1,6 @@
 import unicode from 'unicode-properties';
-import type { SFNTBaseFont } from '../sfnt-base-font.js';
 import type { OpenType } from '../tables/open-type.js';
+import type { TrueTypeFont } from '../true-type-font.js';
 import { OpenTypeProcessor } from './open-type-processor.js';
 import type { IndicInfo } from './shapers/indic-shaper.js';
 import type { USEInfo } from './shapers/universal-shaper.js';
@@ -9,7 +9,7 @@ export type ShaperInfo = IndicInfo | USEInfo;
 
 export class GlyphInfo<ShaperInfoT = null> {
 	/** @internal */
-	public font: SFNTBaseFont;
+	public font: TrueTypeFont;
 	private _id: number;
 	public features: OpenType.FeatureFlags;
 	public ligatureID: number | null;
@@ -26,7 +26,7 @@ export class GlyphInfo<ShaperInfoT = null> {
 	public markAttachmentType?: number;
 
 	constructor(
-		font: SFNTBaseFont,
+		font: TrueTypeFont,
 		id: number,
 		public codePoints: number[] = [],
 		features?: OpenType.FeatureTag[] | OpenType.Features,

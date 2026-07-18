@@ -1,6 +1,6 @@
 import unicode, { type UnicodeCombiningClassName } from 'unicode-properties';
 import type { Glyph } from '../glyph/glyph.js';
-import type { SFNTBaseFont } from '../sfnt-base-font.js';
+import type { TrueTypeFont } from '../true-type-font.js';
 import type { GlyphPosition } from './glyph-position.js';
 
 /**
@@ -12,7 +12,7 @@ import type { GlyphPosition } from './glyph-position.js';
  * https://github.com/behdad/harfbuzz/blob/master/src/hb-ot-shape-fallback.cc
  */
 export class UnicodeLayoutEngine {
-	constructor(private readonly font: SFNTBaseFont) {}
+	constructor(private readonly font: TrueTypeFont) {}
 
 	/**
 	 * TODO Ligatures are currently not handled.

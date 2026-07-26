@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import {
 	DFont,
-	type SFNTFontCollection,
+	type FontCollection,
 	TrueTypeCollection,
 } from '@pdf-lab/fontkit';
 import { findFontkitTestFont } from '../util.js';
@@ -12,7 +12,7 @@ for (const filename of filenames) {
 	const fullName = findFontkitTestFont(filename);
 	const bytes = fs.readFileSync(fullName);
 
-	const collection: SFNTFontCollection = filename.match(/\.dfont$/)
+	const collection: FontCollection = filename.match(/\.dfont$/)
 		? new DFont(bytes)
 		: new TrueTypeCollection(bytes);
 

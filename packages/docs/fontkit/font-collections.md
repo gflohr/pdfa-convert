@@ -44,6 +44,6 @@ system's "Resource Fork" and into the standard data fork.
 `@pdf-lab/fontkit` abstracts away these underlying structural differences
 completely. Whether you open a modern cross-platform `.ttc` or a legacy Apple
 `.dfont`, the engine parses the structural file tables/resource maps into a
-[unified collection API](/fontkit/api/interfaces/SFNTFontCollection), letting you
+[unified collection API](/fontkit/api/interfaces/FontCollection), letting you
 query, list, and extract the individual nested font faces using identical
 methods.

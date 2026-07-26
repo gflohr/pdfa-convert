@@ -43,7 +43,7 @@ an object that has something to do with fonts.
 This usage is still supported for compatibility reasons but it is considered
 deprecated.
 
-## What Really Happens!
+## What Really Happens
 
 The library checks the first couple of bytes of the input and tries to
 determine the file format from this. Depending on these bytes, it returns one
@@ -55,10 +55,10 @@ of these objects:
 - a [TrueType font collection](/fontkit/api/classes/TrueTypeCollection)
 - a [legacy Apple data fork font collection/container](/fontkit/api/classes/DFont)
 
-A [TrueType](/fontkit/api/classes/TrueTypeCollection),
+A [TrueType](/fontkit/api/classes/TrueTypeFont),
 [WOFF](/fontkit/api/classes/WOFFFont), and
 [WOFF2](/fontkit/api/classes/WOFFFont) font all implement the
-[SFNTFont](/fontkit/api/interfaces/SFNTFont) interface, and in fact, WOFF and
+[Font](/fontkit/api/interfaces/Font) interface, and in fact, WOFF and
 WOFF2 fonts are just subclasses of a TrueType font.
 
 On the other hand, a [TrueType font
@@ -66,11 +66,15 @@ collection](/fontkit/api/classes/TrueTypeCollection) or a
 [legacy Apple data fork font collection/container](/fontkit/api/classes/DFont)
 are actually containers for multiple font faces, which support a totally
 different interface
-[SFNTFontCollection](/fontkit/api/interfaces/SFNTFontCollection). If you pass
+[FontCollection](/fontkit/api/interfaces/FontCollection). If you pass
 data for these formats to
-[`fontkit.create()`](/fontkit/api/variables/fontkit#create),
-you have to pass the PostScript name of the desired font as a second argument
-in order to get back an [SFNTFont](/fontkit/api/interfaces/SFNTFont):
+[`fontkit.create()`](/fontkit/api/variables/fontkit#create), and do not
+pass a second argument, then the
+[FontCollection](/fontkit/api/interfaces/FontCollection) object is returned,
+and that has an API that differs completely from that of a
+[TrueTypeFont](/fontkit/api/classes/TrueTypeFont) font. That means, you have to
+pass the PostScript name of the desired font as a second argument in order to
+get back a [TrueTypeFont](/fontkit/api/classes/TrueTypeFont):
 
 :::tabs key:language variant:code
 
@@ -118,18 +122,57 @@ you have to know which of the contained fonts you want to load. And in order
 to do so, you have to know the `postscriptName` property of that particular
 font.
 
-It could be argued that the probing approach works well for single-font
-files. Decoding a regular TrueType `.ttf` file, or a `.woff` or
-`.woff2` does not make a difference. They are all decoded into the same
-internal structure. On the other hand, these files serve very different
-purposes. The WOFF/WOFF2 font format is a web font format, whereas your
-operating system will only ship with `.ttf` (or `.otf`) font files.
-
 It all boils down to "know your data". And because parsing font data from
 unknown or untrusted sources implies a considerable security risk (see
-[Security](/fontkit/introduction/security)), it is considered better to use the specialised
-constructors for [TrueType](/fontkit/api/classes/TrueTypeCollection),
+[Security](/fontkit/introduction/security)), it is considered better, to use
+the specialised constructors for
+[TrueTypeFont](/fontkit/api/classes/TrueTypeFont),
 [WOFF](/fontkit/api/classes/WOFFFont), or
 [WOFF2](/fontkit/api/classes/WOFFFont) fonts, and for the container formats
 [`TrueTypeCollection`](/fontkit/api/classes/TrueTypeCollection) and
 [`DFont`](/fontkit/api/classes/DFont).
+
+## Using the legacy API
+
+A typical usage looks like this:
+
+```TypeScript
+import * as fs from 'node:fs';
+import { fontkit } from '@pdf-lab/fontkit';
+
+if (process.argv.length < 3) {
+	console.error(`Usage: ${process.argv[1]} FONT_OR_COLLECTION`);
+	process.exit(1);
+}
+
+const bytes = fs.readFileSync(process.argv[2]!);
+
+try {
+	const something = fontkit.create(bytes);
+	if (!something) {
+		console.error(`The font or font collection has no variation with the name '${process.argv[3]}'!`);
+	} else if (something.type === 'TTC' || something.type === 'DFont') {
+		console.log('File contains a font collection.');
+	} else if (process.argv[3]?.length) {
+		console.log('Single font file.');
+	}
+} catch {
+	console.error('Unsupported font format!');
+}
+```
+
+That makes more sense, if you look into how the `create()` method is
+implemented:
+
+It first tries to identify the file format, from the first couple of bytes.
+If that does not yield a positive result, an exception is thrown.
+
+Otherwise, the currently selected object is either a 
+[`Font`](/fontkit/api/interfaces/Font) or a
+[`FontCollection`](/fontkit/api/interfaces/FontCollection). The code then checks
+whether an additional argument was given. If it was then the method
+`getFont()` is called. That method is defined for both types. For a
+collection, it returns the specified font if it exists. For a single font,
+it returns a font variation if it exists.
+
+

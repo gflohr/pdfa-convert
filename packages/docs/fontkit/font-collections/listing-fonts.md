@@ -11,12 +11,12 @@ import * as fs from 'node:fs';
 import {
 	DFont,
 	TrueTypeCollection,
-	type SFNTFontCollection,
+	type FontCollection,
 } from '@pdf-lab/fontkit';
 
 const ttcFilename = 'NotoSans.ttc';
 const ttcBytes = fs.readFileSync(ttcFilename);
-const ttc: SFNTFontCollection = const new TrueTypeCollection(ttcBytes);
+const ttc: FontCollection = const new TrueTypeCollection(ttcBytes);
 console.log(`Font collection '${ttcFilename}':`);
 for (const font of ttc) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);
@@ -24,7 +24,7 @@ for (const font of ttc) {
 
 const dfontFilename = 'NotoSans.dfont';
 const dfontBytes = fs.readFileSync(dfontFilename);
-const dfont: SFNTFontCollection = const new DFont(dfontBytes);
+const dfont: FontCollection = const new DFont(dfontBytes);
 console.log(`Font collection '${dfontFilename}':`);
 for (const font of ttc) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);

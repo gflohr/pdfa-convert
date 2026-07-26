@@ -78,7 +78,7 @@ export const fontkit = {
 	/**
 	 * Create an instance of a font or a font collection.
 	 *
-	 * For a {@link SFNTFontCollection}, you may specify the
+	 * For a {@link FontCollection}, you may specify the
 	 * PostScript name of one of the fonts contained in the collection.
 	 * Otherwise, you get the collection itself. You can then get the list
 	 * of included fonts with the method `getFonts`.

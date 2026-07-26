@@ -119,19 +119,22 @@ export interface TrueTypeFont extends Font, FontTableField {}
 /**
  * This is the base class for all SFNT-based font formats in fontkit.
  * It supports TrueType, and PostScript glyphs, and several color glyph formats.
- *
- * It is functionally identical to a {@link TrueTypeFont} but lacks the
- * discriminating `type` property.
- *
- * @see {@link SFNTFont}
- * @see {@link TrueTypeFont#type}
- * @see {@link WOFFFont#type}
- * @see {@link WOFF2Font#type}
  */
 export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	implements Font<TDirectory>
 {
-	/** internal */
+	/**
+	 * Identifier for TrueType fonts. Always 'TTF'.
+	 */
+	public static type = 'TTF';
+
+	/**
+	 * Discriminating property. Has the same value as the static `type`
+	 * property.
+	 */
+	public readonly type: string = TrueTypeFont.type;
+
+	/** @internal */
 	public stream: r.DecodeStream;
 	private variationCoords: number[] | null;
 	private directoryPos: number;

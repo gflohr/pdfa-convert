@@ -5,29 +5,31 @@ import { woffDirectoryStruct } from './tables/woff-directory.js';
 import { TrueTypeFont } from './true-type-font.js';
 import { asciiDecoder } from './utils.js';
 
-/** @internal */
-export interface WOFFFont {
-	readonly type: 'WOFF';
-}
-
 /**
  * Parses and processes Web Open Font Format (WOFF 1.0) files.
  *
  * When instantiated, a `WOFFFont` is uncompressed and decoded on the fly and
  * after that functionally identical to a {@link TrueTypeFont}.
- *
- * Note that the `WOFFFont` class does not extend the class
- * {@link TrueTypeFont} but the common abstract base class
- * {@link SFNTBaseClass}.
  */
-// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
 export class WOFFFont extends TrueTypeFont<WOFFDirectory> {
 	/**
-	 * Discriminating property.
-	 *
-	 * @see {@link SFNTFont}
+	 * Identifier for WOFF fonts.
 	 */
-	public readonly type: 'WOFF' = 'WOFF';
+	public static type = 'WOFF';
+
+	/**
+	 * Discriminating property. Has the same value as the static `type`
+	 * property.
+	 */
+	public readonly type: string = WOFFFont.type;
+
+	constructor(
+		streamOrBuffer: Uint8Array | r.DecodeStream,
+		variationCoords: number[] | null = null,
+	) {
+		super(streamOrBuffer, variationCoords);
+		this.type = 'WOFF';
+	}
 
 	static probe(buffer: Uint8Array) {
 		return asciiDecoder.decode(buffer.slice(0, 4)) === 'wOFF';

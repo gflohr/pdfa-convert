@@ -1,9 +1,11 @@
 import type { TrueTypeFont } from './true-type-font';
 
 /**
- * A file container for multiple {@link SFNTFont} programs.
+ * A file container for multiple {@link TrueTypeFont} programs.
  */
 export interface FontCollection {
+	readonly type: 'TTC' | 'DFont';
+
 	/**
 	 * A lazily loaded array of fonts contained in the collection.
 	 */

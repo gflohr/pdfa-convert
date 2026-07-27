@@ -27,13 +27,18 @@ export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
 	/**
 	 * Identifier for WOFF2 fonts. Always 'WOFF2'.
 	 */
-	public static type = 'WOFF2';
+	public static objType = 'WOFF2';
 
 	/**
 	 * Discriminating property. Has the same value as the static `type`
 	 * property.
 	 */
-	public readonly type: string = WOFF2Font.type;
+	public readonly objType: string = WOFF2Font.objType;
+
+	/**
+	 * @deprecated Use WOFF2Font#objType instead!
+	 */
+	public readonly type: string = WOFF2Font.objType;
 
 	private dataPos?: number;
 	// Do NOT initialise this inline (e.g., `= false`).
@@ -53,6 +58,8 @@ export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
 		super(streamOrBuffer, variationCoords);
 		this.decompress();
 		this.decompressed = true;
+
+		this.objType = this.type = 'WOFF2';
 	}
 
 	protected decodeDirectory(): WOFF2Directory {

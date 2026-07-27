@@ -15,20 +15,25 @@ export class WOFFFont extends TrueTypeFont<WOFFDirectory> {
 	/**
 	 * Identifier for WOFF fonts.
 	 */
-	public static type = 'WOFF';
+	public static objType: 'WOFF' = 'WOFF';
 
 	/**
 	 * Discriminating property. Has the same value as the static `type`
 	 * property.
 	 */
-	public readonly type: string = WOFFFont.type;
+	public readonly objType: string = WOFFFont.objType;
+
+	/**
+	 * @deprecated Use @{link WOFFFont#objType} instead!
+	 */
+	public readonly type: string = WOFFFont.objType;
 
 	constructor(
 		streamOrBuffer: Uint8Array | r.DecodeStream,
 		variationCoords: number[] | null = null,
 	) {
 		super(streamOrBuffer, variationCoords);
-		this.type = 'WOFF';
+		this.objType = this.type = WOFFFont.objType;
 	}
 
 	static probe(buffer: Uint8Array) {

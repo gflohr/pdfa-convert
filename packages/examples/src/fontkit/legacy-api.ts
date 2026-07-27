@@ -12,7 +12,7 @@ try {
 	const something = fontkit.create(bytes, process.argv[3]);
 	if (!something) {
 		console.error(`The font or font collection has no variation with the name '${process.argv[3]}'!`);
-	} else if (something.type === 'TTC' || something.type === 'DFont') {
+	} else if (something.objType === 'TTC' || something.objType === 'DFont') {
 		console.log('File contains a font collection.');
 	} else if (process.argv[3]?.length) {
 		console.log('Font variation or font from collection.');

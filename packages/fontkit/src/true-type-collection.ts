@@ -44,11 +44,25 @@ const TTCHeader = new r.VersionedStruct<TTCTable.Header>(
 );
 
 export interface TrueTypeCollection extends FontCollection {
+	/**
+	 * Identifier for TrueTypeCollection objects.
+	 */
+	readonly objType: 'TTC';
+
+	/**
+	 * @deprecated Use {@link TrueTypeCollection#objType} instead!
+	 */
 	readonly type: 'TTC';
 }
 
 // biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
 export class TrueTypeCollection implements FontCollection {
+	/**
+	 * Identifier for TrueType collection objects, always 'TTC'.
+	 */
+	public static readonly objType: 'TTC' = 'TTC';
+
+	public readonly objType: 'TTC' = 'TTC';
 	public readonly type: 'TTC' = 'TTC';
 
 	private stream: r.DecodeStream;

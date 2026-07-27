@@ -126,13 +126,18 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	/**
 	 * Identifier for TrueType fonts. Always 'TTF'.
 	 */
-	public static type = 'TTF';
+	public static readonly objType: string = 'TTF';
 
 	/**
-	 * Discriminating property. Has the same value as the static `type`
-	 * property.
+	 * Discriminating property. Has the same value as the static
+	 * {@link TrueTypeFont.objType} property.
 	 */
-	public readonly type: string = TrueTypeFont.type;
+	public readonly objType: string = TrueTypeFont.objType;
+
+	/**
+	 * @deprecated Use {@link TrueTypeFont#objType}` instead!
+	 */
+	public readonly type: string = TrueTypeFont.objType;
 
 	/** @internal */
 	public stream: r.DecodeStream;

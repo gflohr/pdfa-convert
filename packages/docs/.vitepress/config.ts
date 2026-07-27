@@ -60,14 +60,24 @@ export default defineConfig({
 								],
 							},
 							{
-								text: 'Differences to Other Fontkit Versions',
-								link: '/fontkit/differences-to-other-fontkit-versions',
-							},
-							{
 								text: 'Legacy API',
 								link: '/fontkit/legacy-api',
 							},
 						],
+					},
+					{
+						text: 'Tables',
+						link: '/fontkit/tables',
+						items: [
+							{
+								text: 'Naming Conventions',
+								link: '/fontkit/tables/naming-conventions'
+							},
+						],
+					},
+					{
+						text: 'Differences to Other Fontkit Versions',
+						link: '/fontkit/differences-to-other-fontkit-versions',
 					},
 					{
 						text: 'API',

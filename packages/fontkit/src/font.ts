@@ -64,7 +64,8 @@ import type { TrueTypeSubsetFont } from './true-type-subset-font.js';
  * {@link OpenTypeFont}, which guarantees the presence of the 8 core tables,
  * and 0-2 outline tables.
  *
- * @deprecated This interface is unnecessary. Use {@link TrueTypeFont} as a type instead!
+ * This interface is mostly useless for application programming. You can
+ * normally just use {@link TrueTypeFont} as a type instead!
  */
 export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	/**

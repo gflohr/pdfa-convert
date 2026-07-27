@@ -60,6 +60,10 @@ export default defineConfig({
 								],
 							},
 							{
+								text: 'Differences to Other Fontkit Versions',
+								link: '/fontkit/differences-to-other-fontkit-versions',
+							},
+							{
 								text: 'Legacy API',
 								link: '/fontkit/legacy-api',
 							},

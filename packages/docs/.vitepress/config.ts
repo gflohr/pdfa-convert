@@ -50,6 +50,22 @@ export default defineConfig({
 						text: 'Usage/Examples',
 						items: [
 							{
+								text: 'Inspecting & Querying Metrics',
+								link: '/fontkit/inspecting-and-querying-metrics',
+							},
+							{
+								text: 'Text Layout & Glyph Run Measurement',
+								link: '/fontkit/text-layout-and-glyph-run-measurement',
+							},
+							{
+								text: 'Glyph Outline & Path Operations',
+								link: '/fontkit/glyph-outlines-and-path-operations',
+							},
+							{
+								text: 'Subsetting',
+								link: '/fontkit/subsetting',
+							},
+							{
 								text: 'Font Collections',
 								link: '/fontkit/font-collections',
 							},

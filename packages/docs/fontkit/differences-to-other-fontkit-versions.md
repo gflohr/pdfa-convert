@@ -35,7 +35,7 @@ The most important differences are:
   environments and ESM/CJS dual-package resolution.
 * **Ported Bugfixes:** All known bugfixes from the other fontkit versions have
   been ported to `@pdf-lab/fontkit`.
-* **Actively Maintained:** This fork will receive regular dependency updated.
+* **Actively Maintained:** This fork will receive regular dependency updates.
   Bugfixes and other pull requests are welcome!
 * **Flexible Subset Streaming:** You can use the new and simple
   [`encode()`](./api/classes/Subset.html#encode) or the legacy
@@ -58,4 +58,4 @@ An effort has been made to maintain maximum compatibility with upstream
 * The CommonJS module does not have a default export: You have to change
   `const fontkit = require('@pdf-lab/fontkit')` to `const { fontkit } =
   require('@df-lab/fontkit')`.
-* The discriminating property `objType` is preferred over `type`.
+* The discriminating property `objType` is preferred over the deprecated `type`.

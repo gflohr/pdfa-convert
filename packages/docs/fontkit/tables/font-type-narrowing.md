@@ -89,6 +89,9 @@ You can try that out in your IDE by hovering the mouse over the variable name
 [`OpenTypeFont`](../api/type-aliases/OpenTypeFont). Inside, it has the type
 [`OpenTypeTrueTypeFont`](../api/interfaces/OpenTypeTrueTypeFont).
 
+See [Versioned Structures](./versioned-structures#details-and-caveats) for
+more details about the feature.
+
 ### OpenType Fonts with PostScript Outlines
 
 You can detect an OpenTypeFont with PostScript outlines in the same fashion.

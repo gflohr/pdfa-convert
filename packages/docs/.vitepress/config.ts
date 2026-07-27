@@ -52,12 +52,6 @@ export default defineConfig({
 							{
 								text: 'Font Collections',
 								link: '/fontkit/font-collections',
-								items: [
-									{
-										text: 'Listing Fonts',
-										link: '/fontkit/font-collections/listing-fonts'
-									},
-								],
 							},
 							{
 								text: 'Legacy API',
@@ -76,7 +70,11 @@ export default defineConfig({
 							{
 								text: 'Font Type Narrowing',
 								link: '/fontkit/tables/font-type-narrowing',
-							}
+							},
+							{
+								text: 'Versioned Structures',
+								link: '/fontkit/tables/versioned-structures',
+							},
 						],
 					},
 					{

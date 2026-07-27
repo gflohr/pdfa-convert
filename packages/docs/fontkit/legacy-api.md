@@ -28,12 +28,16 @@ console.log(font.fullName);
 == CommonJS
 ```JavaScript
 const fs = require('node:fs');
-const fontkit = require('@pdf-lab/fontkit');
+const { fontkit } = require('@pdf-lab/fontkit');
 
 const fontBytes = fs.readFileSync('Helvetica.ttf');
 const font = fontkit.create(fontBytes);
 console.log(font.fullName);
 ```
+
+**Important!** You cannot use the default import with CommonJS (`const
+fontkit = require('@pdf-lab/fontkit')`). It is not possible to offer
+a default export and named exports simultaneously with CommonJS.
 
 :::
 
@@ -136,6 +140,9 @@ the specialised constructors for
 
 A typical usage looks like this:
 
+:::tabs key:language variant:code
+
+== TypeScript
 ```TypeScript
 import * as fs from 'node:fs';
 import { fontkit } from '@pdf-lab/fontkit';
@@ -148,18 +155,78 @@ if (process.argv.length < 3) {
 const bytes = fs.readFileSync(process.argv[2]!);
 
 try {
-	const something = fontkit.create(bytes);
+	const something = fontkit.create(bytes, process.argv[3]);
 	if (!something) {
 		console.error(`The font or font collection has no variation with the name '${process.argv[3]}'!`);
 	} else if (something.type === 'TTC' || something.type === 'DFont') {
 		console.log('File contains a font collection.');
 	} else if (process.argv[3]?.length) {
+		console.log('Font variation or font from collection.');
+	} else {
 		console.log('Single font file.');
 	}
-} catch {
-	console.error('Unsupported font format!');
+} catch(e) {
+	console.error(`Not a font file or font collection (${e})!`);
 }
 ```
+
+== ES6
+```JavaScript
+import * as fs from 'node:fs';
+import { fontkit } from '@pdf-lab/fontkit';
+
+if (process.argv.length < 3) {
+	console.error(`Usage: ${process.argv[1]} FONT_OR_COLLECTION`);
+	process.exit(1);
+}
+
+const bytes = fs.readFileSync(process.argv[2]!);
+
+try {
+	const something = fontkit.create(bytes, process.argv[3]);
+	if (!something) {
+		console.error(`The font or font collection has no variation with the name '${process.argv[3]}'!`);
+	} else if (something.type === 'TTC' || something.type === 'DFont') {
+		console.log('File contains a font collection.');
+	} else if (process.argv[3]?.length) {
+		console.log('Font variation or font from collection.');
+	} else {
+		console.log('Single font file.');
+	}
+} catch(e) {
+	console.error(`Not a font file or font collection (${e})!`);
+}
+```
+
+== CommonJS
+```JavaScript
+const fs = require('node:fs');
+const { fontkit } = require('@pdf-lab/fontkit');
+
+if (process.argv.length < 3) {
+	console.error(`Usage: ${process.argv[1]} FONT_OR_COLLECTION`);
+	process.exit(1);
+}
+
+const bytes = fs.readFileSync(process.argv[2]!);
+
+try {
+	const something = fontkit.create(bytes, process.argv[3]);
+	if (!something) {
+		console.error(`The font or font collection has no variation with the name '${process.argv[3]}'!`);
+	} else if (something.type === 'TTC' || something.type === 'DFont') {
+		console.log('File contains a font collection.');
+	} else if (process.argv[3]?.length) {
+		console.log('Font variation or font from collection.');
+	} else {
+		console.log('Single font file.');
+	}
+} catch(e) {
+	console.error(`Not a font file or font collection (${e})!`);
+}
+```
+
+::: tabs
 
 That makes more sense, if you look into how the `create()` method is
 implemented:
@@ -175,4 +242,5 @@ whether an additional argument was given. If it was then the method
 collection, it returns the specified font if it exists. For a single font,
 it returns a font variation if it exists.
 
-
+Under normal circumstance, you probably do not want all that magic to happen.
+Instead, you should check your input data, and then call the right constructor.

@@ -17,7 +17,9 @@ Because @pdf-lab/fontkit may support more tables in the future, all property
 names with four characters are considered reserved. This is the reason, why
 the [`type`](../api/classes/TrueTypeFont#properties) property is deprecated
 in favour of the [`objType`](../api/classes/TrueTypeFont#properties)
-property.
+property, and the [`bbox`](../api/classes/TrueTypeFont#properties) property is
+deprecated in favour of the
+[`boundingBox`](../api/classes/TrueTypeFont#properties) property.
 
 In order to save you from typing `font['CFF ']`, an alias `font.cff` exists.
 

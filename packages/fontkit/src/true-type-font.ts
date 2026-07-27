@@ -155,7 +155,7 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 
 	// Those variables are lazily instantiated by their respctive getters, and
 	// then frozen.
-	private _bbox!: Readonly<BoundingBox>;
+	private _boundingBox!: Readonly<BoundingBox>;
 	private _characterSet!: number[];
 	private _cmapProcessor!: CmapProcessor;
 	private _layoutEngine!: LayoutEngine;
@@ -496,18 +496,25 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 		return this.head.unitsPerEm;
 	}
 
-	public get bbox(): Readonly<BoundingBox> | undefined {
-		if (typeof this._bbox === 'undefined') {
+	public get boundingBox(): Readonly<BoundingBox> | undefined {
+		if (typeof this._boundingBox === 'undefined') {
 			if (!this.head) {
 				return undefined;
 			}
 			const head = this.head;
-			this._bbox = Object.freeze(
+			this._boundingBox = Object.freeze(
 				new BoundingBox(head.xMin, head.yMin, head.xMax, head.yMax),
 			);
 		}
 
-		return this._bbox;
+		return this._boundingBox;
+	}
+
+	/**
+	 * @deprecated Use `boundingBox` instead!
+	 */
+	public get bbox(): Readonly<BoundingBox> | undefined {
+		return this.boundingBox;
 	}
 
 	private get cmapProcessor(): CmapProcessor | null {

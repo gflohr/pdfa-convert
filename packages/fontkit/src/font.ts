@@ -165,6 +165,7 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	 * variable outline alignment.
 	 */
 	prep: prepTable.prep | null;
+
 	/**
 	 * Control Value Table. Establishes pixel values used by instructions to
 	 * control raster adjustments.
@@ -454,6 +455,11 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 
 	/**
 	 * The font’s bounding box, i.e. the box that encloses all glyphs in the font.
+	 */
+	get boundingBox(): Readonly<BoundingBox> | undefined;
+
+	/**
+	 * @deprecated Use `boundingBox` instead!
 	 */
 	get bbox(): Readonly<BoundingBox> | undefined;
 

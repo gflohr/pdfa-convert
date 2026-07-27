@@ -51,7 +51,10 @@ An effort has been made to maintain maximum compatibility with upstream
   always have to check whether it is actually present. The hand-crafted
   interfaces for other `fontkit` versions, suggest that some tables like
   `CFF `, `OS/2`, `head`, `hhea`, or `post` are always present, which is by no
-  means guaranteed by the library. FIXME! Document upcycling fonts!
+  means guaranteed by the library. But the library contains methods that
+  elegantly validate font features and cast at the same time so that you
+  can safely access certain subsets of tables, see
+  [Font Type Narrowing](./tables/font-type-narrowing)!
 * The CommonJS module does not have a default export: You have to change
   `const fontkit = require('@pdf-lab/fontkit')` to `const { fontkit } =
   require('@df-lab/fontkit')`.

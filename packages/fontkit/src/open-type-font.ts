@@ -176,13 +176,16 @@ export type OpenTypePostScriptFont = OpenTypeCFF1Font | OpenTypeCFF2Font;
  * conformant OpenType font. You will usually get an object implementing
  * the interface with {@link Font.asOpenTypeFont}.
  *
- * You can discriminate the different types in your code like this:
+ * Fonts that implement this interface, have all 8 core OpenType tables
+ * (@{link requiredOpenTypeTables}) present and successfully decoded.
+ *
+ * You can discriminate the different sub types in your code like this:
  *
  * ```TypeScript
  * const openTypeFont = font.asOpenTypeFont();
  *
  * if (!openTypeFont) {
- * 	// This font is a legacy font without the compete set of OpenType core
+ * 	// This font is a legacy font without the complete set of OpenType core
  * 	// tables.
  * } else if (openTypeFont.outlines === 'TrueType') {
  * 	// openTypeFont is now an OpenTypeTrueTypeFont in the scope of this branch.

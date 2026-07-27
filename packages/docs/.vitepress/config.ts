@@ -73,6 +73,10 @@ export default defineConfig({
 								text: 'Naming Conventions',
 								link: '/fontkit/tables/naming-conventions'
 							},
+							{
+								text: 'Font Type Narrowing',
+								link: '/fontkit/tables/font-type-narrowing',
+							}
 						],
 					},
 					{

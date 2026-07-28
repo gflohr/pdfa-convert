@@ -51,27 +51,27 @@ export default defineConfig({
 						items: [
 							{
 								text: 'Inspecting & Querying Metrics',
-								link: '/fontkit/inspecting-and-querying-metrics',
+								link: '/fontkit/examples/inspecting-and-querying-metrics',
 							},
 							{
 								text: 'Text Layout & Glyph Run Measurement',
-								link: '/fontkit/text-layout-and-glyph-run-measurement',
+								link: '/fontkit/examples/text-layout-and-glyph-run-measurement',
 							},
 							{
 								text: 'Glyph Outline & Path Operations',
-								link: '/fontkit/glyph-outlines-and-path-operations',
+								link: '/fontkit/examples/glyph-outlines-and-path-operations',
 							},
 							{
 								text: 'Subsetting',
-								link: '/fontkit/subsetting',
+								link: '/fontkit/examples/subsetting',
 							},
 							{
 								text: 'Font Collections',
-								link: '/fontkit/font-collections',
+								link: '/fontkit/examples/font-collections',
 							},
 							{
 								text: 'Legacy API',
-								link: '/fontkit/legacy-api',
+								link: '/fontkit/examples/legacy-api',
 							},
 						],
 					},

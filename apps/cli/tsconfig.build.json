@@ -4,7 +4,7 @@
 		"sourceMap": true,
 		"outDir": "dist",
 		"paths": {
-			"pdf-lab-core": ["../../packages/pdf-lab-core/dist"]
+			"pdfa-lab-core": ["../../packages/pdfa-lab-core/dist"]
 		}
 	},
 	"include": ["src"],

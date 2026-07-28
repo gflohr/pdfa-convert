@@ -1,6 +1,6 @@
 import { PDFRef } from '@cantoo/pdf-lib';
 import * as yaml from 'js-yaml';
-import { type FontInfo, PDFLab, type TextBlock } from 'pdf-lab-core';
+import { type FontInfo, PDFALab, type TextBlock } from 'pdfa-lab-core';
 import {
 	afterEach,
 	beforeEach,
@@ -19,11 +19,11 @@ vi.mock('../util/optspec.js');
 vi.mock('./load-input.js', () => ({
 	loadInput: vi.fn().mockResolvedValue(new Uint8Array()),
 }));
-vi.mock('pdf-lab-core', async (importActual) => {
-	const actual = await importActual<typeof import('pdf-lab-core')>();
+vi.mock('pdfa-lab-core', async (importActual) => {
+	const actual = await importActual<typeof import('pdfa-lab-core')>();
 	return {
 		...actual,
-		PDFLab: {
+		PDFALab: {
 			from: vi.fn(),
 		},
 	};
@@ -66,7 +66,7 @@ describe('Text Command', () => {
 
 	it('run() should call extract and return 0 on success', async () => {
 		const extractTextMock = vi.fn().mockReturnValue([]);
-		(PDFLab.from as Mock).mockResolvedValue({
+		(PDFALab.from as Mock).mockResolvedValue({
 			extractText: extractTextMock,
 		});
 
@@ -117,7 +117,7 @@ describe('Text Command', () => {
 
 		it('should output text only', async () => {
 			const extractTextMock = vi.fn().mockReturnValue(textBlocks);
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				extractText: extractTextMock,
 			});
 
@@ -135,7 +135,7 @@ describe('Text Command', () => {
 
 		it('should output yaml', async () => {
 			const extractTextMock = vi.fn().mockReturnValue(textBlocks);
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				extractText: extractTextMock,
 			});
 
@@ -153,7 +153,7 @@ describe('Text Command', () => {
 
 		it('should output json', async () => {
 			const extractTextMock = vi.fn().mockReturnValue(textBlocks);
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				extractText: extractTextMock,
 			});
 

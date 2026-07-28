@@ -1,7 +1,7 @@
 import { Textdomain } from '@esgettext/runtime';
 import type { OptSpec } from './util/optspec.js';
 
-const gtx = Textdomain.getInstance('pdf-lab');
+const gtx = Textdomain.getInstance('pdfa-lab');
 
 export const defaultOptions: {
 	input: OptSpec;

@@ -1,17 +1,17 @@
 [![licence](https://img.shields.io/badge/licence-WTFPL-blue)](http://www.wtfpl.net/)
-[![price](https://img.shields.io/badge/price-FREE-green)](https://github.com/gflohr/pdf-lab/blob/main/LICENSE)
-[![coverage](https://img.shields.io/coverallsCoverage/github/gflohr/pdf-lab?branch=main)](https://coveralls.io/github/gflohr/pdf-lab?branch=main)
+[![price](https://img.shields.io/badge/price-FREE-green)](https://github.com/gflohr/pdfa-lab/blob/main/LICENSE)
+[![coverage](https://img.shields.io/coverallsCoverage/github/gflohr/pdfa-lab?branch=main)](https://coveralls.io/github/gflohr/pdfa-lab?branch=main)
 [![stand with](https://img.shields.io/badge/stand%20with-Ukraine🇺🇦-ffc107)](https://www.standwithukraineeurope.com/en/)
 <!-- Disabled until package is documented and published. -->
-<!--[![downloads](https://img.shields.io/npm/dw/%40pdf-lab%2Fcore)](https://www.npmjs.com/package/@pdf-lab/core)-->
-<!--[![documentation](https://img.shields.io/badge/documentation-read-green)](https://gflohr.github.io/pdf-lab)-->
+<!--[![downloads](https://img.shields.io/npm/dw/%40pdfa-lab%2Fcore)](https://www.npmjs.com/package/@pdfa-lab/core)-->
+<!--[![documentation](https://img.shields.io/badge/documentation-read-green)](https://gflohr.github.io/pdfa-lab)-->
 
-# PDF-Lab<!--omit-from-toc-->
+# PDFA-lab<!--omit-from-toc-->
 
 This project is currently a work in progress. It is a supplement
 to the Cantoo fork of [pdf-lib](https://github.com/cantoo-scribe/pdf-lib).
 
-- [PDF-Lab](#pdf-lab)
+- [PDFA-lab](#pdfa-lab)
 	- [Description](#description)
 	- [Current State](#current-state)
 		- [Text Extraction](#text-extraction)
@@ -57,7 +57,7 @@ fork [`@cantoo/pdf-lib`](https://www.npmjs.com/package/@cantoo/pdf-lib).
 This project contains a drop-in replacement for `@pdf-lib/fontkit`, see its
 [README](./packages/fontkit/README.md). The replacement aims at fixing the
 known bugs in the existing implementation. It will probably be available as
-`@pdf-lab/fontkit`.
+`@pdfa-lab/fontkit`.
 
 ## Limitations and Caveats
 

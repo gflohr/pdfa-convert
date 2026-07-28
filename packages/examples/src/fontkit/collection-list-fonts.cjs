@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { DFont, TrueTypeCollection } = require('@pdf-lab/fontkit');
+const { DFont, TrueTypeCollection } = require('@pdfa-lab/fontkit');
 
 const filenames = ['NotoSans/NotoSans.ttc', 'NotoSans/NotoSans.dfont'];
 

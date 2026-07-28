@@ -1,7 +1,7 @@
 # Agent Skills
 
 This directory contains structured **skills** used by agents to understand and
-work with the `pdf-lab` project.
+work with the `pdfa-lab` project.
 
 The goal of these skills is to provide **concise, task-oriented documentation**
 that enables agents to:

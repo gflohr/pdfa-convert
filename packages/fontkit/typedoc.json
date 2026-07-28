@@ -9,7 +9,7 @@
 	"readme": "none",
 	"parametersFormat": "table",
 	"classPropertiesFormat": "table",
-	"sourceLinkTemplate": "https://github.com/gflohr/pdf-lab/blob/main/{path}#L{line}",
+	"sourceLinkTemplate": "https://github.com/gflohr/pdfa-lab/blob/main/{path}#L{line}",
 	"validation": {
 		"notExported": false
 	}

@@ -3,11 +3,11 @@
 layout: home
 
 hero:
-  name: "@pdf-lab"
+  name: "@pdfa-lab"
   text: "High-quality PDF tools for Node and the Browser"
   actions:
     - theme: alt
-      text: '@pdf-lab/fontkit'
+      text: '@pdfa-lab/fontkit'
       link: ./fontkit/introduction/what-is-fontkit
 
 features:

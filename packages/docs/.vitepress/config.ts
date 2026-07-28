@@ -4,8 +4,8 @@ import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-	title: "@pdf-lab",
-	base: "/pdf-lab/",
+	title: "@pdfa-lab",
+	base: "/pdfa-lab/",
 	description: "High-quality PDF tools for Node and the Browser",
 	// FIXME! This seems to be a bug in the TypeDoc Markdown plug-in.
 	ignoreDeadLinks: true,
@@ -22,7 +22,7 @@ export default defineConfig({
 
 		sidebar: [
 			{
-				text: '@pdf-lab/fontkit',
+				text: '@pdfa-lab/fontkit',
 				link: '/fontkit',
 				items: [
 					{
@@ -106,7 +106,7 @@ export default defineConfig({
 		],
 
 		socialLinks: [
-			{ icon: 'github', link: 'https://github.com/gflohr/pdf-lab' }
+			{ icon: 'github', link: 'https://github.com/gflohr/pdfa-lab' }
 		]
 	}
 });

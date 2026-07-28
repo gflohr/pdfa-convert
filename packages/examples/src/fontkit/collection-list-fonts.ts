@@ -3,7 +3,7 @@ import {
 	DFont,
 	type FontCollection,
 	TrueTypeCollection,
-} from '@pdf-lab/fontkit';
+} from '@pdfa-lab/fontkit';
 import { findFontkitTestFont } from '../util.js';
 
 const filenames = ['NotoSans/NotoSans.ttc', 'NotoSans/NotoSans.dfont'];

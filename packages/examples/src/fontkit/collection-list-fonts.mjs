@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { DFont, TrueTypeCollection } from '@pdf-lab/fontkit';
+import { DFont, TrueTypeCollection } from '@pdfa-lab/fontkit';
 
 const filenames = ['NotoSans/NotoSans.ttc', 'NotoSans/NotoSans.dfont'];
 

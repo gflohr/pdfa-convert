@@ -6,7 +6,7 @@ import { CMapMapper } from '../encoding/mappers/cmap-mapper.js';
 import { IdentityMapper } from '../encoding/mappers/identity-mapper.js';
 import type { FontUsage } from '../font/collect-resources.js';
 import type { FontInfo } from '../font/types.js';
-import { PDFLab } from '../pdf-lab.js';
+import { PDFALab } from '../pdfa-lab.js';
 import type { GlyphBlock } from './extract-glyphs.js';
 import * as extractGlyphModule from './extract-glyphs.js';
 import { extractText, type TextBlock } from './extract-text.js';
@@ -22,7 +22,7 @@ describe('Text Extraction', () => {
 			);
 
 			const pdfBytes = await fs.readFile(filename);
-			const pdfLab = await PDFLab.from(pdfBytes);
+			const pdfLab = await PDFALab.from(pdfBytes);
 			const fonts = pdfLab.collectFonts();
 			// biome-ignore lint/complexity/useLiteralKeys: false positive.
 			const fontResources = pdfLab['fontUsage']!;
@@ -143,7 +143,7 @@ describe('Text Extraction', () => {
 				'../../../../assets/pdfs/3-fonts-embedded.pdf',
 			);
 			const pdfBytes = await fs.readFile(filename);
-			const pdfLab = await PDFLab.from(pdfBytes);
+			const pdfLab = await PDFALab.from(pdfBytes);
 			const fonts = pdfLab.collectFonts();
 			// biome-ignore lint/complexity/useLiteralKeys: false positive.
 			const fontResources = pdfLab['fontUsage']!;
@@ -285,7 +285,7 @@ endbfchar
 				'../../../../assets/pdfs/mixed-content.pdf',
 			);
 			const pdfBytes = await fs.readFile(filename);
-			const pdfLab = await PDFLab.from(pdfBytes);
+			const pdfLab = await PDFALab.from(pdfBytes);
 			const fonts = pdfLab.collectFonts();
 			// biome-ignore lint/complexity/useLiteralKeys: false positive.
 			const fontResources = pdfLab['fontUsage']!;

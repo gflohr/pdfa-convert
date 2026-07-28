@@ -184,7 +184,7 @@ collection object can be returned by Fontkit.
 
 * [`collection.getFont(postscriptName)`](../api/interfaces/FontCollection#getfont) -
   Gets a font from the collection by its postscript name. Returns a
-  [`TrueTypeFont`](../api/classes/TrueTypeFont.md )object.
+  [`TrueTypeFont`](../api/classes/TrueTypeFont.md)object.
 * [`collection.fonts`](../api/interfaces/FontCollection#fonts) -
   This property is a lazily-loaded array of all of the fonts in the collection.
 
@@ -260,7 +260,7 @@ to functions that can be applied to render the path to a graphics context.
   path’s bounding box, i.e. the smallest rectangle that contains the entire
   path shape. This is the exact bounding box, taking into account control
   points that may be outside the visible shape.
-* [`path.cbox`](../api/classes/Path#) - This property represents the path’s
+* [`path.cbox`](../api/classes/Path#cbox) - This property represents the path’s
   control box. It is like the bounding box, but it includes all points of the
   path, including control points of bezier segments. It is much faster to
   compute than the real bounding box, but less accurate if there are control

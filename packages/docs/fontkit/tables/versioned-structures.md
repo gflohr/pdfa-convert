@@ -143,7 +143,7 @@ if (cpal) {
 
 The above code would not compile with current TypeScript versions:
 
-```
+```text
 Property 'offsetPaletteTypeArray' does not exist on type 'CPAL'.
   Property 'offsetPaletteTypeArray' does not exist on type 'CPALV0'.
 ```

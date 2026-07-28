@@ -226,7 +226,7 @@ try {
 }
 ```
 
-::: tabs
+:::
 
 That makes more sense, if you look into how the `create()` method is
 implemented:

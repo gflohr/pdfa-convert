@@ -57,5 +57,5 @@ An effort has been made to maintain maximum compatibility with upstream
   [Font Type Narrowing](./tables/font-type-narrowing)!
 * The CommonJS module does not have a default export: You have to change
   `const fontkit = require('@pdf-lab/fontkit')` to `const { fontkit } =
-  require('@df-lab/fontkit')`.
+  require('@pdf-lab/fontkit')`.
 * The discriminating property `objType` is preferred over the deprecated `type`.

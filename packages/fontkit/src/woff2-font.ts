@@ -30,7 +30,7 @@ export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
 	public static objType = 'WOFF2';
 
 	/**
-	 * Discriminating property. Has the same value as the static `type`
+	 * Discriminating property. Has the same value as the static `objType`
 	 * property.
 	 */
 	public readonly objType: string = WOFF2Font.objType;

@@ -1,4 +1,4 @@
-import type { TrueTypeFont } from './true-type-font';
+import type { TrueTypeFont } from './true-type-font.js';
 
 /**
  * A file container for multiple {@link TrueTypeFont} programs.
@@ -9,6 +9,9 @@ export interface FontCollection {
 	 */
 	readonly objType: 'TTC' | 'DFont';
 
+	/**
+	 * @deprecated Use `objType` instead!
+	 */
 	readonly type: 'TTC' | 'DFont';
 
 	/**

@@ -2,8 +2,6 @@
 
 You can load a font file like this:
 
-<!-- FIXME! Do not use the legacy API here! -->
-
 :::tabs key:language variant:code
 
 == TypeScript
@@ -29,7 +27,7 @@ const bbox = new BoundingBox(5, 3, 25, 30);
 == CommonJS
 ```JavaScript
 const fs = require('fs');
-const { TrueTypeFont } = require('@pdf-lab/fontkit');
+const { TrueTypeFont, BoundingBox } = require('@pdf-lab/fontkit');
 
 const bytes = fs.readFileSync('Helvetica.ttf');
 const font = new TrueTypeFont(bytes);

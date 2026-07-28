@@ -9,8 +9,10 @@ import { useRouter } from 'vitepress'
 const { go } = useRouter()
 
 onMounted(() => {
-	go('/pdf-lab/fontkit/introduction/what-is-fontkit.html')
+	go('/pdf-lab/fontkit/introduction/what-is-fontkit')
 })
 </script>
 
-Redirecting you to the Fontkit API documentation... If you are not redirected automatically, [click here](/fontkit/api/).
+Redirecting you to the Fontkit documentation... If you are not redirected
+automatically, [open the Fontkit
+documentation](/pdf-lab/fontkit/introduction/what-is-fontkit).

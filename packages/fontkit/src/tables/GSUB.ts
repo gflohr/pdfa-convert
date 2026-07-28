@@ -98,8 +98,8 @@ export namespace GSUBTable {
 	}
 
 	/**
-	 * Glyph Substitution Table. Replaces default layouts to process contextual
-	 * alternates and ligatures.
+	 * Glyph Substitution Table. Supplies glyph substitutions for contextual
+	 * alternates, ligatures, and script-specific rendering.
 	 */
 	export type GSUB = GSUBV1_0 | GSUBV1_1;
 }

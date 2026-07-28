@@ -2,8 +2,8 @@ import * as r from 'restructure';
 
 export namespace gvarTable {
 	/**
-	 * Glyph Variations Table. Controls structural outline distortion
-	 * transformations for variable glyphs.
+	 * Glyph Variations Table. Stores variation data describing how TrueType
+	 * glyph outlines change across the font’s variation space.
 	 */
 	export interface gvar {
 		version: number;

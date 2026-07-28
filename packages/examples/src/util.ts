@@ -2,7 +2,7 @@ import * as path from 'node:path';
 
 /**
  *
- * @param rename the font filename relative to the fontkit test/data directory.
+ * @param relname the font filename relative to the fontkit test/data directory.
  * @returns the full path name of the file.
  */
 export function findFontkitTestFont(relname: string) {

@@ -96,8 +96,9 @@ export namespace morxTable {
 	}
 
 	/**
-	 * Extended Glyph Metamorphosis Table. Powers state-machine transformations
-	 * substituting AAT items.
+	 * Extended Glyph Metamorphosis Table. Applies state-machine-based glyph
+	 * transformations, including rearrangement, substitution, ligature, and
+	 * insertion operations.
 	 */
 	export interface morx {
 		version: number;

@@ -115,7 +115,8 @@ export interface TrueTypeFont extends Font, FontTableField {}
 
 /**
  * This is the base class for all SFNT-based font formats in fontkit.
- * It supports TrueType, and PostScript glyphs, and several color glyph formats.
+ * It supports TrueType, and PostScript glyphs, and several colour glyph
+ * formats.
  */
 export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	implements Font<TDirectory>
@@ -132,7 +133,7 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	public readonly objType: string = TrueTypeFont.objType;
 
 	/**
-	 * @deprecated Use {@link TrueTypeFont#objType}` instead!
+	 * @deprecated Use {@link TrueTypeFont#objType} instead!
 	 */
 	public readonly type: string = TrueTypeFont.objType;
 
@@ -206,7 +207,7 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	 * (@see https://github.com/foliojs/restructure).
 	 *
 	 * @param streamOrBuffer binary font data
-	 * @param variationCoords Normalized design coordinates (typically ranging
+	 * @param variationCoords Normalised design coordinates (typically ranging
 	 *   from -1.0 to 1.0) used to select a specific instance within a variable
 	 *   font's design space.
 	 */

@@ -47,9 +47,9 @@ Exceptions:
 
 * `OS/2`: The namespace is [`OS2Table`](../api/@pdf-lab/namespaces/OS2Table),
   and the type is [`OS2Table.OS2`](../api/@pdf-lab/namespaces/OS2Table/type-aliases/OS2).
-* `cvt `: The namespace is [`cvtTable`](../api/@pdf-lab/namespaces/cvtTable),
+* `cvt[SPACE]`: The namespace is [`cvtTable`](../api/@pdf-lab/namespaces/cvtTable),
   and the interface is [`cvtTable.cvt`](../api/@pdf-lab/namespaces/cvtTable/interfaces/cvt).
-* `CFF /cff`: There is a namespace [`CFFTable`](../api/@pdf-lab/namespaces/CFFTable/),
+* `CFF[SPACE]/cff`: There is a namespace [`CFFTable`](../api/@pdf-lab/namespaces/CFFTable/),
   but the font property `CFF `, and its alias `cff` have the type
   [`CFF1Font`](../api/classes/CFF1Font).
 * `CFF2`: There is no namespace `CFF2Table`, and the font property has the type

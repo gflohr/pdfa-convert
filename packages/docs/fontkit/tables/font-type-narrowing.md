@@ -17,7 +17,7 @@ if (font.cmap) {
 
 // Modern JavaScript/TypeScript only: Nullish coalescing guards (optional
 // chaining):
-const familyName = this.name?.records.fullName?.en;
+const familyName = font.name?.records.fullName?.en;
 ```
 
 ## OpenType Fonts
@@ -34,7 +34,7 @@ OpenType fonts must have 8 core tables present (see
 * [`OS/2`](../api/@pdf-lab/namespaces/OS2Table/type-aliases/OS2)
 * [`post`](../api/@pdf-lab/namespaces/postTable/type-aliases/post)
 
-You can get a font object, where these tables are guaranted to be present
+You can get a font object, where these tables are guaranteed to be present
 and decodable with the
 [`asOpenTypeFont()`](../api/classes/TrueTypeFont#asopentypefont) method:
 
@@ -57,7 +57,7 @@ the method returns `null`.
 
 The type [`OpenTypeFont`](../api/type-aliases/OpenTypeFont) is a union type:
 
-```
+```TypeScript
 export type OpenTypeFont = OpenTypeTrueTypeFont | OpenTypePostscriptFont
 	| OpenTypeNoOutlinesFont;
 ```
@@ -150,7 +150,7 @@ const aatFont = font.asAATFont(); // aatFont is an `AATFont` or `null`.
 if (aatFont) {
 	 // aatFont is now an `AATFont` without a cast. The `loca`, `hmtx`, and
 	 // `morx` tables are guaranteed to exist and be decodable.
-	const locaVersion = otFont.loca.version;
+	const locaVersion = aatFont.loca.version;
 }
 ```
 
@@ -172,6 +172,6 @@ const subsetFont = font.asTrueTypeSubsetFont(); // aatFont is a `TrueTypeSubsetF
 if (subsetFont) {
 	 // `subsetFont` is now a `TrueTypeSubsetFont` without a cast. The `loca`
 	 // and `hmtx` tables are guaranteed to exist and be decodable.
-	const locaVersion = otFont.loca.version;
+	const locaVersion = subsetFont.loca.version;
 }
 ```

@@ -90,8 +90,8 @@ export namespace justTable {
 	}
 
 	/**
-	 * Justification Table. Provides layout spacing adjustments for AAT
-	 * tracking loops.
+	 * Justification Table (`just`). Provides layout rules for line justification,
+	 * glyph width deltas, and post-compensation actions in AAT typography.
 	 */
 	export interface just {
 		version: number;

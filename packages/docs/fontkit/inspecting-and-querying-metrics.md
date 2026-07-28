@@ -10,28 +10,28 @@ ratios, and structural indicators.
 == TypeScript
 ```TypeScript
 import * as fs from 'node:fs';
-import { TypeScriptFont } from '@pdf-lab/fontkit';
+import { TrueTypeFont } from '@pdf-lab/fontkit';
 
 const bytes = fs.readFileSync('Arial.ttf');
-const font = new TypeScriptFont(bytes);
+const font = new TrueTypeFont(bytes);
 ```
 
 == ES6
 ```JavaScript
 import * as fs from 'node:fs';
-import { TypeScriptFont } from '@pdf-lab/fontkit';
+import { TrueTypeFont } from '@pdf-lab/fontkit';
 
 const bytes = fs.readFileSync('Arial.ttf');
-const font = new TypeScriptFont(bytes);
+const font = new TrueTypeFont(bytes);
 ```
 
 == CommonJS
 ```JavaScript
 const fs = require('node:fs');
-const { TypeScriptFont } = require('@pdf-lab/fontkit');
+const { TrueTypeFont } = require('@pdf-lab/fontkit');
 
 const bytes = fs.readFileSync('Arial.ttf');
-const font = new TypeScriptFont(bytes);
+const font = new TrueTypeFont(bytes);
 ```
 
 :::

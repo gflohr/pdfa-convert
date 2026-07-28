@@ -2,6 +2,7 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src",
+		"outDir": "dist",
 		"types": ["node"],
 		"module": "nodenext",
 		"moduleResolution": "nodenext",
@@ -9,5 +10,5 @@
 		"checkJs": false
 	},
 	"include": ["src"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "*/**/*.cjs", "*/**/*.mjs"]
 }

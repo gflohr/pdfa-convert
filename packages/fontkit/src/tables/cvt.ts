@@ -2,8 +2,8 @@ import * as r from 'restructure';
 
 export namespace cvtTable {
 	/**
-	 * Control Value Table. Establishes pixel values used by instructions to
-	 * control raster adjustments.
+	 * Control Value Table. Stores indexed control values used by TrueType
+	 * instructions to maintain consistency when hinting glyphs.
 	 */
 	export interface cvt {
 		controlValues: number[];

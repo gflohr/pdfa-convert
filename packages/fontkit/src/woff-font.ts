@@ -18,7 +18,7 @@ export class WOFFFont extends TrueTypeFont<WOFFDirectory> {
 	public static objType: 'WOFF' = 'WOFF';
 
 	/**
-	 * Discriminating property. Has the same value as the static `type`
+	 * Discriminating property. Has the same value as the static `objType`
 	 * property.
 	 */
 	public readonly objType: string = WOFFFont.objType;

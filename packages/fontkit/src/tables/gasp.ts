@@ -15,8 +15,8 @@ export namespace gaspTable {
 	}
 
 	/**
-	 * Grid-fitting and Scan-conversion Procedure Table. Optimises text raster
-	 * rendering constraints.
+	 * Grid-fitting and Scan-conversion Procedure Table. Specifies preferred
+	 * rasterisation techniques for different pixels-per-em ranges.
 	 */
 	export interface gasp {
 		version: number;

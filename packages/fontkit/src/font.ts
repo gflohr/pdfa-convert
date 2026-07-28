@@ -81,21 +81,21 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	 *
 	 * See {@link OpenTypeFont} for usage instructions!
 	 *
-	 * @returns the font with an update
+	 * @returns the font with narrowed to an @{link OpenTypeFont} or `null if a required table is missing
 	 */
 	asOpenTypeFont(): OpenTypeFont | null;
 
 	/**
 	 * Attempts to view this font as an {@link AATFont}.
 	 *
-	 * @returns the font with an update
+	 * @returns the font with narrowed to an @{link AATFont} or `null if a required table is missing
 	 */
 	asAATFont(): AATFont | null;
 
 	/**
 	 * Attempts to view this font as an {@link TrueTypeSubsetFont} font.
 	 *
-	 * @returns the font with an update
+	 * @returns the font with narrowed to a @{link TrueTypeSubsetFont} or `null if a required table is missing
 	 */
 	asTrueTypeSubsetFont(): TrueTypeSubsetFont | null;
 
@@ -166,14 +166,14 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	prep: prepTable.prep | null;
 
 	/**
-	 * Control Value Table. Establishes pixel values used by instructions to
-	 * control raster adjustments.
+	 * Control Value Table. Stores indexed control values used by TrueType
+	 * instructions to maintain consistency when hinting glyphs.
 	 */
 	'cvt ': cvtTable.cvt | null;
 
 	/**
-	 * Glyph Data Table. Stores coordinate boundaries outlining standard
-	 * TrueType geometric shapes.
+	 * Glyph Data Table. Describes TrueType glyph outlines, including contour
+	 * coordinates, composite glyph components, and hinting instructions.
 	 */
 	glyf: glyfTable.glyph | null;
 
@@ -247,8 +247,8 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	GPOS: GPOSTable.GPOS | null;
 
 	/**
-	 * Glyph Substitution Table. Replaces default layouts to process contextual
-	 * alternates and ligatures.
+	 * Glyph Substitution Table. Supplies glyph substitutions for contextual
+	 * alternates, ligatures, and script-specific rendering.
 	 */
 	GSUB: GSUBTable.GSUB | null;
 
@@ -348,8 +348,8 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	gvar: gvarTable.gvar | null;
 
 	/**
-	 * Justification Table. Provides layout spacing adjustments for AAT
-	 * tracking loops.
+	 * Justification Table (`just`). Provides layout rules for line justification,
+	 * glyph width deltas, and post-compensation actions in AAT typography.
 	 */
 	just: justTable.just | null;
 
@@ -511,7 +511,7 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	layout(
 		str: string,
 		userFeatures?: OpenType.Features | OpenType.FeatureTag[],
-		script?: string,
+		script?: Script.OpenTypeTag,
 		language?: string,
 		direction?: BidiDirection,
 	): GlyphRun;
@@ -566,7 +566,7 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	getBaseGlyph(glyph: number, characters?: readonly number[]): Glyph | null;
 
 	/**
-	 * Creates an empty layout subset utilizing this font structure as its
+	 * Creates an empty layout subset utilising this font structure as its
 	 * baseline data map.
 	 */
 	createSubset(): Subset;
@@ -582,14 +582,14 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	stream: r.DecodeStream;
 
 	/**
-	 * Extracts a raw readable segment slice targetting vector outline
+	 * Extracts a raw readable segment slice targeting vector outline
 	 * definitions.
 	 */
 	getGlyfTableStream(): r.DecodeStream | null;
 
 	/**
 	 * The processor responsible for calculating delta adjustments to glyph
-	 * outlines along design variation axes. This is initialized when variation
+	 * outlines along design variation axes. This is initialised when variation
 	 * coordinates are applied, and is `null` for static fonts.
 	 */
 	variationProcessor: GlyphVariationProcessor | null;
@@ -604,7 +604,7 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	 * @see {@link copyright}
 	 * @see {@link version}
 	 */
-	defaultLanguage: string | null;
+	readonly defaultLanguage: string | null;
 
 	/**
 	 * Set the default language.

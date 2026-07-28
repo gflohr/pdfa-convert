@@ -38,7 +38,8 @@ export default function collectSubsetPrefixes(
 		if (subtypeName !== 'Type0') continue;
 
 		const descendantFonts = fontDict.lookup(PDFName.of('DescendantFonts'));
-		if (!(descendantFonts instanceof PDFArray && descendantFonts.size())) continue;
+		if (!(descendantFonts instanceof PDFArray && descendantFonts.size()))
+			continue;
 
 		const descendantFontRef = descendantFonts.get(0);
 		const descendantFontDict = pdfDoc.context.lookupMaybe(
@@ -47,7 +48,10 @@ export default function collectSubsetPrefixes(
 		);
 		if (!descendantFontDict) continue;
 
-		const descendantBaseName = descendantFontDict.lookupMaybe(PDFName.of('BaseFont'), PDFName);
+		const descendantBaseName = descendantFontDict.lookupMaybe(
+			PDFName.of('BaseFont'),
+			PDFName,
+		);
 		if (descendantBaseName?.decodeText().match(/^[A-Z]{6}\+/)) {
 			prefixes.add(descendantBaseName.decodeText().slice(0, 6));
 		}

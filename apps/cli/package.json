@@ -1,6 +1,7 @@
 {
 	"name": "pdfa-lab",
 	"version": "0.1.0",
+	"private": true,
 	"description": "CLI for converting PDFs to PDF/A",
 	"type": "module",
 	"author": {

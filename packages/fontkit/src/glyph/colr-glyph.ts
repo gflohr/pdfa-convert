@@ -1,6 +1,6 @@
 import type { COLRTable } from '../tables/COLR.js';
 import { BoundingBox } from './bounding-box.js';
-import { type FontkitRenderingContext, Glyph } from './glyph.js';
+import { type FontkitCanvas, Glyph } from './glyph.js';
 
 interface Color {
 	red: number;
@@ -105,7 +105,7 @@ export class COLRGlyph extends Glyph {
 		return layers;
 	}
 
-	public render(ctx: FontkitRenderingContext, size: number) {
+	public render(ctx: FontkitCanvas, size: number) {
 		for (const { glyph, color } of this.layers) {
 			ctx.fillColor(
 				[color.red, color.green, color.blue],

@@ -23,7 +23,13 @@ describe('FontEmbedder', () => {
 			const options = {} as FontEmbedOptions;
 
 			expect(() => {
-				new TestFontEmbedder(pdfDoc, fontInfo, [] as GlyphBlock[], new Set<string>(), options);
+				new TestFontEmbedder(
+					pdfDoc,
+					fontInfo,
+					[] as GlyphBlock[],
+					new Set<string>(),
+					options,
+				);
 			}).toThrow('You have to pass a fontkit instance in the embed options!');
 		});
 	});

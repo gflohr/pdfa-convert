@@ -45,7 +45,9 @@ if (otFont) {
 		console.log('* OpenType outlines: TrueType');
 	} else if (otFont.outlines === 'PostScript') {
 		console.log('* OpenType outlines: PostScript');
-		console.log(`* OpenType outline version: CFF version ${otFont.outlineVersion}`);
+		console.log(
+			`* OpenType outline version: CFF version ${otFont.outlineVersion}`,
+		);
 	}
 } else {
 	console.log('* OpenType core tables: no');

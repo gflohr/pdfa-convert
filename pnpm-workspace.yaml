@@ -3,6 +3,7 @@ packages:
   - "apps/*"
 allowBuilds:
   '@swc/core': true
+  canvas: true
   core-js: true
   esbuild: true
 linkWorkspacePackages: true

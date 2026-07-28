@@ -11,7 +11,9 @@ const bytes = fs.readFileSync(process.argv[2]!);
 try {
 	const something = fontkit.create(bytes, process.argv[3]);
 	if (!something) {
-		console.error(`The font or font collection has no variation with the name '${process.argv[3]}'!`);
+		console.error(
+			`The font or font collection has no variation with the name '${process.argv[3]}'!`,
+		);
 	} else if (something.objType === 'TTC' || something.objType === 'DFont') {
 		console.log('File contains a font collection.');
 	} else if (process.argv[3]?.length) {
@@ -19,6 +21,6 @@ try {
 	} else {
 		console.log('Single font file.');
 	}
-} catch(e) {
+} catch (e) {
 	console.error(`Not a font file or font collection (${e})!`);
 }

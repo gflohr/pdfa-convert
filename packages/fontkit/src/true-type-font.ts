@@ -857,6 +857,16 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 		return this._variationProcessor;
 	}
 
+	/**
+	 * This is an alias for `getVariation()`. It was introduced as an attempt
+	 * to unify single font files and font collections under one polymorphic
+	 * interface.
+	 *
+	 * @param name
+	 * @returns the selected font.
+	 *
+	 * @deprecated use @{link TrueTypeFont#getVariation} instead!
+	 */
 	public getFont(name: string): TrueTypeFont {
 		return this.getVariation(name);
 	}

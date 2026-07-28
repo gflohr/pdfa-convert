@@ -7,7 +7,14 @@ import {
 	type PDFRef,
 	PDFString,
 } from '@cantoo/pdf-lib';
-import { fontkit } from '@pdfa-lab/fontkit';
+import {
+	DFont,
+	fontkit,
+	TrueTypeCollection,
+	TrueTypeFont,
+	type Glyph,
+	type Subset,
+} from '@pdfa-lab/fontkit';
 import type { GlyphMapper } from '../encoding/mappers/glyph-mapper.js';
 import { OverlayMapper } from '../encoding/mappers/overlay-mapper.js';
 import type { Encoding } from '../encoding/types.js';
@@ -32,13 +39,13 @@ type Metrics = {
 
 export abstract class FontEmbedder {
 	private initialised = false;
-	private _isTTC = false;
+	private _isFontCollection = false;
 	private _fontDict: PDFDict | undefined;
-	private _font: fontkit.Font | undefined;
-	private _subset: fontkit.Subset | undefined;
+	private _font: TrueTypeFont | undefined;
+	private _subset: Subset | undefined;
 	private _scale: number | undefined;
 	private _glyphIds = new Set<number>();
-	private _glyphs: fontkit.Glyph[] = [];
+	private _glyphs: Glyph[] = [];
 	private _glyphMapping: Record<string, number> = {};
 	private _glyphMapper: GlyphMapper;
 
@@ -107,8 +114,8 @@ export abstract class FontEmbedder {
 		return this._pdfDoc;
 	}
 
-	private get isTTC(): boolean {
-		return this._isTTC;
+	private get isFontCollection(): boolean {
+		return this._isFontCollection;
 	}
 
 	private get fontInfo(): FontInfo {
@@ -127,11 +134,11 @@ export abstract class FontEmbedder {
 		return this._glyphIds;
 	}
 
-	private get font(): fontkit.Font {
+	private get font(): TrueTypeFont {
 		return this._font!;
 	}
 
-	private get subset(): fontkit.Subset {
+	private get subset(): Subset {
 		return this._subset!;
 	}
 
@@ -143,7 +150,7 @@ export abstract class FontEmbedder {
 		return this._glyphBlocks;
 	}
 
-	private get glyphs(): fontkit.Glyph[] {
+	private get glyphs(): Glyph[] {
 		return this._glyphs;
 	}
 
@@ -165,15 +172,30 @@ export abstract class FontEmbedder {
 		const fontData = await this.resolveFont();
 		const source = fontData.source as Uint8Array;
 
-		this._isTTC =
-			source[0] === 0x74 &&
-			source[1] === 0x74 &&
-			source[2] === 0x63 &&
-			source[3] === 0x66;
+		const isTTC = TrueTypeCollection.probe(source);
+		const isDFont = DFont.probe(source);
+		this._isFontCollection = isTTC || isDFont;
 
-		this._font = this.isTTC
-			? fontkit.create(source, fontData.postScriptName)
-			: fontkit.create(source as Uint8Array);
+		let font: TrueTypeFont | null;
+		if (isTTC && fontData.postScriptName) {
+			const collection = new TrueTypeCollection(source);
+			font = collection.getFont(fontData.postScriptName);
+		} else if(isDFont && fontData.postScriptName) {
+			const collection = new TrueTypeCollection(source);
+			font = collection.getFont(fontData.postScriptName);
+		} else {
+			font = new TrueTypeFont(source);
+			if (typeof fontData.postScriptName !== 'undefined') {
+				font = font.getFont(fontData.postScriptName);
+			}
+		}
+
+		if (!font) {
+			throw new Error(`Font with PostScript name '${fontData.postScriptName}' not found!`)
+		}
+
+		this._font = font;
+
 		this._subset = this.font.createSubset();
 		this._scale = 1000 / this.font.unitsPerEm;
 
@@ -311,46 +333,19 @@ end
 			const codePoint = this.coerceCodePoints(
 				this.glyphMapper.lookupCodePoints(glyphId),
 			);
-			const glyph = this.font.glyphForCodePoint(codePoint);
+			const glyph = this.font.glyphForCodePoint(codePoint) ?? this.font.getGlyph(0);
+			if (!glyph) {
+				throw new Error('Font does not have a fallback glyph!');
+			}
 			subset.includeGlyph(glyph);
 			this.glyphs.push(glyph);
 			this.glyphMapping[glyphId] = ++newGlyphId;
 		});
 	}
 
-	private async serializeSubset(): Promise<Uint8Array> {
-		const subset = this.subset;
-		return new Promise((resolve, reject) => {
-			const parts: Uint8Array[] = [];
-			subset
-				.encodeStream()
-				.on('data', (bytes) => parts.push(bytes))
-				.on('end', () => resolve(this.mergeUint8Arrays(parts)))
-				// biome-ignore lint/suspicious/noExplicitAny: TODO!
-				.on('error' as any, (err) => reject(err));
-		});
-	}
-
-	private mergeUint8Arrays(arrays: Uint8Array[]): Uint8Array {
-		let totalSize = 0;
-		for (let idx = 0, len = arrays.length; idx < len; idx++) {
-			totalSize += arrays[idx]!.length;
-		}
-
-		const mergedBuffer = new Uint8Array(totalSize);
-		let offset = 0;
-		for (let idx = 0, len = arrays.length; idx < len; idx++) {
-			const array = arrays[idx];
-			mergedBuffer.set(array!, offset);
-			offset += array!.length;
-		}
-
-		return mergedBuffer;
-	}
-
 	private async embedFontStream(): Promise<PDFRef> {
 		const context = this.pdfDoc.context;
-		const fontStream = context.flateStream(await this.serializeSubset(), {
+		const fontStream = context.flateStream(this.subset.encode(), {
 			Subtype: this.isCFF() ? 'CIDFontType0C' : undefined,
 		});
 
@@ -390,14 +385,24 @@ end
 	private extractMetrics(): Metrics {
 		const font = this.font;
 
+		if (!font.boundingBox) {
+			throw new Error('Font has no bounding box!');
+		}
 		const bbox = [
-			this.scale * font.bbox.minX,
-			this.scale * font.bbox.minY,
-			this.scale * font.bbox.maxX,
-			this.scale * font.bbox.maxY,
+			this.scale * font.boundingBox.minX,
+			this.scale * font.boundingBox.minY,
+			this.scale * font.boundingBox.maxX,
+			this.scale * font.boundingBox.maxY,
 		];
 
+		if (!font.ascent) {
+			throw new Error('Font has no ascender!');
+		}
 		const ascent = this.scale * font.ascent;
+
+		if (!font.descent) {
+			throw new Error('Font has no descender!');
+		}
 		const descent = this.scale * font.descent;
 
 		const capHeight = font.capHeight ? this.scale * font.capHeight : ascent;

@@ -1,3 +1,5 @@
+import { TrueTypeFont } from '@pdfa-lab/fontkit';
+
 export interface FontFlagOptions {
 	fixedPitch?: boolean;
 	serif?: boolean;
@@ -31,14 +33,15 @@ const makeFontFlags = (options: FontFlagOptions) => {
 };
 
 // From: https://github.com/foliojs/pdfkit/blob/83f5f7243172a017adcf6a7faa5547c55982c57b/lib/font/embedded.js#L123-L129
-export const deriveFontFlags = (font: fontkit.Font): number => {
+export const deriveFontFlags = (font: TrueTypeFont): number => {
 	const familyClass = font['OS/2'] ? font['OS/2'].sFamilyClass : 0;
+	const fixedPitch = font.post?.isFixedPitch;
 	const flags = makeFontFlags({
-		fixedPitch: font.post.isFixedPitch,
+		fixedPitch: !!fixedPitch,
 		serif: 1 <= familyClass && familyClass <= 7,
 		symbolic: true, // Assume the font uses non-latin characters
 		script: familyClass === 10,
-		italic: font.head.macStyle.italic,
+		italic: font.head?.macStyle.italic,
 	});
 
 	return flags;

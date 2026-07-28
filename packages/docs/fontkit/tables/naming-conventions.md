@@ -14,7 +14,7 @@ If this is the first access to the property `cmap`, the table is lazily
 loaded.
 
 Because @pdf-lab/fontkit may support more tables in the future, all property
-names with four characters are considered reserved. This is the reason, why
+names with four characters are considered reserved. This is the reason why
 the [`type`](../api/classes/TrueTypeFont#properties) property is deprecated
 in favour of the [`objType`](../api/classes/TrueTypeFont#properties)
 property, and the [`bbox`](../api/classes/TrueTypeFont#properties) property is

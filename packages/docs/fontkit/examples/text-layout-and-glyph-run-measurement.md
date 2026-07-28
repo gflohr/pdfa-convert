@@ -82,7 +82,7 @@ console.log(`Total Width at ${fontSize}pt: ${widthInPoints.toFixed(2)}pt`);
 
 :::
 
-A [GlyphRun](../api/classes/GlyphRun) has properties `glyph` and `positions`
+A [GlyphRun](../api/classes/GlyphRun) has properties `glyphs` and `positions`
 which are arrays of identical length. You can uses these to get the metrics
 of the rendered layout.
 
@@ -168,5 +168,7 @@ for (let i = 0; i < run.glyphs.length; i++) {
 
 The code will output "rtl" as the writing direction.
 
-You can also see that the array of glyphs is reversed. The first glyph in
-the array represents the last letter of the sentence.
+Note that for Right-to-Left (RTL) layout runs, the order of glyphs in
+`run.glyphs` reflects the visual rendering order from left to right. In other
+words: The last letter of the Arabic sentence is represented by the first
+glyph.

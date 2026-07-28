@@ -4,6 +4,11 @@ import type { TrueTypeFont } from './true-type-font';
  * A file container for multiple {@link TrueTypeFont} programs.
  */
 export interface FontCollection {
+	/**
+	 * Identifier for the collection. One of 'TTC' or 'DFont'.
+	 */
+	readonly objType: 'TTC' | 'DFont';
+
 	readonly type: 'TTC' | 'DFont';
 
 	/**

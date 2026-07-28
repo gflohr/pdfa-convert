@@ -1,13 +1,7 @@
-import {
-	PDFArray,
-	type PDFDict,
-	PDFDocument,
-	PDFName,
-} from '@cantoo/pdf-lib';
+import { PDFArray, type PDFDict, PDFDocument, PDFName } from '@cantoo/pdf-lib';
 import { describe, expect, it } from 'vitest';
-
+import type { FontUsage } from './collect-resources.js';
 import collectSubsetPrefixes from './collect-subset-prefixes.js';
-import { FontUsage } from './collect-resources.js';
 
 describe('collectSubsetPrefixes', () => {
 	it('should collect subset prefixes from simple fonts', async () => {
@@ -28,14 +22,9 @@ describe('collectSubsetPrefixes', () => {
 			},
 		];
 
-		const prefixes = collectSubsetPrefixes(
-			pdfDoc,
-			resources,
-		);
+		const prefixes = collectSubsetPrefixes(pdfDoc, resources);
 
-		expect(prefixes).toStrictEqual(
-			new Set(['ABCDEF']),
-		);
+		expect(prefixes).toStrictEqual(new Set(['ABCDEF']));
 	});
 
 	it('should collect subset prefixes from descendant fonts', async () => {
@@ -48,8 +37,7 @@ describe('collectSubsetPrefixes', () => {
 			BaseFont: PDFName.of('GHIJKL+NotoSans'),
 		}) as PDFDict;
 
-		const descendantFontRef =
-			context.register(descendantFontDict);
+		const descendantFontRef = context.register(descendantFontDict);
 
 		const descendantFonts = PDFArray.withContext(context);
 		descendantFonts.push(descendantFontRef);
@@ -61,8 +49,7 @@ describe('collectSubsetPrefixes', () => {
 			DescendantFonts: descendantFonts,
 		}) as PDFDict;
 
-		const type0FontRef =
-			context.register(type0FontDict);
+		const type0FontRef = context.register(type0FontDict);
 
 		const resources = [
 			{
@@ -70,14 +57,9 @@ describe('collectSubsetPrefixes', () => {
 			},
 		];
 
-		const prefixes = collectSubsetPrefixes(
-			pdfDoc,
-			resources,
-		);
+		const prefixes = collectSubsetPrefixes(pdfDoc, resources);
 
-		expect(prefixes).toStrictEqual(
-			new Set(['MNOPQR', 'GHIJKL']),
-		);
+		expect(prefixes).toStrictEqual(new Set(['MNOPQR', 'GHIJKL']));
 	});
 
 	it('should ignore fonts without subset prefixes', async () => {
@@ -98,10 +80,7 @@ describe('collectSubsetPrefixes', () => {
 			},
 		];
 
-		const prefixes = collectSubsetPrefixes(
-			pdfDoc,
-			resources,
-		);
+		const prefixes = collectSubsetPrefixes(pdfDoc, resources);
 
 		expect(prefixes.size).toBe(0);
 	});
@@ -127,13 +106,8 @@ describe('collectSubsetPrefixes', () => {
 			},
 		] as FontUsage[];
 
-		const prefixes = collectSubsetPrefixes(
-			pdfDoc,
-			resources,
-		);
+		const prefixes = collectSubsetPrefixes(pdfDoc, resources);
 
-		expect(prefixes).toStrictEqual(
-			new Set(['ABCDEF']),
-		);
+		expect(prefixes).toStrictEqual(new Set(['ABCDEF']));
 	});
 });

@@ -41,13 +41,10 @@ import {
 import { asciiDecoder } from './utils.js';
 
 export interface VariationAxis {
-	axisTag: string;
+	name: string;
 	min: number;
 	default: number;
 	max: number;
-	flags: number;
-	nameID: number;
-	name: string;
 }
 
 export interface VariationAxes {
@@ -740,7 +737,7 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 				min: axis.minValue,
 				default: axis.defaultValue,
 				max: axis.maxValue,
-			} as VariationAxis;
+			};
 		}
 
 		return res;

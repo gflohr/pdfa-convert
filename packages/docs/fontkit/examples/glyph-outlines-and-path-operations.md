@@ -8,6 +8,13 @@ You can convert the glyphs contained in a font into SVG paths.
 
 == TypeScript
 ```TypeScript
+import * as fs from 'node:fs';
+import { TrueTypeFont } from '@pdfa-lab/fontkit';
+
+const filename = 'OpenSans/OpenSans-Regular.ttf';
+const bytes = fs.readFileSync(filename);
+const font = new TrueTypeFont(bytes);
+
 const glyph = font.glyphForCodePoint('€'.charCodeAt(0));
 if (!glyph) {
 	throw new Error('No glyph found for the Euro sign!');
@@ -25,6 +32,13 @@ console.log(svg);
 
 == ES6
 ```JavaScript
+import * as fs from 'node:fs';
+import { TrueTypeFont } from '@pdfa-lab/fontkit';
+
+const filename = 'OpenSans/OpenSans-Regular.ttf';
+const bytes = fs.readFileSync(filename);
+const font = new TrueTypeFont(bytes);
+
 const glyph = font.glyphForCodePoint('€'.charCodeAt(0));
 if (!glyph) {
 	throw new Error('No glyph found for the Euro sign!');
@@ -42,6 +56,13 @@ console.log(svg);
 
 == CommonJS
 ```JavaScript
+const fs = require('node:fs');
+const { TrueTypeFont } = require('@pdfa-lab/fontkit');
+
+const filename = 'OpenSans/OpenSans-Regular.ttf';
+const bytes = fs.readFileSync(filename);
+const font = new TrueTypeFont(bytes);
+
 const glyph = font.glyphForCodePoint('€'.charCodeAt(0));
 if (!glyph) {
 	throw new Error('No glyph found for the Euro sign!');
@@ -68,6 +89,11 @@ You can also render it into a PDF document created with
 ```TypeScript
 import PDFDocument from 'pdfkit';
 import * as fs from 'node:fs';
+import { TrueTypeFont } from '@pdfa-lab/fontkit';
+
+const filename = 'OpenSans/OpenSans-Regular.ttf';
+const bytes = fs.readFileSync(filename);
+const font = new TrueTypeFont(bytes);
 
 const doc = new PDFDocument();
 
@@ -91,6 +117,11 @@ doc.end();
 ```JavaScript
 import PDFDocument from 'pdfkit';
 import * as fs from 'node:fs';
+import { TrueTypeFont } from '@pdfa-lab/fontkit';
+
+const filename = 'OpenSans/OpenSans-Regular.ttf';
+const bytes = fs.readFileSync(filename);
+const font = new TrueTypeFont(bytes);
 
 const doc = new PDFDocument();
 

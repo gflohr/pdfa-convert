@@ -56,7 +56,7 @@ fork [`@cantoo/pdf-lib`](https://www.npmjs.com/package/@cantoo/pdf-lib).
 
 This project contains a drop-in replacement for `@pdf-lib/fontkit`, see its
 [README](./packages/fontkit/README.md). The replacement aims at fixing the
-known bugs in the existing implementation. It will probably be available as
+known bugs in the existing implementation. It will be available as
 `@pdfa-lab/fontkit`.
 
 ## Limitations and Caveats

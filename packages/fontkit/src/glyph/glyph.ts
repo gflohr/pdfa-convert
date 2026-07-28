@@ -67,9 +67,11 @@ export interface GlyphLayoutMetrics {
  * The minimum vector context shape fontkit expects for rendering.
  * @internal
  */
-export interface FontkitRenderingContext {
+export interface FontkitCanvas {
+	save(): void;
+	restore(): void;
 	fill(): void;
-	fillColor(rgb: [number, number, number], alphaPercent?: number): this;
+	fillColor(colour: [number, number, number], alpha?: number): void;
 	image(
 		data: Uint8Array,
 		options?: {
@@ -79,9 +81,12 @@ export interface FontkitRenderingContext {
 			height?: number;
 		},
 	): void;
-	restore(): void;
-	save(): void;
 	scale(x: number, y: number): void;
+	moveTo(x: number, y: number): void;
+	lineTo(x: number, y: number): void;
+	quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+ 	bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+	closePath(): void;
 }
 
 /**
@@ -355,15 +360,28 @@ export abstract class Glyph {
 	/**
 	 * Renders the glyph to the given graphics context, at the specified font
 	 * size.
+	 *
+	 * The rendering context `ctx` should actually be an instance of
+	 * [pdfkit](https://www.npmjs.com/package/canvas). However, for regular
+	 * glyphs, you can also pass an HTML5 `Canvas` or one of the
+	 * implementations for Node.js, like
+	 * [canvas](https://www.npmjs.com/package/canvas), although you have to
+	 * cast this, when using TypeScript.
+	 *
+	 * Unfortunately, this will crash, for colour glyphs, see
+	 * https://github.com/gflohr/pdfa-lab/issues/105.
+	 *
+	 * @param ctx the `FontkitCanvas`
+	 * @param size the font size in points
 	 */
-	public render(ctx: FontkitRenderingContext, size: number) {
+	public render(ctx: FontkitCanvas, size: number) {
 		ctx.save();
 
 		const scale = (1 / this.font.unitsPerEm) * size;
 		ctx.scale(scale, scale);
 
 		const fn = this.path.toFunction();
-		fn(ctx as unknown as Path);
+		fn(ctx);
 		ctx.fill();
 
 		ctx.restore();

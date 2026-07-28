@@ -1,4 +1,5 @@
 import { BoundingBox } from './bounding-box.js';
+import type { FontkitCanvas } from './glyph.js';
 
 const SVG_COMMANDS = {
 	moveTo: 'M',
@@ -38,8 +39,8 @@ export class Path {
 	 *
 	 * @returns A function accepting a graphics context.
 	 */
-	public toFunction(): (ctx: Path) => void {
-		return (ctx: Path) =>
+	public toFunction(): (ctx: FontkitCanvas) => void {
+		return (ctx: FontkitCanvas) =>
 			this.commands.forEach((c) => {
 				const method = ctx[c.command];
 				if (typeof method === 'function') {

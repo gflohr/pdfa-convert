@@ -1,6 +1,6 @@
 import * as r from 'restructure';
 import type { sbixTable } from '../tables/sbix.js';
-import type { FontkitRenderingContext } from './glyph.js';
+import type { FontkitCanvas } from './glyph.js';
 import { TrueTypeGlyph } from './true-type-glyph.js';
 
 export interface SBIXImageType {
@@ -51,7 +51,7 @@ export class SBIXGlyph extends TrueTypeGlyph {
 		return SBIXImage.decode(this.font.stream, { buflen: end - start });
 	}
 
-	render(ctx: FontkitRenderingContext, size: number) {
+	render(ctx: FontkitCanvas, size: number) {
 		const img = this.getImageForSize(size);
 		if (img != null) {
 			const scale = size / this.font.unitsPerEm;

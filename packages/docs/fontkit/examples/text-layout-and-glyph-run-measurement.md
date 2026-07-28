@@ -83,7 +83,7 @@ console.log(`Total Width at ${fontSize}pt: ${widthInPoints.toFixed(2)}pt`);
 :::
 
 A [GlyphRun](../api/classes/GlyphRun) has properties `glyphs` and `positions`
-which are arrays of identical length. You can uses these to get the metrics
+which are arrays of identical length. You can use these to get the metrics
 of the rendered layout.
 
 The above example assumes text using a Latin script with left-to-right

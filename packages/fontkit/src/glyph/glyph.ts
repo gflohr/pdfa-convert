@@ -362,9 +362,9 @@ export abstract class Glyph {
 	 * size.
 	 *
 	 * The rendering context `ctx` should actually be an instance of
-	 * [pdfkit](https://www.npmjs.com/package/canvas). However, for regular
-	 * glyphs, you can also pass an HTML5 `Canvas` or one of the
-	 * implementations for Node.js, like
+	 * [pdfkit](https://www.npmjs.com/package/pdfkit). However, for regular
+	 * glyphs, you can also pass an HTML5 `CanvasRenderingContext2D` or one of
+	 * the implementations for Node.js, like
 	 * [canvas](https://www.npmjs.com/package/canvas), although you have to
 	 * cast this, when using TypeScript.
 	 *

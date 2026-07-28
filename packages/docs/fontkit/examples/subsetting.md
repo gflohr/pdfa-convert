@@ -13,8 +13,8 @@ universally usable. They can only be embedded as CID fonts.
 If you embed fonts via
 [`@cantoo/pdf-lib`](https://www.npmjs.com/package/@cantoo/pdf-lib) or the
 original, now unmaintained
-[`pdf-lib`](https://www.npmjs.com/package/@cantoo/pdf-lib), this happens
-automatically, and the resulting PDFs are fully usable.
+[`pdf-lib`](https://www.npmjs.com/package/pdf-lib), this happens automatically,
+and the resulting PDFs are fully usable.
 
 ## Creating Subsets
 
@@ -106,7 +106,7 @@ You start by creating an empty subset with
 Next, you have to create an array of [`Glyph`](../api/classes/Glyph) objects,
 that the subset should contain. In the example code, this is achieved with
 [`glyphsForString()](../api/classes/TrueTypeFont#glyphsforstring), but there
-are other ways to achive this.
+are other ways to achieve this.
 
 Each of the required glyphs is then passed to the method
 [`includeGlyph()`](../api/classes/Subset#includeglyph) of the

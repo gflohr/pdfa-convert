@@ -10,10 +10,10 @@ const font = new TrueTypeFont(bytes);
 const arabicText = 'مرحبا بالعالم'; // "Hello World" in Arabic.
 
 const features = {
-	init: true, // Initial forms
-	medi: true, // Medial forms
-	fina: true, // Final forms
-	liga: true, // Standard ligatures
+	init: true, // Initial forms.
+	medi: true, // Medial forms.
+	fina: true, // Final forms.
+	liga: true, // Standard ligatures.
 };
 
 const run = font.layout(arabicText, features, 'arab');

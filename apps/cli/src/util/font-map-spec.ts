@@ -1,5 +1,5 @@
 import { Textdomain } from '@esgettext/runtime';
-import type { FontMap } from 'pdf-lab-core';
+import type { FontMap } from 'pdfa-lab-core';
 
 function parseSpec(
 	spec: string,
@@ -37,7 +37,7 @@ export function fontMapSpec(specArgs: string[] | string): FontMap {
 	for (const spec of specs) {
 		const entry = parseSpec(spec);
 		if (!entry) {
-			const gtx = Textdomain.getInstance('pdf-lab');
+			const gtx = Textdomain.getInstance('pdfa-lab');
 
 			throw new Error(
 				gtx._x("invalid font map specification '{spec}'", { spec }),

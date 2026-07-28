@@ -1,6 +1,6 @@
 # AI Agent Instructions
 
-The PDF-Lab project is a toolchain for PDF manipulation and analysis, with
+The PDFA-lab project is a toolchain for PDF manipulation and analysis, with
 a loose focus on functionality required to upgrade PDF documents to the PDF/A
 standard. It is meant as a supplement, not as an alternative to 'pdf-lib'.
 Since 'pdf-lib' is currently unmaintainted, it uses the fork `@cantoo/pdf-lib`
@@ -10,7 +10,7 @@ under the hood.
 
 | Directory                  | Purpose                                         |
 | -------------------------- | ----------------------------------------------- |
-| `packages/pdf-lab-core/`   | The core functionality                          |
+| `packages/pdfa-lab-core/`   | The core functionality                          |
 | `packages/fontkit/`        | A drop-in replacement for `@pdf-lib/fontkit`    |
 | `apps/cli/`                | The command-line interface                      |
 

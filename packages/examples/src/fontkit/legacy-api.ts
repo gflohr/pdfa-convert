@@ -1,5 +1,5 @@
 import * as fs from 'node:fs';
-import { fontkit } from '@pdf-lab/fontkit';
+import { fontkit } from '@pdfa-lab/fontkit';
 
 if (process.argv.length < 3) {
 	console.error(`Usage: ${process.argv[1]} FONT_OR_COLLECTION`);

@@ -1,5 +1,5 @@
 {
-	"name": "pdf-lab",
+	"name": "pdfa-lab",
 	"version": "0.1.0",
 	"description": "CLI for converting PDFs to PDF/A",
 	"type": "module",
@@ -10,14 +10,14 @@
 	"license": "WTFPL",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/gflohr/pdf-lab.git"
+		"url": "git+https://github.com/gflohr/pdfa-lab.git"
 	},
 	"bugs": {
-		"url": "https://github.com/gflohr/pdf-lab/issues"
+		"url": "https://github.com/gflohr/pdfa-lab/issues"
 	},
-	"homepage": "https://github.com/gflohr/pdf-lab/tree/main/apps/cli#readme",
+	"homepage": "https://github.com/gflohr/pdfa-lab/tree/main/apps/cli#readme",
 	"bin": {
-		"pdf-lab": "./dist/cli.js"
+		"pdfa-lab": "./dist/cli.js"
 	},
 	"files": [
 		"dist"
@@ -52,7 +52,7 @@
 		"@esgettext/runtime": "^1.3.10",
 		"@pdf-lib/fontkit": "^1.1.1",
 		"@valibot/i18n": "^1.2.0",
-		"pdf-lab-core": "workspace:*",
+		"pdfa-lab-core": "workspace:*",
 		"valibot": "^1.4.1",
 		"yargs": "^18.0.0"
 	},

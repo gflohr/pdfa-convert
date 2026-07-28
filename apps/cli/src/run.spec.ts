@@ -11,7 +11,7 @@ vi.mock('./util/load-input.js', () => ({
 import { TextCommand } from './commands/text.js';
 import { run } from './run.js';
 
-describe('pdf-lab-cli', () => {
+describe('pdfa-lab-cli', () => {
 	describe('normal operation', () => {
 		it('should run the command', async () => {
 			const argv = ['text', 'sample.pdf'];

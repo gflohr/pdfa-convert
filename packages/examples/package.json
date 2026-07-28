@@ -1,8 +1,8 @@
 {
-	"name": "@pdf-lab/examples",
+	"name": "@pdfa-lab/examples",
 	"version": "0.1.0",
 	"private": true,
-	"description": "Examples for the pdf-lab libraries",
+	"description": "Examples for the pdfa-lab libraries",
 	"scripts": {
 		"build": "tsc",
 		"check": "biome check",
@@ -13,7 +13,7 @@
 	"license": "ISC",
 	"type": "module",
 	"dependencies": {
-		"@pdf-lab/fontkit": "workspace:*",
+		"@pdfa-lab/fontkit": "workspace:*",
 		"tsx": "^4.22.4"
 	}
 }

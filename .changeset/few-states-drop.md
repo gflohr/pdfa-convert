@@ -1,6 +1,6 @@
 ---
-"pdf-lab-core": patch
-"pdf-lab": patch
+"pdfa-lab-core": patch
+"pdfa-lab": patch
 ---
 
 Embed Type0 fonts.

@@ -1,5 +1,5 @@
 import * as fs from 'node:fs';
-import { TrueTypeFont } from '@pdf-lab/fontkit';
+import { TrueTypeFont } from '@pdfa-lab/fontkit';
 import { findFontkitTestFont } from '../util.js';
 
 const filename = 'NotoSansCJK/NotoSansCJKkr-Regular.otf';

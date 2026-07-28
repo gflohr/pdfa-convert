@@ -1,7 +1,7 @@
 {
 	"name": "docs",
 	"version": "0.1.0",
-	"description": "Documentation for @pdf-lab",
+	"description": "Documentation for @pdfa-lab",
 	"private": true,
 	"main": "index.js",
 	"scripts": {

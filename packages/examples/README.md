@@ -1,6 +1,6 @@
 # Examples
 
-Examples for `@pdf-lab`.
+Examples for `@pdfa-lab`.
 
 ## Prerequisites
 

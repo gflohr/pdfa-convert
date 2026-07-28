@@ -1,15 +1,15 @@
 ---
 name: repo-generated-files
 description: >
-  Explains the rules and patterns for generated files in the pdf-lab core
+  Explains the rules and patterns for generated files in the pdfa-lab core
 	library. Guides AI agents on which files are generated, how they are updated,
 	and how to handle issues or pull requests involving generated code.
 ---
 
-# PDF-Lab Generated Files
+# PDFA-lab Generated Files
 
 This skill documents **how generated files are handled** in the e-invoice-eu repo.
-Generated files appear in `packages/pdf-lab-core/src`.
+Generated files appear in `packages/pdfa-lab-core/src`.
 
 ## General Rules
 

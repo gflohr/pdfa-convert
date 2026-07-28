@@ -8,18 +8,18 @@ vi.mock('./load-input.js', () => ({
 }));
 
 vi.mock('../util/optspec.js');
-vi.mock('pdf-lab-core', async (importActual) => {
-	const actual = await importActual<typeof import('pdf-lab-core')>();
+vi.mock('pdfa-lab-core', async (importActual) => {
+	const actual = await importActual<typeof import('pdfa-lab-core')>();
 	return {
 		...actual,
-		PDFLab: {
+		PDFALab: {
 			from: vi.fn(),
 		},
 	};
 });
 
 import { PDFRef } from '@cantoo/pdf-lib';
-import { type FontInfo, PDFLab } from 'pdf-lab-core';
+import { type FontInfo, PDFALab } from 'pdfa-lab-core';
 import { type FontInfoDto, toFontInfoDto } from '../util/font-info-dto.js';
 import { FontCommand } from './font.js';
 
@@ -93,7 +93,7 @@ describe('Font command', () => {
 			return new Map();
 		});
 
-		(PDFLab.from as Mock).mockResolvedValue({
+		(PDFALab.from as Mock).mockResolvedValue({
 			collectFonts: collectFontsMock,
 		});
 
@@ -108,7 +108,7 @@ describe('Font command', () => {
 		it('should output text only', async () => {
 			const collectFontsMock = vi.fn().mockReturnValue(fontInfoMap);
 
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				collectFonts: collectFontsMock,
 			});
 
@@ -127,7 +127,7 @@ Helvetica-Oblique`;
 		it('should output json', async () => {
 			const collectFontsMock = vi.fn().mockReturnValue(fontInfoMap);
 
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				collectFonts: collectFontsMock,
 			});
 
@@ -145,7 +145,7 @@ Helvetica-Oblique`;
 		it('should output yaml', async () => {
 			const collectFontsMock = vi.fn().mockReturnValue(fontInfoMap);
 
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				collectFonts: collectFontsMock,
 			});
 
@@ -173,7 +173,7 @@ Helvetica-Oblique`;
 			});
 			const collectFontsMock = vi.fn().mockReturnValue(fontInfoMap);
 
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				collectFonts: collectFontsMock,
 			});
 
@@ -193,7 +193,7 @@ Helvetica-Oblique`;
 		it('should filter out by base-font name', async () => {
 			const collectFontsMock = vi.fn().mockReturnValue(fontInfoMap);
 
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				collectFonts: collectFontsMock,
 			});
 
@@ -215,7 +215,7 @@ Helvetica-Oblique`;
 		it('should filter out by font name', async () => {
 			const collectFontsMock = vi.fn().mockReturnValue(fontInfoMap);
 
-			(PDFLab.from as Mock).mockResolvedValue({
+			(PDFALab.from as Mock).mockResolvedValue({
 				collectFonts: collectFontsMock,
 			});
 

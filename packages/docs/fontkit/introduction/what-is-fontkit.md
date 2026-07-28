@@ -1,4 +1,4 @@
-# What is `@pdf-lab/fontkit`?
+# What is `@pdfa-lab/fontkit`?
 
 Fontkit is an advanced font engine for Node and the browser.
 
@@ -15,7 +15,7 @@ Fontkit is an advanced font engine for Node and the browser.
 * Support for AAT variation glyphs, allowing for nearly infinite design control over weight, width, and other axes.
 * Font subsetting support - create a new font including only the specified glyphs.
 
-## Improvements in `@pdf-lab/fontkit`
+## Improvements in `@pdfa-lab/fontkit`
 
 * Fully Typed Architecture: Re-engineered from the ground up in native TypeScript, offering robust auto-completion, strict compiler checks, and inline documentation for complex internal font structures (such as layout tables and glyph collections).
 * API documentation; you are currently reading it.
@@ -28,7 +28,7 @@ The primary limitation of the original codebase and its early forks was the
 reliance on loose JavaScript objects to represent complex, low-level binary
 specifications (like OpenType and AAT structures).
 
-By porting @pdf-lab/fontkit to strict TypeScript, the library has been turned
+By porting @pdfa-lab/fontkit to strict TypeScript, the library has been turned
 internal structural contracts into a form of static analysis. This migration
 has eliminated legacy silent bugs, clearly define cross-module 
 internal boundaries (like table registration schemes), and dramatically 
@@ -52,10 +52,10 @@ There is another popular fontkit fork
 [`@foliojs-fork/fontkit`](https://github.com/foliojs-fork/fontkit#readme)
 that included many improvements and bug fixes to the original fontkit.
 
-This version `@pdf-lab/fontkit` is based on the original fontkit and the
+This version `@pdfa-lab/fontkit` is based on the original fontkit and the
 two forks. It tries to incorporate all improvements in the other forks.
 
-The main advantage of `@pdf-lab/fontkit` is that the original codebase has
+The main advantage of `@pdfa-lab/fontkit` is that the original codebase has
 been ported to TypeScript, which improves developer experience significantly.
 
 ## About This Documentation
@@ -63,5 +63,5 @@ been ported to TypeScript, which improves developer experience significantly.
 This documentation is a work in progress, and your contributions are highly
 welcome! If you spot any factual errors, notice missing sections, or have ideas
 for stylistic improvements, please feel free to open an issue or submit a pull
-request directly to the [pdf-lab GitHub
-repository](https://github.com/gflohr/pdf-lab).
+request directly to the [pdfa-lab GitHub
+repository](https://github.com/gflohr/pdfa-lab).

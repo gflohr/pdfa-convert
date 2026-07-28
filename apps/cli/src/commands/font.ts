@@ -2,7 +2,7 @@ import * as os from 'node:os';
 import { Textdomain } from '@esgettext/runtime';
 import fontkit from '@pdf-lib/fontkit';
 import * as yaml from 'js-yaml';
-import { type FontInfo, PDFLab } from 'pdf-lab-core';
+import { type FontInfo, PDFALab } from 'pdfa-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
@@ -11,7 +11,7 @@ import { fontMapSpec } from '../util/font-map-spec.js';
 import { coerceOptions, type OptSpec } from '../util/optspec.js';
 import { writeOutput } from '../util/write-output.js';
 
-const gtx = Textdomain.getInstance('pdf-lab');
+const gtx = Textdomain.getInstance('pdfa-lab');
 
 const options: {
 	embed: OptSpec;
@@ -103,7 +103,7 @@ export class FontCommand implements Command {
 	}
 
 	private getFonts(
-		lab: PDFLab,
+		lab: PDFALab,
 		configOptions: ConfigOptions,
 	): Map<string, FontInfo> {
 		const fonts = lab.collectFonts();
@@ -125,7 +125,7 @@ export class FontCommand implements Command {
 		return fonts;
 	}
 
-	private async embedFonts(lab: PDFLab, configOptions: ConfigOptions) {
+	private async embedFonts(lab: PDFALab, configOptions: ConfigOptions) {
 		const fonts = this.getFonts(lab, configOptions);
 		const refs = [...fonts.values()].map((f) => f.ref);
 		const fontMap = fontMapSpec((configOptions['font-map'] ?? []) as string[]);
@@ -140,7 +140,7 @@ export class FontCommand implements Command {
 		await writeOutput(configOptions.output as string, lab);
 	}
 
-	private listFonts(lab: PDFLab, configOptions: ConfigOptions) {
+	private listFonts(lab: PDFALab, configOptions: ConfigOptions) {
 		const fonts = this.getFonts(lab, configOptions);
 
 		if (configOptions.format === 'text') {
@@ -163,7 +163,7 @@ export class FontCommand implements Command {
 	}
 
 	private async doRun(input: Buffer, configOptions: ConfigOptions) {
-		const lab = await PDFLab.from(input);
+		const lab = await PDFALab.from(input);
 
 		if (configOptions.list) {
 			this.listFonts(lab, configOptions);

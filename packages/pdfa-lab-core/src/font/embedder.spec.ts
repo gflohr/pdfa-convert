@@ -1,6 +1,6 @@
 import { type PDFDocument, PDFRef } from '@cantoo/pdf-lib';
 import { describe, expect, it } from 'vitest';
-import type { FontEmbedOptions } from '../pdf-lab.js';
+import type { FontEmbedOptions } from '../pdfa-lab.js';
 import type { GlyphBlock } from '../text/extract-glyphs.js';
 import { FontEmbedder } from './embedder.js';
 import type { FontInfo } from './types.js';

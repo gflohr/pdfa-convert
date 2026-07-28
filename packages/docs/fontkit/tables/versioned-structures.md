@@ -1,9 +1,9 @@
 # Versioned Structures
 
-`@pdf-lab/fontkit` attempts to fully type all table objects, so that library
+`@pdfa-lab/fontkit` attempts to fully type all table objects, so that library
 users can benefit from type-safety and auto-completion. The types have been
 created manually and have errors. Please report any problems at
-https://github.com/gflohr/pdf-lab/issues!
+https://github.com/gflohr/pdfa-lab/issues!
 
 However, a lot of tables or parts of it have changed over time, and they
 often use versioning. Different versions have different properties, and this
@@ -13,7 +13,7 @@ wherever versions divert.
 ## General Layout
 
 A typical and simple example is the
-[`CPAL`](../api/@pdf-lab/namespaces/CPALTable):
+[`CPAL`](../api/@pdfa-lab/namespaces/CPALTable):
 
 ```TypeScript
 export namespace CPALTable {
@@ -48,16 +48,16 @@ export namespace CPALTable {
 ```
 
 Starting from the bottom, it is clear that
-[`CPAL`](../api/@pdf-lab/namespaces/CPALTable/type-aliases/CPAL) is a union
+[`CPAL`](../api/@pdfa-lab/namespaces/CPALTable/type-aliases/CPAL) is a union
 type. It is either a
-[`CPALV0`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALV0) or a
-[`CPALV1`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALV1)
+[`CPALV0`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALV0) or a
+[`CPALV1`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALV1)
 interface.
 
 Each version, extends
-[`CPALHeader`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALHeader). In
+[`CPALHeader`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALHeader). In
 other words,
-[`CPALHeader`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALHeader)
+[`CPALHeader`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALHeader)
 defines the properties that are present in *all* versions.
 
 Both subtypes have a property `version` with a fixed `number` value `0` or `1`.
@@ -86,7 +86,7 @@ If you load this code into your IDE, and move the mouse over variable `cpal`,
 you can see how it changes its inferred type. Because of this, you can
 access the property `offsetPaletteTypeArray` without a non-null assertion,
 because the type has been narrowed to
-[`CPALV1`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALV1) inside of
+[`CPALV1`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALV1) inside of
 the inner `if` branch.
 
 This feature is called *union discrimination*. It is also used for
@@ -96,9 +96,9 @@ This feature is called *union discrimination*. It is also used for
 
 The condition `cpal.version === 1` is in this case equivalent to
 `cpal.version !== 0`. The type
-[`CPAL`](../api/@pdf-lab/namespaces/CPALTable/type-aliases/CPAL) is either a
-[`CPALV0`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALV0) or a
-[`CPALV1`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALV1). That
+[`CPAL`](../api/@pdfa-lab/namespaces/CPALTable/type-aliases/CPAL) is either a
+[`CPALV0`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALV0) or a
+[`CPALV1`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALV1). That
 means that the version number can only be `0` or `1`.
 
 This is not just a static typing feature. The library guarantees that your code
@@ -149,7 +149,7 @@ Property 'offsetPaletteTypeArray' does not exist on type 'CPAL'.
 ```
 
 TypeScript tell you that the variable may be of type
-[`CPALV0`](../api/@pdf-lab/namespaces/CPALTable/interfaces/CPALV0) and that
+[`CPALV0`](../api/@pdfa-lab/namespaces/CPALTable/interfaces/CPALV0) and that
 does not have the property `offsetPaletteTypeArray`. The reasoning behind this
 is probably that `version` may have other values like `2` or `3.1415927`.
 

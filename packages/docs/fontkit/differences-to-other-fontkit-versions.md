@@ -24,17 +24,17 @@ The most important differences are:
   instance `.objType` properties to enable type-safe format checks without
   string literal guessing.
 * **Strongly Typed Font Tables:** Low-level font tables and structures (such
-  as [`cmap`](./api/@pdf-lab/namespaces/cmapTable/interfaces/cmap), 
-  [`hmtx`](./api/@pdf-lab/namespaces/hmtxTable/interfaces/hmtx),
-  [`OS2`](./api/@pdf-lab/namespaces/OS2Table/type-aliases/OS2),
-  or [`morx`](./api/@pdf-lab/namespaces/morxTable/interfaces/morx))
+  as [`cmap`](./api/@pdfa-lab/namespaces/cmapTable/interfaces/cmap), 
+  [`hmtx`](./api/@pdfa-lab/namespaces/hmtxTable/interfaces/hmtx),
+  [`OS2`](./api/@pdfa-lab/namespaces/OS2Table/type-aliases/OS2),
+  or [`morx`](./api/@pdfa-lab/namespaces/morxTable/interfaces/morx))
   have been refactored into strict, strongly typed interfaces and
   (discriminated) unions.
 * **Modern Tooling & Zero Legacy Dependencies:** Updated build pipelines,
   package exports, and test suites targeting modern Node.js runtime
   environments and ESM/CJS dual-package resolution.
 * **Ported Bugfixes:** All known bugfixes from the other fontkit versions have
-  been ported to `@pdf-lab/fontkit`.
+  been ported to `@pdfa-lab/fontkit`.
 * **Actively Maintained:** This fork will receive regular dependency updates.
   Bugfixes and other pull requests are welcome!
 * **Flexible Subset Streaming:** You can use the new and simple
@@ -47,7 +47,7 @@ The most important differences are:
 An effort has been made to maintain maximum compatibility with upstream
 `fontkit` and other versions. The following known incompatibilities exist:
 
-* All tables in `@pdf-lab/fontkit` are nullable! When you access a table, you
+* All tables in `@pdfa-lab/fontkit` are nullable! When you access a table, you
   always have to check whether it is actually present. The hand-crafted
   interfaces for other `fontkit` versions, suggest that some tables like
   `CFF `, `OS/2`, `head`, `hhea`, or `post` are always present, which is by no
@@ -56,6 +56,6 @@ An effort has been made to maintain maximum compatibility with upstream
   can safely access certain subsets of tables, see
   [Font Type Narrowing](./tables/font-type-narrowing)!
 * The CommonJS module does not have a default export: You have to change
-  `const fontkit = require('@pdf-lab/fontkit')` to `const { fontkit } =
-  require('@pdf-lab/fontkit')`.
+  `const fontkit = require('@pdfa-lab/fontkit')` to `const { fontkit } =
+  require('@pdfa-lab/fontkit')`.
 * The discriminating property `objType` is preferred over the deprecated `type`.

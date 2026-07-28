@@ -1,5 +1,5 @@
 {
-	"name": "@pdf-lab/fontkit",
+	"name": "@pdfa-lab/fontkit",
 	"version": "1.1.0",
 	"description": "An advanced font engine for Node and the browser",
 	"type": "module",
@@ -72,7 +72,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/gflohr/pdf-lab.git"
+		"url": "git://github.com/gflohr/pdfa-lab.git"
 	},
 	"keywords": [
 		"opentype",
@@ -89,8 +89,8 @@
 		"Andrew Dillon <andrew.dillon.j@gmail.com>"
 	],
 	"bugs": {
-		"url": "https://github.com/gflohr/pdf-lab/issues"
+		"url": "https://github.com/gflohr/pdfa-lab/issues"
 	},
 	"license": "MIT",
-	"homepage": "https://github.com/gflohr/pdf-lab/packages/fontkit#readme"
+	"homepage": "https://github.com/gflohr/pdfa-lab/packages/fontkit#readme"
 }

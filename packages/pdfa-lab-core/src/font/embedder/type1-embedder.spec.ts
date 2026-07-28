@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import { PDFDocument, PDFRef } from '@cantoo/pdf-lib';
-import fontkit from '@pdf-lib/fontkit';
+import { fontkit } from '@pdfa-lab/fontkit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SingleByteEncodingMapper } from '../../encoding/mappers/single-byte-encoding-mapper.js';
 import type { FontEmbedOptions } from '../../pdfa-lab.js';

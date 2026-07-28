@@ -35,7 +35,7 @@ export type FontEmbedOptions = {
 
 	platform?: string;
 	/**
-	 * A fontkit instance, see `@pdf-lib/fontkit`.
+	 * A fontkit instance, see `@pdfa-lib/fontkit`.
 	 */
 
 	/**

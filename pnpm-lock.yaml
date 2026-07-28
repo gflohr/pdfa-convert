@@ -20,9 +20,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.31.0
         version: 2.31.0(@types/node@26.0.0)
-      '@pdf-lib/fontkit':
-        specifier: ^1.1.1
-        version: 1.1.1
+      '@pdfa-lab/fontkit':
+        specifier: workspace:*
+        version: link:packages/fontkit
       '@tsconfig/recommended':
         specifier: ^1.0.13
         version: 1.0.13
@@ -68,9 +68,9 @@ importers:
       '@esgettext/runtime':
         specifier: ^1.3.10
         version: 1.3.10
-      '@pdf-lib/fontkit':
-        specifier: ^1.1.1
-        version: 1.1.1
+      '@pdfa-lab/fontkit':
+        specifier: workspace:*
+        version: link:../../packages/fontkit
       '@valibot/i18n':
         specifier: ^1.2.0
         version: 1.2.0(valibot@1.4.1(typescript@6.0.3))
@@ -248,6 +248,9 @@ importers:
       '@cantoo/pdf-lib':
         specifier: ^2.7.1
         version: 2.7.1
+      '@pdfa-lab/fontkit':
+        specifier: workspace:*
+        version: link:../fontkit
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^29.0.3
@@ -1078,9 +1081,6 @@ packages:
 
   '@oxc-project/types@0.127.0':
     resolution: {integrity: sha512-aIYXQBo4lCbO4z0R3FHeucQHpF46l2LbMdxRvqvuRuW2OxdnSkcng5B8+K12spgLDj93rtN3+J2Vac/TIO+ciQ==}
-
-  '@pdf-lib/fontkit@1.1.1':
-    resolution: {integrity: sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==}
 
   '@pdf-lib/standard-fonts@1.0.0':
     resolution: {integrity: sha512-hU30BK9IUN/su0Mn9VdlVKsWBS6GyhVfqjwl1FjZN4TxP6cCw0jP2w7V3Hf5uX7M0AZJ16vey9yE0ny7Sa59ZA==}
@@ -4658,10 +4658,6 @@ snapshots:
       which: 6.0.1
 
   '@oxc-project/types@0.127.0': {}
-
-  '@pdf-lib/fontkit@1.1.1':
-    dependencies:
-      pako: 1.0.11
 
   '@pdf-lib/standard-fonts@1.0.0':
     dependencies:

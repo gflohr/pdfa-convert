@@ -10,7 +10,7 @@ import {
 	rgb,
 	StandardFonts,
 } from '@cantoo/pdf-lib';
-import fontkit from '@pdf-lib/fontkit';
+import { fontkit } from '@pdfa-lib/fontkit';
 
 async function genStandardFonts(): Promise<void> {
 	const pdfDoc = await PDFDocument.create();

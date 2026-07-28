@@ -1,7 +1,10 @@
 import * as r from 'restructure';
 
 export namespace maxpTable {
-	/** Maximum profile. */
+	/**
+	 * Maximum Profile Table. Explicitly defines memory boundaries and total
+	 * glyph count constraints.
+	 */
 	export interface maxp {
 		version: number;
 

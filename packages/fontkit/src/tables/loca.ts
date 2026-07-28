@@ -12,8 +12,8 @@ export namespace locaTable {
 	}
 
 	/**
-	 * Version 0 of the loca table has 16-bit offsets, version 1 has 32-bit
-	 * offsets. It is expected that the offsets are sorted.
+	 * Index to Location Table. Maps local offsets for binary data streams
+	 * resolving glyph outlines.
 	 */
 	export type loca = locaV0 | locaV1;
 }

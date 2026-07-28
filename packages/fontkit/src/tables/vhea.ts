@@ -2,7 +2,8 @@ import * as r from 'restructure';
 
 export namespace vheaTable {
 	/**
-	 * Vertical header table.
+	 * Vertical Header Table. Stores global metric parameters for vertical text
+	 * directions.
 	 */
 	export interface vhea {
 		/** Version number of the Vertical Header Table. */

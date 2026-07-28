@@ -12,6 +12,10 @@ export namespace DSIGTable {
 		signature: Buffer;
 	}
 
+	/**
+	 * Digital Signature Table. Encapsulates cryptographic signatures
+	 * validating binary authenticity.
+	 */
 	export interface DSIG {
 		/** Version number of the DSIG table (0x00000001). */
 		ulVersion: number;

@@ -21,7 +21,8 @@ export namespace VDMXTable {
 		entries: VTable[] /** The VDMX records. */;
 	}
 
-	/** VDMX tables contain ascender/descender overrides for certain (usually
+	/**
+	 * The VDMX table contains ascender/descender overrides for certain (usually
 	 * small sizes. This is needed in order to match font metrics on Windows.
 	 */
 	export interface VDMX {

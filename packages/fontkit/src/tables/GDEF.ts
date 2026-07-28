@@ -68,6 +68,10 @@ export namespace GDEFTable {
 		itemVariationStore: OpenTypeVariation.ItemVariationStore;
 	}
 
+	/**
+	 * Glyph Definition Table. Categorises glyph types (e.g., base, ligature,
+	 * mark) for layout alignment.
+	 */
 	export type GDEF = GDEFV1_1 | GDEFV1_3 | GDEFV1_4;
 }
 

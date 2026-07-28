@@ -95,6 +95,10 @@ export namespace morxTable {
 		subtables: Subtable[];
 	}
 
+	/**
+	 * Extended Glyph Metamorphosis Table. Powers state-machine transformations
+	 * substituting AAT items.
+	 */
 	export interface morx {
 		version: number;
 		nChains: number;

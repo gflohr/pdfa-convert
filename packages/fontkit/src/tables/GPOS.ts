@@ -336,6 +336,10 @@ export namespace GPOSTable {
 		featureVariations: OpenTypeVariation.FeatureVariations | null;
 	}
 
+	/**
+	 * Glyph Positioning Table. Provides precise metric adjustments handling
+	 * kerning and attachment marks.
+	 */
 	export type GPOS = GPOSV1_0 | GPOSV1_1;
 }
 

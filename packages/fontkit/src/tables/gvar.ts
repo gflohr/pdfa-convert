@@ -1,6 +1,10 @@
 import * as r from 'restructure';
 
 export namespace gvarTable {
+	/**
+	 * Glyph Variations Table. Controls structural outline distortion
+	 * transformations for variable glyphs.
+	 */
 	export interface gvar {
 		version: number;
 		axisCount: number;

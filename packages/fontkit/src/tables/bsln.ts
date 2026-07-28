@@ -36,6 +36,10 @@ export namespace bslnTable {
 		| SubtableFormat2
 		| SubtableFormat3;
 
+	/**
+	 * Baseline Table. Provides baseline shift measurements for multi-script
+	 * alignment.
+	 */
 	export interface bsln {
 		version: number;
 		format: number;

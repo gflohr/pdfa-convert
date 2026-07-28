@@ -185,6 +185,10 @@ export namespace OS2Table {
 		usUpperOpticalPointSize: number;
 	}
 
+	/**
+	 * OS/2 and Windows Metrics Table. Contains subsystem configurations,
+	 * weights, and unicode ranges.
+	 */
 	export type OS2 = OS2V0 | OS2V1 | OS2V2 | OS2V3 | OS2V4 | OS2V5;
 }
 

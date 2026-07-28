@@ -132,6 +132,9 @@ export namespace kernTable {
 		tables: Table[];
 	}
 
+	/**
+	 * Kerning Table. Contains traditional pairwise spacing adjustments.
+	 */
 	export type kern = kernV0 | kernV1;
 }
 

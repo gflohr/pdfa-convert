@@ -86,6 +86,10 @@ export namespace EBLCTable {
 		};
 	}
 
+	/**
+	 * The Embedded Bitmap Data Table (EBLC) and the Colour Bitmap Data Table
+	 * (CBLC) share the same interface.
+	 */
 	export interface EBLC {
 		version: number; // 0x00020000
 		numSizes: number;

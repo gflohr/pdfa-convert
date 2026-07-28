@@ -19,6 +19,10 @@ export namespace fvarTable {
 		postscriptNameID?: number;
 	}
 
+	/**
+	 * Font Variations Table. Declares design axes and instance configurations
+	 * in variable fonts.
+	 */
 	export interface fvar {
 		version: number;
 		offsetToData: number;

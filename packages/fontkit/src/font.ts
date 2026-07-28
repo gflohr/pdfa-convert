@@ -118,7 +118,6 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	hhea: hheaTable.hhea | null;
 
 	/**
-	 *
 	 * Horizontal Metrics Table. Contains advance widths and left side
 	 * bearings for all glyphs.
 	 */
@@ -291,79 +290,79 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	/**
 	 * Linear Threshold Table. Sets pixel-per-em limits where scaling
 	 * instructions degrade.
-	 * */
+	 */
 	LTSH: LTSHTable.LTSH | null;
 
 	/**
 	 * PCL 5 Table. Contains metrics and command parameters for HP LaserJet
 	 * compatibility.
-	 * */
+	 */
 	PCLT: PCLTTable.PCLT | null;
 
 	/**
 	 * Vertical Device Metrics Table. Preserves explicit vertical pixel height
 	 * mappings.
-	 * */
+	 */
 	VDMX: VDMXTable.VDMX | null;
 
 	/**
 	 * Vertical Header Table. Stores global metric parameters for vertical text
 	 * directions.
-	 * */
+	 */
 	vhea: vheaTable.vhea | null;
 
 	/**
 	 * Vertical Metrics Table. Contains advance heights and top side bearings
 	 * for vertical layouts.
-	 * */
+	 */
 	vmtx: vmtxTable.vmtx | null;
 
 	/**
 	 * Axis Variations Table. Modifies normalised coordinates across axes in
 	 * variable fonts.
-	 * */
+	 */
 	avar: avarTable.avar | null;
 
 	/**
 	 * Baseline Table. Provides baseline shift measurements for multi-script
 	 * alignment.
-	 * */
+	 */
 	bsln: bslnTable.bsln | null;
 
 	/**
 	 * Feature Name Table. Maps AAT feature selectors to localised string
 	 * references.
-	 * */
+	 */
 	feat: featTable.feat | null;
 
 	/**
 	 * Font Variations Table. Declares design axes and instance configurations
 	 * in variable fonts.
-	 * */
+	 */
 	fvar: fvarTable.fvar | null;
 
 	/**
 	 * Glyph Variations Table. Controls structural outline distortion
 	 * transformations for variable glyphs.
-	 * */
+	 */
 	gvar: gvarTable.gvar | null;
 
 	/**
 	 * Justification Table. Provides layout spacing adjustments for AAT
 	 * tracking loops.
-	 * */
+	 */
 	just: justTable.just | null;
 
 	/**
 	 * Extended Glyph Metamorphosis Table. Powers state-machine transformations
 	 * substituting AAT items.
-	 * */
+	 */
 	morx: morxTable.morx | null;
 
 	/**
 	 * Optical Bounds Table. Sets bounding limits to align glyphs based on
 	 * visual centre points.
-	 * */
+	 */
 	opbd: opbdTable.opbd | null;
 
 	/**

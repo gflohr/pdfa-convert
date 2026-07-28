@@ -27,6 +27,10 @@ export namespace CPALTable {
 		offsetPaletteEntryLabelArray: number[];
 	}
 
+	/**
+	 * Colour Palette Table. Maps index arrays declaring hex colours utilised by
+	 * COLR elements.
+	 */
 	export type CPAL = CPALV0 | CPALV1;
 }
 

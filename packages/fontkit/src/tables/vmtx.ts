@@ -3,6 +3,10 @@ import type { GlyphAxisMetrics } from '../glyph/glyph.js';
 import type { MetricsTable } from './metrics.js';
 
 export namespace vmtxTable {
+	/**
+	 * Vertical Metrics Table. Contains advance heights and top side bearings
+	 * for vertical layouts.
+	 */
 	export interface vmtx extends MetricsTable {}
 }
 

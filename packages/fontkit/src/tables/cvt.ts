@@ -1,7 +1,10 @@
 import * as r from 'restructure';
 
 export namespace cvtTable {
-	/** An array of predefined values accessible by instructions. */
+	/**
+	 * Control Value Table. Establishes pixel values used by instructions to
+	 * control raster adjustments.
+	 */
 	export interface cvt {
 		controlValues: number[];
 	}

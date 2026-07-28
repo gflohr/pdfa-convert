@@ -14,6 +14,10 @@ export namespace gaspTable {
 		};
 	}
 
+	/**
+	 * Grid-fitting and Scan-conversion Procedure Table. Optimises text raster
+	 * rendering constraints.
+	 */
 	export interface gasp {
 		version: number;
 		numRanges: number;

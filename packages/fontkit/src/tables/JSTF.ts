@@ -33,6 +33,10 @@ export namespace JSTFTable {
 		script: Script;
 	}
 
+	/**
+	 * Justification Table. Provides options for justification adjustments in
+	 * complex scripts.
+	 */
 	export interface JSTF {
 		version: number; // should be 0x00010000
 		scriptCount: number;

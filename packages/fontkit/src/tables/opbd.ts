@@ -9,6 +9,10 @@ export namespace opbdTable {
 		bottom: number;
 	}
 
+	/**
+	 * Optical Bounds Table. Sets bounding limits to align glyphs based on
+	 * visual centre points.
+	 */
 	export interface opbd {
 		version: number;
 		format: number;

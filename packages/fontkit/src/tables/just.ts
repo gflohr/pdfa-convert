@@ -89,6 +89,10 @@ export namespace justTable {
 		widthDeltaClusters: Record<number, WidthDeltaRecord[]>;
 	}
 
+	/**
+	 * Justification Table. Provides layout spacing adjustments for AAT
+	 * tracking loops.
+	 */
 	export interface just {
 		version: number;
 		format: number;

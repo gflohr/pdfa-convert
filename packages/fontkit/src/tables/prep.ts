@@ -5,6 +5,10 @@ import * as r from 'restructure';
  * transformation change.\
  */
 export namespace prepTable {
+	/**
+	 * Control Value Program Table. Provides global instructions establishing
+	 * variable outline alignment.
+	 */
 	export interface prep {
 		controlValueProgram: number[];
 	}

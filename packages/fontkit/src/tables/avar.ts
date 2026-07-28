@@ -11,6 +11,10 @@ export namespace avarTable {
 		correspondence: Correspondence[];
 	}
 
+	/**
+	 * Axis Variations Table. Modifies normalised coordinates across axes in
+	 * variable fonts.
+	 */
 	export interface avar {
 		version: number;
 		axisCount: number;

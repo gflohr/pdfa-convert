@@ -1,9 +1,4 @@
-import {
-	PDFDocument,
-	PDFName,
-	PDFRef,
-	type PDFStream,
-} from '@cantoo/pdf-lib';
+import { PDFDocument, PDFName, PDFRef, type PDFStream } from '@cantoo/pdf-lib';
 import collectFonts from './font/collect-fonts.js';
 import { collectResources, type FontUsage } from './font/collect-resources.js';
 import collectSubsetPrefixes from './font/collect-subset-prefixes.js';

@@ -68,7 +68,7 @@ const ttcFilename = 'NotoSans.ttc';
 const ttcBytes = fs.readFileSync(ttcFilename);
 const ttc: FontCollection = new TrueTypeCollection(ttcBytes);
 console.log(`Font collection '${ttcFilename}':`);
-for (const font of ttc) {
+for (const font of ttc.fonts) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);
 }
 
@@ -76,7 +76,7 @@ const dfontFilename = 'NotoSans.dfont';
 const dfontBytes = fs.readFileSync(dfontFilename);
 const dfont: FontCollection = new DFont(dfontBytes);
 console.log(`Font collection '${dfontFilename}':`);
-for (const font of dfont) {
+for (const font of dfont.fonts) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);
 }
 ```
@@ -90,7 +90,7 @@ const ttcFilename = 'NotoSans.ttc';
 const ttcBytes = fs.readFileSync(ttcFilename);
 const ttc = new TrueTypeCollection(ttcBytes);
 console.log(`Font collection '${ttcFilename}':`);
-for (const font of ttc) {
+for (const font of ttc.fonts) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);
 }
 
@@ -98,7 +98,7 @@ const dfontFilename = 'NotoSans.dfont';
 const dfontBytes = fs.readFileSync(dfontFilename);
 const dfont = new DFont(dfontBytes);
 console.log(`Font collection '${dfontFilename}':`);
-for (const font of dfont) {
+for (const font of dfont.fonts) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);
 }
 ```
@@ -112,7 +112,7 @@ const ttcFilename = 'NotoSans.ttc';
 const ttcBytes = fs.readFileSync(ttcFilename);
 const ttc = new TrueTypeCollection(ttcBytes);
 console.log(`Font collection '${ttcFilename}':`);
-for (const font of ttc) {
+for (const font of ttc.fonts) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);
 }
 
@@ -120,7 +120,7 @@ const dfontFilename = 'NotoSans.dfont';
 const dfontBytes = fs.readFileSync(dfontFilename);
 const dfont = new DFont(dfontBytes);
 console.log(`Font collection '${dfontFilename}':`);
-for (const font of dfont) {
+for (const font of dfont.fonts) {
 	console.log(`\t- ${font.postscriptName} (${font.fullName})`);
 }
 ```

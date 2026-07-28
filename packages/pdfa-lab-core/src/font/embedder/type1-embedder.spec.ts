@@ -3,7 +3,7 @@ import { PDFDocument, PDFRef } from '@cantoo/pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SingleByteEncodingMapper } from '../../encoding/mappers/single-byte-encoding-mapper.js';
-import type { FontEmbedOptions } from '../../pdf-lab.js';
+import type { FontEmbedOptions } from '../../pdfa-lab.js';
 import type { GlyphBlock } from '../../text/extract-glyphs.js';
 import * as resolveFontModule from '../resolve-font.js';
 import type { FontInfo } from '../types.js';

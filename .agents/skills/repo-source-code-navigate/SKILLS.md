@@ -1,6 +1,6 @@
 ---
 name: repo-structure-navigate
-description: Navigate pdf-lab repository structure. Use when looking for files, understanding the codebase layout, locating tests, API docs, or guide pages. Covers monorepo layout, library architecture, file naming conventions, and quick lookups.
+description: Navigate pdfa-lab repository structure. Use when looking for files, understanding the codebase layout, locating tests, API docs, or guide pages. Covers monorepo layout, library architecture, file naming conventions, and quick lookups.
 ---
 
 # E-Invoice-EU Repository Structure
@@ -8,16 +8,16 @@ description: Navigate pdf-lab repository structure. Use when looking for files, 
 ## Monorepo Layout
 
 ```text
-pdf-lab/
+pdfa-lab/
 ├── assets/             # PDF documents, fonts, and so on.
 ├── apps/               # Applications.
 │   └── cli/            # The command-line interfaace
 ├── packages/           # Other.
-│   └── pdf-lab-core/   # The pdf-lab-core library.
+│   └── pdfa-lab-core/   # The pdfa-lab-core library.
 └   scripts/            # Various helper scripts.
 ```
 
-## Core Library (`/packages/pdf-lab-core/src/`)
+## Core Library (`/packages/pdfa-lab-core/src/`)
 
 ### Directory Structure
 

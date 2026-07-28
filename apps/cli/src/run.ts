@@ -15,7 +15,7 @@ import { loadInput } from './util/load-input.js';
 
 const commandNames = ['font', 'text'];
 
-const gtx = Textdomain.getInstance('pdf-lab');
+const gtx = Textdomain.getInstance('pdfa-lab');
 v.setGlobalConfig({ lang: Textdomain.locale });
 
 const __filename = fileURLToPath(import.meta.url);

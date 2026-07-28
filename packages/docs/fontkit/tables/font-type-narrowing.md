@@ -25,14 +25,14 @@ const familyName = font.name?.records.fullName?.en;
 OpenType fonts must have 8 core tables present (see
 [`requiredOpenTypeTables`](../api/variables/requiredOpenTypeTables)):
 
-* [`cmap`](../api/@pdf-lab/namespaces/cmapTable/interfaces/cmap)
-* [`head`](../api/@pdf-lab/namespaces/headTable/interfaces/head)
-* [`hhea`](../api/@pdf-lab/namespaces/hheaTable/interfaces/hhea)
-* [`hmtx`](../api/@pdf-lab/namespaces/hmtxTable/interfaces/hmtx)
-* [`maxp`](../api/@pdf-lab/namespaces/maxpTable/interfaces/maxp)
-* [`name`](../api/@pdf-lab/namespaces/nameTable/type-aliases/name)
-* [`OS/2`](../api/@pdf-lab/namespaces/OS2Table/type-aliases/OS2)
-* [`post`](../api/@pdf-lab/namespaces/postTable/type-aliases/post)
+* [`cmap`](../api/@pdfa-lab/namespaces/cmapTable/interfaces/cmap)
+* [`head`](../api/@pdfa-lab/namespaces/headTable/interfaces/head)
+* [`hhea`](../api/@pdfa-lab/namespaces/hheaTable/interfaces/hhea)
+* [`hmtx`](../api/@pdfa-lab/namespaces/hmtxTable/interfaces/hmtx)
+* [`maxp`](../api/@pdfa-lab/namespaces/maxpTable/interfaces/maxp)
+* [`name`](../api/@pdfa-lab/namespaces/nameTable/type-aliases/name)
+* [`OS/2`](../api/@pdfa-lab/namespaces/OS2Table/type-aliases/OS2)
+* [`post`](../api/@pdfa-lab/namespaces/postTable/type-aliases/post)
 
 You can get a font object, where these tables are guaranteed to be present
 and decodable with the
@@ -63,7 +63,7 @@ export type OpenTypeFont = OpenTypeTrueTypeFont | OpenTypePostscriptFont
 ```
 
 An OpenType font with TrueType outlines, also requires the
-[`loca`](../api/@pdf-lab/namespaces/locaTable/type-aliases/loca) table. The
+[`loca`](../api/@pdfa-lab/namespaces/locaTable/type-aliases/loca) table. The
 [`asOpenTypeFont()`](../api/classes/TrueTypeFont#asopentypefont) method has
 already checked for the presence of this type, and you can get an
 [`OpenTypeTrueTypeFont`](../api/interfaces/OpenTypeTrueTypeFont) from its
@@ -136,9 +136,9 @@ if (otFont && otFont.outlines === 'none') {
 AAT (Apple Advanced Typography) fonts must have 3 tables present, see
 [`requiredAATTables`](../api/variables/requiredAATTables):
 
-* [`morx`](../api/@pdf-lab/namespaces/morxTable/interfaces/morx)
-* [`loca`](../api/@pdf-lab/namespaces/locaTable/interfaces/loca)
-* [`hmtx`](../api/@pdf-lab/namespaces/hmtxTable/interfaces/hmtx)
+* [`morx`](../api/@pdfa-lab/namespaces/morxTable/interfaces/morx)
+* [`loca`](../api/@pdfa-lab/namespaces/locaTable/interfaces/loca)
+* [`hmtx`](../api/@pdfa-lab/namespaces/hmtxTable/interfaces/hmtx)
 
 You can validate and cast a
 [`TrueTypeFont`](../api/classes/TrueTypeFont) to an
@@ -158,8 +158,8 @@ if (aatFont) {
 
 The minimal set of tables required to instantiate and run a
 [`TrueTypeGlyph`](../api/classes/TrueTypeGlyph) are the
-[`loca`](../api/@pdf-lab/namespaces/locaTable/interfaces/loca) and
-[`hmtx`](../api/@pdf-lab/namespaces/hmtxTable/interfaces/hmtx) tables, see
+[`loca`](../api/@pdfa-lab/namespaces/locaTable/interfaces/loca) and
+[`hmtx`](../api/@pdfa-lab/namespaces/hmtxTable/interfaces/hmtx) tables, see
 [`requiredTrueTypeSubsetTables`](../api/variables/requiredTrueTypeSubsetTables).
 
 You can validate and cast a

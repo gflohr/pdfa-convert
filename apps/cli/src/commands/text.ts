@@ -1,13 +1,13 @@
 import { Textdomain } from '@esgettext/runtime';
 import * as yaml from 'js-yaml';
-import { PDFLab } from 'pdf-lab-core';
+import { PDFALab } from 'pdfa-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
 import { type FontInfoDto, toFontInfoDto } from '../util/font-info-dto.js';
 import { coerceOptions, type OptSpec } from '../util/optspec.js';
 
-const gtx = Textdomain.getInstance('pdf-lab');
+const gtx = Textdomain.getInstance('pdfa-lab');
 
 const options: {
 	format: OptSpec;
@@ -45,7 +45,7 @@ export class TextCommand implements Command {
 	}
 
 	private async doRun(input: Buffer, configOptions: ConfigOptions) {
-		const lab = await PDFLab.from(input);
+		const lab = await PDFALab.from(input);
 
 		const blocks = await lab.extractText();
 		if (configOptions.format === 'text') {

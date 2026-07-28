@@ -14,7 +14,7 @@ import type { Encoding } from '../encoding/types.js';
 import { isStandardEncoding } from '../encoding/util/is-standard-encoding.js';
 import { octetsToGlyphIds } from '../encoding/util/octets-to-glyph-ids.js';
 import { LiteralParser } from '../parser/literal-parser.js';
-import type { FontEmbedOptions } from '../pdf-lab.js';
+import type { FontEmbedOptions } from '../pdfa-lab.js';
 import type { GlyphBlock } from '../text/extract-glyphs.js';
 import { deriveFontFlags } from './derive-font-flags.js';
 import type { OsType } from './load-font.js';

@@ -1,5 +1,5 @@
 ---
-"@pdf-lab/fontkit": patch
+"@pdfa-lab/fontkit": patch
 ---
 
 incorporate fontkit

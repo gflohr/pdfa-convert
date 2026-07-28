@@ -3,7 +3,7 @@ import type { Arguments, Options } from 'yargs';
 
 import { Package } from '../package.js';
 
-const gtx = Textdomain.getInstance('pdf-lab');
+const gtx = Textdomain.getInstance('pdfa-lab');
 
 export interface OptSpec extends Options {
 	multi?: boolean;

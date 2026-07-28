@@ -1,9 +1,9 @@
-# `@pdf-lab/fontkit`
+# `@pdfa-lab/fontkit`
 
-This is `@pdf-lab/fontkit`, or the umpteenth fork of `fontkit`, an effort
+This is `@pdfa-lab/fontkit`, or the umpteenth fork of `fontkit`, an effort
 to make font processing available to the JavaScript/TypeScript eco system.
 
-- [`@pdf-lab/fontkit`](#pdf-labfontkit)
+- [`@pdfa-lab/fontkit`](#pdfa-labfontkit)
 	- [Lineage](#lineage)
 	- [Why Another Fork?](#why-another-fork)
 	- [State and Plans](#state-and-plans)
@@ -74,7 +74,7 @@ This project derives from a chain of related `fontkit` implementations:
   A fork of `foliojs/fontkit` adapted for `pdf-lib`, adding browser/UMD support
   and packaging changes
 
-- `@pdf-lab/fontkit` (this project)  
+- `@pdfa-lab/fontkit` (this project)  
   A continuation of `@pdf-lib/fontkit`, focusing on TypeScript migration,
   structural cleanup, and browser-first compatibility
 
@@ -126,7 +126,7 @@ and browser support diverged.
 ## Naming
 
 To avoid confusion with upstream packages, this fork is published under a
-distinct namespace (`@pdf-lab/*`). Unfortunately, this is only a one-character
+distinct namespace (`@pdfa-lab/*`). Unfortunately, this is only a one-character
 difference from the original upstream naming, which was not intentional. For
 lack of a better alternative, the naming is kept as-is for now.
 
@@ -191,7 +191,7 @@ Fontkit is an advanced font engine for Node and the browser, used by [PDFKit](ht
 #### Example
 
 ```js
-import fontkit from '@pdf-lab/fontkit';
+import fontkit from '@pdfa-lab/fontkit';
 import fs from 'fs';
 
 // open a font synchronously
@@ -221,27 +221,27 @@ subset.encodeStream()
 To install the latest stable version:
 ```bash
 # With npm
-npm install --save @pdf-lab/fontkit
+npm install --save @pdfa-lab/fontkit
 
 # With yarn
-yarn add  @pdf-lab/fontkit
+yarn add  @pdfa-lab/fontkit
 ```
 This assumes you're using [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/lang/en/) as your package manager.
 
 ##### UMD Module
 
-You can also download `@pdf-lab/fontkit` as a UMD module from [unpkg](https://unpkg.com/#/). The UMD builds have been compiled to ES5, so they should work [in any modern browser](https://caniuse.com/#feat=es5). UMD builds are useful if you aren't using a package manager or module bundler. For example, you can use them directly in the `<script>` tag of an HTML page.
+You can also download `@pdfa-lab/fontkit` as a UMD module from [unpkg](https://unpkg.com/#/). The UMD builds have been compiled to ES5, so they should work [in any modern browser](https://caniuse.com/#feat=es5). UMD builds are useful if you aren't using a package manager or module bundler. For example, you can use them directly in the `<script>` tag of an HTML page.
 
 The following builds are available:
 
-* https://unpkg.com/@pdf-lab/fontkit/dist/fontkit.umd.js
-* https://unpkg.com/@pdf-lab/fontkit/dist/fontkit.umd.min.js
+* https://unpkg.com/@pdfa-lab/fontkit/dist/fontkit.umd.js
+* https://unpkg.com/@pdfa-lab/fontkit/dist/fontkit.umd.min.js
 
 When using a UMD build, you will have access to a global `window.fontkit` variable. This variable contains the object exported by `@pdf-lib/fontkit`. For example:
 
 ```javascript
 // NPM module
-import fontkit from '@pdf-lab/fontkit';
+import fontkit from '@pdfa-lab/fontkit';
 
 // UMD module
 var fontkit = window.fontkit;

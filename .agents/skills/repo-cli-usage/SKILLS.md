@@ -1,20 +1,20 @@
 ---
 name: repo-cli-usage
 description: >
-  Provides AI agents with instructions for using the `pdf-lab` CLI. Includes
+  Provides AI agents with instructions for using the `pdfa-lab` CLI. Includes
   installation, help commands, and detailed guidance for each CLI command.
 ---
 
 # e-invoice-eu CLI Usage
 
-This skill documents how to install and use the `pdf-lab` command-line tool.
+This skill documents how to install and use the `pdfa-lab` command-line tool.
 
 ## Installation
 
-You can install the commandline tool `pdf-lab` like this:
+You can install the commandline tool `pdfa-lab` like this:
 
 ```sh
-npm install -g pdf-lab
+npm install -g pdfa-lab
 ```
 
 Instead of `npm` you can also use `pnpm`, `yarn`, or `bun` with their
@@ -25,7 +25,7 @@ If you lack permissions, prepend sudo to the command.
 Test the installation:
 
 ```text
-pdf-lab --version
+pdfa-lab --version
 ```
 
 ## On-the-fly Usage
@@ -34,22 +34,22 @@ It is also possible to use the tool without installation. This is achieved
 with the help of `npx` (or `pnpx`, `bunx`):
 
 ```
-npx pdf-lab --help
+npx pdfa-lab --help
 ```
 
-This will use a locally present `pdf-lab` or install it somewhere in the
+This will use a locally present `pdfa-lab` or install it somewhere in the
 user's home directory.
 
 ## Obtaining Help
 
 You can get an overview of all available commands and global options with
-`pdf-lab --help` or `pdf-lab -h`.
+`pdfa-lab --help` or `pdfa-lab -h`.
 
 You can get help for a specific comment with `e-invoice-eu COMMAND --help`
 or `e-invoice-eu COMMAND -h`. Example:
 
 ```sh
-pdf-lab text --help
+pdfa-lab text --help
 ```
 
 ## Global Options
@@ -78,21 +78,21 @@ The only other global option is `--version` respectively `-V` (case matters,
 Extract text with font information and page numbers from `invoice.pdf`:
 
 ```sh
-pdf-lab --verbose text invoice.pdf
+pdfa-lab --verbose text invoice.pdf
 ```
 
 Alternatively specify input file with `--input`:
 
 ```sh
-pdf-lab --input=invoice.pdf
+pdfa-lab --input=invoice.pdf
 ```
 
 Read PDF from standard input:
 
 ```sh
-cat example.pdf | pdf-lab
-cat example.pdf | pdf-lab -
-cat example.pdf | pdf-lab --input=-
+cat example.pdf | pdfa-lab
+cat example.pdf | pdfa-lab -
+cat example.pdf | pdfa-lab --input=-
 ```
 
 All three invocations are equivalent.
@@ -144,8 +144,8 @@ More commands will be implemented soon:
 ## Check List
 
 - [ ] The CLI is installed globally (npm, yarn, pnpm, or bun).
-- [ ] Use pdf-lab --help for general guidance.
-- [ ] Each command has its own help: pdf-lab *command* --help.
+- [ ] Use pdfa-lab --help for general guidance.
+- [ ] Each command has its own help: pdfa-lab *command* --help.
 - [ ] Contributors or agents should never modify installation instructions; they are fixed.
 - [ ] Include examples for every command in the documentation.
 - [ ] Include notes or hints for special scenarios (permissions, PDF output, etc.).

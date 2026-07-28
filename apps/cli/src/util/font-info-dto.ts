@@ -1,4 +1,4 @@
-import type { FontInfo } from 'pdf-lab-core';
+import type { FontInfo } from 'pdfa-lab-core';
 
 export type FontInfoDto = {
 	ref: string;

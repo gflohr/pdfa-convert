@@ -44,7 +44,7 @@ export type FontEmbedOptions = {
 	fontkit?: unknown;
 };
 
-export class PDFLab {
+export class PDFALab {
 	private fonts: Map<string, FontInfo> | undefined;
 	private fontUsage: FontUsage[] | undefined;
 
@@ -52,7 +52,7 @@ export class PDFLab {
 
 	/**
 	 * Returns the internally used `PDFDocument`. Changing the structure of
-	 * this document, and then calling other `PDFLab` methods, may result in
+	 * this document, and then calling other `PDFALab` methods, may result in
 	 * undefined behaviour and is strongly discouraged.
 	 *
 	 * @return the internally used `PDFDocument`
@@ -78,7 +78,7 @@ export class PDFLab {
 	}
 
 	/**
-	 * Creates a `PDFLab` instance from a variety of PDF-like inputs and
+	 * Creates a `PDFALab` instance from a variety of PDF-like inputs and
 	 * normalizes them into a single canonical `@cantoo/pdf-lib` document
 	 * representation.
 	 *
@@ -117,11 +117,11 @@ export class PDFLab {
 	 *
 	 * @param input A PDF source: raw bytes, base64 string, data URI, or a
 	 * `PDFDocument` instance.
-	 * @returns A normalized `PDFLab` instance backed by a canonical PDF document.
+	 * @returns A normalized `PDFALab` instance backed by a canonical PDF document.
 	 */
 	static async from(
 		input: PDFDocument | string | ArrayBuffer | Uint8Array<ArrayBufferLike>,
-	): Promise<PDFLab> {
+	): Promise<PDFALab> {
 		let pdfDoc: PDFDocument;
 		if (typeof input === 'string') {
 			pdfDoc = await PDFDocument.load(input);
@@ -148,7 +148,7 @@ export class PDFLab {
 			);
 		}
 
-		return new PDFLab(pdfDoc);
+		return new PDFALab(pdfDoc);
 	}
 
 	/**

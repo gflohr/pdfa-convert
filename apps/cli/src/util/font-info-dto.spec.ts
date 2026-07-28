@@ -1,5 +1,5 @@
 import { PDFRef } from '@cantoo/pdf-lib';
-import type { FontInfo } from 'pdf-lab-core';
+import type { FontInfo } from 'pdfa-lab-core';
 import { describe, expect, it } from 'vitest';
 import { toFontInfoDto } from './font-info-dto.js';
 

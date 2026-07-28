@@ -149,5 +149,5 @@ an educated guess.
 ## Key Takeaways for Agents
 
 * Text extraction from PDFs is imperfect.
-* The "pdf-lab" still oversimplifies things and may produce wrong results.
+* The "pdfa-lab" still oversimplifies things and may produce wrong results.
 * 

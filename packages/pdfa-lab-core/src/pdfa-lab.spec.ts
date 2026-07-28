@@ -3,20 +3,20 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SingleByteEncodingMapper } from './encoding/mappers/single-byte-encoding-mapper.js';
 import * as collectFont from './font/collect-fonts.js';
 import type { FontInfo } from './font/types.js';
-import { PDFLab } from './pdf-lab.js';
+import { PDFALab } from './pdfa-lab.js';
 
-async function makePDFLab(): Promise<PDFLab> {
+async function makePDFALab(): Promise<PDFALab> {
 	const doc = await PDFDocument.create();
 	const lab = new (
-		PDFLab as unknown as {
-			new (pdfDoc: PDFDocument): PDFLab;
+		PDFALab as unknown as {
+			new (pdfDoc: PDFDocument): PDFALab;
 		}
 	)(doc);
 
 	return lab;
 }
 
-describe('PDFLab', () => {
+describe('PDFALab', () => {
 	afterEach(() => {
 		vi.restoreAllMocks();
 	});
@@ -25,18 +25,18 @@ describe('PDFLab', () => {
 		it('returns the same instance if given a real PDFDocument', async () => {
 			const doc = await PDFDocument.create();
 
-			const result = await PDFLab.from(doc);
+			const result = await PDFALab.from(doc);
 
-			expect(result).toBeInstanceOf(PDFLab);
+			expect(result).toBeInstanceOf(PDFALab);
 		});
 
 		it('loads a PDFDocument from Uint8Array', async () => {
 			const doc = await PDFDocument.create();
 			const bytes = await doc.save();
 
-			const result = await PDFLab.from(bytes);
+			const result = await PDFALab.from(bytes);
 
-			expect(result).toBeInstanceOf(PDFLab);
+			expect(result).toBeInstanceOf(PDFALab);
 		});
 
 		it('loads a PDFDocument from base64 string', async () => {
@@ -44,9 +44,9 @@ describe('PDFLab', () => {
 			const bytes = await doc.save();
 			const base64 = Buffer.from(bytes).toString('base64');
 
-			const result = await PDFLab.from(base64);
+			const result = await PDFALab.from(base64);
 
-			expect(result).toBeInstanceOf(PDFLab);
+			expect(result).toBeInstanceOf(PDFALab);
 		});
 
 		it('recreates a "foreign" PDFDocument (same shape, different prototype)', async () => {
@@ -54,14 +54,14 @@ describe('PDFLab', () => {
 			const saveSpy = vi.fn(() => doc.save());
 			const foreignDoc = { context: doc.context, save: saveSpy };
 
-			const result = await PDFLab.from(foreignDoc as unknown as PDFDocument);
+			const result = await PDFALab.from(foreignDoc as unknown as PDFDocument);
 
-			expect(result).toBeInstanceOf(PDFLab);
+			expect(result).toBeInstanceOf(PDFALab);
 			expect(saveSpy).toHaveBeenCalledTimes(1);
 		});
 
 		it('throws for invalid input', async () => {
-			await expect(PDFLab.from(123 as unknown as string)).rejects.toThrow(
+			await expect(PDFALab.from(123 as unknown as string)).rejects.toThrow(
 				/input must be/,
 			);
 		});
@@ -72,7 +72,7 @@ describe('PDFLab', () => {
 			const bytes = new Uint8Array([37, 80, 68, 70]); // "%PDF" minimal header
 
 			try {
-				await PDFLab.from(bytes);
+				await PDFALab.from(bytes);
 			} catch {
 				// ignore parse error, we only care that load was called
 			}
@@ -114,7 +114,7 @@ describe('PDFLab', () => {
 		});
 
 		it.skip('should embed all fonts', async () => {
-			const lab = await makePDFLab();
+			const lab = await makePDFALab();
 			const collectMock = vi
 				.spyOn(collectFont, 'default')
 				.mockReturnValue(fontInfoMap);
@@ -127,7 +127,7 @@ describe('PDFLab', () => {
 
 	describe('collect fonts', () => {
 		it('should call the collectFont() implementation', async () => {
-			const lab = await makePDFLab();
+			const lab = await makePDFALab();
 			const collectMock = vi
 				.spyOn(collectFont, 'default')
 				.mockReturnValue(new Map<string, FontInfo>());
@@ -138,7 +138,7 @@ describe('PDFLab', () => {
 		});
 
 		it('should cache the results', async () => {
-			const lab = await makePDFLab();
+			const lab = await makePDFALab();
 			const fonts = new Map<string, FontInfo>();
 
 			fonts.set('42 0 R', {

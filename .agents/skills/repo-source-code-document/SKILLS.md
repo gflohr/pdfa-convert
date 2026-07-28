@@ -1,9 +1,9 @@
 ---
 name: repo-source-code-document
-description: Write TypeDoc comments and inline documentation for pdf-lab library source code in /packages/core/src/. Use when documenting classes, interfaces, and types. Covers interface documentation, function overloads, purity annotations, inline comment patterns, and terminology consistency.
+description: Write TypeDoc comments and inline documentation for pdfa-lab library source code in /packages/core/src/. Use when documenting classes, interfaces, and types. Covers interface documentation, function overloads, purity annotations, inline comment patterns, and terminology consistency.
 ---
 
-# PDF-Lab Source Code Documentation
+# PDFA-lab Source Code Documentation
 
 Documentation patterns for library source code in `/packages/core/src/`.
 

@@ -27,6 +27,7 @@ export default defineConfig({
 				items: [
 					{
 						text: 'Introduction',
+						collapsed: true,
 						items: [
 							{
 								text: 'What is fontkit?',
@@ -47,7 +48,8 @@ export default defineConfig({
 						],
 					},
 					{
-						text: 'Usage/Examples',
+						text: 'Examples',
+						collapsed: true,
 						items: [
 							{
 								text: 'Inspecting & Querying Metrics',
@@ -77,6 +79,7 @@ export default defineConfig({
 					},
 					{
 						text: 'Tables',
+						collapsed: true,
 						link: '/fontkit/tables',
 						items: [
 							{

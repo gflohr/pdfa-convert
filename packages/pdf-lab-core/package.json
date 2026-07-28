@@ -4,16 +4,16 @@
 	"description": "Convert PDFs to PDF/A format (Node.js and browser compatible)",
 	"license": "WTFPL",
 	"type": "module",
-	"main": "./dist/fontkit.cjs",
-	"module": "./dist/fontkit.esm.js",
-	"browser": "./dist/fontkit.umd.js",
+	"main": "./dist/index.cjs.js",
+	"module": "./dist/index.esm.js",
+	"browser": "./dist/index.browser.js",
 	"typings": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/fontkit.esm.js",
-			"require": "./dist/fontkit.cjs",
-			"browser": "./dist/fontkit.umd.js"
+			"import": "./dist/iindex.esm.js",
+			"require": "./dist/index.cjs.cjs",
+			"browser": "./dist/index.browser.js"
 		}
 	},
 	"files": [

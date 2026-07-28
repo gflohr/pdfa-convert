@@ -1,163 +1,615 @@
 /* istanbul ignore file */
+import type * as r from 'restructure';
+import type { AATFont } from './aat/aat-font.js';
 import type { CFF1Font } from './cff/cff1-font.js';
+import type { CFF2Font } from './cff/cff2-font.js';
 import type { BoundingBox } from './glyph/bounding-box.js';
 import type { Glyph } from './glyph/glyph.js';
-import type { GlyphRun } from './layout/glyph-run.js';
-import type { SFNTFont } from './sfnt-font.js';
+import type { GlyphVariationProcessor } from './glyph/glyph-variation-processor.js';
+import type { BidiDirection, GlyphRun } from './layout/glyph-run.js';
+import type { LayoutEngine } from './layout/layout-engine.js';
+import type * as Script from './layout/script.js';
+import type { OpenTypeFont } from './open-type-font.js';
 import type { Subset } from './subset/subset.js';
+import type { avarTable } from './tables/avar.js';
+import type { BASETable } from './tables/BASE.js';
+import type { bslnTable } from './tables/bsln.js';
+import type { COLRTable } from './tables/COLR.js';
+import type { CPALTable } from './tables/CPAL.js';
+import type { cmapTable } from './tables/cmap.js';
+import type { cvtTable } from './tables/cvt.js';
+import type { DSIGTable } from './tables/DSIG.js';
+import type { SFNTDirectory, SFNTTableMap } from './tables/directory.js';
+import type { EBLCTable } from './tables/EBLC.js';
+import type { featTable } from './tables/feat.js';
+import type { fpgmTable } from './tables/fpgm.js';
+import type { fvarTable } from './tables/fvar.js';
+import type { GDEFTable } from './tables/GDEF.js';
+import type { GPOSTable } from './tables/GPOS.js';
+import type { GSUBTable } from './tables/GSUB.js';
+import type { gaspTable } from './tables/gasp.js';
+import type { glyfTable } from './tables/glyf.js';
+import type { gvarTable } from './tables/gvar.js';
+import type { HVARTable } from './tables/HVAR.js';
+import type { hdmxTable } from './tables/hdmx.js';
+import type { headTable } from './tables/head.js';
+import type { hheaTable } from './tables/hhea.js';
+import type { hmtxTable } from './tables/hmtx.js';
+import type { JSTFTable } from './tables/JSTF.js';
+import type { justTable } from './tables/just.js';
+import type { kernTable } from './tables/kern.js';
+import type { LTSHTable } from './tables/LTSH.js';
+import type { locaTable } from './tables/loca.js';
+import type { maxpTable } from './tables/maxp.js';
+import type { morxTable } from './tables/morx.js';
+import type { nameTable } from './tables/name.js';
+import type { OS2Table } from './tables/OS2.js';
+import type { opbdTable } from './tables/opbd.js';
 import type { OpenType } from './tables/open-type.js';
-import type { TrueTypeFont } from './true-type-font.js';
-
-export interface VariationAxis {
-	axisTag: string;
-	min: number;
-	default: number;
-	max: number;
-	flags: number;
-	nameID: number;
-	name: string;
-}
-
-export interface VariationAxes {
-	wght?: VariationAxis;
-	wdth?: VariationAxis;
-}
-
-export type NamedVariation = Record<string, number>;
-
-export type NamedVariations = Record<string, NamedVariation>;
-
-export type VariationCoordinates = Record<string, number>;
-
-export type VariationSettings = Record<string, number>;
+import type { PCLTTable } from './tables/PCLT.js';
+import type { postTable } from './tables/post.js';
+import type { prepTable } from './tables/prep.js';
+import type { sbixTable } from './tables/sbix.js';
+import type { VDMXTable } from './tables/VDMX.js';
+import type { VORGTable } from './tables/VORG.js';
+import type { vheaTable } from './tables/vhea.js';
+import type { vmtxTable } from './tables/vmtx.js';
+import type { TrueTypeSubsetFont } from './true-type-subset-font.js';
 
 /**
- * This interface only exists for adding compatibility with other fontkit
- * forks.
+ * Baseline interface representing an unvalidated SFNT-based layout.
+ * Every table property is considered nullable by default. As a consequence,
+ * many properties are possibly `undefined`. You can avoid that by upcasting
+ * the font object with {@link Font["asOpenTypeFont"]} to an
+ * {@link OpenTypeFont}, which guarantees the presence of the 8 core tables,
+ * and 0-2 outline tables.
  *
- * @deprecated Use {@link SFNTFont} instead!
+ * This interface is mostly useless for application programming. You can
+ * normally just use {@link TrueTypeFont} as a type instead!
  */
-export interface Font extends SFNTFont {
-	// Metadata properties
-	postscriptName: string | null;
+export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
+	/**
+	 * Tests whether a certain table is present in the font file.
+	 *
+	 * @param tag the table name like `cmap`, `OS/2`, or `hmtx`
+	 */
+	hasTable<K extends string = string>(tag: K | keyof SFNTTableMap): boolean;
+
+	/**
+	 * Attempts to view this font instance as a strict OpenType font
+	 * layout. Returns null, if a structurally required table is missing.
+	 *
+	 * See {@link OpenTypeFont} for usage instructions!
+	 *
+	 * @returns the font with narrowed to an @{link OpenTypeFont} or `null if a required table is missing
+	 */
+	asOpenTypeFont(): OpenTypeFont | null;
+
+	/**
+	 * Attempts to view this font as an {@link AATFont}.
+	 *
+	 * @returns the font with narrowed to an @{link AATFont} or `null if a required table is missing
+	 */
+	asAATFont(): AATFont | null;
+
+	/**
+	 * Attempts to view this font as an {@link TrueTypeSubsetFont} font.
+	 *
+	 * @returns the font with narrowed to a @{link TrueTypeSubsetFont} or `null if a required table is missing
+	 */
+	asTrueTypeSubsetFont(): TrueTypeSubsetFont | null;
+
+	/**
+	 * Character to Glyph Index Mapping Table. Maps characters to internal
+	 * glyph indices.
+	 */
+	cmap: cmapTable.cmap | null;
+
+	/**
+	 * Font Header Table. Tracks global typographic metrics, scale grid bounds,
+	 * and metadata.
+	 */
+	head: headTable.head | null;
+
+	/**
+	 * Horizontal Header Table. Stores global metric parameters for horizontal
+	 * glyph layouts.
+	 */
+	hhea: hheaTable.hhea | null;
+
+	/**
+	 * Horizontal Metrics Table. Contains advance widths and left side
+	 * bearings for all glyphs.
+	 */
+	hmtx: hmtxTable.hmtx | null;
+
+	/**
+	 * Maximum Profile Table. Explicitly defines memory boundaries and total
+	 * glyph count constraints.
+	 */
+	maxp: maxpTable.maxp | null;
+
+	/**
+	 * Naming Table. Contains multilingual string records for copyrights,
+	 * families, and system IDs.
+	 */
+	name: nameTable.name | null;
+
+	/**
+	 * OS/2 and Windows Metrics Table. Contains subsystem configurations,
+	 * weights, and unicode ranges.
+	 */
+	'OS/2': OS2Table.OS2 | null;
+
+	/**
+	 * PostScript Table. Encapsulates printer operational bounds and
+	 * memory-tracking metrics.
+	 */
+	post: postTable.post | null;
+
+	/**
+	 * Font Program Table. Contains low-level hints executing instruction sets
+	 * across grid points.
+	 */
+	fpgm: fpgmTable.fpgm | null;
+
+	/**
+	 * Index to Location Table. Maps local offsets for binary data streams
+	 * resolving glyph outlines.
+	 */
+	loca: locaTable.loca | null;
+
+	/**
+	 * Control Value Program Table. Provides global instructions establishing
+	 * variable outline alignment.
+	 */
+	prep: prepTable.prep | null;
+
+	/**
+	 * Control Value Table. Stores indexed control values used by TrueType
+	 * instructions to maintain consistency when hinting glyphs.
+	 */
+	'cvt ': cvtTable.cvt | null;
+
+	/**
+	 * Glyph Data Table. Describes TrueType glyph outlines, including contour
+	 * coordinates, composite glyph components, and hinting instructions.
+	 */
+	glyf: glyfTable.glyph | null;
+
+	/**
+	 * PostScript Compact Font Format (CFF) Outline Table version 1.
+	 */
+	cff: CFF1Font | null;
+
+	/**
+	 * Alternate PostScript Compact Font Format alias mapping.
+	 */
+	'CFF ': CFF1Font | null;
+
+	/**
+	 * PostScript Compact Font Format (CFF) Outline Table version 2.
+	 */
+	CFF2: CFF2Font | null;
+
+	/**
+	 * Vertical Origin Table. Specifies vertical coordinate origins for dynamic
+	 * metrics scaling.
+	 */
+	VORG: VORGTable.VORG | null;
+
+	/**
+	 * Embedded Bitmap Data Table. Stores bitmap images for specific point
+	 * sizes.
+	 */
+	EBLC: EBLCTable.EBLC | null;
+
+	/**
+	 * Colour Bitmap Data Table. Variant containing colour bitmap raw data
+	 * blocks.
+	 */
+	CBLC: EBLCTable.EBLC | null;
+
+	/**
+	 * Standard Bitmap Graphics Table. Embeds raster configurations (PNG/JPEG)
+	 * directly within glyph IDs.
+	 */
+	sbix: sbixTable.sbix | null;
+
+	/**
+	 * Colour Table. Outlines layering configurations for multi-coloured vector
+	 * icon layouts.
+	 */
+	COLR: COLRTable.COLR | null;
+
+	/**
+	 * Colour Palette Table. Maps index arrays declaring hex colours utilised by
+	 * COLR elements.
+	 */
+	CPAL: CPALTable.CPAL | null;
+
+	/**
+	 * Baseline Data Table. Sets alignment values dynamically shifting script
+	 * baselines.
+	 */
+	BASE: BASETable.BASE | null;
+
+	/**
+	 * Glyph Definition Table. Categorises glyph types (e.g., base, ligature,
+	 * mark) for layout alignment.
+	 */
+	GDEF: GDEFTable.GDEF | null;
+
+	/**
+	 * Glyph Positioning Table. Provides precise metric adjustments handling
+	 * kerning and attachment marks.
+	 */
+	GPOS: GPOSTable.GPOS | null;
+
+	/**
+	 * Glyph Substitution Table. Supplies glyph substitutions for contextual
+	 * alternates, ligatures, and script-specific rendering.
+	 */
+	GSUB: GSUBTable.GSUB | null;
+
+	/**
+	 * Justification Table. Provides options for justification adjustments in
+	 * complex scripts.
+	 */
+	JSTF: JSTFTable.JSTF | null;
+
+	/**
+	 * Horizontal Variation Metrics Table. Adjusts advance metrics across
+	 * design spaces in variable fonts.
+	 */
+	HVAR: HVARTable.HVAR | null;
+
+	/**
+	 * Digital Signature Table. Encapsulates cryptographic signatures
+	 * validating binary authenticity.
+	 */
+	DSIG: DSIGTable.DSIG | null;
+
+	/**
+	 * Grid-fitting and Scan-conversion Procedure Table. Optimises text raster
+	 * rendering constraints.
+	 */
+	gasp: gaspTable.gasp | null;
+
+	/**
+	 * Horizontal Device Metrics Table. Preserves explicit pixel width mappings
+	 * optimising spacing.
+	 */
+	hdmx: hdmxTable.hdmx | null;
+
+	/**
+	 * Kerning Table. Contains traditional pairwise spacing adjustments.
+	 */
+	kern: kernTable.kern | null;
+
+	/**
+	 * Linear Threshold Table. Sets pixel-per-em limits where scaling
+	 * instructions degrade.
+	 */
+	LTSH: LTSHTable.LTSH | null;
+
+	/**
+	 * PCL 5 Table. Contains metrics and command parameters for HP LaserJet
+	 * compatibility.
+	 */
+	PCLT: PCLTTable.PCLT | null;
+
+	/**
+	 * Vertical Device Metrics Table. Preserves explicit vertical pixel height
+	 * mappings.
+	 */
+	VDMX: VDMXTable.VDMX | null;
+
+	/**
+	 * Vertical Header Table. Stores global metric parameters for vertical text
+	 * directions.
+	 */
+	vhea: vheaTable.vhea | null;
+
+	/**
+	 * Vertical Metrics Table. Contains advance heights and top side bearings
+	 * for vertical layouts.
+	 */
+	vmtx: vmtxTable.vmtx | null;
+
+	/**
+	 * Axis Variations Table. Modifies normalised coordinates across axes in
+	 * variable fonts.
+	 */
+	avar: avarTable.avar | null;
+
+	/**
+	 * Baseline Table. Provides baseline shift measurements for multi-script
+	 * alignment.
+	 */
+	bsln: bslnTable.bsln | null;
+
+	/**
+	 * Feature Name Table. Maps AAT feature selectors to localised string
+	 * references.
+	 */
+	feat: featTable.feat | null;
+
+	/**
+	 * Font Variations Table. Declares design axes and instance configurations
+	 * in variable fonts.
+	 */
+	fvar: fvarTable.fvar | null;
+
+	/**
+	 * Glyph Variations Table. Controls structural outline distortion
+	 * transformations for variable glyphs.
+	 */
+	gvar: gvarTable.gvar | null;
+
+	/**
+	 * Justification Table (`just`). Provides layout rules for line justification,
+	 * glyph width deltas, and post-compensation actions in AAT typography.
+	 */
+	just: justTable.just | null;
+
+	/**
+	 * Extended Glyph Metamorphosis Table. Powers state-machine transformations
+	 * substituting AAT items.
+	 */
+	morx: morxTable.morx | null;
+
+	/**
+	 * Optical Bounds Table. Sets bounding limits to align glyphs based on
+	 * visual centre points.
+	 */
+	opbd: opbdTable.opbd | null;
+
+	/**
+	 * The unique PostScript name for this font or `null` if not present.
+	 *
+	 * Some broken fonts have PostScript names that cannot be decoded into
+	 * a string. They are exposed as `Uint8Array`.
+	 */
+	postscriptName: string | Uint8Array | null;
+
+	/**
+	 * The font's full name, e.g. "Helvetica Bold", or `null` if not present.
+	 */
 	fullName: string | null;
+
+	/**
+	 * The font's family name, e.g. "Helvetica", or `null` if not present.
+	 */
 	familyName: string | null;
+
+	/**
+	 * The font's sub-family, e.g. "Bold", or `null` if not present.
+	 */
 	subfamilyName: string | null;
+
+	/**
+	 * The font's copyright information, or `null` if not present.
+	 */
 	copyright: string | null;
+
+	/**
+	 * The font's version number or `null` if not present.
+	 */
 	version: string | null;
 
-	// Metrics properties
-	unitsPerEm: number /** Size of the font’s internal coordinate grid */;
-	ascent: number /** The font’s ascender */;
-	descent: number /** The font’s descender */;
-	lineGap: number /** Amount of space that should be included between lines */;
-	underlinePosition: number /** Offset from the normal underline position that should be used */;
-	underlineThickness: number /** Weight of the underline that should be used */;
-	italicAngle: number /** If this is an italic font, the angle the cursor should be drawn at to match the font design */;
-	capHeight: number /** Height of capital letters above the baseline. */;
-	xHeight: number /** Height of lower case letters. */;
-	bbox: Readonly<BoundingBox> /** Font’s bounding box, i.e. the box that encloses all glyphs in the font. */;
-
-	// Other properties
-	numGlyphs: number /** Number of glyphs in the font */;
-	characterSet: number[] /** Array of all of the unicode code points supported by the font */;
-	availableFeatures: OpenType.FeatureTag[] /** OpenType feature tags (or mapped AAT tags) supported by the font */;
-
-	// Character to Glyph Mapping Methods
-
 	/**
-	 * Maps a single unicode code point (number) to a Glyph object.
-	 * Does not perform any advanced substitutions (there is no context to do so).
+	 * The font’s [ascender](https://en.wikipedia.org/wiki/Ascender_(typography)).
 	 */
-	glyphForCodePoint(codePoint: number): Glyph | null;
+	get ascent(): number | undefined;
 
 	/**
-	 * Returns whether there is glyph in the font for the given
-	 * unicode code point.
+	 * The font’s [descender](https://en.wikipedia.org/wiki/Descender).
+	 */
+	get descent(): number | undefined;
+
+	/**
+	 * The line gap, i.e. amount of space that should be included between lines.
+	 */
+	get lineGap(): number | undefined;
+
+	/**
+	 * The offset from the normal underline position that should be used.
+	 */
+	get underlinePosition(): number | undefined;
+
+	/**
+	 * The weight of the underline that should be used.
+	 */
+	get underlineThickness(): number | undefined;
+
+	/**
+	 * If this is an italic font, the angle the cursor should be drawn at to
+	 * match the font design.
+	 */
+	get italicAngle(): number | undefined;
+
+	/**
+	 * The height of capital letters above the baseline.
+	 * See [here](https://en.wikipedia.org/wiki/Cap_height) for more details.
+	 */
+	get capHeight(): number | undefined;
+
+	/**
+	 * The height of lowercase letters in the font.
+	 * See [here](https://en.wikipedia.org/wiki/X-height) for more details.
+	 */
+	get xHeight(): number;
+
+	/**
+	 * The total count of glyph indexes present in the font mapping.
+	 */
+	get numGlyphs(): number | undefined;
+
+	/**
+	 * The size of the font's internal coordinate grid in units per em.
+	 * Defaults to 1000, if all other attempts to calculate the value fail.
+	 */
+	get unitsPerEm(): number;
+
+	/**
+	 * The font’s bounding box, i.e. the box that encloses all glyphs in the font.
+	 */
+	get boundingBox(): Readonly<BoundingBox> | undefined;
+
+	/**
+	 * @deprecated Use `boundingBox` instead!
+	 */
+	get bbox(): Readonly<BoundingBox> | undefined;
+
+	/**
+	 * An array of all of the unicode code points supported by the font.
+	 */
+	characterSet: number[] | undefined;
+
+	/**
+	 * Returns whether there is a glyph in the font for the given unicode code point.
+	 *
+	 * @param codePoint - the unicode code point
+	 * @returns `true` if a glyph is available for the code point, `false` otherwise
 	 */
 	hasGlyphForCodePoint(codePoint: number): boolean;
 
 	/**
-	 * This method returns an array of Glyph objects for the given string.
-	 * This is only a one-to-one mapping from characters to glyphs. For most uses,
-	 * you should use Font.layout, which provides a much more advanced mapping
-	 * supporting AAT and OpenType shaping.
+	 * Maps a single unicode code point to a Glyph object.
+	 * Does not perform any advanced substitutions.
+	 *
+	 * @param codePoint - the unicode code point
+	 * @returns the corresponding glyph
 	 */
-	glyphsForString(string: string): Glyph[];
-
-	// Glyph Metrics and Layout Methods
+	glyphForCodePoint(codePoint: number): Glyph | null;
 
 	/**
-	 * This method returns a GlyphRun object, which includes an array of Glyphs
-	 * and GlyphPositions for the given string. Glyph objects are described below.
-	 * GlyphPosition objects include 4 properties: xAdvance, yAdvance, xOffset,
-	 * and yOffset.
+	 * Returns an array of Glyph objects for the given string.
+	 * This is only a static one-to-one mapping from characters to glyphs.
 	 *
-	 * The features parameter is an array of OpenType feature tags to be applied
-	 * in addition to the default set. If this is an AAT font, the OpenType
-	 * feature tags are mapped to AAT features.
+	 * @param str the string to encode
+	 * @returns the corresponding glyphs
+	 */
+	glyphsForString(str: string): Glyph[];
+
+	/**
+	 * The shaping engine matching text scripts to font tables. */
+	layoutEngine: LayoutEngine;
+
+	/**
+	 * Returns a GlyphRun object, which includes an array of Glyphs and
+	 * GlyphPositions for the given string.
+	 *
+	 * @param str the string to encode
+	 * @param userFeatures an array of OpenType feature tags to be applied in addition to the default set.
+	 * @param script the script of the string
+	 * @param language the language of the string
+	 * @param direction the writing direction for the string
+	 * @returns the rendered string as a GlyphRun
 	 */
 	layout(
-		text: string,
-		features?: OpenType.Features | OpenType.FeatureTag[],
-		script?: string | null,
-		language?: string | null,
-		direction?: string | null,
+		str: string,
+		userFeatures?: OpenType.Features | OpenType.FeatureTag[],
+		script?: Script.OpenTypeTag,
+		language?: string,
+		direction?: BidiDirection,
 	): GlyphRun;
 
-	// Other Methods
+	/**
+	 * Returns an array of strings that map to the given glyph id.
+	 * @param gid - the glyph id
+	 */
+	stringsForGlyph(gid: number): string[];
+
+	/**
+	 * Returns an array of alternative unicode mapping arrays tied to a
+	 * specific glyph ID.
+	 */
+	codePointsForGlyph(gid: number): number[];
+
+	/**
+	 * An array of all OpenType feature tags supported by the font.
+	 */
+	get availableFeatures(): OpenType.FeatureTag[];
+
+	/**
+	 * An array of all OpenType feature tags supported by the font for a given
+	 * script and language.
+	 */
+	getAvailableFeatures(
+		script: Script.UnicodeScript,
+		language?: string,
+	): OpenType.FeatureTag[];
 
 	/**
 	 * Returns a glyph object for the given glyph id. You can pass the array of
 	 * code points this glyph represents for your use later, and it will be
 	 * stored in the glyph object.
+	 *
+	 * @param glyph the glyph id
+	 * @param characters an array of code points this glyph represents
+	 * @returns the corresponding glyph
 	 */
-	getGlyph(glyphId: number, codePoints?: readonly number[]): Glyph | null;
+	getGlyph(glyph: number, characters?: readonly number[]): Glyph | null;
 
 	/**
-	 * Returns a Subset object for this font.
+	 * Like {@link getGlyph} but falls back to the fallback glyph `.notdef`
+	 * if the glyph cannot be resolved, because of missing tables.
+	 *
+	 * @param glyph the glyph id
+	 * @param characters an optional sequence of codepoints
+	 */
+	safeGetGlyph(glyph: number, characters?: readonly number[]): Glyph;
+
+	/** @internal */
+	getBaseGlyph(glyph: number, characters?: readonly number[]): Glyph | null;
+
+	/**
+	 * Creates an empty layout subset utilising this font structure as its
+	 * baseline data map.
 	 */
 	createSubset(): Subset;
 
 	/**
-	 * Horizontal header metrics (hhea table).
+	 * The structural binary wrapper tracking offset blocks and table pointers.
 	 */
-	//hhea: hheaTable.hhea;
+	directory: TDirectory;
 
 	/**
-	 * Variable font axes (if present in the font).
+	 * The raw input stream reading binary payload slices.
 	 */
-	readonly variationAxes: VariationAxes;
+	stream: r.DecodeStream;
 
 	/**
-	 * Returns named variation instances defined in the font.
+	 * Extracts a raw readable segment slice targeting vector outline
+	 * definitions.
 	 */
-	readonly namedVariations: NamedVariations;
+	getGlyfTableStream(): r.DecodeStream | null;
 
 	/**
-	 * Returns a new font instance with applied variation coordinates.
+	 * The processor responsible for calculating delta adjustments to glyph
+	 * outlines along design variation axes. This is initialised when variation
+	 * coordinates are applied, and is `null` for static fonts.
+	 */
+	variationProcessor: GlyphVariationProcessor | null;
+
+	/**
+	 * The default language for strings to get from the font with getName().
 	 *
-	 * @throws if the font does not contain required variation tables.
+	 * @see {@link postscriptName}
+	 * @see {@link fullName}
+	 * @see {@link familyName}
+	 * @see {@link subfamilyName}
+	 * @see {@link copyright}
+	 * @see {@link version}
 	 */
-	getVariation(settings: string | VariationCoordinates): Font;
+	readonly defaultLanguage: string | null;
 
 	/**
-	 * Returns all Unicode strings associated with a glyph ID.
+	 * Set the default language.
 	 *
-	 * @param id - Glyph ID in the font’s glyph table
+	 * @see {@link defaultLanguage}
 	 */
-	stringsForGlyph(id: number): string[];
-
-	/**
-	 * An alias for the font's `CFF ` table (always version 1).
-	 */
-	cff: CFF1Font | null;
-
-	/**
-	 * Get a font variation of that name.
-	 *
-	 * @param postScriptName Postscript name of the variation
-	 * @returns the found if found, null otherwise
-	 */
-	getFont(postScriptName: string): TrueTypeFont | null;
+	setDefaultLanguage(lang: string | null): void;
 }

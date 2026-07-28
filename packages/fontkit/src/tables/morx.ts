@@ -95,6 +95,11 @@ export namespace morxTable {
 		subtables: Subtable[];
 	}
 
+	/**
+	 * Extended Glyph Metamorphosis Table. Applies state-machine-based glyph
+	 * transformations, including rearrangement, substitution, ligature, and
+	 * insertion operations.
+	 */
 	export interface morx {
 		version: number;
 		nChains: number;

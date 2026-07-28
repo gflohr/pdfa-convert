@@ -1,9 +1,5 @@
 import isEqual from 'deep-equal';
-import type {
-	DecodeStream,
-	EncodeStream,
-	FieldT,
-} from 'restructure';
+import type { DecodeStream, EncodeStream, FieldT } from 'restructure';
 import type { CFFSubsetCharset } from '../subset/cff-subset.js';
 import type { CFFFont, CFFTable } from './cff-font.js';
 import type { IndexItemValue } from './cff-index.js';

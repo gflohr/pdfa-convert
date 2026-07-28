@@ -1,0 +1,19 @@
+{
+	"name": "@pdf-lab/examples",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Examples for the pdf-lab libraries",
+	"scripts": {
+		"build": "tsc",
+		"check": "biome check",
+		"check:fix": "biome check --write"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "module",
+	"dependencies": {
+		"@pdf-lab/fontkit": "workspace:*",
+		"tsx": "^4.22.4"
+	}
+}

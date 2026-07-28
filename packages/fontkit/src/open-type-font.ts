@@ -1,6 +1,6 @@
+import type { Font } from './font.js';
 import type { BoundingBox } from './glyph/bounding-box.js';
 import type { Glyph } from './glyph/glyph.js';
-import type { SFNTFont } from './sfnt-font.js';
 import type { SFNTTableMap } from './tables/directory.js';
 
 /**
@@ -98,7 +98,7 @@ type OpenTypeHeaderKeys = keyof OpenTypeHeader;
  * @see {@link requiredOpenTypeTables} for the list of required tables.
  */
 export interface OpenTypeNoOutlinesFont
-	extends Omit<SFNTFont, RequiredOpenTypeTableTag | OpenTypeHeaderKeys>,
+	extends Omit<Font, RequiredOpenTypeTableTag | OpenTypeHeaderKeys>,
 		StrictTables<RequiredOpenTypeTableTag>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
@@ -112,7 +112,7 @@ export interface OpenTypeNoOutlinesFont
  * (glyf + loca + hmtx).
  */
 export interface OpenTypeTrueTypeFont
-	extends Omit<SFNTFont, RequiredOpenTypeTrueTypeTableTag | OpenTypeHeaderKeys>,
+	extends Omit<Font, RequiredOpenTypeTrueTypeTableTag | OpenTypeHeaderKeys>,
 		StrictTables<RequiredOpenTypeTrueTypeTableTag>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
@@ -129,7 +129,7 @@ export interface OpenTypeTrueTypeFont
  * legacy version.
  */
 export interface OpenTypeCFF1Font
-	extends Omit<SFNTFont, RequiredOpenTypeCFF1TableTag | OpenTypeHeaderKeys>,
+	extends Omit<Font, RequiredOpenTypeCFF1TableTag | OpenTypeHeaderKeys>,
 		StrictTables<RequiredOpenTypeCFF1TableTag>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
@@ -152,7 +152,7 @@ export interface OpenTypeCFF1Font
  * legacy version.
  */
 export interface OpenTypeCFF2Font
-	extends Omit<SFNTFont, RequiredOpenTypeCFF2TableTag | OpenTypeHeaderKeys>,
+	extends Omit<Font, RequiredOpenTypeCFF2TableTag | OpenTypeHeaderKeys>,
 		StrictTables<RequiredOpenTypeCFF2TableTag>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
@@ -174,15 +174,18 @@ export type OpenTypePostScriptFont = OpenTypeCFF1Font | OpenTypeCFF2Font;
 /**
  * The final Discriminated Union representing any upcast, structurally
  * conformant OpenType font. You will usually get an object implementing
- * the interface with {@link SFNTFont.asOpenTypeFont}.
+ * the interface with {@link Font.asOpenTypeFont}.
  *
- * You can discriminate the different types in your code like this:
+ * Fonts that implement this interface, have all 8 core OpenType tables
+ * (@{link requiredOpenTypeTables}) present and successfully decoded.
+ *
+ * You can discriminate the different sub types in your code like this:
  *
  * ```TypeScript
  * const openTypeFont = font.asOpenTypeFont();
  *
  * if (!openTypeFont) {
- * 	// This font is a legacy font without the compete set of OpenType core
+ * 	// This font is a legacy font without the complete set of OpenType core
  * 	// tables.
  * } else if (openTypeFont.outlines === 'TrueType') {
  * 	// openTypeFont is now an OpenTypeTrueTypeFont in the scope of this branch.

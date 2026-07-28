@@ -1,4 +1,5 @@
 import * as r from 'restructure';
+import type { FontCollection } from './font-collection.js';
 import { TrueTypeFont } from './true-type-font.js';
 import { asciiDecoder } from './utils.js';
 
@@ -42,7 +43,28 @@ const TTCHeader = new r.VersionedStruct<TTCTable.Header>(
 	ttcHeaderFields,
 );
 
-export class TrueTypeCollection {
+export interface TrueTypeCollection extends FontCollection {
+	/**
+	 * Identifier for TrueTypeCollection objects.
+	 */
+	readonly objType: 'TTC';
+
+	/**
+	 * @deprecated Use {@link TrueTypeCollection#objType} instead!
+	 */
+	readonly type: 'TTC';
+}
+
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
+export class TrueTypeCollection implements FontCollection {
+	/**
+	 * Identifier for TrueType collection objects, always 'TTC'.
+	 */
+	public static readonly objType: 'TTC' = 'TTC';
+
+	public readonly objType: 'TTC' = 'TTC';
+	public readonly type: 'TTC' = 'TTC';
+
 	private stream: r.DecodeStream;
 	private header: TTCTable.Header;
 

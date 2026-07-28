@@ -7,6 +7,10 @@ export namespace hmtxTable {
 		bearing: number;
 	}
 
+	/**
+	 * Horizontal Metrics Table. Contains advance widths and left side
+	 * bearings for all glyphs.
+	 */
 	export interface hmtx extends MetricsTable {}
 }
 

@@ -12,7 +12,7 @@ import {
 	expertSubsetCharset,
 	isoAdobeCharset,
 } from './cff-charsets.js';
-import { CFFDict, CFFTraversalContext } from './cff-dict.js';
+import { CFFDict, type CFFTraversalContext } from './cff-dict.js';
 import { expertEncoding, standardEncoding } from './cff-encodings.js';
 import type { CFFTable } from './cff-font.js';
 import { CFFIndex } from './cff-index.js';
@@ -213,7 +213,10 @@ export class CFFPrivateOp {
 		return decoded;
 	}
 
-	size(dict: CFFTable.PrivateDictData, ctx?: CFFTraversalContext): [number, number] {
+	size(
+		dict: CFFTable.PrivateDictData,
+		ctx?: CFFTraversalContext,
+	): [number, number] {
 		// This method has zero test coverage upstream and probably contains a
 		// runtime bug, see the bogus cast!
 		return [
@@ -222,7 +225,11 @@ export class CFFPrivateOp {
 		];
 	}
 
-	encode(stream: EncodeStream, dict: CFFTable.PrivateDictData, ctx?: CFFTraversalContext) {
+	encode(
+		stream: EncodeStream,
+		dict: CFFTable.PrivateDictData,
+		ctx?: CFFTraversalContext,
+	) {
 		const size = cffPrivateDict.size(dict, ctx, false);
 		const encoded = ptr.encode(stream, dict, ctx);
 

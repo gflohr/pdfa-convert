@@ -1,4 +1,5 @@
 import * as r from 'restructure';
+import type { FontCollection } from './font-collection.js';
 import { TrueTypeFont } from './true-type-font.js';
 
 const DFontName = new r.String(r.uint8);
@@ -77,7 +78,28 @@ const dfontHeaderFields = {
 };
 const dFontHeader = new r.Struct<DFontHeader>(dfontHeaderFields);
 
-export class DFont {
+export interface DFont extends FontCollection {
+	/**
+	 * Identifier for DFont collection objects.
+	 */
+	readonly objType: 'DFont';
+
+	/**
+	 * @deprecated Use {@link DFont#objType} instead!
+	 */
+	readonly type: 'DFont';
+}
+
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Needed for discriminated union.
+export class DFont implements FontCollection {
+	/**
+	 * Identifier for DFont collection objects, always 'DFont'.
+	 */
+	public static readonly objType: 'DFont' = 'DFont';
+
+	public readonly objType: 'DFont' = 'DFont';
+	public readonly type: 'DFont' = 'DFont';
+
 	private readonly stream: r.DecodeStream;
 	private readonly header: DFontHeader;
 	private readonly sfnt?: ResourceTypeEntry;

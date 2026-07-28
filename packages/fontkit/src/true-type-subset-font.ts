@@ -1,6 +1,6 @@
+import type { Font } from './font.js';
 import type { Glyph } from './glyph/index.js';
 import type { StrictTables } from './open-type-font.js';
-import type { SFNTFont } from './sfnt-font.js';
 
 /**
  * Minimal operational capability needed to instantiate and run a TrueTypeGlyph.
@@ -19,7 +19,7 @@ export type RequiredTrueTypeSubsetTableTag =
  * (glyf + loca).
  */
 export interface TrueTypeSubsetFont
-	extends Omit<SFNTFont, RequiredTrueTypeSubsetTableTag>,
+	extends Omit<Font, RequiredTrueTypeSubsetTableTag>,
 		StrictTables<RequiredTrueTypeSubsetTableTag> {
 	getGlyph(glyph: number, characters?: readonly number[]): Glyph;
 	getBaseGlyph(glyph: number, characters?: readonly number[]): Glyph;

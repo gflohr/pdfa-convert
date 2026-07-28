@@ -97,6 +97,10 @@ export namespace GSUBTable {
 		featureVariations: OpenTypeVariation.FeatureVariations;
 	}
 
+	/**
+	 * Glyph Substitution Table. Supplies glyph substitutions for contextual
+	 * alternates, ligatures, and script-specific rendering.
+	 */
 	export type GSUB = GSUBV1_0 | GSUBV1_1;
 }
 

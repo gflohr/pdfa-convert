@@ -1,5 +1,5 @@
 import * as r from 'restructure';
-import type { DFont } from './d-font.js';
+import type { FontCollection } from './font-collection.js';
 import type { TrueTypeCollection } from './true-type-collection.js';
 import type { TrueTypeFont } from './true-type-font.js';
 
@@ -34,7 +34,7 @@ const formats: FontContainer[] = [];
  * ### Why Deprecated?
  *
  * * The `fontkit.create` factory relies on runtime structural probing to determine
- * whether a byte stream is an {@link TrueTypeFont}, a {@link TrueTypeCollection},
+ * whether a byte stream is a {@link TrueTypeFont}, a {@link TrueTypeCollection},
  * or a {@link DFont}. This approach introduces two critical drawbacks:
  *
  * 1. **Ambiguity:** It forces a vague union return type, requiring consumers to write manual
@@ -78,7 +78,7 @@ export const fontkit = {
 	/**
 	 * Create an instance of a font or a font collection.
 	 *
-	 * For a {@link TrueTypeCollection} or {@link DFont}, you may specify the
+	 * For a {@link FontCollection}, you may specify the
 	 * PostScript name of one of the fonts contained in the collection.
 	 * Otherwise, you get the collection itself. You can then get the list
 	 * of included fonts with the method `getFonts`.
@@ -97,12 +97,14 @@ export const fontkit = {
 	 * @param postscriptName the optional PostScript name
 	 * @returns the font or font collection
 	 *
-	 * @deprecated Instantiate one of the class constructors {@link TrueTypeFont},
+	 * @deprecated Use one of the designated class constructors
+	 * {@link TrueTypeFont}, {@link WOFFFont}, {@link WOFF2Font},
+	 * {@link TrueTypeCollection}, {@link DFont} instead!
 	 */
 	create: (
 		bytes: Uint8Array,
 		postscriptName?: string,
-	): TrueTypeFont | DFont | TrueTypeCollection | null => {
+	): TrueTypeFont | FontCollection | null => {
 		const buffer = Buffer.from(bytes);
 		for (let i = 0; i < formats.length; i++) {
 			const format = formats[i];
@@ -112,7 +114,7 @@ export const fontkit = {
 					return font.getFont(postscriptName);
 				}
 
-				return font as TrueTypeFont | DFont | TrueTypeCollection;
+				return font as TrueTypeFont | FontCollection;
 			}
 		}
 		throw new Error('Unknown font format');

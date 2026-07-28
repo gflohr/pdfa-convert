@@ -5,8 +5,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	requiredOpenTypeTables,
 	requiredOpenTypeTrueTypeTables,
+	type SFNTDirectory,
 	type SFNTDirectoryEntry,
-	type SFNTFontDirectory,
 	type SFNTTableMap,
 	TrueTypeFont,
 } from '../src/index.js';
@@ -38,7 +38,7 @@ describe('TrueTypeFont Capabilities & Table Resolution', () => {
 			tag: 'true',
 			numTables: 0,
 			tables: {},
-		} as SFNTFontDirectory;
+		} as SFNTDirectory;
 
 		font['decodeTable'] = vi.fn((entry: SFNTDirectoryEntry) => ({
 			tag: entry.tag,
@@ -175,7 +175,7 @@ describe('TrueTypeFont Capabilities & Table Resolution', () => {
 			font = Object.create(TrueTypeFont.prototype);
 
 			font['tables'] = {} as SFNTTableMap;
-			font.directory = { tables: {} } as SFNTFontDirectory;
+			font.directory = { tables: {} } as SFNTDirectory;
 
 			font['getTable'] = vi.fn().mockReturnValue({});
 

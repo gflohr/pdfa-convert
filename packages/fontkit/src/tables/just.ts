@@ -89,6 +89,10 @@ export namespace justTable {
 		widthDeltaClusters: Record<number, WidthDeltaRecord[]>;
 	}
 
+	/**
+	 * Justification Table (`just`). Provides layout rules for line justification,
+	 * glyph width deltas, and post-compensation actions in AAT typography.
+	 */
 	export interface just {
 		version: number;
 		format: number;

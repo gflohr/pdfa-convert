@@ -3,14 +3,7 @@ import { type AATFont, requiredAATTables } from './aat/aat-font.js';
 import { fontkit } from './base.js';
 import type { CFF1Font } from './cff/cff1-font.js';
 import { CmapProcessor } from './cmap-processor.js';
-import type {
-	NamedVariation,
-	NamedVariations,
-	VariationAxes,
-	VariationAxis,
-	VariationCoordinates,
-	VariationSettings,
-} from './font.js';
+import type { Font } from './font.js';
 import { BoundingBox } from './glyph/bounding-box.js';
 import { CFFGlyph } from './glyph/cff-glyph.js';
 import { COLRGlyph } from './glyph/colr-glyph.js';
@@ -28,12 +21,15 @@ import {
 	requiredOpenTypeTables,
 	requiredOpenTypeTrueTypeTables,
 } from './open-type-font.js';
-import type { SFNTFont, SFNTFontDirectory } from './sfnt-font.js';
 import { CFFSubset } from './subset/cff-subset.js';
 import type { Subset } from './subset/subset.js';
 import { TrueTypeSubset } from './subset/true-type-subset.js';
 import type { AAT } from './tables/aat.js';
-import type { SFNTDirectoryEntry, SFNTTableMap } from './tables/directory.js';
+import type {
+	SFNTDirectory,
+	SFNTDirectoryEntry,
+	SFNTTableMap,
+} from './tables/directory.js';
 import { directory } from './tables/directory.js';
 import { tables } from './tables/index.js';
 import type { nameTable } from './tables/name.js';
@@ -43,6 +39,26 @@ import {
 	type TrueTypeSubsetFont,
 } from './true-type-subset-font.js';
 import { asciiDecoder } from './utils.js';
+
+export interface VariationAxis {
+	name: string;
+	min: number;
+	default: number;
+	max: number;
+}
+
+export interface VariationAxes {
+	wght?: VariationAxis;
+	wdth?: VariationAxis;
+}
+
+export type NamedVariation = Record<string, number>;
+
+export type NamedVariations = Record<string, NamedVariation>;
+
+export type VariationCoordinates = Record<string, number>;
+
+export type VariationSettings = Record<string, number>;
 
 export type LayoutFeatures = OpenType.Features | AAT.Features;
 
@@ -94,33 +110,50 @@ export type ExtensionTables = Omit<SFNTTableMap, CoreTableKey>;
  */
 export type FontTableField = CoreTables & ExtensionTables;
 
-export interface TrueTypeFont<
-	TDirectory extends SFNTFontDirectory = SFNTFontDirectory,
-> extends SFNTFont,
-		FontTableField {
-	directory: TDirectory;
-}
+/** @internal */
+export interface TrueTypeFont extends Font, FontTableField {}
 
 /**
  * This is the base class for all SFNT-based font formats in fontkit.
- * It supports TrueType, and PostScript glyphs, and several color glyph formats.
+ * It supports TrueType, and PostScript glyphs, and several colour glyph
+ * formats.
  */
-// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: Merged with FontTableFields to map table layout properties dynamically via the constructor loop.
-export class TrueTypeFont<
-	TDirectory extends SFNTFontDirectory = SFNTFontDirectory,
-> implements SFNTFont
+export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
+	implements Font<TDirectory>
 {
+	/**
+	 * Identifier for TrueType fonts. Always 'TTF'.
+	 */
+	public static readonly objType: string = 'TTF';
+
+	/**
+	 * Discriminating property. Has the same value as the static
+	 * {@link TrueTypeFont.objType} property.
+	 */
+	public readonly objType: string = TrueTypeFont.objType;
+
+	/**
+	 * @deprecated Use {@link TrueTypeFont#objType} instead!
+	 */
+	public readonly type: string = TrueTypeFont.objType;
+
+	/** @internal */
 	public stream: r.DecodeStream;
 	private variationCoords: number[] | null;
 	private directoryPos: number;
 	private tables: SFNTTableMap = {} as SFNTTableMap;
 	protected glyphs: Record<number, Glyph> = {};
+	/** @internal */
 	public directory: TDirectory;
+
+	/**
+	 * The default language as an ISO 639-1 code ('en', 'fr', ...).
+	 */
 	public defaultLanguage: string | null;
 
 	// Those variables are lazily instantiated by their respctive getters, and
 	// then frozen.
-	private _bbox!: Readonly<BoundingBox>;
+	private _boundingBox!: Readonly<BoundingBox>;
 	private _characterSet!: number[];
 	private _cmapProcessor!: CmapProcessor;
 	private _layoutEngine!: LayoutEngine;
@@ -128,13 +161,37 @@ export class TrueTypeFont<
 	private _namedVariations!: NamedVariations;
 	private _variationProcessor!: GlyphVariationProcessor | null;
 
-	public outlines = '';
+	/**
+	 * Determines the type of glyph outlines based on the presence of the
+	 * required tables.
+	 *
+	 * Fonts without the core OpenType tables are identified
+	 * by an empty string (@see {@link OpenTypeNoOutlinesFont}).
+	 *
+	 * If all core OpenType tables are present, the outline type is either
+	 * 'TrueType' if the `loca` table is present, or `PostScript` if either
+	 * `CFF ` or `CFF2` are present, 'none' otherwise.
+	 *
+	 * @see {@link OpenTypeTrueTypeFont}
+	 * @see {@link OpenTypePostScriptFont}
+	 */
+	public outlines: 'TrueType' | 'PostScript' | 'none' | '' = '';
+
+	/**
+	 * Discriminator for the different flavours of
+	 * {@link OpenTypePostScriptFont}.
+	 *
+	 * If the `CFF2` table is present, outline version is 2, if the `CFF `
+	 * table is present, it is 1. For fonts that do not have PostScript,
+	 * outlines, the value is 0.
+	 */
 	public outlineVersion = 0;
 
 	// Infers all other table properties (cmap, head, OS/2, etc.) via the
 	// interface heritage.
 	[key: string]: unknown;
 
+	/** @internal */
 	public static probe(buffer: Uint8Array): boolean {
 		const format = asciiDecoder.decode(buffer.slice(0, 4));
 		return (
@@ -144,6 +201,16 @@ export class TrueTypeFont<
 		);
 	}
 
+	/**
+	 * Instantiates a font object from binary font data. You can either pass
+	 * in a `Uint8Array` or `DecodeStream` from the restructure library
+	 * (@see https://github.com/foliojs/restructure).
+	 *
+	 * @param streamOrBuffer binary font data
+	 * @param variationCoords Normalised design coordinates (typically ranging
+	 *   from -1.0 to 1.0) used to select a specific instance within a variable
+	 *   font's design space.
+	 */
 	constructor(
 		streamOrBuffer: Uint8Array | r.DecodeStream,
 		variationCoords: number[] | null = null,
@@ -427,18 +494,25 @@ export class TrueTypeFont<
 		return this.head.unitsPerEm;
 	}
 
-	public get bbox(): Readonly<BoundingBox> | undefined {
-		if (typeof this._bbox === 'undefined') {
+	public get boundingBox(): Readonly<BoundingBox> | undefined {
+		if (typeof this._boundingBox === 'undefined') {
 			if (!this.head) {
 				return undefined;
 			}
 			const head = this.head;
-			this._bbox = Object.freeze(
+			this._boundingBox = Object.freeze(
 				new BoundingBox(head.xMin, head.yMin, head.xMax, head.yMax),
 			);
 		}
 
-		return this._bbox;
+		return this._boundingBox;
+	}
+
+	/**
+	 * @deprecated Use `boundingBox` instead!
+	 */
+	public get bbox(): Readonly<BoundingBox> | undefined {
+		return this.boundingBox;
 	}
 
 	private get cmapProcessor(): CmapProcessor | null {
@@ -547,7 +621,7 @@ export class TrueTypeFont<
 	public layout(
 		str: string,
 		userFeatures?: OpenType.Features | OpenType.FeatureTag[],
-		script?: Script.UnicodeScript,
+		script?: Script.OpenTypeTag,
 		language?: string,
 		direction?: BidiDirection,
 	): GlyphRun {
@@ -664,7 +738,7 @@ export class TrueTypeFont<
 				min: axis.minValue,
 				default: axis.defaultValue,
 				max: axis.maxValue,
-			} as VariationAxis;
+			};
 		}
 
 		return res;
@@ -861,3 +935,10 @@ export class TrueTypeFont<
 		return this as TrueTypeSubsetFont;
 	}
 }
+
+/**
+ * The class TTFFont is a compatibility alias for {@link TrueTypeFont}
+ *
+ * @deprecated Use {@link TrueTypeFont} instead!
+ */
+export class TTFFont extends TrueTypeFont {}

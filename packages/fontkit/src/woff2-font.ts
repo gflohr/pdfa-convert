@@ -17,10 +17,29 @@ import type { TrueTypeSubsetFont } from './true-type-subset-font.js';
 import { asciiDecoder } from './utils.js';
 
 /**
- * Subclass of TrueTypeFont that represents a TTF/OTF font compressed by WOFF2
+ * A WOFF2Font represents a compressed TTF/OTF font.
  * See spec here: http://www.w3.org/TR/WOFF2/
+ *
+ * When instantiated, a `WOFF2Font` is uncompressed and decoded on the fly and
+ * after that functionally identical to a {@link TrueTypeFont}.
  */
 export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
+	/**
+	 * Identifier for WOFF2 fonts. Always 'WOFF2'.
+	 */
+	public static objType = 'WOFF2';
+
+	/**
+	 * Discriminating property. Has the same value as the static `objType`
+	 * property.
+	 */
+	public readonly objType: string = WOFF2Font.objType;
+
+	/**
+	 * @deprecated Use WOFF2Font#objType instead!
+	 */
+	public readonly type: string = WOFF2Font.objType;
+
 	private dataPos?: number;
 	// Do NOT initialise this inline (e.g., `= false`).
 	//
@@ -39,6 +58,8 @@ export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
 		super(streamOrBuffer, variationCoords);
 		this.decompress();
 		this.decompressed = true;
+
+		this.objType = this.type = 'WOFF2';
 	}
 
 	protected decodeDirectory(): WOFF2Directory {

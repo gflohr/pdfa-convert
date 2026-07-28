@@ -132,6 +132,9 @@ export namespace kernTable {
 		tables: Table[];
 	}
 
+	/**
+	 * Kerning Table. Contains traditional pairwise spacing adjustments.
+	 */
 	export type kern = kernV0 | kernV1;
 }
 
@@ -164,7 +167,7 @@ interface KernSubtableContext {
 	leftTable: LeftTableConfig;
 }
 
-export interface Kern2ArrayContext  {
+export interface Kern2ArrayContext {
 	parent?: KernSubtableContext;
 	off?: number;
 	_startOffset?: number;
@@ -175,8 +178,11 @@ const kern2ArrayFields = {
 		return t._startOffset! - (t.parent?.parent?._startOffset ?? 0);
 	},
 	len: (t: Kern2ArrayContext) => {
-		return (((t.parent?.leftTable.max ?? 0) - t.off!) / (t.parent?.rowWidth ?? 0) + 1) *
-		((t.parent?.rowWidth ?? 0) / 2);
+		return (
+			(((t.parent?.leftTable.max ?? 0) - t.off!) / (t.parent?.rowWidth ?? 0) +
+				1) *
+			((t.parent?.rowWidth ?? 0) / 2)
+		);
 	},
 	values: new r.LazyArray(r.int16, 'len'),
 };

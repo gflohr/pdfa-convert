@@ -5,8 +5,16 @@
 	"type": "module",
 	"main": "dist/fontkit.umd.js",
 	"unpkg": "dist/fontkit.umd.min.js",
-	"module": "dist/fontkit.es.js",
-	"types": "fontkit.d.ts",
+	"module": "dist/fontkit.esm.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/fontkit.esm.js",
+			"require": "./dist/fontkit.cjs",
+			"default": "./dist/fontkit.umd.js"
+		}
+	},
 	"scripts": {
 		"clean": "rimraf --glob dist node_modules/.cache \"src/**/trie.ts\" \"src/**/trie-indic.ts\" \"src/**/trie-use.ts\" \"src/**/indic.ts\" \"src/**/use.ts\"",
 		"generate:data": "pnpm exec tsx scripts/gen-trie.ts && pnpm exec tsx scripts/gen-use.ts && pnpm exec tsx scripts/gen-indic.ts",

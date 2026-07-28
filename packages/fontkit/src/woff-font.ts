@@ -5,7 +5,37 @@ import { woffDirectoryStruct } from './tables/woff-directory.js';
 import { TrueTypeFont } from './true-type-font.js';
 import { asciiDecoder } from './utils.js';
 
+/**
+ * Parses and processes Web Open Font Format (WOFF 1.0) files.
+ *
+ * When instantiated, a `WOFFFont` is uncompressed and decoded on the fly and
+ * after that functionally identical to a {@link TrueTypeFont}.
+ */
 export class WOFFFont extends TrueTypeFont<WOFFDirectory> {
+	/**
+	 * Identifier for WOFF fonts.
+	 */
+	public static objType: 'WOFF' = 'WOFF';
+
+	/**
+	 * Discriminating property. Has the same value as the static `objType`
+	 * property.
+	 */
+	public readonly objType: string = WOFFFont.objType;
+
+	/**
+	 * @deprecated Use @{link WOFFFont#objType} instead!
+	 */
+	public readonly type: string = WOFFFont.objType;
+
+	constructor(
+		streamOrBuffer: Uint8Array | r.DecodeStream,
+		variationCoords: number[] | null = null,
+	) {
+		super(streamOrBuffer, variationCoords);
+		this.objType = this.type = WOFFFont.objType;
+	}
+
 	static probe(buffer: Uint8Array) {
 		return asciiDecoder.decode(buffer.slice(0, 4)) === 'wOFF';
 	}

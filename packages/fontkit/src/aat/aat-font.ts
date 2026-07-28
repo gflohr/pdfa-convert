@@ -1,7 +1,7 @@
-import type { Glyph } from '../glyph';
-import type { StrictTables } from '../open-type-font';
-import type { SFNTFont } from '../sfnt-font';
-import type { morxTable } from '../tables';
+import type { Font } from '../font.js';
+import type { Glyph } from '../glyph/glyph.js';
+import type { StrictTables } from '../open-type-font.js';
+import type { morxTable } from '../tables/index.js';
 import {
 	requiredTrueTypeSubsetTables,
 	type TrueTypeSubsetFont,
@@ -29,7 +29,7 @@ export type RequiredAATTableTag = (typeof requiredAATTables)[number];
  * tracking, and text reordering, primarily on Apple platforms.
  */
 export interface AATFont
-	extends Omit<SFNTFont, RequiredAATTableTag>,
+	extends Omit<Font, RequiredAATTableTag>,
 		StrictTables<RequiredAATTableTag>,
 		Omit<TrueTypeSubsetFont, 'morx'> {
 	getGlyph(glyph: number, characters?: readonly number[]): Glyph;

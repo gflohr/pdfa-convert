@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import type { VariationCoordinates } from '../src/font.js';
-import { fontkit, type SFNTFont } from '../src/index.js';
+import { type Font, fontkit } from '../src/index.js';
 import type { TrueTypeFont } from '../src/true-type-font.js';
 
 type OpenCallback = (
@@ -15,7 +15,7 @@ interface Fontkit {
 
 	registerFormat(format: unknown): void;
 
-	create(buffer: Uint8Array, postscriptName?: string): SFNTFont;
+	create(buffer: Uint8Array, postscriptName?: string): Font;
 
 	openSync(
 		filename: string,

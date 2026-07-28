@@ -20,6 +20,10 @@ export namespace featTable {
 		name: string;
 	}
 
+	/**
+	 * Feature Name Table. Maps AAT feature selectors to localised string
+	 * references.
+	 */
 	export interface feat {
 		version: number;
 		featureNameCount: number;

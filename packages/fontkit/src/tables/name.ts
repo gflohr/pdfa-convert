@@ -68,6 +68,10 @@ export namespace nameTable {
 		langTags: LangTagRecord[];
 	}
 
+	/**
+	 * Naming Table. Contains multilingual string records for copyrights,
+	 * families, and system IDs.
+	 */
 	export type name = nameV0 | nameV1;
 }
 

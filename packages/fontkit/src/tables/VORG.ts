@@ -6,6 +6,10 @@ export namespace VORGTable {
 		vertOriginY: number;
 	}
 
+	/**
+	 * Vertical Origin Table. Specifies vertical coordinate origins for dynamic
+	 * metrics scaling.
+	 */
 	export interface VORG {
 		majorVersion: number;
 		minorVersion: number;

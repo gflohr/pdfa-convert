@@ -160,7 +160,10 @@ export namespace cmapTable {
 		table: Subtable;
 	}
 
-	/** Character to glyph mapping. */
+	/**
+	 * Character to Glyph Index Mapping Table. Maps characters to internal
+	 * glyph indices.
+	 */
 	export interface cmap {
 		version: number;
 		numSubtables: number;

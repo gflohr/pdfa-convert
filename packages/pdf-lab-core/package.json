@@ -11,8 +11,8 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.esm.js",
-			"require": "./dist/index.cjs.js",
+			"import": "./dist/iindex.esm.js",
+			"require": "./dist/index.cjs.cjs",
 			"browser": "./dist/index.browser.js"
 		}
 	},

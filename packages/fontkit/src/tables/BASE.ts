@@ -109,6 +109,10 @@ export namespace BASETable {
 		itemVariationStore: OpenTypeVariation.ItemVariationStore;
 	}
 
+	/**
+	 * Baseline Data Table. Sets alignment values dynamically shifting script
+	 * baselines.
+	 */
 	export type BASE = BASEV1_0 | BASEV1_1;
 }
 

@@ -1,6 +1,10 @@
 import * as r from 'restructure';
 
 export namespace PCLTTable {
+	/**
+	 * PCL 5 Table. Contains metrics and command parameters for HP LaserJet
+	 * compatibility.
+	 */
 	export interface PCLT {
 		version: number;
 		fontNumber: number;

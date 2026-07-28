@@ -51,7 +51,8 @@ export namespace postTable {
 	}
 
 	/**
-	 * Represents the parsed OpenType PostScript information table ('post').
+	 * PostScript Table. Encapsulates printer operational bounds and
+	 * memory-tracking metrics.
 	 */
 	export type post = postV1 | postV2 | postV2_5 | postV3 | postV4;
 }

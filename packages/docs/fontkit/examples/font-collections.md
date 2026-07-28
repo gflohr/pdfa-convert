@@ -105,7 +105,7 @@ for (const font of dfont.fonts) {
 
 == CommonJS
 ```JavaScript
-const fs from 'node:fs';
+const fs = require('node:fs');
 const { DFont, TrueTypeCollection } = require('@pdf-lab/fontkit');
 
 const ttcFilename = 'NotoSans.ttc';

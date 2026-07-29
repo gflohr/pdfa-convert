@@ -124,4 +124,52 @@ describe('Factory Functions', () => {
 			);
 		});
 	});
+
+	describe('Load Font Collection', () => {
+		it('should expose the loadFontCollection() function', () => {
+			expect(fontkit.loadFontCollection).toBeDefined();
+			expect(typeof fontkit.loadFont).toBe('function');
+		});
+
+		it('should load a single TrueType font collection', async () => {
+			const bytes = await fs.readFile(
+				path.resolve(
+					import.meta.dirname,
+					'./data/NotoSans/NotoSans.ttc',
+				),
+			);
+			const collection = fontkit.loadFontCollection(bytes);
+			expect(collection).toBeDefined();
+			expect(collection.objType).toBe('TTC');
+		});
+
+		it('should load a single Datafork TrueType font collection', async () => {
+			const bytes = await fs.readFile(
+				path.resolve(
+					import.meta.dirname,
+					'./data/NotoSans/NotoSans.dfont',
+				),
+			);
+			const collection = fontkit.loadFontCollection(bytes);
+			expect(collection).toBeDefined();
+			expect(collection.objType).toBe('DFont');
+		});
+
+		it('should throw an error if a font is passed', async () => {
+			const bytes = await fs.readFile(
+				path.resolve(
+					import.meta.dirname,
+					'./data/OpenSans/OpenSans-Regular.ttf',
+				),
+			);
+			const err = 'Not a font collection!';
+			expect(() => fontkit.loadFontCollection(bytes)).toThrow(err);
+		});
+
+		it('should throw an error if corrupt data is passed', () => {
+			const bytes = Buffer.from('25 or 6 to 4');
+			const err = 'Not a font collection!';
+			expect(() => fontkit.loadFontCollection(bytes)).toThrow(err);
+		});
+	});
 });

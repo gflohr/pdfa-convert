@@ -7,14 +7,7 @@ import {
 	type PDFRef,
 	PDFString,
 } from '@cantoo/pdf-lib';
-import {
-	DFont,
-	fontkit,
-	type Glyph,
-	type Subset,
-	TrueTypeCollection,
-	TrueTypeFont,
-} from '@pdfa-lab/fontkit';
+import { fontkit, OpenTypeFont, type Glyph, type Subset, type TrueTypeFont } from '@pdfa-lab/fontkit';
 import type { GlyphMapper } from '../encoding/mappers/glyph-mapper.js';
 import { OverlayMapper } from '../encoding/mappers/overlay-mapper.js';
 import type { Encoding } from '../encoding/types.js';
@@ -39,9 +32,10 @@ type Metrics = {
 
 export abstract class FontEmbedder {
 	private initialised = false;
-	private _isFontCollection = false;
 	private _fontDict: PDFDict | undefined;
-	private _font: TrueTypeFont | undefined;
+	// FIXME! This should be cast to OpenTypeFont, because the font cannot
+	// be embedded without font metrics.
+	private _font: OpenTypeFont | undefined;
 	private _subset: Subset | undefined;
 	private _scale: number | undefined;
 	private _glyphIds = new Set<number>();
@@ -114,10 +108,6 @@ export abstract class FontEmbedder {
 		return this._pdfDoc;
 	}
 
-	private get isFontCollection(): boolean {
-		return this._isFontCollection;
-	}
-
 	private get fontInfo(): FontInfo {
 		return this._fontInfo;
 	}
@@ -134,7 +124,7 @@ export abstract class FontEmbedder {
 		return this._glyphIds;
 	}
 
-	private get font(): TrueTypeFont {
+	private get font(): OpenTypeFont {
 		return this._font!;
 	}
 
@@ -166,6 +156,25 @@ export abstract class FontEmbedder {
 		return this._subsetPrefixes;
 	}
 
+	private probeCollection(data: Uint8Array): boolean {
+		const magic = new TextDecoder('ascii').decode(data.slice(0, 4));
+
+		// We have to check whether the magic number indicates a font, because
+		// detecting a Datafork font requires decoding the header. At least,
+		// this is what fontkit does.
+		//
+		// That means that corrupt data will be incorrectly recognised as
+		// a font collection data, but fontkit's probe functions will
+		// handle that.
+		return (
+			magic !== 'true' &&
+			magic !== 'OTTO' &&
+			magic !== String.fromCharCode(0, 1, 0, 0) &&
+			magic !== 'wOF2' &&
+			magic !== 'WOFF'
+		);
+	}
+
 	private async initialise() {
 		if (this.initialised) return;
 
@@ -173,31 +182,16 @@ export abstract class FontEmbedder {
 		const source = fontData.source as Uint8Array;
 
 		// FIXME! Use the new loadFont() factory!
-		const isTTC = TrueTypeCollection.probe(source);
-		const isDFont = DFont.probe(source);
-		this._isFontCollection = isTTC || isDFont;
+		const isTTC = this.probeCollection(source);
 
-		let font: TrueTypeFont | null;
-		if (isTTC && fontData.postScriptName) {
-			const collection = new TrueTypeCollection(source);
-			font = collection.getFont(fontData.postScriptName);
-		} else if (isDFont && fontData.postScriptName) {
-			const collection = new DFont(source);
-			font = collection.getFont(fontData.postScriptName);
-		} else {
-			font = new TrueTypeFont(source);
-			if (typeof fontData.postScriptName !== 'undefined') {
-				font = font.getFont(fontData.postScriptName);
-			}
+		const font = isTTC ? fontkit.loadFont(source, fontData.postScriptName)
+			: fontkit.loadFont(source);
+
+		const asOpenType = font.asOpenTypeFont();
+		if (!asOpenType) {
+			throw new Error(`Font cannot be embedded because it is missing core OpenType tables!`);
 		}
-
-		if (!font) {
-			throw new Error(
-				`Font with PostScript name '${fontData.postScriptName}' not found!`,
-			);
-		}
-
-		this._font = font;
+		this._font = asOpenType;
 
 		this._subset = this.font.createSubset();
 		this._scale = 1000 / this.font.unitsPerEm;
@@ -389,9 +383,6 @@ end
 	private extractMetrics(): Metrics {
 		const font = this.font;
 
-		if (!font.boundingBox) {
-			throw new Error('Font has no bounding box!');
-		}
 		const bbox = [
 			this.scale * font.boundingBox.minX,
 			this.scale * font.boundingBox.minY,
@@ -399,14 +390,8 @@ end
 			this.scale * font.boundingBox.maxY,
 		];
 
-		if (typeof font.ascent === 'undefined') {
-			throw new Error('Font has no ascender!');
-		}
 		const ascent = this.scale * font.ascent;
 
-		if (typeof font.descent === 'undefined') {
-			throw new Error('Font has no descender!');
-		}
 		const descent = this.scale * font.descent;
 
 		const capHeight = font.capHeight ? this.scale * font.capHeight : ascent;

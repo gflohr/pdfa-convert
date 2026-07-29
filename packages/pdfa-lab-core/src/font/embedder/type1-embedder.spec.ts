@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import { PDFDocument, PDFRef } from '@cantoo/pdf-lib';
-import { fontkit } from '@pdfa-lab/fontkit';
+import { type FontkitAPI, fontkit } from '@pdfa-lab/fontkit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SingleByteEncodingMapper } from '../../encoding/mappers/single-byte-encoding-mapper.js';
 import type { FontEmbedOptions } from '../../pdfa-lab.js';
@@ -26,7 +26,7 @@ describe('Type1 Font Embedder', () => {
 
 	beforeEach(async () => {
 		pdfDoc = await PDFDocument.load(pdfBytes);
-		pdfDoc.registerFontkit(fontkit);
+		(pdfDoc.registerFontkit as unknown as (fk: FontkitAPI) => void)(fontkit);
 	});
 
 	it('should embed the Helvetica font', async () => {

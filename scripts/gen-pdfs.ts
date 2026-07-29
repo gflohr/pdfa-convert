@@ -10,12 +10,11 @@ import {
 	rgb,
 	StandardFonts,
 } from '@cantoo/pdf-lib';
-import { fontkit } from '@pdfa-lab/fontkit';
+import { type FontkitAPI, fontkit } from '@pdfa-lab/fontkit';
 
 async function genStandardFonts(): Promise<void> {
 	const pdfDoc = await PDFDocument.create();
-	// biome-ignore lint/suspicious/noExplicitAny: Upstream type is incorrect!
-	pdfDoc.registerFontkit(fontkit as any);
+	(pdfDoc.registerFontkit as unknown as (fk: FontkitAPI) => void)(fontkit);
 
 	const page = pdfDoc.addPage();
 	const { height } = page.getSize();

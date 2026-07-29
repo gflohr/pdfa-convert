@@ -74,7 +74,7 @@ export type FontData = {
 
 	/**
 	 * The optional PostScript name. This is only relevant, if the font
-	 * is a TrueType collection (`.ttc`) file.
+	 * is a font collection (`.ttc` or `.dfont`) file.
 	 */
 	postScriptName?: string;
 };

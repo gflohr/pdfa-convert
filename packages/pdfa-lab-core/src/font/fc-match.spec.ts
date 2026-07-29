@@ -90,7 +90,7 @@ describe('fcMatch', () => {
 			cb(
 				null,
 				{
-					stdout: 'configuration mising',
+					stdout: 'configuration missing',
 				},
 				'',
 			);

@@ -36,20 +36,23 @@ const collectionFormats = [TrueTypeCollection, DFont];
  * Available both as a default import and as the named import `fontkit`.
  * Exception: The CommonJS bundle only has the named import `fontkit`.
  */
-export const fontkit = {
+export interface FontkitAPI {
 	/**
 	 * Set to `true` for verbose error logging.
 	 */
-	logErrors: false,
+	logErrors: boolean;
 
 	/**
-	 * The default language to use.
+	 * The default language to use. Defaults to 'en'.
 	 */
-	defaultLanguage: 'en',
+	defaultLanguage: string;
 
-	setDefaultLanguage: (lang = 'en') => {
-		fontkit.defaultLanguage = lang;
-	},
+	/**
+	 * Set the global default language.
+	 *
+	 * @param lang the language code
+	 */
+	setDefaultLanguage: (lang: string) => void;
 
 	/**
 	 * Register a new font format.
@@ -59,9 +62,7 @@ export const fontkit = {
 	 * @deprecated Remove this!
 	 * @hidden
 	 */
-	registerFormat: (format: FontContainer) => {
-		formats.push(format);
-	},
+	registerFormat: (format: FontContainer) => void;
 
 	/**
 	 * Load a font from raw input data. You can either load a
@@ -81,6 +82,69 @@ export const fontkit = {
 	 * @param postscriptName the PostScript name of the font in a collection
 	 * @returns a {@link TrueTypeFont}
 	 */
+	loadFont: (bytes: Uint8Array, postscriptName?: string) => TrueTypeFont;
+
+	/**
+	 * Load a font collection from raw input data. You can either load a
+	 * {@link TrueTypeCollection} or {@link DFont}.
+
+	 * The function throws an exception, if the input data is not in a
+	 * recognised format.
+	 *
+	 * @param bytes the raw input data for the font collection
+	 * @returns a {@link FontCollection}
+	 */
+	loadFontCollection: (bytes: Uint8Array) => FontCollection;
+
+	/**
+	 * @deprecated Use {@link fontkit.loadFont} or {@link fontkit.loadFontCollection} instead!
+	 *
+	 * Create an instance of a font or a font collection.
+	 *
+	 * For a {@link FontCollection}, you may specify the
+	 * PostScript name of one of the fonts contained in the collection.
+	 * Otherwise, you get the collection itself. You can then get the list
+	 * of included fonts with the method `getFonts`.
+	 *
+	 * If the font is a regular font program file and you specify a PostScript
+	 * name, an attempt is made to get a font variation of that name. That is
+	 * only possible if:
+	 *
+	 * 1. The font has an {@link fvarTable.fvar} table.
+	 * 2. The font either has a {@link CFFFont | CFF2} table, or it has both a {@link gvarTable.gvar | gvar} and `glyf` table.
+	 *
+	 * The resolution may still fail if the requested variation is not present
+	 * in the font.
+	 *
+	 * The function is deprecated, because it forces users to check the type
+	 * of the returned object. They will normally either expect a font or a font
+	 * collection, but not both.
+	 *
+	 * @param bytes the raw font byte
+	 * @param postscriptName the optional PostScript name
+	 * @returns the font or font collection
+	 *
+	 * {@link TrueTypeFont}, {@link WOFFFont}, {@link WOFF2Font},
+	 * {@link TrueTypeCollection}, {@link DFont} instead!
+	 */
+	create: (
+		bytes: Uint8Array,
+		postscriptName?: string,
+	) => TrueTypeFont | FontCollection | null;
+}
+
+export const fontkit: FontkitAPI = {
+	logErrors: false,
+	defaultLanguage: 'en',
+
+	setDefaultLanguage: (lang = 'en') => {
+		fontkit.defaultLanguage = lang;
+	},
+
+	registerFormat: (format: FontContainer) => {
+		formats.push(format);
+	},
+
 	loadFont: (bytes: Uint8Array, postscriptName?: string): TrueTypeFont => {
 		if (typeof postscriptName === 'undefined') {
 			for (let i = 0; i < fontFormats.length; i++) {
@@ -114,16 +178,6 @@ export const fontkit = {
 		}
 	},
 
-	/**
-	 * Load a font collection from raw input data. You can either load a
-	 * {@link TrueTypeCollection} or {@link DFont}.
-
-	 * The function throws an exception, if the input data is not in a
-	 * recognised format.
-	 *
-	 * @param bytes the raw input data for the font collection
-	 * @returns a {@link FontCollection}
-	 */
 	loadFontCollection: (bytes: Uint8Array): FontCollection => {
 		for (let i = 0; i < collectionFormats.length; i++) {
 			const format = collectionFormats[i];

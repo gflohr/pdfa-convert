@@ -133,10 +133,7 @@ describe('Factory Functions', () => {
 
 		it('should load a single TrueType font collection', async () => {
 			const bytes = await fs.readFile(
-				path.resolve(
-					import.meta.dirname,
-					'./data/NotoSans/NotoSans.ttc',
-				),
+				path.resolve(import.meta.dirname, './data/NotoSans/NotoSans.ttc'),
 			);
 			const collection = fontkit.loadFontCollection(bytes);
 			expect(collection).toBeDefined();
@@ -145,10 +142,7 @@ describe('Factory Functions', () => {
 
 		it('should load a single Datafork TrueType font collection', async () => {
 			const bytes = await fs.readFile(
-				path.resolve(
-					import.meta.dirname,
-					'./data/NotoSans/NotoSans.dfont',
-				),
+				path.resolve(import.meta.dirname, './data/NotoSans/NotoSans.dfont'),
 			);
 			const collection = fontkit.loadFontCollection(bytes);
 			expect(collection).toBeDefined();

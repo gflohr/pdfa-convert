@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { fontkit } from '../src/';
+import { fontkit } from '../src/index.js';
 
 describe('Factory Functions', () => {
 	describe('Load Font', () => {
@@ -128,7 +128,7 @@ describe('Factory Functions', () => {
 	describe('Load Font Collection', () => {
 		it('should expose the loadFontCollection() function', () => {
 			expect(fontkit.loadFontCollection).toBeDefined();
-			expect(typeof fontkit.loadFont).toBe('function');
+			expect(typeof fontkit.loadFontCollection).toBe('function');
 		});
 
 		it('should load a single TrueType font collection', async () => {

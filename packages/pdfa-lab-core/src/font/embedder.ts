@@ -172,6 +172,7 @@ export abstract class FontEmbedder {
 		const fontData = await this.resolveFont();
 		const source = fontData.source as Uint8Array;
 
+		// FIXME! Use the new loadFont() factory!
 		const isTTC = TrueTypeCollection.probe(source);
 		const isDFont = DFont.probe(source);
 		this._isFontCollection = isTTC || isDFont;
@@ -181,7 +182,7 @@ export abstract class FontEmbedder {
 			const collection = new TrueTypeCollection(source);
 			font = collection.getFont(fontData.postScriptName);
 		} else if (isDFont && fontData.postScriptName) {
-			const collection = new TrueTypeCollection(source);
+			const collection = new DFont(source);
 			font = collection.getFont(fontData.postScriptName);
 		} else {
 			font = new TrueTypeFont(source);
@@ -398,12 +399,12 @@ end
 			this.scale * font.boundingBox.maxY,
 		];
 
-		if (!font.ascent) {
+		if (typeof font.ascent === 'undefined') {
 			throw new Error('Font has no ascender!');
 		}
 		const ascent = this.scale * font.ascent;
 
-		if (!font.descent) {
+		if (typeof font.descent === 'undefined') {
 			throw new Error('Font has no descender!');
 		}
 		const descent = this.scale * font.descent;

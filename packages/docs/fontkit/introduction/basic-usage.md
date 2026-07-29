@@ -29,7 +29,7 @@ const font = fontkit.loadFont(bytes);
 == CommonJS
 ```JavaScript
 const fs = require('fs');
-const { TrueTypeFont } = require('@pdfa-lab/fontkit');
+const { fontkit } = require('@pdfa-lab/fontkit');
 
 const bytes = fs.readFileSync('Helvetica.ttf');
 const font = fontkit.loadFont(bytes);
@@ -106,7 +106,7 @@ const font = fontkit.loadFont(bytes, 'NotoSans-Italic');
 == CommonJS
 ```JavaScript
 const fs = require('fs');
-const { TrueTypeFont } = require('@pdfa-lab/fontkit');
+const { fontkit } = require('@pdfa-lab/fontkit');
 
 const bytes = fs.readFileSync('NotoSans.ttc');
 const font = fontkit.loadFont(bytes, 'NotoSans-Italic');
@@ -134,7 +134,7 @@ window.fetch('NotoSans.ttc')
 
 :::
 
-Instead of a TrueTye collection (`.ttc` file), you can also pass a
+Instead of a TrueType collection (`.ttc` file), you can also pass a
 Datafork True Type font collection (`.dfont`). These files are still sometimes
 used on macOS.
 

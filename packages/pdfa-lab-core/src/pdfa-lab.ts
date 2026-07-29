@@ -34,12 +34,9 @@ export type FontEmbedOptions = {
 	 */
 
 	platform?: string;
-	/**
-	 * A fontkit instance, see `@pdfa-lib/fontkit`.
-	 */
 
 	/**
-	 * FIXME! Create a stub type that covers all functionality that we need.
+	 * A fontkit instance, see `@pdfa-lab/fontkit`.
 	 */
 	fontkit?: unknown;
 };

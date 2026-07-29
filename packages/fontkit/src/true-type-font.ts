@@ -865,7 +865,7 @@ export class TrueTypeFont<TDirectory extends SFNTDirectory = SFNTDirectory>
 	 * @param name
 	 * @returns the selected font.
 	 *
-	 * @deprecated use @{link TrueTypeFont#getVariation} instead!
+	 * @deprecated use {@link TrueTypeFont#getVariation} instead!
 	 */
 	public getFont(name: string): TrueTypeFont {
 		return this.getVariation(name);

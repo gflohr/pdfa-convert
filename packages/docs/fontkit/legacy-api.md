@@ -79,7 +79,7 @@ and that has an API that differs completely from that of a
 pass the PostScript name of the desired font as a second argument in order to
 get back a [TrueTypeFont](/fontkit/api/classes/TrueTypeFont). However, if
 you specified a PostScript name of a font that does not exist in the collection,
-the function returns `null`:pn
+the function returns `null`:
 
 :::tabs key:language variant:code
 
@@ -90,7 +90,7 @@ import fontkit from '@pdfa-lab/fontkit';
 
 const fontBytes = fs.readFileSync('Times.ttc');
 const font = fontkit.create(fontBytes, 'Times-Italic');
-console.log(font.fullName);
+console.log(font?.fullName);
 ```
 
 == ES6
@@ -100,7 +100,7 @@ import fontkit from '@pdfa-lab/fontkit';
 
 const fontBytes = fs.readFileSync('Times.ttc');
 const font = fontkit.create(fontBytes, 'Times-Italic');
-console.log(font.fullName);
+console.log(font?.fullName);
 ```
 
 == CommonJS
@@ -110,7 +110,7 @@ const fontkit = require('@pdfa-lab/fontkit');
 
 const fontBytes = fs.readFileSync('Times.ttc');
 const font = fontkit.create(fontBytes, 'Times-Italic');
-console.log(font.fullName);
+console.log(font?.fullName);
 ```
 
 :::
@@ -137,12 +137,12 @@ It all boils down to "know your data". And because parsing font data from
 unknown or untrusted sources implies a considerable security risk (see
 [Security](/fontkit/introduction/security)), it is considered better, to use
 the factory functions
-[`fontkit.loadFont()`](./api/variables/fontkit#loadFont) or
-[`fontkit.loadFontCollection()`](./api/variables/fontkit#loadFont). The first
-will load a font, the second a font collection.
+[`fontkit.loadFont()`](./api/variables/fontkit#loadfont) or
+[`fontkit.loadFontCollection()`](./api/variables/fontkit#loadfontcollection).
+The first will load a font, the second a font collection.
 
 Alternatively, if you know the data format, you can also simply use the
-the designated constructors for
+designated constructors for
 [TrueTypeFont](/fontkit/api/classes/TrueTypeFont),
 [WOFF](/fontkit/api/classes/WOFFFont), or
 [WOFF2](/fontkit/api/classes/WOFFFont) fonts, and for the container formats

@@ -21,7 +21,7 @@ export interface FontContainer {
 	probe(buffer: Uint8Array): boolean;
 
 	/**
-	 * The constructor signature accepting a Restructure `DecodeStream`.
+	 * The constructor signature accepting a `Uint8Array`.
 	 */
 	new (stream: Uint8Array): FontContainerInstance;
 }

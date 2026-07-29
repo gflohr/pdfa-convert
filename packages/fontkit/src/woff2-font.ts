@@ -56,8 +56,7 @@ export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
 		variationCoords: number[] | null = null,
 	) {
 		super(streamOrBuffer, variationCoords);
-		this.decompress();
-		this.decompressed = true;
+		this.decompressed = false;
 
 		this.objType = this.type = 'WOFF2';
 	}
@@ -71,33 +70,32 @@ export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
 	}
 
 	private decompress() {
-		this.stream.pos = this.dataPos!;
-		const buffer = this.stream.readBuffer(this.directory.totalCompressedSize);
+		if (!this.decompressed) {
+			this.stream.pos = this.dataPos!;
+			const buffer = this.stream.readBuffer(this.directory.totalCompressedSize);
 
-		let decompressedSize = 0;
-		for (const tag in this.directory.tables) {
-			const entry = this.directory.tables[tag];
-			entry.offset = decompressedSize;
-			decompressedSize +=
-				entry.transformLength != null ? entry.transformLength : entry.length;
+			let decompressedSize = 0;
+			for (const tag in this.directory.tables) {
+				const entry = this.directory.tables[tag];
+				entry.offset = decompressedSize;
+				decompressedSize +=
+					entry.transformLength != null ? entry.transformLength : entry.length;
+			}
+
+			const decompressed = brotli(buffer as Buffer, decompressedSize);
+			if (!decompressed) {
+				throw new Error('Error decoding compressed data in WOFF2');
+			}
+
+			this.stream = new r.DecodeStream(Buffer.from(decompressed));
+			this.decompressed = true;
 		}
-
-		const decompressed = brotli(buffer as Buffer, decompressedSize);
-		if (!decompressed) {
-			throw new Error('Error decoding compressed data in WOFF2');
-		}
-
-		this.stream = new r.DecodeStream(Buffer.from(decompressed));
 	}
 
 	protected decodeTable<K extends keyof typeof tables>(
 		table: SFNTDirectoryEntry,
 	): ReturnType<(typeof tables)[K]['decode']> | null {
-		if (!this.decompressed) {
-			throw new Error(
-				`Attempt to access uninitialised font table data '${table.tag}'!`,
-			);
-		}
+		this.decompress();
 
 		return super.decodeTable<K>(table as unknown as SFNTDirectoryEntry);
 	}
@@ -123,6 +121,7 @@ export class WOFF2Font extends TrueTypeFont<WOFF2Directory> {
 	}
 
 	private transformGlyfTable() {
+		this.decompress();
 		const tables = this.directory.tables;
 		this.stream.pos = tables.glyf!.offset;
 		const table = GlyfTable.decode(this.stream);

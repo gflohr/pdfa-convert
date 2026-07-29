@@ -1,7 +1,10 @@
 import * as r from 'restructure';
 import type { FontCollection } from './font-collection.js';
-import type { TrueTypeCollection } from './true-type-collection.js';
-import type { TrueTypeFont } from './true-type-font.js';
+import { TrueTypeCollection } from './true-type-collection.js';
+import { TrueTypeFont } from './true-type-font.js';
+import { WOFFFont } from './woff-font.js';
+import { WOFF2Font } from './woff2-font.js';
+import { DFont } from './d-font.js';
 
 export interface FontContainerInstance {
 	getFont(postscriptName: string): TrueTypeFont | null;
@@ -25,6 +28,8 @@ export interface FontContainer {
 }
 
 const formats: FontContainer[] = [];
+const fontFormats = [TrueTypeFont, WOFF2Font, WOFFFont];
+const collectionFormats = [TrueTypeCollection, DFont];
 
 /**
  * The legacy factory entry point into the library.
@@ -69,6 +74,7 @@ export const fontkit = {
 	 *
 	 * @param format
 	 *
+	 * @deprecated Remove this!
 	 * @hidden
 	 */
 	registerFormat: (format: FontContainer) => {
@@ -105,11 +111,10 @@ export const fontkit = {
 		bytes: Uint8Array,
 		postscriptName?: string,
 	): TrueTypeFont | FontCollection | null => {
-		const buffer = Buffer.from(bytes);
 		for (let i = 0; i < formats.length; i++) {
 			const format = formats[i];
-			if (format.probe(buffer)) {
-				const font = new format(new r.DecodeStream(buffer));
+			if (format.probe(bytes)) {
+				const font = new format(new r.DecodeStream(bytes));
 				if (postscriptName) {
 					return font.getFont(postscriptName);
 				}
@@ -118,5 +123,34 @@ export const fontkit = {
 			}
 		}
 		throw new Error('Unknown font format');
+	},
+
+	loadFont: (bytes: Uint8Array, postscriptName?: string): TrueTypeFont => {
+		if (typeof postscriptName === 'undefined') {
+			for (let i = 0; i < fontFormats.length; i++) {
+				const format = fontFormats[i];
+				if (format.probe(bytes)) {
+					const font = new format(new r.DecodeStream(bytes));
+
+					return font as TrueTypeFont;
+				}
+			}
+			throw new Error('Not a font file!');
+		} else {
+			for (let i = 0; i < collectionFormats.length; i++) {
+				const format = collectionFormats[i];
+				if (format.probe(bytes)) {
+					const collection = new format(new r.DecodeStream(bytes)) as FontCollection;
+					const font = collection.getFont(postscriptName);
+					if (!font) {
+						const fonts = collection.fonts.map(f => `'${f.postscriptName}'`).join(', ');
+						throw new Error(`Font collection does not contain '${postscriptName}'! Try one of ${fonts} instead!`);
+					}
+
+					return font;
+				}
+			}
+			throw new Error('Not a font collection!');
+		}
 	},
 };

@@ -1,4 +1,4 @@
-import { TrueTypeFont } from '@pdfa-lab/fontkit';
+import type { TrueTypeFont } from '@pdfa-lab/fontkit';
 
 export interface FontFlagOptions {
 	fixedPitch?: boolean;

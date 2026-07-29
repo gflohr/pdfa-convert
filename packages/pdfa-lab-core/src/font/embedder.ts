@@ -10,10 +10,10 @@ import {
 import {
 	DFont,
 	fontkit,
-	TrueTypeCollection,
-	TrueTypeFont,
 	type Glyph,
 	type Subset,
+	TrueTypeCollection,
+	TrueTypeFont,
 } from '@pdfa-lab/fontkit';
 import type { GlyphMapper } from '../encoding/mappers/glyph-mapper.js';
 import { OverlayMapper } from '../encoding/mappers/overlay-mapper.js';
@@ -180,7 +180,7 @@ export abstract class FontEmbedder {
 		if (isTTC && fontData.postScriptName) {
 			const collection = new TrueTypeCollection(source);
 			font = collection.getFont(fontData.postScriptName);
-		} else if(isDFont && fontData.postScriptName) {
+		} else if (isDFont && fontData.postScriptName) {
 			const collection = new TrueTypeCollection(source);
 			font = collection.getFont(fontData.postScriptName);
 		} else {
@@ -191,7 +191,9 @@ export abstract class FontEmbedder {
 		}
 
 		if (!font) {
-			throw new Error(`Font with PostScript name '${fontData.postScriptName}' not found!`)
+			throw new Error(
+				`Font with PostScript name '${fontData.postScriptName}' not found!`,
+			);
 		}
 
 		this._font = font;
@@ -333,7 +335,8 @@ end
 			const codePoint = this.coerceCodePoints(
 				this.glyphMapper.lookupCodePoints(glyphId),
 			);
-			const glyph = this.font.glyphForCodePoint(codePoint) ?? this.font.getGlyph(0);
+			const glyph =
+				this.font.glyphForCodePoint(codePoint) ?? this.font.getGlyph(0);
 			if (!glyph) {
 				throw new Error('Font does not have a fallback glyph!');
 			}

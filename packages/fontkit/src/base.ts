@@ -1,10 +1,10 @@
 import * as r from 'restructure';
+import { DFont } from './d-font.js';
 import type { FontCollection } from './font-collection.js';
 import { TrueTypeCollection } from './true-type-collection.js';
 import { TrueTypeFont } from './true-type-font.js';
 import { WOFFFont } from './woff-font.js';
 import { WOFF2Font } from './woff2-font.js';
-import { DFont } from './d-font.js';
 
 export interface FontContainerInstance {
 	getFont(postscriptName: string): TrueTypeFont | null;
@@ -140,11 +140,17 @@ export const fontkit = {
 			for (let i = 0; i < collectionFormats.length; i++) {
 				const format = collectionFormats[i];
 				if (format.probe(bytes)) {
-					const collection = new format(new r.DecodeStream(bytes)) as FontCollection;
+					const collection = new format(
+						new r.DecodeStream(bytes),
+					) as FontCollection;
 					const font = collection.getFont(postscriptName);
 					if (!font) {
-						const fonts = collection.fonts.map(f => `'${f.postscriptName}'`).join(', ');
-						throw new Error(`Font collection does not contain '${postscriptName}'! Try one of ${fonts} instead!`);
+						const fonts = collection.fonts
+							.map((f) => `'${f.postscriptName}'`)
+							.join(', ');
+						throw new Error(
+							`Font collection does not contain '${postscriptName}'! Try one of ${fonts} instead!`,
+						);
 					}
 
 					return font;

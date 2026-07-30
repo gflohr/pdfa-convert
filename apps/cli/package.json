@@ -54,7 +54,7 @@
 		"@pdfa-lab/fontkit": "workspace:*",
 		"@valibot/i18n": "^1.2.0",
 		"pdfa-lab-core": "workspace:*",
-		"valibot": "^1.4.1",
+		"valibot": "^1.4.2",
 		"yargs": "^18.0.0"
 	},
 	"devDependencies": {

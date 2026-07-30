@@ -1,6 +1,6 @@
 import * as os from 'node:os';
 import { Textdomain } from '@esgettext/runtime';
-import fontkit from '@pdf-lib/fontkit';
+import { fontkit } from '@pdfa-lab/fontkit';
 import * as yaml from 'js-yaml';
 import { type FontInfo, PDFALab } from 'pdfa-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';

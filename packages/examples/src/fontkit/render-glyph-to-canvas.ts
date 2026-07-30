@@ -15,8 +15,8 @@ if (!glyph) {
 
 const f = glyph.path.toFunction();
 
-const canvas = createCanvas(400, 400)
-const ctx = canvas.getContext('2d')
+const canvas = createCanvas(400, 400);
+const ctx = canvas.getContext('2d');
 
 const fontSize = 150;
 const scale = fontSize / font.unitsPerEm;

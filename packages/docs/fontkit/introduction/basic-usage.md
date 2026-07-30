@@ -1,6 +1,7 @@
 # Basic Usage
 
-## Load a Font 
+## Load a Font
+
 You can load a font file like this:
 
 :::tabs key:language variant:code
@@ -8,30 +9,30 @@ You can load a font file like this:
 == TypeScript
 ```TypeScript
 import * as fs from 'node:fs';
-import { TrueTypeFont } from '@pdfa-lab/fontkit';
+import { fontkit } from '@pdfa-lab/fontkit';
 
 const bytes = fs.readFileSync('Helvetica.ttf');
-const font = new TrueTypeFont(bytes);
+const font = fontkit.loadFont(bytes);
 // Do something with the font.
 ```
 
 == ES6
 ```JavaScript
 import * as fs from 'node:fs';
-import { TrueTypeFont } from '@pdfa-lab/fontkit';
+import { fontkit } from '@pdfa-lab/fontkit';
 
 const bytes = fs.readFileSync('Helvetica.ttf');
-const font = new TrueTypeFont(bytes);
+const font = fontkit.loadFont(bytes);
 // Do something with the font.
 ```
 
 == CommonJS
 ```JavaScript
 const fs = require('fs');
-const { TrueTypeFont } = require('@pdfa-lab/fontkit');
+const { fontkit } = require('@pdfa-lab/fontkit');
 
 const bytes = fs.readFileSync('Helvetica.ttf');
-const font = new TrueTypeFont(bytes);
+const font = fontkit.loadFont(bytes);
 // Do something with the font.
 ```
 
@@ -47,9 +48,9 @@ window.fetch('Helvetica.ttf')
 		return response.arrayBuffer();
 	})
 	.then(buffer => {
-		const fontData = new Uint8Array(buffer);
-		// The UMD package only features the legacy API!
-		const font = fontkit.create(fontData);
+		const bytes = new Uint8Array(buffer);
+		const font = fontkit.loadFont(bytes);
+		// Do something with the font.
 	})
 	.catch(error => console.error('Error loading font:', error));
 ```
@@ -65,6 +66,77 @@ intentional architectural design choice to preserve the legacy
 If you require standalone browser access to those individual helper classes,
 please use a modern module bundler instead of relying on raw UMD script
 injections. Alternatively, file a pull request that removes this limitation.
+
+Instead of the factory method [`fontkit.loadFont`](../api/variables/fontkit#loadfont),
+you can also use the constructors directly, if you know the format of the
+input data, see
+[`TrueTypeFont`](../api/classes/TrueTypeFont),
+[`WOFF2Font`](../api/classes/WOFF2Font), or
+[`WOFFFont`](../api/classes/WOFFFont) for more information!
+
+## Load a Font from a Collection
+
+TrueType Collections contain multiple fonts in an optimised format. You can
+load a font from a collection with the same factory function
+[`fontkit.loadFont`](../api/variables/fontkit#loadfont), but you have to
+pass the PostScript name of the desired font as a second argument:
+
+:::tabs key:language variant:code
+
+== TypeScript
+```TypeScript
+import * as fs from 'node:fs';
+import { fontkit } from '@pdfa-lab/fontkit';
+
+const bytes = fs.readFileSync('NotoSans.ttc');
+const font = fontkit.loadFont(bytes, 'NotoSans-Italic');
+// Do something with the font.
+```
+
+== ES6
+```JavaScript
+import * as fs from 'node:fs';
+import { fontkit } from '@pdfa-lab/fontkit';
+
+const bytes = fs.readFileSync('NotoSans.ttc');
+const font = fontkit.loadFont(bytes, 'NotoSans-Italic');
+// Do something with the font.
+```
+
+== CommonJS
+```JavaScript
+const fs = require('fs');
+const { fontkit } = require('@pdfa-lab/fontkit');
+
+const bytes = fs.readFileSync('NotoSans.ttc');
+const font = fontkit.loadFont(bytes, 'NotoSans-Italic');
+// Do something with the font.
+```
+
+== UMD
+```JavaScript
+const fontkit = window.fontkit;
+
+window.fetch('NotoSans.ttc')
+	.then(response => {
+		if (!response.ok) {
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
+		return response.arrayBuffer();
+	})
+	.then(buffer => {
+		const bytes = new Uint8Array(buffer);
+		const font = fontkit.loadFont(bytes, 'NotoSans-Italic');
+		// Do something with the font.
+	})
+	.catch(error => console.error('Error loading font:', error));
+```
+
+:::
+
+Instead of a TrueType collection (`.ttc` file), you can also pass a
+Datafork True Type font collection (`.dfont`). These files are still sometimes
+used on macOS.
 
 ## Metadata 
 
@@ -92,7 +164,7 @@ All of these properties may be `null`!
 * [`font.ascent`](../api/classes/TrueTypeFont#ascent) - the font’s
   [ascender](http://en.wikipedia.org/wiki/Ascender_(typography))
 * [`font.descent`](../api/classes/TrueTypeFont#descent) - the font’s
-  [descender](http://en.wikipedia.org/wiki/Descender
+  [descender](http://en.wikipedia.org/wiki/Descender)
 * [`font.lineGap`](../api/classes/TrueTypeFont#linegap) - the amount of space that
   should be included between lines
 * [`font.underlinePosition`](../api/classes/TrueTypeFont#underlineposition) - the

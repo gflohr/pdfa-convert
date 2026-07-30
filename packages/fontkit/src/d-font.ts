@@ -104,7 +104,7 @@ export class DFont implements FontCollection {
 	private readonly header: DFontHeader;
 	private readonly sfnt?: ResourceTypeEntry;
 
-	static probe(buffer: Buffer) {
+	static probe(buffer: Uint8Array) {
 		const stream = new r.DecodeStream(buffer);
 		let header: DFontHeader;
 

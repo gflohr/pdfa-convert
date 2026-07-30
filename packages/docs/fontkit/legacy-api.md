@@ -1,7 +1,7 @@
 # Legacy API
 
 Historically, the only documented entry point into the `fontkit` library was
-this:
+the factory function [`fontkit.create()`](./api/variables/fontkit#create):
 
 :::tabs key:language variant:code
 
@@ -41,8 +41,7 @@ a default export and named exports simultaneously with CommonJS.
 
 :::
 
-The default export has one single documented method `create` which returns
-an object that has something to do with fonts.
+The `fontkit.create()` returns either a font, a font collection, or nothing.
 
 This usage is still supported for compatibility reasons but it is considered
 deprecated.
@@ -78,7 +77,9 @@ pass a second argument, then the
 and that has an API that differs completely from that of a
 [TrueTypeFont](/fontkit/api/classes/TrueTypeFont) font. That means, you have to
 pass the PostScript name of the desired font as a second argument in order to
-get back a [TrueTypeFont](/fontkit/api/classes/TrueTypeFont):
+get back a [TrueTypeFont](/fontkit/api/classes/TrueTypeFont). However, if
+you specified a PostScript name of a font that does not exist in the collection,
+the function returns `null`:
 
 :::tabs key:language variant:code
 
@@ -89,7 +90,7 @@ import fontkit from '@pdfa-lab/fontkit';
 
 const fontBytes = fs.readFileSync('Times.ttc');
 const font = fontkit.create(fontBytes, 'Times-Italic');
-console.log(font.fullName);
+console.log(font?.fullName);
 ```
 
 == ES6
@@ -99,7 +100,7 @@ import fontkit from '@pdfa-lab/fontkit';
 
 const fontBytes = fs.readFileSync('Times.ttc');
 const font = fontkit.create(fontBytes, 'Times-Italic');
-console.log(font.fullName);
+console.log(font?.fullName);
 ```
 
 == CommonJS
@@ -109,7 +110,7 @@ const fontkit = require('@pdfa-lab/fontkit');
 
 const fontBytes = fs.readFileSync('Times.ttc');
 const font = fontkit.create(fontBytes, 'Times-Italic');
-console.log(font.fullName);
+console.log(font?.fullName);
 ```
 
 :::
@@ -119,7 +120,13 @@ console.log(font.fullName);
 If you understand the legacy API, and it is useful for you, go ahead and use
 it. There is nothing wrong with it.
 
-However, in most of the cases, you have to know your input data beforehand
+In almost all use cases, you either want to load a font but not a
+font collection. Or you want to load a font collection but not a font. The
+legacy factory function [`fontkit.create()`](./api/variables/fontkit#create)
+may return either a font, a font collection, or `null`. You always have to
+check the return value of it, before you can use it.
+
+That means that you have to know your input data beforehand
 in order to use this API correctly. You have to know whether the file contains
 a single font or a collection of fonts. And when it is a collection of fonts,
 you have to know which of the contained fonts you want to load. And in order
@@ -129,7 +136,13 @@ font.
 It all boils down to "know your data". And because parsing font data from
 unknown or untrusted sources implies a considerable security risk (see
 [Security](/fontkit/introduction/security)), it is considered better, to use
-the specialised constructors for
+the factory functions
+[`fontkit.loadFont()`](./api/variables/fontkit#loadfont) or
+[`fontkit.loadFontCollection()`](./api/variables/fontkit#loadfontcollection).
+The first will load a font, the second a font collection.
+
+Alternatively, if you know the data format, you can also simply use the
+designated constructors for
 [TrueTypeFont](/fontkit/api/classes/TrueTypeFont),
 [WOFF](/fontkit/api/classes/WOFFFont), or
 [WOFF2](/fontkit/api/classes/WOFFFont) fonts, and for the container formats

@@ -86,6 +86,7 @@ export interface OpenTypeHeader {
 	capHeight: number;
 	numGlyphs: number;
 	unitsPerEm: number;
+	boundingBox: Readonly<BoundingBox>;
 	bbox: Readonly<BoundingBox>;
 }
 

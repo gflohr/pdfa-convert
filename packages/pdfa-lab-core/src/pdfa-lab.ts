@@ -2,14 +2,11 @@ import { PDFDocument, PDFName, PDFRef, type PDFStream } from '@cantoo/pdf-lib';
 import collectFonts from './font/collect-fonts.js';
 import { collectResources, type FontUsage } from './font/collect-resources.js';
 import collectSubsetPrefixes from './font/collect-subset-prefixes.js';
-import { TrueTypeFontEmbedder } from './font/embedder/truetype-embedder.js';
-import { Type1FontEmbedder } from './font/embedder/type1-embedder.js';
-import type { FontEmbedder } from './font/embedder.js';
+import { FontEmbedder } from './font/embedder.js';
 import { patchStream } from './font/patch-stream.js';
 import type { FontInfo, FontMap, PatchSet } from './font/types.js';
 import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
 import { extractText, type TextBlock } from './text/extract-text.js';
-import { Type0FontEmbedder } from './font/embedder/type0-embedder.js';
 
 /**
  * Options for embedding fonts.
@@ -227,40 +224,19 @@ export class PDFALab {
 			// Make sure that we also embed unused fonts.
 			const fontBlocks = glyphsInFont[font.ref.toString()] ?? [];
 
-			let embedder: FontEmbedder;
-			switch (font.subtype) {
-				case 'Type0':
-					embedder = new Type0FontEmbedder(
-						this.pdfDocument,
-						font,
-						fontBlocks,
-						subsetPrefixes,
-						options,
-					);
-					break;
-				case 'Type1':
-					embedder = new Type1FontEmbedder(
-						this.pdfDocument,
-						font,
-						fontBlocks,
-						subsetPrefixes,
-						options,
-					);
-					break;
-				case 'TrueType':
-					embedder = new TrueTypeFontEmbedder(
-						this.pdfDocument,
-						font,
-						fontBlocks,
-						subsetPrefixes,
-						options,
-					);
-					break;
-				default:
-					throw new Error(
-						`Embedding font sybtype ${font.subtype} not yet implemented`,
-					);
+			if (font.subtype !== 'Type0' && font.subtype !== 'Type1' && font.subtype !== 'TrueType') {
+				throw new Error(
+					`Embedding font sybtype ${font.subtype} not yet implemented`,
+				);
 			}
+
+			const embedder = new FontEmbedder(
+				this.pdfDocument,
+				font,
+				fontBlocks,
+				subsetPrefixes,
+				options,
+			);
 
 			const patchSets = await embedder.embed();
 			allPatchSets.push(...patchSets);

@@ -35,7 +35,7 @@ type Metrics = {
 	widths: (number | number[])[];
 };
 
-export abstract class FontEmbedder {
+export class FontEmbedder {
 	private initialised = false;
 	private _fontDict: PDFDict | undefined;
 	// FIXME! This should be cast to OpenTypeFont, because the font cannot

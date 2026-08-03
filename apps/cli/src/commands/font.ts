@@ -54,7 +54,7 @@ const options: {
 	},
 	font: {
 		group: gtx._('Selection of Fonts'),
-		alias: ['b', 'font-name'],
+		alias: ['font-name'],
 		type: 'string',
 		multi: true,
 		describe: gtx._('limit to font-name'),
@@ -68,6 +68,7 @@ const options: {
 	},
 	'fc-match': {
 		group: gtx._('Font Embedding Options'),
+		alias: ['f'],
 		type: 'string',
 		default: 'fc-match',
 		describe: gtx._("path to the 'fc-match' program"),
@@ -76,7 +77,7 @@ const options: {
 		group: gtx._('Font Embedding Options'),
 		type: 'string',
 		multi: true,
-		describe: gtx._('font mapping (FONT_NAME:PATH[:POSTSCRIPT_NAME]'),
+		describe: gtx._('font mapping (FONT_NAME,PATH[,POSTSCRIPT_NAME]'),
 	},
 	compress: {
 		group: gtx._('Font Embedding Options'),

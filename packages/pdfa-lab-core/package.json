@@ -12,7 +12,7 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/iindex.esm.js",
+			"import": "./dist/index.esm.js",
 			"require": "./dist/index.cjs.cjs",
 			"browser": "./dist/index.browser.js"
 		}

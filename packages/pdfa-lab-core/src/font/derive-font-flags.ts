@@ -1,4 +1,4 @@
-import type { TrueTypeFont } from '@pdfa-lab/fontkit';
+import type { OpenTypeFont } from '@pdfa-lab/fontkit';
 
 export interface FontFlagOptions {
 	fixedPitch?: boolean;
@@ -33,8 +33,8 @@ const makeFontFlags = (options: FontFlagOptions) => {
 };
 
 // From: https://github.com/foliojs/pdfkit/blob/83f5f7243172a017adcf6a7faa5547c55982c57b/lib/font/embedded.js#L123-L129
-export const deriveFontFlags = (font: TrueTypeFont): number => {
-	const familyClass = font['OS/2'] ? font['OS/2'].sFamilyClass : 0;
+export function deriveFontFlags(font: OpenTypeFont): number {
+	const familyClass = font['OS/2'].sFamilyClass;
 	const fixedPitch = font.post?.isFixedPitch;
 	const flags = makeFontFlags({
 		fixedPitch: !!fixedPitch,

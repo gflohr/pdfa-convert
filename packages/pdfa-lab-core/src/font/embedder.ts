@@ -7,7 +7,12 @@ import {
 	type PDFRef,
 	PDFString,
 } from '@cantoo/pdf-lib';
-import { fontkit, OpenTypeFont, type Glyph, type Subset, type TrueTypeFont } from '@pdfa-lab/fontkit';
+import {
+	fontkit,
+	type Glyph,
+	type OpenTypeFont,
+	type Subset,
+} from '@pdfa-lab/fontkit';
 import type { GlyphMapper } from '../encoding/mappers/glyph-mapper.js';
 import { OverlayMapper } from '../encoding/mappers/overlay-mapper.js';
 import type { Encoding } from '../encoding/types.js';
@@ -184,12 +189,15 @@ export abstract class FontEmbedder {
 		// FIXME! Use the new loadFont() factory!
 		const isTTC = this.probeCollection(source);
 
-		const font = isTTC ? fontkit.loadFont(source, fontData.postScriptName)
+		const font = isTTC
+			? fontkit.loadFont(source, fontData.postScriptName)
 			: fontkit.loadFont(source);
 
 		const asOpenType = font.asOpenTypeFont();
 		if (!asOpenType) {
-			throw new Error(`Font cannot be embedded because it is missing core OpenType tables!`);
+			throw new Error(
+				`Font cannot be embedded because it is missing core OpenType tables!`,
+			);
 		}
 		this._font = asOpenType;
 

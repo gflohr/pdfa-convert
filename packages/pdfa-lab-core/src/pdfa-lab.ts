@@ -2,6 +2,7 @@ import { PDFDocument, PDFName, PDFRef, type PDFStream } from '@cantoo/pdf-lib';
 import collectFonts from './font/collect-fonts.js';
 import { collectResources, type FontUsage } from './font/collect-resources.js';
 import collectSubsetPrefixes from './font/collect-subset-prefixes.js';
+import { TrueTypeFontEmbedder } from './font/embedder/truetype-embedder.js';
 import { Type1FontEmbedder } from './font/embedder/type1-embedder.js';
 import type { FontEmbedder } from './font/embedder.js';
 import { patchStream } from './font/patch-stream.js';
@@ -149,7 +150,7 @@ export class PDFALab {
 	}
 
 	/**
-	 * Embed multiple fonts, but only if the are not already embedded.
+	 * Embed multiple fonts, but only if they are not already embedded.
 	 * If no references were passed, all currently missing fonts are
 	 * embedded.
 	 *
@@ -229,6 +230,15 @@ export class PDFALab {
 			switch (font.subtype) {
 				case 'Type1':
 					embedder = new Type1FontEmbedder(
+						this.pdfDocument,
+						font,
+						fontBlocks,
+						subsetPrefixes,
+						options,
+					);
+					break;
+				case 'TrueType':
+					embedder = new TrueTypeFontEmbedder(
 						this.pdfDocument,
 						font,
 						fontBlocks,

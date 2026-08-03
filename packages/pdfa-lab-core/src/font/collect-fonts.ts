@@ -121,17 +121,14 @@ function getFontType0Info(
 		descendantFontDescriptor.has(PDFName.of('FontFile3'));
 
 	const toUnicodeMapper = getToUnicodeMapper(fontDict);
-	const baseFont = descendantFontDescriptor
+	const baseFont = fontDict
 		.lookupMaybe(PDFName.of('BaseFont'), PDFName)
 		?.decodeText();
 	const encodingMapper = getEncodingMapper(fontDict, 'Type0', baseFont);
-	const subtype = descendantFontDescriptor
-		.lookupMaybe(PDFName.of('Subtype'), PDFName)
-		?.decodeText() as FontSubtype;
 	const fontInfo: FontInfo = {
 		ref: fontRef,
 		embedded,
-		subtype,
+		subtype: 'Type0',
 		toUnicodeMapper,
 		encodingMapper,
 	};

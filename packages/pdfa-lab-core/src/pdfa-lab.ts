@@ -9,6 +9,7 @@ import { patchStream } from './font/patch-stream.js';
 import type { FontInfo, FontMap, PatchSet } from './font/types.js';
 import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
 import { extractText, type TextBlock } from './text/extract-text.js';
+import { Type0FontEmbedder } from './font/embedder/type0-embedder.js';
 
 /**
  * Options for embedding fonts.
@@ -228,6 +229,15 @@ export class PDFALab {
 
 			let embedder: FontEmbedder;
 			switch (font.subtype) {
+				case 'Type0':
+					embedder = new Type0FontEmbedder(
+						this.pdfDocument,
+						font,
+						fontBlocks,
+						subsetPrefixes,
+						options,
+					);
+					break;
 				case 'Type1':
 					embedder = new Type1FontEmbedder(
 						this.pdfDocument,

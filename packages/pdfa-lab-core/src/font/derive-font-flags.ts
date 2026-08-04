@@ -50,11 +50,9 @@ export function deriveFontFlags(font: OpenTypeFont): number {
 		isScript = classID === 10;
 	} else {
 		// Fallback: Infer from font/PostScript name or sub-family name
-		const psName = (
-			font.name?.postscriptName ||
-			font.name?.fullName ||
-			''
-		).toLowerCase();
+		const rawPostScriptName = font.postscriptName;
+
+		const psName = typeof rawPostScriptName === 'string' ? rawPostScriptName : '';
 
 		isScript = /script|handwriting|cursive|calligraphy/i.test(psName);
 

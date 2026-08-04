@@ -13,8 +13,6 @@ export const requiredOpenTypeTables = [
 	'hmtx',
 	'maxp',
 	'name',
-	'OS/2',
-	'post',
 ] as const;
 
 /**

@@ -28,6 +28,7 @@ describe('resolve', () => {
 	it('returns font from fontMap (preloaded)', async () => {
 		const fontData: FontData = {
 			source: new Uint8Array([1, 2, 3]),
+			filename: 'Helvetica.otf',
 		};
 
 		const fontMap: FontMap = {
@@ -44,26 +45,27 @@ describe('resolve', () => {
 	it('loads font from path in fontMap', async () => {
 		const bytes = new Uint8Array([1, 2, 3]);
 
-		vi.mocked(loadFontFromPath).mockResolvedValue({ source: bytes });
+		vi.mocked(loadFontFromPath).mockResolvedValue({ source: bytes, filename: '/path/to/font.ttf' });
 
 		const fontMap: FontMap = {
-			helvetica: { source: '/path/to/font.ttf' },
+			helvetica: { source: '/path/to/font.ttf', filename: '/path/to/font.ttf' },
 		};
 
-		const result = await resolveFont('Helvetica', fontMap, 'fc-match', 'linux');
+		const result = await resolveFont('Helvetica', fontMap, 'fc-match', 'unix');
 
 		expect(loadFontFromPath).toHaveBeenCalledWith(
 			'Helvetica',
 			'/path/to/font.ttf',
-			'linux',
+			'unix',
 		);
 
-		expect(result).toEqual({ source: bytes });
+		expect(result).toEqual({ source: bytes, filename: '/path/to/font.ttf' });
 	});
 
 	it('uses fcMatch if available', async () => {
 		const fontData: FontData = {
 			source: new Uint8Array([4, 5, 6]),
+			filename: '/path/to/font.ttf',
 			postScriptName: 'TestPS',
 		};
 
@@ -79,12 +81,13 @@ describe('resolve', () => {
 	it('falls back to loadFont when fcMatch fails', async () => {
 		const fontData: FontData = {
 			source: new Uint8Array([7, 8, 9]),
+			filename: '/path/to/font.ttf',
 		};
 
 		vi.mocked(fcMatch).mockResolvedValue(undefined);
 		vi.mocked(loadFont).mockResolvedValue(fontData);
 
-		const result = await resolveFont('SomeFont', {}, 'fc-match', 'linux');
+		const result = await resolveFont('SomeFont', {}, 'fc-match', 'unix');
 
 		expect(loadFont).toHaveBeenCalled();
 		expect(result).toBe(fontData);
@@ -102,6 +105,7 @@ describe('resolve', () => {
 	it('normalizes font name using fontName()', async () => {
 		const fontData: FontData = {
 			source: new Uint8Array([1]),
+			filename: '/path/to/Helvetica.ttf',
 		};
 
 		vi.mocked(fontName).mockReturnValue('Helvetica');

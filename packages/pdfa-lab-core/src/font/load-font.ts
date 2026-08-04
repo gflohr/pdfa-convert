@@ -280,10 +280,11 @@ export async function loadFont(
 		directoryMap ??= await getDirectoryMap(locations);
 		if (Object.hasOwn(directoryMap, fontName.toLowerCase())) {
 			try {
+				const filename = directoryMap[fontName.toLowerCase()]!
 				const fontBytes = await fs.readFile(
-					directoryMap[fontName.toLowerCase()]!,
+					filename
 				);
-				if (fontBytes) return { source: fontBytes };
+				if (fontBytes) return { source: fontBytes, filename };
 			} catch {}
 		}
 
@@ -295,7 +296,7 @@ export async function loadFont(
 					const fullname = `${locations[j]}/${candidates[i]}.${extensions[k]}`;
 					try {
 						const fontBytes = await fs.readFile(fullname);
-						if (fontBytes) return { source: fontBytes };
+						if (fontBytes) return { source: fontBytes, filename: fullname };
 					} catch {}
 				}
 			}
@@ -328,7 +329,7 @@ export async function loadFontFromPath(
 	} else {
 		const fs = await import('node:fs/promises');
 
-		return { source: await fs.readFile(path) };
+		return { source: await fs.readFile(path), filename: path };
 	}
 }
 

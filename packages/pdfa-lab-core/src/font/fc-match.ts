@@ -28,11 +28,12 @@ export async function fcMatch(
 		]);
 
 		const [filename, postScriptName] = stdout.split(' : ', 2);
+		if (typeof filename === 'undefined') return;
 		if (typeof postScriptName === 'undefined') return;
 
 		const source = await readFile(filename!);
 
-		return { source, postScriptName };
+		return { source, postScriptName, filename };
 	} catch {
 		return;
 	}

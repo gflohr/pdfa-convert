@@ -77,6 +77,13 @@ export type FontData = {
 	 * is a font collection (`.ttc` or `.dfont`) file.
 	 */
 	postScriptName?: string;
+
+	// FIXME! Allow font variation?
+
+	/**
+	 * The filename of the font file or font collection.
+	 */
+	filename: string;
 };
 
 /**

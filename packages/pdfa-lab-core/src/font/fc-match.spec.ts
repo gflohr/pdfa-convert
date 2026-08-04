@@ -55,13 +55,13 @@ describe('fcMatch', () => {
 
 	it('returns FontData when successful', async () => {
 		const fileBuffer = new Uint8Array([1, 2, 3]);
+		const fontPath = '/user/share/fonts/helvetica.ttf';
 
-		// biome-ignore lint/suspicious/noExplicitAny: this is just a mock.
-		execFileMock.mockImplementation((_cmd, _args, cb: any) => {
+		execFileMock.mockImplementation((_cmd, _args, cb) => {
 			cb(
 				null,
 				{
-					stdout: '/user/share/fonts/helvetica.ttf : Helvetica-Bold',
+					stdout: `${fontPath} : Helvetica-Bold`,
 				},
 				'',
 			);
@@ -75,6 +75,7 @@ describe('fcMatch', () => {
 
 		const expected: FontData = {
 			source: fileBuffer,
+			filename: fontPath,
 			postScriptName: 'Helvetica-Bold',
 		};
 

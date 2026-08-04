@@ -39,7 +39,7 @@ describe('Font loading', () => {
 			const result = await loadFontFromPath(fontName, path, 'linux' as OsType);
 
 			expect(readFileMock).toHaveBeenCalledWith(path);
-			expect(result).toStrictEqual({ source: bytes });
+			expect(result).toStrictEqual({ source: bytes, filename: path });
 		});
 	});
 });

@@ -193,10 +193,13 @@ export class FontEmbedder {
 			? fontkit.loadFont(source, fontData.postScriptName)
 			: fontkit.loadFont(source);
 
+
 		const asOpenType = font.asOpenTypeFont();
 		if (!asOpenType) {
+			const fontLocation = typeof fontData.postScriptName === 'undefined' ? fontData.filename
+				: `${fontData.filename} (PostScript name: ${fontData.postScriptName})`;
 			throw new Error(
-				`Font cannot be embedded because it is missing core OpenType tables!`,
+				`${fontLocation}: cannot be embedded because it is missing core OpenType tables!`,
 			);
 		}
 		this._font = asOpenType;

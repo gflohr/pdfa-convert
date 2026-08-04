@@ -1,6 +1,7 @@
 # What is `@pdfa-lab/fontkit`?
 
-Fontkit is an advanced font engine for Node and the browser.
+Fontkit is an advanced font engine for Node and the browser
+written in TypeScript.
 
 ## Features
 

@@ -131,12 +131,12 @@ export class FontCommand implements Command {
 		const refs = [...fonts.values()].map((f) => f.ref);
 		const fontMap = fontMapSpec((configOptions['font-map'] ?? []) as string[]);
 
-		await lab.embedFonts(refs, {
+		await lab.embedFonts({
 			fontMap,
 			fcMatch: configOptions['fc-match'] as string,
 			platform: os.platform(),
 			fontkit,
-		});
+		}, refs);
 
 		await writeOutput(configOptions.output as string, lab);
 	}

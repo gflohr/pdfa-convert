@@ -45,7 +45,10 @@ describe('resolve', () => {
 	it('loads font from path in fontMap', async () => {
 		const bytes = new Uint8Array([1, 2, 3]);
 
-		vi.mocked(loadFontFromPath).mockResolvedValue({ source: bytes, filename: '/path/to/font.ttf' });
+		vi.mocked(loadFontFromPath).mockResolvedValue({
+			source: bytes,
+			filename: '/path/to/font.ttf',
+		});
 
 		const fontMap: FontMap = {
 			helvetica: { source: '/path/to/font.ttf', filename: '/path/to/font.ttf' },

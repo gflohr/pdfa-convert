@@ -152,12 +152,12 @@ export class PDFALab {
 	 * If no references were passed, all currently missing fonts are
 	 * embedded.
 	 *
-	 * @param references font references (try `collectFonts()`)
 	 * @param options control the font embedding
+	 * @param references can be determined  `collectFonts()`)
 	 */
 	public async embedFonts(
-		references?: PDFRef[],
 		options: FontEmbedOptions = {},
+		references?: PDFRef[],
 	) {
 		options.fontMap ??= {};
 		options.fcMatch ??= 'fc-match';
@@ -224,7 +224,11 @@ export class PDFALab {
 			// Make sure that we also embed unused fonts.
 			const fontBlocks = glyphsInFont[font.ref.toString()] ?? [];
 
-			if (font.subtype !== 'Type0' && font.subtype !== 'Type1' && font.subtype !== 'TrueType') {
+			if (
+				font.subtype !== 'Type0' &&
+				font.subtype !== 'Type1' &&
+				font.subtype !== 'TrueType'
+			) {
 				throw new Error(
 					`Embedding font sybtype ${font.subtype} not yet implemented`,
 				);

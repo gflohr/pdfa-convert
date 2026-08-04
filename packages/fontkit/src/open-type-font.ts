@@ -1,7 +1,18 @@
+import type { CFF1Font } from './cff/cff1-font.js';
+import type { CFF2Font } from './cff/cff2-font.js';
 import type { Font } from './font.js';
 import type { BoundingBox } from './glyph/bounding-box.js';
 import type { Glyph } from './glyph/glyph.js';
 import type { SFNTTableMap } from './tables/directory.js';
+import type {
+	cmapTable,
+	headTable,
+	hheaTable,
+	hmtxTable,
+	locaTable,
+	maxpTable,
+	nameTable,
+} from './tables/index.js';
 
 /**
  * The list of strictly required tables for an OpenType font.
@@ -66,15 +77,11 @@ export const requiredOpenTypeCFF2Tables = [
 export type RequiredOpenTypeCFF2TableTag =
 	(typeof requiredOpenTypeCFF2Tables)[number];
 
-export type StrictTables<T extends keyof SFNTTableMap> = {
-	readonly [K in T]: NonNullable<SFNTTableMap[K]>;
-};
-
 /**
  * These are propertiesthat are guaranteed to be defined, if the font has been
  * upcast to an {@link OpenTypeFont}.
  */
-export interface OpenTypeHeader {
+interface OpenTypeHeader {
 	ascent: number;
 	descent: number;
 	lineGap: number;
@@ -97,13 +104,19 @@ type OpenTypeHeaderKeys = keyof OpenTypeHeader;
  * @see {@link requiredOpenTypeTables} for the list of required tables.
  */
 export interface OpenTypeNoOutlinesFont
-	extends Omit<Font, RequiredOpenTypeTableTag | OpenTypeHeaderKeys>,
-		StrictTables<RequiredOpenTypeTableTag>,
+	extends Omit<Font, OpenTypeHeaderKeys>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
 	readonly outlines: 'none';
 
 	readonly outlineVersion: 0;
+
+	cmap: cmapTable.cmap;
+	head: headTable.head;
+	hhea: hheaTable.hhea;
+	hmtx: hmtxTable.hmtx;
+	maxp: maxpTable.maxp;
+	name: nameTable.name;
 }
 
 /**
@@ -111,8 +124,7 @@ export interface OpenTypeNoOutlinesFont
  * (glyf + loca + hmtx).
  */
 export interface OpenTypeTrueTypeFont
-	extends Omit<Font, RequiredOpenTypeTrueTypeTableTag | OpenTypeHeaderKeys>,
-		StrictTables<RequiredOpenTypeTrueTypeTableTag>,
+	extends Omit<Font, OpenTypeHeaderKeys>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
 	readonly outlines: 'TrueType';
@@ -121,6 +133,14 @@ export interface OpenTypeTrueTypeFont
 
 	getGlyph(glyph: number, characters?: readonly number[]): Glyph;
 	getBaseGlyph(glyph: number, characters?: readonly number[]): Glyph;
+
+	cmap: cmapTable.cmap;
+	head: headTable.head;
+	hhea: hheaTable.hhea;
+	hmtx: hmtxTable.hmtx;
+	maxp: maxpTable.maxp;
+	name: nameTable.name;
+	loca: locaTable.loca;
 }
 
 /**
@@ -128,8 +148,7 @@ export interface OpenTypeTrueTypeFont
  * legacy version.
  */
 export interface OpenTypeCFF1Font
-	extends Omit<Font, RequiredOpenTypeCFF1TableTag | OpenTypeHeaderKeys>,
-		StrictTables<RequiredOpenTypeCFF1TableTag>,
+	extends Omit<Font, OpenTypeHeaderKeys>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
 	readonly outlines: 'PostScript';
@@ -144,6 +163,15 @@ export interface OpenTypeCFF1Font
 
 	getGlyph(glyph: number, characters?: readonly number[]): Glyph;
 	getBaseGlyph(glyph: number, characters?: readonly number[]): Glyph;
+
+	cmap: cmapTable.cmap;
+	head: headTable.head;
+	hhea: hheaTable.hhea;
+	hmtx: hmtxTable.hmtx;
+	maxp: maxpTable.maxp;
+	name: nameTable.name;
+	loca: locaTable.loca;
+	'CFF ': CFF1Font;
 }
 
 /**
@@ -151,8 +179,7 @@ export interface OpenTypeCFF1Font
  * legacy version.
  */
 export interface OpenTypeCFF2Font
-	extends Omit<Font, RequiredOpenTypeCFF2TableTag | OpenTypeHeaderKeys>,
-		StrictTables<RequiredOpenTypeCFF2TableTag>,
+	extends Omit<Font, OpenTypeHeaderKeys>,
 		OpenTypeHeader {
 	/** Discriminator for the different outline types. */
 	readonly outlines: 'PostScript';
@@ -162,6 +189,15 @@ export interface OpenTypeCFF2Font
 
 	getGlyph(glyph: number, characters?: readonly number[]): Glyph;
 	getBaseGlyph(glyph: number, characters?: readonly number[]): Glyph;
+
+	cmap: cmapTable.cmap;
+	head: headTable.head;
+	hhea: hheaTable.hhea;
+	hmtx: hmtxTable.hmtx;
+	maxp: maxpTable.maxp;
+	name: nameTable.name;
+	loca: locaTable.loca;
+	CFF2: CFF2Font;
 }
 
 /**

@@ -1,11 +1,7 @@
 import type { Font } from '../font.js';
 import type { Glyph } from '../glyph/glyph.js';
-import type { StrictTables } from '../open-type-font.js';
 import type { morxTable } from '../tables/index.js';
-import {
-	requiredTrueTypeSubsetTables,
-	type TrueTypeSubsetFont,
-} from '../true-type-subset-font';
+import { requiredTrueTypeSubsetTables } from '../true-type-subset-font';
 
 /**
  * Minimal operational capability needed Apple Advanced Typography (AAT).
@@ -28,10 +24,9 @@ export type RequiredAATTableTag = (typeof requiredAATTables)[number];
  * {@link morxTable.morx | morx}) to handle glyph substitution, contextual
  * tracking, and text reordering, primarily on Apple platforms.
  */
-export interface AATFont
-	extends Omit<Font, RequiredAATTableTag>,
-		StrictTables<RequiredAATTableTag>,
-		Omit<TrueTypeSubsetFont, 'morx'> {
+export interface AATFont extends Font {
 	getGlyph(glyph: number, characters?: readonly number[]): Glyph;
 	getBaseGlyph(glyph: number, characters?: readonly number[]): Glyph;
+
+	morx: morxTable.morx;
 }

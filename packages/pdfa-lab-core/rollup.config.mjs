@@ -11,10 +11,7 @@ function tsPlugin(tsconfig) {
 }
 
 function onwarn(warning, warn) {
-	if (
-		warning.code === 'CIRCULAR_DEPENDENCY' &&
-		warning.message.includes('/node_modules/@cantoo/pdf-lib/')
-	) {
+	if (warning.code === 'CIRCULAR_DEPENDENCY') {
 		return;
 	}
 

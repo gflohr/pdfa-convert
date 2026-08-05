@@ -195,6 +195,13 @@ export class FontEmbedder {
 
 		const asOpenType = font.asOpenTypeFont();
 		if (!asOpenType) {
+			if (typeof fontData.filename === 'undefined') {
+				if (typeof fontData.source === 'string') {
+					fontData.filename = fontData.source;
+				} else {
+					fontData.filename = '[in-memory data]';
+				}
+			}
 			const fontLocation =
 				typeof fontData.postScriptName === 'undefined'
 					? fontData.filename

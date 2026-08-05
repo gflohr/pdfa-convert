@@ -83,7 +83,7 @@ export type FontData = {
 	/**
 	 * The filename of the font file or font collection.
 	 */
-	filename: string;
+	filename?: string;
 };
 
 /**

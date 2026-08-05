@@ -18,25 +18,13 @@ describe('Font loading', () => {
 			vi.resetAllMocks();
 		});
 
-		it('throws if not running in Node (no platform provided)', async () => {
-			await expect(loadFontFromPath(fontName, path)).rejects.toThrow(
-				`The font '${fontName}' is not embedded, and cannot be loaded from the file system.`,
-			);
-		});
-
-		it('throws if platform is missing even in Node', async () => {
-			await expect(loadFontFromPath(fontName, path, undefined)).rejects.toThrow(
-				`The font '${fontName}' is not embedded, and cannot be loaded from the file system.`,
-			);
-		});
-
-		it('reads file from fs when running in Node with platform', async () => {
+		it('reads file from fs when running in Node', async () => {
 			const fs = await import('node:fs/promises');
 			const readFileMock = vi.mocked(fs.readFile);
 
 			readFileMock.mockResolvedValue(bytes);
 
-			const result = await loadFontFromPath(fontName, path, 'linux' as OsType);
+			const result = await loadFontFromPath(fontName, path);
 
 			expect(readFileMock).toHaveBeenCalledWith(path);
 			expect(result).toStrictEqual({ source: bytes, filename: path });

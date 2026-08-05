@@ -42,7 +42,6 @@ const getPlugins = () => [
 ];
 
 const onwarn = (warning, warn) => {
-	warn(`code: ${warning.code}`);
 	if (warning.code === 'CIRCULAR_DEPENDENCY') return;
 };
 

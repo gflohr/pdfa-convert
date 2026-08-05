@@ -272,7 +272,7 @@ export async function resolveFont(
 		const key = canonicalName.toLowerCase();
 		const data = fontMap[key]?.source;
 		if (typeof data === 'string') {
-			fontMap[key] = await loadFontFromPath(canonicalName, data, platform);
+			fontMap[key] = await loadFontFromPath(canonicalName, data);
 		}
 
 		return fontMap[key]!;
@@ -294,7 +294,6 @@ export async function resolveFont(
 				fontMap[key] = await loadFontFromPath(
 					pdfFontName,
 					data.source,
-					platform,
 				);
 			}
 

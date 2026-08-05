@@ -308,21 +308,19 @@ export async function loadFont(
  *
  * @param fontName the name of the font
  * @param path the path to the font program file
- * @param platform the platform (`os.platform()`) or undefined for the browser
  * @returns the raw font data
  */
 export async function loadFontFromPath(
 	fontName: string,
 	path: string,
-	platform?: OsType,
 ): Promise<FontData> {
 	const isNode =
 		Object.prototype.toString.call(
 			typeof process !== 'undefined' ? process : 0,
 		) === '[object process]';
-	if (!isNode || !platform) {
+	if (!isNode) {
 		throw new Error(
-			`The font '${fontName}' is not embedded, and cannot be loaded from the file system.`,
+			`The font '${fontName}' is not embedded and must be passed as raw data the browser.`,
 		);
 	} else {
 		const fs = await import('node:fs/promises');

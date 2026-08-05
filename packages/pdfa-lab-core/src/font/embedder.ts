@@ -231,7 +231,7 @@ export class FontEmbedder {
 		await this.initialise();
 		this.fontDict.set(PDFName.of('Subtype'), PDFName.of('Type0'));
 		const subsetPrefix = this.generateSubsetPrefix();
-		const baseFontName = `${subsetPrefix}+${this.fontInfo.fontName ?? 'Unknown'}`;
+		const baseFontName = `${subsetPrefix}+${this.font.postscriptName ?? 'Unknown'}`;
 		this.fontDict.set(PDFName.of('BaseFont'), PDFName.of(baseFontName));
 		this.fontDict.set(PDFName.of('Encoding'), PDFName.of('Identity-H'));
 

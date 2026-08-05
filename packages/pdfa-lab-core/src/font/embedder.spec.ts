@@ -49,10 +49,8 @@ describe('FontEmbedder', () => {
 
 		beforeAll(async () => {
 			const pdfBytes = await fs.readFile(pdfFilename);
-			lab = await PDFALab.from(pdfBytes);
-		});
+			const type1Lab = await PDFALab.from(pdfBytes);
 
-		it('should embed the 14 Type 1 fonts', async () => {
 			const fontMap: FontMap = {
 				Helvetica: {
 					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
@@ -97,13 +95,20 @@ describe('FontEmbedder', () => {
 					source: path.resolve(notoDir, 'NotoSansSymbols2-Regular.ttf')
 				},
 			};
-			await lab.embedFonts({
+			await type1Lab.embedFonts({
 				fontkit,
 				fontMap,
+				compress: false,
 			});
 
-			const pdfBytes = await lab.save();
-			await fs.writeFile('test.pdf', pdfBytes);
+			const embeddedBytes = await type1Lab.save();
+			lab = await PDFALab.from(embeddedBytes);
+		});
+
+		it('should embed the 14 Type 1 fonts', async () => {
+			const fonts = lab.collectFonts();
+
+			expect(fonts.size).toBe(14);
 		});
 	});
 });

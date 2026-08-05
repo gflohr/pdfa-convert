@@ -70,7 +70,9 @@ export class PDFALab {
 	 * @returns
 	 */
 	public async save(): Promise<Uint8Array> {
-		return this.pdfDocument.save({ useObjectStreams: false });
+		// It is crucial to set useObjectStreams to true here! Otherwise,
+		// pdf-lib will corrupt the document.
+		return this.pdfDocument.save({ useObjectStreams: true });
 	}
 
 	/**

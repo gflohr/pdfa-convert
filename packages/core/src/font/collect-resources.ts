@@ -1,8 +1,8 @@
 import { PDFDict, type PDFDocument, PDFRef } from '@cantoo/pdf-lib';
 
 /**
- * A FontUsage maps resource names like F1, F2, to serialised references like
- * "7 0 R".
+ * A FontUsage maps resource names like F1, F2, to PDF references like
+ * `PDFRef(7, 0)`.
  */
 export type FontUsage = Record<string, PDFRef>;
 

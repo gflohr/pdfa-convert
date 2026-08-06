@@ -221,20 +221,23 @@ export class PDFALab {
 			});
 		}
 
-		const allPatchSets: PatchSet[] = [];
 		for (const font of fonts) {
-			// Make sure that we also embed unused fonts.
-			const fontBlocks = glyphsInFont[font.ref.toString()] ?? [];
-
 			if (
 				font.subtype !== 'Type0' &&
 				font.subtype !== 'Type1' &&
 				font.subtype !== 'TrueType'
 			) {
+				// Fail early!
 				throw new Error(
-					`Embedding font sybtype ${font.subtype} not yet implemented`,
+					`Embedding font subtype ${font.subtype} not yet implemented`,
 				);
 			}
+		}
+
+		const allPatchSets: PatchSet[] = [];
+		for (const font of fonts) {
+			// Make sure that we also embed unused fonts.
+			const fontBlocks = glyphsInFont[font.ref.toString()] ?? [];
 
 			const embedder = new FontEmbedder(
 				this.pdfDocument,

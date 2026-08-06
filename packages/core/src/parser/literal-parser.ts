@@ -89,8 +89,6 @@ export class LiteralParser {
 			case 53:
 			case 54:
 			case 55:
-			case 56:
-			case 57:
 				i += this.parseOctalEscape(chars, octets, pos);
 				break;
 			default:
@@ -108,11 +106,11 @@ export class LiteralParser {
 	): number {
 		let value = octets[i]! - 0o060;
 		let consumed = 0;
-		if (octets[i + 1] && octets[i + 1]! >= 0o060 && octets[i + 1]! <= 0o071) {
+		if (octets[i + 1]! >= 0o060 && octets[i + 1]! <= 0o067) {
 			value *= 8;
 			value += octets[i + 1]! - 0o060;
 			++consumed;
-			if (octets[i + 2] && octets[i + 2]! >= 0o060 && octets[i + 2]! <= 0o071) {
+			if (octets[i + 2]! >= 0o060 && octets[i + 2]! <= 0o067) {
 				value *= 8;
 				value += octets[i + 2]! - 0o060;
 				++consumed;

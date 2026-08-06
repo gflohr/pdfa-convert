@@ -239,7 +239,7 @@ export const fontkit: FontkitAPI = {
 };
 
 /**
- * Compatibility export. This is identical to @{link fontkit} but can be
+ * Compatibility export. This is identical to {@link fontkit} but can be
  * used as an argument to `registerFontkit()` in `@cantoo/pdf-lib` (resp. in
  * `pdf-lib`).
  */

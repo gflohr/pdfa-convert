@@ -68,7 +68,7 @@ export class SingleByteEncodingMapper implements GlyphMapper {
 	}
 
 	public lookupCodePoints(glyph: number): number[] {
-		if (glyph < 0 || glyph > this.encoding.length) {
+		if (glyph < 0 || glyph >= this.encoding.length) {
 			throw new Error(`glyph ID ${glyph} out of range`);
 		}
 

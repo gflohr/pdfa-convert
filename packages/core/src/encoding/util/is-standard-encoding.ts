@@ -4,6 +4,9 @@ import {
 	StandardEncodings,
 } from '../types.js';
 
+/**
+ * @internal
+ */
 export function isStandardEncoding(
 	value: string,
 	caseInsensitive = false,

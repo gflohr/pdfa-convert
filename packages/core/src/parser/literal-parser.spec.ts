@@ -42,8 +42,8 @@ describe('Literal string parsing', () => {
 
 		it('should allow unescaped nested parentheses', () => {
 			const parser = new LiteralParser('StandardEncoding');
-			const cp = parser.parse(toOctets('Hello, world!'));
-			expect(decodeNumberArray(cp)).toBe('Hello, world!');
+			const cp = parser.parse(toOctets('Hello, (world)!'));
+			expect(decodeNumberArray(cp)).toBe('Hello, (world)!');
 		});
 
 		it('should allow nested parentheses', () => {

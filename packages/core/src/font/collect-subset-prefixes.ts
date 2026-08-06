@@ -8,7 +8,7 @@ import {
 import type { FontUsage } from './collect-resources.js';
 
 /**
- * Collect all subset prefixes ussed in a PDF document.
+ * Collect all subset prefixes used in a PDF document.
  *
  * @param pdfDoc the input PDF
  * @param resources the used font resources as returned by `collectResources`

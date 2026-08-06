@@ -170,7 +170,6 @@ export interface OpenTypeCFF1Font
 	hmtx: hmtxTable.hmtx;
 	maxp: maxpTable.maxp;
 	name: nameTable.name;
-	loca: locaTable.loca;
 	'CFF ': CFF1Font;
 }
 
@@ -196,7 +195,6 @@ export interface OpenTypeCFF2Font
 	hmtx: hmtxTable.hmtx;
 	maxp: maxpTable.maxp;
 	name: nameTable.name;
-	loca: locaTable.loca;
 	CFF2: CFF2Font;
 }
 

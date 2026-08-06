@@ -1,4 +1,3 @@
-import { isUint8ClampedArray } from 'node:util/types';
 import { Lexer } from '../../parser/lexer.js';
 import type { Token } from '../../parser/types.js';
 import type { GlyphMapper } from './glyph-mapper.js';
@@ -18,7 +17,7 @@ type CodeSpaceRange = {
 export class CMapMapper implements GlyphMapper {
 	private mappings: Mapping[];
 	private codeSpaceRanges: CodeSpaceRange[] = [];
-	private defaultByteWidth = 2; // Fallback default for CMap keys
+	private defaultByteWidth = 2; // Fallback default for CMap keys.
 	private _highest: number;
 
 	constructor(
@@ -53,7 +52,7 @@ export class CMapMapper implements GlyphMapper {
 	}
 
 	public getCodeBytesWidth(octets: Uint8Array, idx: number): number {
-		// 1. Try explicit begincodespacerange blocks first
+		// Try explicit begincodespacerange blocks first.
 		if (this.codeSpaceRanges.length > 0) {
 			for (const range of this.codeSpaceRanges) {
 				const width = range.byteWidth;
@@ -71,7 +70,7 @@ export class CMapMapper implements GlyphMapper {
 			}
 		}
 
-		// 2. Fallback: infer from CMap default byte width or highest mapped key
+		// Fallback: infer from CMap default byte width or highest mapped key.
 		const remaining = octets.length - idx;
 		if (this._highest > 0xff || this.defaultByteWidth === 2) {
 			return remaining >= 2 ? 2 : remaining;
@@ -139,8 +138,8 @@ export class CMapMapper implements GlyphMapper {
 				}
 			} else {
 				// String. Detect token byte width (e.g. <0001> = 2 bytes).
-				if ((mapping as number[]).length === 0 && token.value.length === 2) {
-					this.defaultByteWidth = 2;
+				if ((mapping as number[]).length === 0) {
+					this.defaultByteWidth = token.value.length === 1 ? 1 : 2;
 				}
 				mapping.push(this.uint8ArrayToNumber(token.value));
 				if (mapping.length >= cardinality) {

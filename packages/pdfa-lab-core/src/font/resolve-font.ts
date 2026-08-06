@@ -291,10 +291,7 @@ export async function resolveFont(
 		if (Object.hasOwn(fontMap, key)) {
 			const data = fontMap[key];
 			if (typeof data?.source === 'string') {
-				fontMap[key] = await loadFontFromPath(
-					pdfFontName,
-					data.source,
-				);
+				fontMap[key] = await loadFontFromPath(pdfFontName, data.source);
 			}
 
 			return fontMap[key]!;

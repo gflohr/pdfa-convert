@@ -52,7 +52,8 @@ export function deriveFontFlags(font: OpenTypeFont): number {
 		// Fallback: Infer from font/PostScript name or sub-family name
 		const rawPostScriptName = font.postscriptName;
 
-		const psName = typeof rawPostScriptName === 'string' ? rawPostScriptName : '';
+		const psName =
+			typeof rawPostScriptName === 'string' ? rawPostScriptName : '';
 
 		isScript = /script|handwriting|cursive|calligraphy/i.test(psName);
 

@@ -186,7 +186,6 @@ export class FontEmbedder {
 		const fontData = await this.resolveFont();
 		const source = fontData.source as Uint8Array;
 
-		// FIXME! Use the new loadFont() factory!
 		const isTTC = this.probeCollection(source);
 
 		const font = isTTC
@@ -253,7 +252,7 @@ export class FontEmbedder {
 			'/ToUnicode',
 			'/DescendantFonts',
 		]);
-		this.fontDict.keys().forEach(key => {
+		this.fontDict.keys().forEach((key) => {
 			if (!allowedNames.has(key.asString())) {
 				this.fontDict.delete(key);
 			}

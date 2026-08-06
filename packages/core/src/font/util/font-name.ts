@@ -26,9 +26,9 @@
  * @returns The normalised font name without subset prefix or numeric suffix.
  *
  * @example
- * getFontName('ABCDEF+Helvetica-1234') // -> 'Helvetica'
- * getFontName('ArialMT-5678')          // -> 'ArialMT'
- * getFontName('TimesNewRomanPSMT')     // -> 'TimesNewRomanPSMT'
+ * fontName('ABCDEF+Helvetica-1234') // -> 'Helvetica'
+ * fontName('ArialMT-5678')          // -> 'ArialMT'
+ * fontName('TimesNewRomanPSMT')     // -> 'TimesNewRomanPSMT'
  */
 export function fontName(name: string): string {
 	// Strip subset prefix (ABCDEF+).

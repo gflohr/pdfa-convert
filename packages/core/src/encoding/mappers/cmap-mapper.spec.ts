@@ -89,7 +89,7 @@ endbfrange
 			expect(cmap.lookup(0x201)).toBe('\uFFFD');
 		});
 
-		it('should decode BTF16-BE Unicode values', () => {
+		it('should decode UTF16-BE Unicode values', () => {
 			const source = `
 1 beginbfchar
 <3AF1> <D840DC3E>

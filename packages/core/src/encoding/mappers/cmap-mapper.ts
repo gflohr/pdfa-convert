@@ -26,16 +26,11 @@ export class CMapMapper implements GlyphMapper {
 		if (source instanceof Uint8Array) {
 			this.mappings = [...this.parse(source)].sort((a, b) => a[0] - b[0]);
 
-			if (this.mappings.length) {
-				const lastMapping = this.mappings[this.mappings.length - 1]!;
-				if (lastMapping?.length === 2) {
-					this._highest = lastMapping[0];
-				} else {
-					this._highest = lastMapping[1];
-				}
-			} else {
-				this._highest = 0;
-			}
+			this._highest = this.mappings.reduce(
+				(max, mapping) =>
+					Math.max(max, mapping.length === 2 ? mapping[0] : mapping[1]),
+				0,
+			);
 		} else {
 			throw new Error(`unsupported CMap source type '${typeof source}'`);
 		}

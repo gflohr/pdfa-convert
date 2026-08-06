@@ -54,17 +54,9 @@ export async function extractText(
 		if (!fontRef) continue;
 
 		const font = fonts.get(fontRef.toString());
-
-		// This should be verified. Will a PDF viewer fall back to a
-		// default font (Helvetica), if the font information is missing?
-		//
-		// On the other hand, working around such a broken document is
-		// probably not worth the hassle. Making the font optional in the
-		// type definition will complicate things.
 		if (!font) continue;
 
-		// If a Type1 font uses a `ToUnicode` CMap, that map is used for text
-		// extraction. In that case, we need an overlay mapper.
+		// Select the appropriate mapper.
 		const mapper =
 			isStandardEncoding(font.encodingMapper.name, true) && font.toUnicodeMapper
 				? new OverlayMapper(font.encodingMapper, font.toUnicodeMapper)
@@ -72,12 +64,24 @@ export async function extractText(
 					? font.toUnicodeMapper
 					: font.encodingMapper;
 
-		const glyphs = octetsToGlyphIds(glyphBlock.glyphs, mapper);
-		const decodedGlyphs =
-			glyphBlock.type === 'lstring'
-				? new LiteralParser(font.encodingMapper.name as Encoding).parse(glyphs)
-				: glyphs;
-		const text = decodedGlyphs.map((glyph) => mapper.lookup(glyph)).join('');
+		// Un-escape raw bytes for literal strings BEFORE glyph segmentation.
+		let rawOctets: Uint8Array;
+
+		if (glyphBlock.type === 'lstring') {
+			const rawArray = Array.from(glyphBlock.glyphs);
+			const parsedArray = new LiteralParser(
+				font.encodingMapper.name as Encoding,
+			).parse(rawArray);
+			rawOctets = new Uint8Array(parsedArray);
+		} else {
+			rawOctets = glyphBlock.glyphs;
+		}
+
+		// Segment un-escaped octets into glyph IDs based on mapper byte width.
+		const glyphs = octetsToGlyphIds(rawOctets, mapper);
+
+		// Map glyph IDs to Unicode text exactly once.
+		const text = glyphs.map((glyph) => mapper.lookup(glyph)).join('');
 
 		textBlocks.push({
 			text,

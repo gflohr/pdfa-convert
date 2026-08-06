@@ -7,11 +7,11 @@ import {
 	type PDFRef,
 	PDFString,
 } from '@cantoo/pdf-lib';
-import {
+import type {
 	FontkitAPI,
-	type Glyph,
-	type OpenTypeFont,
-	type Subset,
+	Glyph,
+	OpenTypeFont,
+	Subset,
 } from '@pdfa-lab/fontkit';
 import type { GlyphMapper } from '../encoding/mappers/glyph-mapper.js';
 import { OverlayMapper } from '../encoding/mappers/overlay-mapper.js';

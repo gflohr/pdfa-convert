@@ -60,8 +60,9 @@ export function deriveFontFlags(font: OpenTypeFont): number {
 
 		if (!isScript) {
 			const isSans = /sans|gothic|arial|helvetica|grotesk/i.test(psName);
-			const isExplicitSerif =
-				/serif|roman|times|georgia|garamond|bodoni/i.test(psName);
+			const isExplicitSerif = /serif|roman|times|georgia|garamond|bodoni/i.test(
+				psName,
+			);
 
 			// If it explicitly mentions serif or is not a known sans/monospace,
 			// fallback logically.

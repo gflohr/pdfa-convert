@@ -44,7 +44,7 @@ describe('OverlayMapper', () => {
 			name: 'Identity-H',
 			lookup: vi.fn().mockReturnValue('overlay'),
 			lookupCodePoints: vi.fn(),
-	 	} as unknown as GlyphMapper;
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback, overlay);
 

@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import { decodePDFRawStream, PDFDict, type PDFDocument, PDFName, PDFRawStream, PDFRef } from '@cantoo/pdf-lib';
+import { decodePDFRawStream, PDFArray, PDFDict, type PDFDocument, PDFName, PDFObject, PDFRawStream, PDFRef, PDFStream } from '@cantoo/pdf-lib';
 import fontkit from '@pdfa-lab/fontkit';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { type FontEmbedOptions, PDFALab } from '../pdfa-lab.js';
@@ -15,6 +15,27 @@ const pdfDir = path.resolve(rootDir, 'assets', 'pdfs');
 const fontDir = path.resolve(rootDir, 'assets', 'fonts');
 const notoDir = path.resolve(fontDir, 'noto');
 const libreOfficeDir = path.resolve(fontDir, 'libre-office');
+
+function getStreamContents(stream: PDFObject | undefined): Uint8Array | null {
+	if (!stream) {
+		return null;
+	} else if (stream instanceof PDFRawStream) {
+		return decodePDFRawStream(stream).decode();
+	} else if (stream instanceof PDFStream) {
+		return stream.getContents();
+	} else {
+		return null;
+	}
+}
+
+function getStreamStringContents(stream: PDFObject | undefined): string | null {
+	const contents = getStreamContents(stream);
+	if (!contents) {
+		return null;
+	} else {
+		return Buffer.from(contents).toString();
+	}
+}
 
 describe('FontEmbedder', () => {
 	describe('Constructor Guard', () => {
@@ -135,11 +156,36 @@ describe('FontEmbedder', () => {
 
 				// Ensure the CMap stream parses as non-empty text containing CMap markers
 				const toUnicode = doc.context.lookup(toUnicodeRef);
-				expect(toUnicode instanceof PDFRawStream).toBeTruthy();
-				const toUnicodeStream = toUnicode as PDFRawStream;
-				const cmapText = Buffer.from(decodePDFRawStream(toUnicodeStream).decode()).toString();
+				const cmapText = getStreamStringContents(toUnicode);
 				expect(cmapText).toMatch(/\/CIDInit \/ProcSet findresource begin\n/);
 				expect(cmapText).toContain(' beginbfchar\n');
+			}
+		});
+
+		it('should subset embedded font streams to only include used characters', async () => {
+			const fonts = [...lab.collectFonts().values()];
+			const ctx = lab.pdfDocument.context;
+
+			for (const font of fonts) {
+				// Navigate Type0 -> DescendantFonts [0] -> FontDescriptor -> FontFile2/3.
+				const fontDict = ctx.lookup(font.ref, PDFDict);
+
+				const descendants = fontDict.lookup(PDFName.of('DescendantFonts'), PDFArray);
+				const cidFontDict = ctx.lookup(descendants.get(0), PDFDict);
+				const descriptor = cidFontDict.lookup(PDFName.of('FontDescriptor'), PDFDict);
+
+				// FontFile2 is TTF/TrueType, FontFile3 is CFF/OpenType
+				const fontStreamRef = descriptor.get(PDFName.of('FontFile2')) ?? descriptor.get(PDFName.of('FontFile3'));
+				expect(fontStreamRef).toBeDefined();
+
+				const fontStream = ctx.lookup(fontStreamRef);
+				const contents = getStreamContents(fontStream);
+				expect(contents).not.toBeNull();
+
+				// Subsubsetted fonts for a simple test PDF should be small
+				// (usually signficantly smaller than 10 KB).
+				expect(contents!.length).toBeGreaterThan(500);
+				expect(contents!.length).toBeLessThan(10_000);
 			}
 		});
 	});

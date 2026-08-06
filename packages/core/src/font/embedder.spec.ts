@@ -349,7 +349,6 @@ describe('FontEmbedder', () => {
 
 			const embeddedBytes = await type0Lab.save();
 			lab = await PDFALab.from(embeddedBytes);
-await fs.writeFile('test.pdf', await lab.save());
 		});
 
 		it('should embed the 2 Type 0 fonts', async () => {

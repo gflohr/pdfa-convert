@@ -32,7 +32,7 @@ describe('PDF glyph extractor', () => {
 		expect(block.offset).toBe(69);
 		expect(block.length).toBe(23);
 		expect(block.pageNumber).toBe(0);
-		expect(block.pageRef).toBe(PDFRef.of(4, 0));
+		expect(block.pageRef.toString()).toBe(PDFRef.of(4, 0).toString());
 	});
 
 	it('should find the second text block', () => {

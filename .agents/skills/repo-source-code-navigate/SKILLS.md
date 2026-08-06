@@ -13,11 +13,11 @@ pdfa-lab/
 ├── apps/               # Applications.
 │   └── cli/            # The command-line interfaace
 ├── packages/           # Other.
-│   └── pdfa-lab-core/   # The pdfa-lab-core library.
+│   └── core/           # The @pdfa-lab/core library.
 └   scripts/            # Various helper scripts.
 ```
 
-## Core Library (`/packages/pdfa-lab-core/src/`)
+## Core Library (`/packages/core/src/`)
 
 ### Directory Structure
 

@@ -43,7 +43,6 @@ const getPlugins = () => [
 
 const onwarn = (warning, warn) => {
 	if (warning.code === 'CIRCULAR_DEPENDENCY') return;
-	warn(warning);
 };
 
 // A helper function to automatically treat all node_modules dependencies

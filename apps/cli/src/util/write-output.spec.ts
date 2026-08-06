@@ -1,5 +1,5 @@
 import * as fs from 'node:fs/promises';
-import type { PDFALab } from 'pdfa-lab-core';
+import type { PDFALab } from '@pdfa-lab/core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { safeStdoutBufferWrite } from './safe-stdout-write.js';
 import { writeOutput } from './write-output.js';

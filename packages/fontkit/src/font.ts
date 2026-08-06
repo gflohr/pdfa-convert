@@ -465,7 +465,7 @@ export interface Font<TDirectory extends SFNTDirectory = SFNTDirectory> {
 	/**
 	 * An array of all of the unicode code points supported by the font.
 	 */
-	characterSet: number[] | undefined;
+	characterSet: number[];
 
 	/**
 	 * Returns whether there is a glyph in the font for the given unicode code point.

@@ -106,7 +106,7 @@ The following steps are involved for recovering the text:
 1. Extract the byte sequence between the parentheses.
 2. Lookup the encoding for font "F13".
 3. Map each byte of the sequence to a glyph name.
-4. Map each glyph name of the sequence to a Unicode code point from the Adoble Glyph List (AGL).
+4. Map each glyph name of the sequence to a Unicode code point from the Adobe Glyph List (AGL).
 
 Theoretically, font "F13" could also use a `ToUnicode` CMap, but this is
 rare in practice.

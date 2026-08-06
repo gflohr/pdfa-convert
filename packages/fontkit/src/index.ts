@@ -1,4 +1,4 @@
-import { type FontkitAPI, fontkit } from './base.js';
+import { type FontkitAPI, fontkit, pdfLibFontKit } from './base.js';
 import { DFont } from './d-font.js';
 import { TrueTypeCollection } from './true-type-collection.js';
 import { TrueTypeFont } from './true-type-font.js';
@@ -12,7 +12,7 @@ fontkit.registerFormat(WOFF2Font);
 fontkit.registerFormat(TrueTypeCollection);
 fontkit.registerFormat(DFont);
 
-export { type FontkitAPI, fontkit };
+export { type FontkitAPI, fontkit, pdfLibFontKit };
 export default fontkit;
 
 export * from './aat/index.js';

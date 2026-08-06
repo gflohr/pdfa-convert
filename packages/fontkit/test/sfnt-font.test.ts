@@ -101,15 +101,14 @@ describe('TrueTypeFont Capabilities & Table Resolution', () => {
 			return new TrueTypeFont(mockStream);
 		};
 
-		it('should set outlines to "" if the core 8 OpenType tables are not complete', () => {
+		it('should set outlines to "" if the core 6 OpenType tables are not complete', () => {
 			const incompleteTags = [
 				'cmap',
 				'head',
 				'hhea',
 				'hmtx',
 				'maxp',
-				'name',
-				'OS/2',
+				// The 'name' table is missing.
 			];
 			const font = createFontWithTables(incompleteTags);
 
@@ -252,7 +251,7 @@ describe('TrueTypeFont Capabilities & Table Resolution', () => {
 				font['outlines'] = 'none';
 
 				vi.mocked(font['getTable']).mockImplementation((entry) => {
-					if (entry.tag === 'OS/2')
+					if (entry.tag === 'cmap')
 						throw new Error('Malformed table array stream');
 					return {} as ReturnType<(typeof font)['getTable']>;
 				});

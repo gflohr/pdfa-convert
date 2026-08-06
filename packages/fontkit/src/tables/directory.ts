@@ -1,10 +1,8 @@
 import * as r from 'restructure';
-import { tables as allTables } from './index.js';
+import { tables } from './index.js';
 
 export type SFNTTableMap = {
-	[K in keyof typeof allTables]: ReturnType<
-		(typeof allTables)[K]['decode']
-	> | null;
+	[K in keyof typeof tables]: ReturnType<(typeof tables)[K]['decode']> | null;
 };
 
 /**
@@ -91,13 +89,13 @@ directoryStruct.process = function (this: DirectoryContext): void {
 
 directoryStruct.preEncode = function (this: DirectoryContext): void {
 	if (!Array.isArray(this.tables)) {
-		const tables = [];
+		const existingTables = [];
 		for (const key in this.tables) {
-			const tag = key as keyof typeof allTables;
-			const tableDef = allTables[tag] as r.FieldT<unknown> | undefined;
+			const tag = key as keyof typeof tables;
+			const tableDef = tables[tag] as r.FieldT<unknown> | undefined;
 			const table = this.tables[tag];
 			if (table && tableDef) {
-				tables.push({
+				existingTables.push({
 					tag,
 					checkSum: 0,
 					offset: new r.VoidPointer(tableDef, table),
@@ -106,7 +104,7 @@ directoryStruct.preEncode = function (this: DirectoryContext): void {
 			}
 		}
 
-		this.tables = tables as unknown as SFNTDirectoryEntry[];
+		this.tables = existingTables as unknown as SFNTDirectoryEntry[];
 	}
 
 	this.tag = 'true';

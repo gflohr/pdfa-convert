@@ -125,7 +125,7 @@ The scope of the command can be limited to individual fonts.
 | `-l, --list`               | boolean  | list fonts                           |
 | `-e, --embed`              | boolean  | embed fonts                          |
 | `-b, --base-font`          | string[] | limit to base font                   |
-| `-f, --font, --font-name`  | string[] | limit to font                        |
+| `--font, --font-name`      | string[] | limit to font                        |
 | `--format`                 | string   | output format for `--list`.          |
 
 The allowed output formats are 'text' (default), 'yaml', or 'json'.

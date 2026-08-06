@@ -1,0 +1,536 @@
+import {
+	PDFArray,
+	PDFDict,
+	type PDFDocument,
+	PDFName,
+	PDFNumber,
+	type PDFRef,
+	PDFString,
+} from '@cantoo/pdf-lib';
+import type {
+	FontkitAPI,
+	Glyph,
+	OpenTypeFont,
+	Subset,
+} from '@pdfa-lab/fontkit';
+import type { GlyphMapper } from '../encoding/mappers/glyph-mapper.js';
+import { OverlayMapper } from '../encoding/mappers/overlay-mapper.js';
+import type { Encoding } from '../encoding/types.js';
+import { isStandardEncoding } from '../encoding/util/is-standard-encoding.js';
+import { octetsToGlyphIds } from '../encoding/util/octets-to-glyph-ids.js';
+import { LiteralParser } from '../parser/literal-parser.js';
+import type { FontEmbedOptions } from '../pdfa-lab.js';
+import type { GlyphBlock } from '../text/extract-glyphs.js';
+import { deriveFontFlags } from './derive-font-flags.js';
+import type { OsType } from './load-font.js';
+import { resolveFont } from './resolve-font.js';
+import type { FontData, FontInfo, PatchSet } from './types.js';
+
+type Metrics = {
+	bbox: number[];
+	ascent: number;
+	descent: number;
+	capHeight: number;
+	italicAngle: number;
+	widths: (number | number[])[];
+};
+
+export class FontEmbedder {
+	private initialised = false;
+	private _fontDict: PDFDict | undefined;
+	// FIXME! This should be cast to OpenTypeFont, because the font cannot
+	// be embedded without font metrics.
+	private _font: OpenTypeFont | undefined;
+	private _subset: Subset | undefined;
+	private _scale: number | undefined;
+	private _glyphIds = new Set<number>();
+	private _glyphs: Glyph[] = [];
+	private _glyphMapping: Record<string, number> = {};
+	private _glyphMapper: GlyphMapper;
+
+	constructor(
+		private readonly _pdfDoc: PDFDocument,
+		private readonly _fontInfo: FontInfo,
+		private readonly _glyphBlocks: GlyphBlock[],
+		private readonly _subsetPrefixes: Set<string>,
+		private readonly _options: FontEmbedOptions,
+	) {
+		if (!this.options.fontkit) {
+			throw new Error(
+				'You have to pass a fontkit instance in the embed options!',
+			);
+		}
+
+		const fontRef = this.fontInfo.ref;
+		const fontDict = this.pdfDoc.context.lookupMaybe(fontRef, PDFDict);
+		if (!fontDict) {
+			throw new Error(`PDF has no font dictionary '${fontRef.toString()}'!`);
+		}
+
+		// Determine the glyph mapper in use. Edge case: It is possible that
+		// a document uses a Type1 font and additionally has a ToUnicode
+		// table. In that case, the glyphs are selected based on the encoding
+		// only. But when extracting text, the ToUnicode CMap acts as an
+		// overlay. That has the absurd consequence that, when you copy and
+		// paste text from the PDF, the copied text differs from the text
+		// rendered.
+		//
+		// In the new document with the embedded font, this is no longer
+		// possible. The rendered glyphs always correspond to the textual
+		// content. In this case, we let the visual representation "win" and
+		// ignore a possible ToUnicode table.
+		//
+		// You can see such a case in the file assets/pdfs/mixed-content.pdf.
+		// It renders the string "price: $5", but when you copy and paste
+		// it, the text is German, and the price has changed.
+		if (isStandardEncoding(this.fontInfo.encodingMapper.name)) {
+			this._glyphMapper = this.fontInfo.encodingMapper;
+		} else if (this.fontInfo.toUnicodeMapper) {
+			this._glyphMapper = this.fontInfo.toUnicodeMapper;
+		} else {
+			const fontName = this.fontInfo.baseFont ?? '[unknown font]';
+			const fontRef = this.fontInfo.ref.toString();
+			throw new Error(
+				`Cannot embed font '${fontName}' (object: ${fontRef}) without a ToUnicode CMap.`,
+			);
+		}
+
+		// Convert the byte streams of the extracted glyphs to glyph ids.
+		this.glyphBlocks.forEach((block) => {
+			const glyphIds = octetsToGlyphIds(block.glyphs, this.glyphMapper);
+			const decodedGlyphIds =
+				block.type === 'lstring'
+					? new LiteralParser(this.glyphMapper.name as Encoding).parse(glyphIds)
+					: glyphIds;
+
+			decodedGlyphIds.forEach((glyphId) => {
+				this.glyphIds.add(glyphId);
+			});
+		});
+	}
+
+	private get pdfDoc(): PDFDocument {
+		return this._pdfDoc;
+	}
+
+	private get fontInfo(): FontInfo {
+		return this._fontInfo;
+	}
+
+	private get options(): FontEmbedOptions {
+		return this._options;
+	}
+
+	private get fontDict(): PDFDict {
+		return this._fontDict!;
+	}
+
+	private get glyphIds(): Set<number> {
+		return this._glyphIds;
+	}
+
+	private get font(): OpenTypeFont {
+		return this._font!;
+	}
+
+	private get subset(): Subset {
+		return this._subset!;
+	}
+
+	private get scale(): number {
+		return this._scale!;
+	}
+
+	private get glyphBlocks(): GlyphBlock[] {
+		return this._glyphBlocks;
+	}
+
+	private get glyphs(): Glyph[] {
+		return this._glyphs;
+	}
+
+	private get glyphMapping(): Record<string, number> {
+		return this._glyphMapping;
+	}
+
+	private get glyphMapper(): GlyphMapper {
+		return this._glyphMapper;
+	}
+
+	private get subsetPrefixes(): Set<string> {
+		return this._subsetPrefixes;
+	}
+
+	private probeCollection(data: Uint8Array): boolean {
+		const magic = new TextDecoder('ascii').decode(data.slice(0, 4));
+
+		// We have to check whether the magic number indicates a font, because
+		// detecting a Datafork font requires decoding the header. At least,
+		// this is what fontkit does.
+		//
+		// That means that corrupt data will be incorrectly recognised as
+		// a font collection data, but fontkit's probe functions will
+		// handle that.
+		return (
+			magic !== 'true' &&
+			magic !== 'OTTO' &&
+			magic !== String.fromCharCode(0, 1, 0, 0) &&
+			magic !== 'wOF2' &&
+			magic !== 'WOFF'
+		);
+	}
+
+	private async initialise() {
+		if (this.initialised) return;
+
+		const fontData = await this.resolveFont();
+		const source = fontData.source as Uint8Array;
+
+		const isTTC = this.probeCollection(source);
+
+		const fontkit = this.options.fontkit as FontkitAPI;
+		const font = isTTC
+			? fontkit.loadFont(source, fontData.postScriptName)
+			: fontkit.loadFont(source);
+
+		const asOpenType = font.asOpenTypeFont();
+		if (!asOpenType) {
+			if (typeof fontData.filename === 'undefined') {
+				if (typeof fontData.source === 'string') {
+					fontData.filename = fontData.source;
+				} else {
+					fontData.filename = '[in-memory data]';
+				}
+			}
+			const fontLocation =
+				typeof fontData.postScriptName === 'undefined'
+					? fontData.filename
+					: `${fontData.filename} (PostScript name: ${fontData.postScriptName})`;
+			throw new Error(
+				`${fontLocation}: cannot be embedded because it is missing core OpenType tables!`,
+			);
+		}
+		this._font = asOpenType;
+
+		this._subset = this.font.createSubset();
+		this._scale = 1000 / this.font.unitsPerEm;
+
+		this.includeGlyphs();
+
+		const fontRef = this._fontInfo.ref;
+		const fontDict = this.pdfDoc.context.lookupMaybe(fontRef, PDFDict);
+		if (typeof fontDict === 'undefined') {
+			throw new Error(`PDF has no font dictionary '${fontRef.toString()}'!`);
+		}
+		this._fontDict = fontDict;
+
+		this.initialised = true;
+	}
+
+	public async embed(): Promise<PatchSet[]> {
+		await this.initialise();
+		this.fontDict.set(PDFName.of('Subtype'), PDFName.of('Type0'));
+		const subsetPrefix = this.generateSubsetPrefix();
+		const baseFontName = `${subsetPrefix}+${this.font.postscriptName ?? 'Unknown'}`;
+		this.fontDict.set(PDFName.of('BaseFont'), PDFName.of(baseFontName));
+		this.fontDict.set(PDFName.of('Encoding'), PDFName.of('Identity-H'));
+
+		const toUnicode = this.embedToUnicode();
+		this.fontDict.set(PDFName.of('ToUnicode'), toUnicode);
+
+		const patchSets = this.recodeGlyphBlocks();
+
+		const cidFontDict = await this.embedCIDFontDict(baseFontName);
+		const descendantFonts = PDFArray.withContext(this.pdfDoc.context);
+		descendantFonts.push(cidFontDict);
+		this.fontDict.set(PDFName.of('DescendantFonts'), descendantFonts);
+
+		const allowedNames = new Set([
+			'/Type',
+			'/Subtype',
+			'/BaseFont',
+			'/Encoding',
+			'/ToUnicode',
+			'/DescendantFonts',
+		]);
+		this.fontDict.keys().forEach((key) => {
+			if (!allowedNames.has(key.asString())) {
+				this.fontDict.delete(key);
+			}
+		});
+
+		return patchSets;
+	}
+
+	private async resolveFont(): Promise<FontData> {
+		return await resolveFont(
+			this.fontInfo.fontName ?? 'sans',
+			this.options.fontMap,
+			this.options.fcMatch,
+			this.options.platform as OsType,
+		);
+	}
+
+	private embedToUnicode(): PDFRef {
+		const cmap = this.createToUnicode();
+
+		const context = this.pdfDoc.context;
+		// FIXME! Only compress, when requested!
+		const cmapStream = context.flateStream(cmap);
+
+		return context.register(cmapStream);
+	}
+
+	private createToUnicode(): string {
+		const mapper = new OverlayMapper(
+			this.fontInfo.encodingMapper,
+			this.fontInfo.toUnicodeMapper,
+		);
+
+		let cmap = `/CIDInit /ProcSet findresource begin
+12 dict begin
+begincmap
+/CIDSystemInfo <<
+  /Registry (Adobe)
+  /Ordering (UCS)
+  /Supplement 0
+>> def
+/CMapName /Adobe-Identity-UCS def
+/CMapType 2 def
+1 begincodespacerange
+<0000> <ffff>
+endcodespacerange
+${this.glyphIds.size} beginbfchar
+`;
+
+		let glyphId = 0;
+		this.glyphIds.forEach((fromCodePoint) => {
+			++glyphId;
+			const codePoint = this.coerceCodePoints(
+				mapper.lookupCodePoints(fromCodePoint),
+			);
+			const hexCodePoint = `<${codePoint.toString(16).padStart(4, '0')}>`;
+			const hexGlyphId = `<${glyphId.toString(16).padStart(4, '0')}>`;
+			cmap += `${hexGlyphId} ${hexCodePoint}\n`;
+		});
+
+		cmap += `endbfchar
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+`;
+		return cmap;
+	}
+
+	protected coerceCodePoints(cps: number[] | undefined): number {
+		if (!cps?.length) {
+			return 0;
+		} else if (cps.length === 1) {
+			return cps[0]!;
+		} else {
+			// Ligature?
+			const asText = cps.map((cp) => String.fromCodePoint(cp)).join('');
+			switch (asText) {
+				case 'DZ':
+					return 0x01f1;
+				case 'Dz':
+					return 0x01f2;
+				case 'dz':
+					return 0x01f3;
+				case 'ff':
+					return 0xfb00;
+				case 'fi':
+					return 0xfb01;
+				case 'fl':
+					return 0xfb02;
+				case 'ffi':
+					return 0xfb03;
+				case 'ffl':
+					return 0xfb04;
+				case 'st':
+					return 0xfb06;
+				default:
+					return cps[0]!; // Better than nothing.
+			}
+		}
+	}
+
+	protected includeGlyphs() {
+		const subset = this.subset;
+
+		let newGlyphId = 0;
+		this.glyphIds.forEach((glyphId) => {
+			const codePoint = this.coerceCodePoints(
+				this.glyphMapper.lookupCodePoints(glyphId),
+			);
+			const glyph =
+				this.font.glyphForCodePoint(codePoint) ?? this.font.getGlyph(0);
+			if (!glyph) {
+				throw new Error('Font does not have a fallback glyph!');
+			}
+			subset.includeGlyph(glyph);
+			this.glyphs.push(glyph);
+			this.glyphMapping[glyphId] = ++newGlyphId;
+		});
+	}
+
+	private async embedFontStream(): Promise<PDFRef> {
+		const context = this.pdfDoc.context;
+		const fontStream = context.flateStream(this.subset.encode(), {
+			Subtype: this.isCFF() ? 'CIDFontType0C' : undefined,
+		});
+
+		return context.register(fontStream);
+	}
+
+	private isCFF(): boolean {
+		return (this.subset as unknown as { cff: boolean }).cff;
+	}
+
+	private async embedCIDFontDict(baseFontName: string): Promise<PDFRef> {
+		const context = this.pdfDoc.context;
+
+		const metrics = this.extractMetrics();
+		const fontDescriptorRef = await this.embedFontDescriptor(
+			metrics,
+			baseFontName,
+		);
+
+		const cidFontDict = context.obj({
+			Type: PDFName.of('Font'),
+			Subtype: PDFName.of(this.isCFF() ? 'CIDFontType0' : 'CIDFontType2'),
+			CIDToGIDMap: PDFName.of('Identity'),
+			BaseFont: PDFName.of(baseFontName),
+			CIDSystemInfo: {
+				Registry: PDFString.of('Adobe'),
+				Ordering: PDFString.of('Identity'),
+				Supplement: 0,
+			},
+			FontDescriptor: fontDescriptorRef,
+			W: metrics.widths,
+		});
+
+		return context.register(cidFontDict);
+	}
+
+	private extractMetrics(): Metrics {
+		const font = this.font;
+
+		const bbox = [
+			this.scale * font.boundingBox.minX,
+			this.scale * font.boundingBox.minY,
+			this.scale * font.boundingBox.maxX,
+			this.scale * font.boundingBox.maxY,
+		];
+
+		const ascent = this.scale * font.ascent;
+
+		const descent = this.scale * font.descent;
+
+		const capHeight = font.capHeight ? this.scale * font.capHeight : ascent;
+
+		const italicAngle = font.italicAngle || 0;
+
+		const widths = this.computeWidths();
+
+		return {
+			bbox,
+			ascent,
+			descent,
+			capHeight,
+			italicAngle,
+			widths,
+		};
+	}
+
+	protected computeWidths(): (number | number[])[] {
+		return [1, this.glyphs.map((glyph) => glyph.advanceWidth * this.scale)];
+	}
+
+	protected async embedFontDescriptor(
+		metrics: Metrics,
+		fontName: string,
+	): Promise<PDFRef> {
+		const context = this.pdfDoc.context;
+		const fontStreamRef = await this.embedFontStream();
+
+		const scale = 1000 / this.font.unitsPerEm;
+
+		const fontDescriptor = context.obj({
+			Type: 'FontDescriptor',
+			FontName: fontName,
+			Flags: deriveFontFlags(this.font),
+			FontBBox: context.obj(metrics.bbox),
+			ItalicAngle: PDFNumber.of(metrics.italicAngle),
+			Ascent: PDFNumber.of(metrics.ascent),
+			Descent: PDFNumber.of(metrics.descent),
+			CapHeight: PDFNumber.of(metrics.capHeight),
+			XHeight: PDFNumber.of((this.font.xHeight || 0) * scale),
+			StemV: PDFNumber.of(80),
+			[this.isCFF() ? 'FontFile3' : 'FontFile2']: fontStreamRef,
+		});
+
+		return context.register(fontDescriptor);
+	}
+
+	private generateSubsetPrefix(): string {
+		for (let n = 0; ; ++n) {
+			let value = n;
+			let prefix = '';
+
+			for (let i = 0; i < 6; ++i) {
+				prefix = String.fromCharCode(65 + (value % 26)) + prefix;
+				value = Math.floor(value / 26);
+			}
+
+			if (!this.subsetPrefixes.has(prefix)) {
+				this.subsetPrefixes.add(prefix);
+				return prefix;
+			}
+		}
+	}
+
+	private recodeGlyphBlocks(): PatchSet[] {
+		const patchSets: PatchSet[] = [];
+
+		for (const block of this.glyphBlocks) {
+			patchSets.push(this.recodeGlyphBlock(block));
+		}
+
+		return patchSets;
+	}
+
+	private recodeGlyphBlock(block: GlyphBlock): PatchSet {
+		const glyphIds = octetsToGlyphIds(block.glyphs, this.glyphMapper);
+		const decodedGlyphIds =
+			block.type === 'lstring'
+				? new LiteralParser(this.glyphMapper.name as Encoding).parse(glyphIds)
+				: glyphIds;
+
+		const hexstring = this.recodePDFString(decodedGlyphIds);
+
+		return {
+			streamId: block.streamId,
+			offset: block.offset,
+			length: block.length,
+			hexstring,
+		};
+	}
+
+	private recodePDFString(glyphs: number[]): number[] {
+		const hexstring =
+			'<' +
+			glyphs
+				.map((id) => this.glyphMapping[id]!)
+				.map((id) => id.toString(16).padStart(4, '0'))
+				.join('') +
+			'>';
+
+		const out: number[] = [];
+		for (let i = 0; i < hexstring.length; ++i) {
+			out.push(hexstring[i]!.charCodeAt(0));
+		}
+
+		return out;
+	}
+}

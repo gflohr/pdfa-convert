@@ -1,6 +1,6 @@
 import { Textdomain } from '@esgettext/runtime';
+import { PDFALab } from '@pdfa-lab/core';
 import * as yaml from 'js-yaml';
-import { PDFALab } from 'pdfa-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';

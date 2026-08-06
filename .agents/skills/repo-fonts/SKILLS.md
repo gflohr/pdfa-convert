@@ -90,7 +90,7 @@ entire font program or just a subset of glyphs.
 Fonts referenced like this can be used to add new text to a PDF document.
 It is not possible, however, to replace an existing font that is not
 embedded with an embedded one. This will be a feature that has to be
-implemented in `pdfa-lab-core`.
+implemented in `packages/core`.
 
 Experiments that manipulate PDFs with missing fonts manually show that this
 is feasible. The required process differs depending on the type of font:

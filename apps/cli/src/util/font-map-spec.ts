@@ -1,5 +1,5 @@
 import { Textdomain } from '@esgettext/runtime';
-import type { FontMap } from 'pdfa-lab-core';
+import type { FontMap } from '@pdfa-lab/core';
 
 function parseSpec(
 	spec: string,

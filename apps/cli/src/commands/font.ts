@@ -1,8 +1,8 @@
 import * as os from 'node:os';
 import { Textdomain } from '@esgettext/runtime';
+import { type FontInfo, PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 import * as yaml from 'js-yaml';
-import { type FontInfo, PDFALab } from 'pdfa-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
@@ -54,7 +54,7 @@ const options: {
 	},
 	font: {
 		group: gtx._('Selection of Fonts'),
-		alias: ['b', 'font-name'],
+		alias: ['font-name'],
 		type: 'string',
 		multi: true,
 		describe: gtx._('limit to font-name'),
@@ -68,6 +68,7 @@ const options: {
 	},
 	'fc-match': {
 		group: gtx._('Font Embedding Options'),
+		alias: ['f'],
 		type: 'string',
 		default: 'fc-match',
 		describe: gtx._("path to the 'fc-match' program"),
@@ -76,7 +77,7 @@ const options: {
 		group: gtx._('Font Embedding Options'),
 		type: 'string',
 		multi: true,
-		describe: gtx._('font mapping (FONT_NAME:PATH[:POSTSCRIPT_NAME]'),
+		describe: gtx._('font mapping (FONT_NAME,PATH[,POSTSCRIPT_NAME])'),
 	},
 	compress: {
 		group: gtx._('Font Embedding Options'),
@@ -130,12 +131,15 @@ export class FontCommand implements Command {
 		const refs = [...fonts.values()].map((f) => f.ref);
 		const fontMap = fontMapSpec((configOptions['font-map'] ?? []) as string[]);
 
-		await lab.embedFonts(refs, {
-			fontMap,
-			fcMatch: configOptions['fc-match'] as string,
-			platform: os.platform(),
-			fontkit,
-		});
+		await lab.embedFonts(
+			{
+				fontMap,
+				fcMatch: configOptions['fc-match'] as string,
+				platform: os.platform(),
+				fontkit,
+			},
+			refs,
+		);
 
 		await writeOutput(configOptions.output as string, lab);
 	}

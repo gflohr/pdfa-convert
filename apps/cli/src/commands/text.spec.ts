@@ -1,6 +1,6 @@
 import { PDFRef } from '@cantoo/pdf-lib';
+import { type FontInfo, PDFALab, type TextBlock } from '@pdfa-lab/core';
 import * as yaml from 'js-yaml';
-import { type FontInfo, PDFALab, type TextBlock } from 'pdfa-lab-core';
 import {
 	afterEach,
 	beforeEach,
@@ -19,8 +19,8 @@ vi.mock('../util/optspec.js');
 vi.mock('./load-input.js', () => ({
 	loadInput: vi.fn().mockResolvedValue(new Uint8Array()),
 }));
-vi.mock('pdfa-lab-core', async (importActual) => {
-	const actual = await importActual<typeof import('pdfa-lab-core')>();
+vi.mock('@pdfa-lab/core', async (importActual) => {
+	const actual = await importActual<typeof import('@pdfa-lab/core')>();
 	return {
 		...actual,
 		PDFALab: {

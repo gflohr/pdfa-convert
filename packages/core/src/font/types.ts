@@ -1,0 +1,119 @@
+import type { PDFRef } from '@cantoo/pdf-lib';
+import type { GlyphMapper } from '../encoding/mappers/glyph-mapper.js';
+
+/**
+ * The possible font subtypes.
+ */
+export type FontSubtype =
+	| 'Type0'
+	| 'Type1'
+	| 'MMType1'
+	| 'Type3'
+	| 'TrueType'
+	| 'CIDFontType0'
+	| 'CIDFontType2';
+
+/**
+ * Information about a font.
+ */
+export type FontInfo = {
+	/**
+	 * The reference to the font dictionary.
+	 */
+	ref: PDFRef;
+
+	/**
+	 * The resource name mapping. For each page that references the font,
+	 * the resource name used is stored.
+	 */
+	//resourceNames: Record<number, string>;
+
+	/**
+	 * The indicator for embedded fonts.
+	 */
+	embedded: boolean;
+
+	/**
+	 * The font subtype. This can only be unset for Type0 fonts.
+	 */
+	subtype?: FontSubtype;
+
+	/**
+	 * The BaseFont. This often contains subset identifiers or a numbered
+	 * suffix.
+	 */
+	baseFont?: string;
+
+	/**
+	 * The normalised font name without the subset identifier or numbered
+	 * suffix.
+	 */
+	fontName?: string;
+
+	/**
+	 * The encoding mapper. You can get the name of the encoding with the
+	 * `name` property of the mapper.
+	 */
+	encodingMapper: GlyphMapper;
+
+	/**
+	 * The optional ToUnicode mapper.
+	 */
+	toUnicodeMapper?: GlyphMapper;
+};
+
+/**
+ * The type for font data reference.
+ */
+export type FontData = {
+	/**
+	 * The source of the font data. This can either be a file system path
+	 * from where the font data gets loaded or the raw data bytes.
+	 */
+	source: string | ArrayBuffer | Uint8Array<ArrayBufferLike>;
+
+	/**
+	 * The optional PostScript name. This is only relevant, if the font
+	 * is a font collection (`.ttc` or `.dfont`) file.
+	 */
+	postScriptName?: string;
+
+	// FIXME! Allow font variation?
+
+	/**
+	 * The filename of the font file or font collection.
+	 */
+	filename?: string;
+};
+
+/**
+ * The font mapping data. This maps font names (with a subset prefix and a
+ * producer suffix stripped off) to font data.
+ */
+export type FontMap = Record<string, FontData>;
+
+/**
+ * Patch instructions.
+ */
+export type PatchSet = {
+	/**
+	 * The numerical ID of the `PDFStream`.
+	 */
+	streamId: number;
+
+	/**
+	 * The offset inside the stream to the first octet that has to be
+	 * replaced.
+	 */
+	offset: number;
+
+	/**
+	 * The number of octets to replace.
+	 */
+	length: number;
+
+	/**
+	 * Replacement string as 8-bit characters.
+	 */
+	hexstring: number[];
+};

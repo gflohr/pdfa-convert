@@ -8,7 +8,7 @@ import {
 	PDFString,
 } from '@cantoo/pdf-lib';
 import {
-	fontkit,
+	FontkitAPI,
 	type Glyph,
 	type OpenTypeFont,
 	type Subset,
@@ -188,6 +188,7 @@ export class FontEmbedder {
 
 		const isTTC = this.probeCollection(source);
 
+		const fontkit = this.options.fontkit as FontkitAPI;
 		const font = isTTC
 			? fontkit.loadFont(source, fontData.postScriptName)
 			: fontkit.loadFont(source);

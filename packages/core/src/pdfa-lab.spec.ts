@@ -22,7 +22,7 @@ describe('PDFALab', () => {
 	});
 
 	describe('from', () => {
-		it('returns the same instance if given a real PDFDocument', async () => {
+		it('wraps a real PDFDocument in a new PDFALab instance', async () => {
 			const doc = await PDFDocument.create();
 
 			const result = await PDFALab.from(doc);

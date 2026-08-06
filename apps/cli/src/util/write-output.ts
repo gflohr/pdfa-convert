@@ -1,5 +1,5 @@
 import * as fs from 'node:fs/promises';
-import type { PDFALab } from 'pdfa-lab-core';
+import type { PDFALab } from '@pdfa-lab/core';
 import { safeStdoutBufferWrite } from './safe-stdout-write.js';
 
 export async function writeOutput(filename: string, lab: PDFALab) {

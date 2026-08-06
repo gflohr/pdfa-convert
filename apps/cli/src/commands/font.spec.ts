@@ -8,8 +8,8 @@ vi.mock('./load-input.js', () => ({
 }));
 
 vi.mock('../util/optspec.js');
-vi.mock('pdfa-lab-core', async (importActual) => {
-	const actual = await importActual<typeof import('pdfa-lab-core')>();
+vi.mock('@pdfa-lab/core', async (importActual) => {
+	const actual = await importActual<typeof import('@pdfa-lab/core')>();
 	return {
 		...actual,
 		PDFALab: {
@@ -19,7 +19,7 @@ vi.mock('pdfa-lab-core', async (importActual) => {
 });
 
 import { PDFRef } from '@cantoo/pdf-lib';
-import { type FontInfo, PDFALab } from 'pdfa-lab-core';
+import { type FontInfo, PDFALab } from '@pdfa-lab/core';
 import { type FontInfoDto, toFontInfoDto } from '../util/font-info-dto.js';
 import { FontCommand } from './font.js';
 

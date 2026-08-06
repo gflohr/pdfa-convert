@@ -6,7 +6,7 @@
  * this:
  *
  * ```
- * import { adobeGlyphs } from 'pdfa-lab-core';
+ * import { adobeGlyphs } from '@pdfa-lab/core';
  *
  * const glyph = adobeGlyphs['Euro'];
  * const name = glyph.n; // 'Euro'.

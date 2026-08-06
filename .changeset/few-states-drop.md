@@ -1,5 +1,5 @@
 ---
-"pdfa-lab-core": patch
+"@pdfa-lab/core": patch
 "pdfa-lab": patch
 ---
 

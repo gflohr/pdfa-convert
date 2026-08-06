@@ -1,8 +1,8 @@
 import * as os from 'node:os';
 import { Textdomain } from '@esgettext/runtime';
+import { type FontInfo, PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 import * as yaml from 'js-yaml';
-import { type FontInfo, PDFALab } from 'pdfa-lab-core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';

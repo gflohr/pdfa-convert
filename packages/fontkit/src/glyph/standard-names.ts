@@ -1,4 +1,4 @@
-// TODO! Synchronise that with the encoding table from pdfa-lab-core!
+// TODO! Synchronise that with the encoding table from @pdfa-lab/core!
 export const standardNames = [
 	'.notdef',
 	'.null',

@@ -10,7 +10,7 @@ under the hood.
 
 | Directory                  | Purpose                                         |
 | -------------------------- | ----------------------------------------------- |
-| `packages/pdfa-lab-core/`   | The core functionality                          |
+| `packages/core/`.          | The core functionality                          |
 | `packages/fontkit/`        | A drop-in replacement for `@pdf-lib/fontkit`    |
 | `apps/cli/`                | The command-line interface                      |
 

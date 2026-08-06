@@ -77,7 +77,7 @@ const options: {
 		group: gtx._('Font Embedding Options'),
 		type: 'string',
 		multi: true,
-		describe: gtx._('font mapping (FONT_NAME,PATH[,POSTSCRIPT_NAME]'),
+		describe: gtx._('font mapping (FONT_NAME,PATH[,POSTSCRIPT_NAME])'),
 	},
 	compress: {
 		group: gtx._('Font Embedding Options'),

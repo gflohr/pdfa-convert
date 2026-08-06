@@ -155,7 +155,7 @@ export class PDFALab {
 	 * embedded.
 	 *
 	 * @param options control the font embedding
-	 * @param references can be determined  `collectFonts()`)
+	 * @param references can be determined by `collectFonts()`
 	 */
 	public async embedFonts(
 		options: FontEmbedOptions = {},

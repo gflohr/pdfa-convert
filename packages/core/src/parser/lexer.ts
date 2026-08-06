@@ -72,6 +72,12 @@ export class Lexer {
 						break;
 					case 37: // Percent (comment).
 						if (token.value.length) this.pushToken(tokens, token, i);
+						token = {
+							type: 'token',
+							value: [],
+							offset: i,
+							length: 0,
+						};
 						for (let j = i; j < bytes.length; ++j) {
 							if (bytes[j] === 10 || bytes[j] === 13) {
 								i = j;

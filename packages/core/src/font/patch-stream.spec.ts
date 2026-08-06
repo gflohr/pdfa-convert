@@ -20,10 +20,9 @@ describe('patchStream', () => {
 
 		const patchSets: PatchSet[] = [
 			{
-				stream,
+				streamId: 0,
 				offset: 1,
 				length: 2,
-				glyphs: new Uint8Array(),
 				hexstring: [0x78, 0x79], // xy
 			},
 		];

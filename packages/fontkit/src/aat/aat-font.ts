@@ -1,7 +1,7 @@
 import type { Font } from '../font.js';
 import type { Glyph } from '../glyph/glyph.js';
 import type { morxTable } from '../tables/index.js';
-import { requiredTrueTypeSubsetTables } from '../true-type-subset-font';
+import { requiredTrueTypeSubsetTables } from '../true-type-subset-font.js';
 
 /**
  * Minimal operational capability needed Apple Advanced Typography (AAT).

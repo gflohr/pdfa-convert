@@ -245,6 +245,20 @@ export class FontEmbedder {
 		descendantFonts.push(cidFontDict);
 		this.fontDict.set(PDFName.of('DescendantFonts'), descendantFonts);
 
+		const allowedNames = new Set([
+			'/Type',
+			'/Subtype',
+			'/BaseFont',
+			'/Encoding',
+			'/ToUnicode',
+			'/DescendantFonts',
+		]);
+		this.fontDict.keys().forEach(key => {
+			if (!allowedNames.has(key.asString())) {
+				this.fontDict.delete(key);
+			}
+		});
+
 		return patchSets;
 	}
 

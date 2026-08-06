@@ -42,7 +42,7 @@ describe('resolve', () => {
 		expect(loadFont).not.toHaveBeenCalled();
 	});
 
-	it.skip('loads font from path in fontMap', async () => {
+	it('loads font from path in fontMap', async () => {
 		const bytes = new Uint8Array([1, 2, 3]);
 
 		vi.mocked(loadFontFromPath).mockResolvedValue({
@@ -59,7 +59,6 @@ describe('resolve', () => {
 		expect(loadFontFromPath).toHaveBeenCalledWith(
 			'Helvetica',
 			'/path/to/font.ttf',
-			'unix',
 		);
 
 		expect(result).toEqual({ source: bytes, filename: '/path/to/font.ttf' });

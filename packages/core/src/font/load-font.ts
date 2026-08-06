@@ -320,7 +320,7 @@ export async function loadFontFromPath(
 		) === '[object process]';
 	if (!isNode) {
 		throw new Error(
-			`The font '${fontName}' is not embedded and must be passed as raw data the browser.`,
+			`The font '${fontName}' is not embedded and must be passed as raw data in the browser.`,
 		);
 	} else {
 		const fs = await import('node:fs/promises');

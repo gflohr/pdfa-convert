@@ -7,10 +7,17 @@ type Mapping =
 	| [number, number, number]
 	| [number, number, number[][]]
 	| [number, number[]];
-type Range = [number, number];
+
+type CodeSpaceRange = {
+	byteWidth: number;
+	min: number;
+	max: number;
+};
 
 export class CMapMapper implements GlyphMapper {
 	private mappings: Mapping[];
+	private codeSpaceRanges: CodeSpaceRange[] = [];
+	private defaultByteWidth = 2; // Fallback default for CMap keys
 	private _highest: number;
 
 	constructor(
@@ -44,6 +51,34 @@ export class CMapMapper implements GlyphMapper {
 		return this._highest;
 	}
 
+	public getCodeBytesWidth(octets: Uint8Array, idx: number): number {
+		// 1. Try explicit begincodespacerange blocks first
+		if (this.codeSpaceRanges.length > 0) {
+			for (const range of this.codeSpaceRanges) {
+				const width = range.byteWidth;
+				if (idx + width > octets.length) continue;
+
+				let code = 0;
+				for (let j = 0; j < width; ++j) {
+					code = (code << 8) | (octets[idx + j]! & 0xff);
+				}
+				code = code >>> 0;
+
+				if (code >= range.min && code <= range.max) {
+					return width;
+				}
+			}
+		}
+
+		// 2. Fallback: infer from CMap default byte width or highest mapped key
+		const remaining = octets.length - idx;
+		if (this._highest > 0xff || this.defaultByteWidth === 2) {
+			return remaining >= 2 ? 2 : remaining;
+		}
+
+		return 1;
+	}
+
 	private parse(
 		source: Uint8Array<ArrayBufferLike> | Uint8ClampedArray<ArrayBufferLike>,
 	): Mapping[] {
@@ -51,7 +86,7 @@ export class CMapMapper implements GlyphMapper {
 		const tokens = lexer.tokenize(source);
 
 		const mappings: Mapping[] = [];
-		const ranges: Range[] = [];
+		this.codeSpaceRanges = [];
 
 		for (let i = 0; i < tokens.length; ++i) {
 			const token = tokens[i]!;
@@ -63,7 +98,7 @@ export class CMapMapper implements GlyphMapper {
 			} else if (value === 'beginbfrange') {
 				i += this.consumeMappings(mappings, tokens, 3, i + 1);
 			} else if (value === 'begincodespacerange') {
-				i += this.consumeRanges(ranges, tokens, i + 1);
+				i += this.consumeRanges(this.codeSpaceRanges, tokens, i + 1);
 			}
 		}
 
@@ -76,7 +111,7 @@ export class CMapMapper implements GlyphMapper {
 		cardinality: number,
 		start: number,
 	): number {
-		const mapping: Mapping = [] as unknown as Mapping;
+		let mapping: Mapping = [] as unknown as Mapping;
 		for (let i = start; i < tokens.length; ++i) {
 			const token = tokens[i]!;
 
@@ -90,6 +125,7 @@ export class CMapMapper implements GlyphMapper {
 					value === '['
 				) {
 					i += this.consumeLigature(mappings, mapping, tokens, i + 1);
+					mapping = [] as unknown as Mapping;
 				} else if (cardinality === 3 && value === 'endbfrange') {
 					return i - start + 1;
 				} else if (
@@ -98,13 +134,17 @@ export class CMapMapper implements GlyphMapper {
 					value === '['
 				) {
 					i += this.consumeLigatures(mappings, mapping, tokens, i + 1);
+					mapping = [] as unknown as Mapping;
 				}
 			} else {
-				// String.
+				// String. Detect token byte width (e.g. <0001> = 2 bytes).
+				if ((mapping as number[]).length === 0 && token.value.length === 2) {
+					this.defaultByteWidth = 2;
+				}
 				mapping.push(this.uint8ArrayToNumber(token.value));
 				if (mapping.length >= cardinality) {
-					mappings.push([...mapping]);
-					(mapping as Array<number>).length = 0;
+					mappings.push(mapping);
+					mapping = [] as unknown as Mapping;
 				}
 			}
 		}
@@ -113,25 +153,31 @@ export class CMapMapper implements GlyphMapper {
 	}
 
 	private consumeRanges(
-		ranges: Range[],
+		ranges: CodeSpaceRange[],
 		tokens: Token[],
 		start: number,
 	): number {
-		const range: Range = [] as unknown as Range;
+		let minToken: Token | null = null;
+
 		for (let i = start; i < tokens.length; ++i) {
 			const token = tokens[i]!;
 
 			if (token.type === 'token') {
 				const value = this.decodeUint8Array(token.value);
-				if (range.length > 1) {
-					ranges.push([range[0], range[1]]);
-				}
 				if (value === 'endcodespacerange') {
 					return i - start + 1;
 				}
 			} else {
-				// String.
-				range.push(this.uint8ArrayToNumber(token.value));
+				if (!minToken) {
+					minToken = token;
+				} else {
+					ranges.push({
+						byteWidth: minToken.value.length,
+						min: this.uint8ArrayToNumber(minToken.value),
+						max: this.uint8ArrayToNumber(token.value),
+					});
+					minToken = null;
+				}
 			}
 		}
 
@@ -155,7 +201,6 @@ export class CMapMapper implements GlyphMapper {
 				mappings.push(mapping);
 				return i - start + 1;
 			} else if (token.type === 'string') {
-				// Convert the Uint8 into an array of 16-bit values.
 				const v = token.value;
 				for (let j = 0; j < v.length - 1; j += 2) {
 					(mapping[1] as number[]).push((v[j]! << 8) | v[j + 1]!);
@@ -183,7 +228,6 @@ export class CMapMapper implements GlyphMapper {
 				mappings.push(mapping);
 				return i - start + 1;
 			} else if (token.type === 'string') {
-				// Convert the Uint8 into an array of 16-bit values.
 				const words: number[] = [];
 				const v = token.value;
 				for (let j = 0, k = 0; j < v.length - 1; j += 2, ++k) {
@@ -222,11 +266,6 @@ export class CMapMapper implements GlyphMapper {
 		return nonZeroSeen ? value >>> 0 : 0;
 	}
 
-	// The CMap tables can become very big. Instead of a (sparse) array, we
-	// do a binary search over the sorted entries.
-	//
-	// If no entry is found, the Unicode replacement character \uFFFD is
-	// returned.
 	public lookup(glyph: number): string {
 		const codePoints = this.lookupCodePoints(glyph);
 		if (codePoints.length) {
@@ -236,10 +275,6 @@ export class CMapMapper implements GlyphMapper {
 		}
 	}
 
-	// Does the same as lookup() but returns an array of code points. This is
-	// more convenient, when we want to select glyphs from a font, which may
-	// lack glyphs but provide an alternative (for example 'increment' for
-	// 'Delta').
 	public lookupCodePoints(glyph: number): number[] {
 		let low = 0;
 		let high = this.mappings.length - 1;
@@ -267,7 +302,6 @@ export class CMapMapper implements GlyphMapper {
 			}
 		}
 
-		// Not found.
 		return [];
 	}
 
@@ -285,23 +319,18 @@ export class CMapMapper implements GlyphMapper {
 	}
 
 	private decodeUTF16BE(value: number): number[] {
-		// Single UTF-16 code unit (BMP)
 		if (value <= 0xffff) {
 			return [value];
 		}
 
-		// Two UTF-16 code units packed into one number
 		const high = (value >> 16) & 0xffff;
 		const low = value & 0xffff;
 
-		// Validate surrogate pair
 		if (high >= 0xd800 && high <= 0xdbff && low >= 0xdc00 && low <= 0xdfff) {
 			const codePoint = ((high - 0xd800) << 10) + (low - 0xdc00) + 0x10000;
-
 			return [codePoint];
 		}
 
-		// Invalid UTF-16.
 		return [];
 	}
 }

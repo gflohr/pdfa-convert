@@ -263,4 +263,29 @@ endbfrange`;
 			expect(cmap.lookupCodePoints(0x62)).toStrictEqual([]);
 		});
 	});
+
+	describe('Byte Width Detection', () => {
+		it('should detect 2-byte width from codespacerange', () => {
+			const source = `
+1 begincodespacerange
+<0000> <FFFF>
+endcodespacerange
+1 beginbfchar
+<0021> <0065>
+endbfchar
+`;
+			const cmap = new CMapMapper(source);
+			expect(cmap.getCodeBytesWidth(new Uint8Array([0x00, 0x21]), 0)).toBe(2);
+		});
+
+		it('should fallback to 2-byte width if keys in bfchar/bfrange are 2-byte hex strings', () => {
+			const source = `
+1 beginbfchar
+<0021> <0065>
+endbfchar
+`;
+			const cmap = new CMapMapper(source);
+			expect(cmap.getCodeBytesWidth(new Uint8Array([0x00, 0x21]), 0)).toBe(2);
+		});
+	});
 });

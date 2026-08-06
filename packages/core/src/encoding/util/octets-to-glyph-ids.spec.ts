@@ -17,7 +17,7 @@ describe('Convert octets to glyph IDs', () => {
 		const source = `1 beginbfrange
 <0001> <0005> <0041>
 endbfrange
-	`;
+    `;
 		const mapper = new CMapMapper(source);
 		const octets = new Uint8Array([
 			0x01, 0x00, 0x02, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00,
@@ -32,7 +32,7 @@ endbfrange
 		const source = `1 beginbfrange
 <0001> <0005> <0041>
 endbfchar
-	`;
+    `;
 		const mapper = new CMapMapper(source);
 		const octets = new Uint8Array([0x00, 0x00, 0x00]);
 		expect(octetsToGlyphIds(octets, mapper)).toStrictEqual([0x00, 0x00, 0x00]);

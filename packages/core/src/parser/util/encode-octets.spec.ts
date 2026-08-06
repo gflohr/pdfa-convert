@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { Encoding } from '../../encoding/types.js';
-import { encodeOctets } from './encode-octets.js'; // adjust path as needed
+import { encodeOctets } from './encode-octets.js';
 
 describe('encodeOctets', () => {
 	it('should map bytes using StandardEncoding (single-byte mapper)', () => {
-		// 'böse' in UTF-8 -> bytes: 62 C3 B6 73 65
+		// 'böse' in UTF-8 -> bytes: 62 C3 B6 73 65.
 		const octets = [0x62, 0xc3, 0xb6, 0x73, 0x65];
 
 		const result = encodeOctets(octets, 'StandardEncoding');

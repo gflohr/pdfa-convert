@@ -8,7 +8,7 @@ describe('OverlayMapper', () => {
 			name: 'WinAnsiEncoding',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn(),
-		};
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback);
 
@@ -20,13 +20,13 @@ describe('OverlayMapper', () => {
 			name: 'StandardEncoding',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn(),
-		};
+		} as unknown as GlyphMapper;
 
 		const overlay: GlyphMapper = {
 			name: 'Identity-H',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn(),
-		};
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback, overlay);
 
@@ -38,13 +38,13 @@ describe('OverlayMapper', () => {
 			name: 'StandardEncoding',
 			lookup: vi.fn().mockReturnValue('fallback'),
 			lookupCodePoints: vi.fn(),
-		};
+		} as unknown as GlyphMapper;
 
 		const overlay: GlyphMapper = {
 			name: 'Identity-H',
 			lookup: vi.fn().mockReturnValue('overlay'),
 			lookupCodePoints: vi.fn(),
-		};
+	 	} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback, overlay);
 
@@ -58,13 +58,13 @@ describe('OverlayMapper', () => {
 			name: 'StandardEncoding',
 			lookup: vi.fn().mockReturnValue('fallback'),
 			lookupCodePoints: vi.fn(),
-		};
+		} as unknown as GlyphMapper;
 
 		const overlay: GlyphMapper = {
 			name: 'Identity-H',
 			lookup: vi.fn().mockReturnValue('\uFFFD'),
 			lookupCodePoints: vi.fn(),
-		};
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback, overlay);
 
@@ -78,7 +78,7 @@ describe('OverlayMapper', () => {
 			name: 'MacRomanEncoding',
 			lookup: vi.fn().mockReturnValue('fallback'),
 			lookupCodePoints: vi.fn(),
-		};
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback);
 
@@ -91,13 +91,13 @@ describe('OverlayMapper', () => {
 			name: 'StandardEncoding',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn().mockReturnValue([1, 2, 3]),
-		};
+		} as unknown as GlyphMapper;
 
 		const overlay: GlyphMapper = {
 			name: 'Identity-V',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn().mockReturnValue([4, 5, 6]),
-		};
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback, overlay);
 
@@ -111,13 +111,13 @@ describe('OverlayMapper', () => {
 			name: 'StandardEncoding',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn().mockReturnValue([1, 2, 3]),
-		};
+		} as unknown as GlyphMapper;
 
 		const overlay: GlyphMapper = {
 			name: 'Identity-V',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn().mockReturnValue([]),
-		};
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback, overlay);
 
@@ -131,7 +131,7 @@ describe('OverlayMapper', () => {
 			name: 'MacRomanEncoding',
 			lookup: vi.fn(),
 			lookupCodePoints: vi.fn().mockReturnValue([7, 8, 9]),
-		};
+		} as unknown as GlyphMapper;
 
 		const mapper = new OverlayMapper(fallback);
 

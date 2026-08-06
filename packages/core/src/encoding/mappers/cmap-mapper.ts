@@ -1,3 +1,4 @@
+import { isUint8ClampedArray } from 'node:util/types';
 import { Lexer } from '../../parser/lexer.js';
 import type { Token } from '../../parser/types.js';
 import type { GlyphMapper } from './glyph-mapper.js';
@@ -30,7 +31,7 @@ export class CMapMapper implements GlyphMapper {
 			source = new TextEncoder().encode(source);
 		}
 
-		if (source instanceof Uint8Array) {
+		if (source instanceof Uint8Array || source instanceof Uint8ClampedArray) {
 			this.mappings = [...this.parse(source)].sort((a, b) => a[0] - b[0]);
 
 			this._highest = this.mappings.reduce(

@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import { type PDFDocument, PDFRef } from '@cantoo/pdf-lib';
+import { decodePDFRawStream, PDFDict, type PDFDocument, PDFName, PDFRawStream, PDFRef } from '@cantoo/pdf-lib';
 import fontkit from '@pdfa-lab/fontkit';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { type FontEmbedOptions, PDFALab } from '../pdfa-lab.js';
@@ -53,28 +53,28 @@ describe('FontEmbedder', () => {
 
 			const fontMap: FontMap = {
 				Helvetica: {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSans-Regular.ttf')
 				},
 				'Helvetica-Bold': {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSans-Regular.ttf')
 				},
 				'Helvetica-Oblique': {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSans-Regular.ttf')
 				},
 				'Helvetica-BoldOblique': {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSans-Regular.ttf')
 				},
 				'Times-Roman': {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSerif-Regular.ttf')
 				},
 				'Times-Italic': {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSerif-Regular.ttf')
 				},
 				'Times-Bold': {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSerif-Regular.ttf')
 				},
 				'Times-BoldItalic': {
-					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
+					source: path.resolve(notoDir, 'NotoSerif-Regular.ttf')
 				},
 				Courier: {
 					source: path.resolve(notoDir, 'NotoSansMono-Regular.ttf')
@@ -106,9 +106,41 @@ describe('FontEmbedder', () => {
 		});
 
 		it('should embed the 14 Type 1 fonts', async () => {
-			const fonts = lab.collectFonts();
+			const fonts = [...lab.collectFonts().values()];
 
-			expect(fonts.size).toBe(14);
+			expect(fonts.length).toBe(14);
+			expect(fonts.filter(font => font.embedded).length).toBe(14);
+			expect(fonts.filter(font => font.subtype === 'Type0').length).toBe(14);
+
+			const uniqueFontNames = [...new Set(fonts.map(f => f.fontName))].sort();
+			expect(uniqueFontNames).toStrictEqual([
+				'NotoSans-Regular',
+				'NotoSansMono-Regular',
+				'NotoSansSymbols2-Regular',
+				'NotoSerif-Regular',
+				'OpenSymbol',
+			]);
+		});
+
+		it('should attach a valid /ToUnicode CMap stream to every embedded Type0 font', async () => {
+			const fonts = [...lab.collectFonts().values()];
+
+			for (const font of fonts) {
+				const doc = lab.pdfDocument;
+				const fontDict = doc.context.lookup(font.ref, PDFDict);
+
+				// Ensure /ToUnicode reference exists.
+				const toUnicodeRef = fontDict.get(PDFName.of('ToUnicode'));
+				expect(toUnicodeRef).toBeDefined();
+
+				// Ensure the CMap stream parses as non-empty text containing CMap markers
+				const toUnicode = doc.context.lookup(toUnicodeRef);
+				expect(toUnicode instanceof PDFRawStream).toBeTruthy();
+				const toUnicodeStream = toUnicode as PDFRawStream;
+				const cmapText = Buffer.from(decodePDFRawStream(toUnicodeStream).decode()).toString();
+				expect(cmapText).toMatch(/\/CIDInit \/ProcSet findresource begin\n/);
+				expect(cmapText).toContain(' beginbfchar\n');
+			}
 		});
 	});
 });

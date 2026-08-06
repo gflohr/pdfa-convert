@@ -5,9 +5,8 @@ export class LiteralParser {
 	constructor(private readonly encoding: Encoding) {}
 
 	/**
-	 * Parse a literal string. Literal strings are delimited by parentheses.
-	 * The input must begin with an open parentheses and end with a closing
-	 * parentheses.
+	 * Parse the body of a literal string. The enclosing parentheses are
+	 * removed by the lexer and must not be part of the input.
 	 *
 	 * Nested parentheses are not treated in a special way. It is expected
 	 * that they are balanced.

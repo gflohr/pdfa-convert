@@ -62,7 +62,7 @@ async function agl() {
 ${header}
 
 /**
- * Representation of a glyph from the Adoble Glyph List Specification.
+ * Representation of a glyph from the Adobe Glyph List Specification.
  */
 export type AdobeGlyph = {
 	/**
@@ -87,7 +87,7 @@ export type AdobeGlyph = {
 };
 
 /**
- * Lookup-table for all glyphs from the Adoble Glyph List Specification.
+ * Lookup-table for all glyphs from the Adobe Glyph List Specification.
  *
  * The comment above the definition is the official Unicode name.
  */

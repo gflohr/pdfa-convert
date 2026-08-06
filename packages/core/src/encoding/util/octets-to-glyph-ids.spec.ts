@@ -16,7 +16,7 @@ describe('Convert octets to glyph IDs', () => {
 	it('should allow 1-4 leading zeros', () => {
 		const source = `1 beginbfrange
 <0001> <0005> <0041>
-endbfchar
+endbfrange
 	`;
 		const mapper = new CMapMapper(source);
 		const octets = new Uint8Array([

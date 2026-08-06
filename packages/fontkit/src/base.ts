@@ -237,3 +237,13 @@ export const fontkit: FontkitAPI = {
 		throw new Error('Unknown font format');
 	},
 };
+
+/**
+ * Compatibility export. This is identical to @{link fontkit} but can be
+ * used as an argument to `registerFontkit()` in `@cantoo/pdf-lib` (resp. in
+ * `pdf-lib`).
+ */
+/* biome-ignore lint/suspicious/noExplicitAny: This is a compatibility tweak
+ * to all users to call registerFontkit() without a cast.
+ */
+export const pdfLibFontKit = fontkit as any;

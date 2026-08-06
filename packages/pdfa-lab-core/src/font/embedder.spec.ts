@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import { decodePDFRawStream, PDFArray, PDFDict, type PDFDocument, PDFName, PDFObject, PDFRawStream, PDFRef, PDFStream } from '@cantoo/pdf-lib';
+import { decodePDFRawStream, PDFArray, PDFDict, PDFDocument, PDFName, PDFObject, PDFRawStream, PDFRef, PDFStream } from '@cantoo/pdf-lib';
 import fontkit from '@pdfa-lab/fontkit';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { type FontEmbedOptions, PDFALab } from '../pdfa-lab.js';
@@ -35,6 +35,12 @@ function getStreamStringContents(stream: PDFObject | undefined): string | null {
 	} else {
 		return Buffer.from(contents).toString();
 	}
+}
+
+async function extractText(lab: PDFALab) {
+	const textBlocks = await lab.extractText();
+
+	return textBlocks.map(block => block.text).join(' ');
 }
 
 describe('FontEmbedder', () => {
@@ -174,7 +180,7 @@ describe('FontEmbedder', () => {
 				const cidFontDict = ctx.lookup(descendants.get(0), PDFDict);
 				const descriptor = cidFontDict.lookup(PDFName.of('FontDescriptor'), PDFDict);
 
-				// FontFile2 is TTF/TrueType, FontFile3 is CFF/OpenType
+				// FontFile2 is TTF/TrueType, FontFile3 is CFF/OpenType.
 				const fontStreamRef = descriptor.get(PDFName.of('FontFile2')) ?? descriptor.get(PDFName.of('FontFile3'));
 				expect(fontStreamRef).toBeDefined();
 
@@ -187,6 +193,14 @@ describe('FontEmbedder', () => {
 				expect(contents!.length).toBeGreaterThan(500);
 				expect(contents!.length).toBeLessThan(10_000);
 			}
+		});
+
+		it('should preserve the contained text', async () => {
+			const bytes = await fs.readFile(pdfFilename);
+			const originalLab = await PDFALab.from(bytes);
+			const originalText = await extractText(originalLab);
+
+			expect(await extractText(lab)).toBe(originalText);
 		});
 	});
 });

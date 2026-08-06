@@ -133,6 +133,9 @@ export class Lexer {
 			} else {
 				// Hexstring.
 				if (byte === 62) {
+					// An odd number of digits implies a trailing zero.
+					if (token.value.length % 2) token.value.push(48);
+
 					const hexvalues: number[] = [];
 					for (let j = 0; j < token.value.length - 1; j += 2) {
 						hexvalues.push(

@@ -1,5 +1,6 @@
 import type { OpenTypeFont } from '@pdfa-lab/fontkit';
 
+/** @internal */
 export interface FontFlagOptions {
 	fixedPitch?: boolean;
 	serif?: boolean;
@@ -59,9 +60,8 @@ export function deriveFontFlags(font: OpenTypeFont): number {
 
 		if (!isScript) {
 			const isSans = /sans|gothic|arial|helvetica|grotesk/i.test(psName);
-			const isExplicitSerif = /serif|roman|times|georgia|garamond|bodoni/i.test(
-				psName,
-			);
+			const isExplicitSerif =
+				/serif|roman|times|georgia|garamond|bodoni/i.test(psName);
 
 			// If it explicitly mentions serif or is not a known sans/monospace,
 			// fallback logically.
@@ -70,46 +70,47 @@ export function deriveFontFlags(font: OpenTypeFont): number {
 	}
 
 	const isItalic = !!(font.head?.macStyle?.italic || font.post?.italicAngle);
+	const isSymbolic = isAdobeStandardSymbolic(font);
 
 	return makeFontFlags({
 		fixedPitch: !!fixedPitch,
 		serif: isSerif,
-		symbolic: isAdobeStandardSymbolic(font),
+		symbolic: isSymbolic,
+		nonsymbolic: !isSymbolic,
 		script: isScript,
 		italic: isItalic,
 	});
 }
 
 /**
- * Adobe Standard Encoding Character Set (Unicodes)
- * Basic ASCII printable range (0x20-0x7E) plus standard Latin-1 extensions.
+ * PDF /Flags Bit 3 (Symbolic) vs Bit 6 (Nonsymbolic) check.
  */
 function isAdobeStandardSymbolic(font: OpenTypeFont): boolean {
-	// 1. Check if the font uses a dedicated Symbol CMap (Platform 3, Encoding
-	// 0). Symbol fonts (like Webdings, Wingdings, Symbol) use this CMap
-	// platform/encoding.
+	// 1. Check if the font uses a dedicated Windows Symbol CMap (Platform 3
+	// Encoding 0).
+	//
+	// Pure symbol fonts (like Webdings, Wingdings, Symbol) use this specific
+	// CMap subtable.
 	const hasSymbolCMap = font.cmap.tables.some(
-		(t) =>
-			(t.platformID === 3 && t.encodingID === 0) ||
-			(t.platformID === 1 &&
-				t.encodingID === 0 &&
-				font.post?.isFixedPitch === 0),
+		(t) => t.platformID === 3 && t.encodingID === 0,
 	);
 
 	if (hasSymbolCMap) {
 		return true;
 	}
 
-	// 2. Check character coverage via code points in the primary CMap
-	// If the font contains code points far outside standard Latin, it must be marked Symbolic.
-	const unicodePoints = font.characterSet; // or Array.from(font.cmap.getCoverage())
+	// 2. Check character coverage via code points in the primary CMap.
+	// If the font contains code points far outside standard Latin, it must be
+	// marked Symbolic.
+	const unicodePoints = font.characterSet;
 
 	for (const codePoint of unicodePoints) {
-		// Allow ASCII, Latin-1 Supplement, and standard Punctuation/Latin Extended-A
+		// Allow ASCII, Latin-1 Supplement, and standard Punctuation/Latin
+		// Extended-A.
 		const isStandardLatin =
-			(codePoint >= 0x0020 && codePoint <= 0x007e) || // ASCII Printable
-			(codePoint >= 0x00a0 && codePoint <= 0x00ff) || // Latin-1 Supplement
-			(codePoint >= 0x0100 && codePoint <= 0x017f); // Latin Extended-A
+			(codePoint >= 0x0020 && codePoint <= 0x007e) || // ASCII Printable.
+			(codePoint >= 0x00a0 && codePoint <= 0x00ff) || // Latin-1 Supplement.
+			(codePoint >= 0x0100 && codePoint <= 0x017f); // Latin Extended-A.
 
 		if (!isStandardLatin) {
 			// Found non-standard Latin, CJK, Math, or PUA character -> Symbolic!

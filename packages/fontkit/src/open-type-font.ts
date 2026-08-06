@@ -175,8 +175,8 @@ export interface OpenTypeCFF1Font
 }
 
 /**
- * OpenType font with verified PostScript Compact Font Format (CFF) components,
- * legacy version.
+ * OpenType font with verified PostScript Compact Font Format (CFF) version
+ * 2 components.
  */
 export interface OpenTypeCFF2Font
 	extends Omit<Font, OpenTypeHeaderKeys>,

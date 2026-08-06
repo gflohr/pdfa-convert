@@ -192,7 +192,7 @@ endbfrange`;
 
 		it('should discard invalid ligature specifications', () => {
 			const source = `
-1beginbfrange
+1 beginbfrange
 <005f> <0061> I should not be here!
 endbfrange`;
 			const cmap = new CMapMapper(source);

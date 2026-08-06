@@ -58,6 +58,7 @@ export function patchStream(
 	if (compress) {
 		const compressed = context.flateStream(newBytes as Uint8Array);
 		stream.dict.set(PDFName.of('Filter'), PDFName.of('FlateDecode'));
+		stream.dict.delete(PDFName.of('DecodeParms'));
 		stream.dict.set(
 			PDFName.of('Length'),
 			PDFNumber.of(compressed.contents.length),
@@ -66,5 +67,7 @@ export function patchStream(
 	} else {
 		stream.updateContents(newBytes);
 		stream.dict.delete(PDFName.of('Filter'));
+		stream.dict.delete(PDFName.of('DecodeParms'));
+		stream.dict.set(PDFName.of('Length'), PDFNumber.of(newBytes.length));
 	}
 }

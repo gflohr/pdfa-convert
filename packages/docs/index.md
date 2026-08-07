@@ -7,6 +7,9 @@ hero:
   text: "High-quality PDF tools for Node and the Browser"
   actions:
     - theme: alt
+      text: '@pdfa-lab/core'
+      link: ./pdfa-lab-core/introduction/about-pdfa-lab
+    - theme: alt
       text: '@pdfa-lab/fontkit'
       link: ./fontkit/introduction/what-is-fontkit
 

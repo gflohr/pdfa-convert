@@ -22,6 +22,26 @@ export default defineConfig({
 
 		sidebar: [
 			{
+				text: '@pdfa-lab/core',
+				link: '/pdfa-lab-core/introduction/about-pdfa-lab',
+				items: [
+					{
+						text: 'Introduction',
+						collapsed: true,
+						items: [
+							{
+								text: 'About @pdfa-lab/core',
+								link: '/pdfa-lab-core/introduction/about-pdfa-lab',
+							},
+							{
+								text: 'Installation',
+								link: './installation',
+							},
+						],
+					},
+				],
+			},
+			{
 				text: '@pdfa-lab/fontkit',
 				link: '/fontkit',
 				items: [

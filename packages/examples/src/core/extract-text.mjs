@@ -6,18 +6,18 @@ if (process.argv.length < 3) {
 	process.exit(1);
 }
 
-extract(process.argv[2]!).catch(err => {
+extract(process.argv[2]).catch(err => {
 	console.error(`Extracting text failed: ${err}`);
 	process.exit(1);
 });
 
-async function extract(filename: string) {
+async function extract(filename) {
 	const bytes = await fs.readFile(filename);
 	const lab = await PDFALab.from(bytes);
 	const blocks = await lab.extractText();
 
 	for (let i = 0; i < blocks.length; ++i) {
-		const block = blocks[i]!;
+		const block = blocks[i];
 
 		console.log(`# Block ${i + 1}\n`);
 		console.log(`Page ${block.pageNumber + 1}`);

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import fontkitTypedocSidebar from '../fontkit/api/typedoc-sidebar.json';
+import coreTypedocSidebar from '../pdfa-lab-core/api/typedoc-sidebar.json';
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
@@ -38,6 +39,20 @@ export default defineConfig({
 								link: './installation',
 							},
 						],
+					},
+					{
+						text: 'Examples',
+						collapsed: true,
+						items: [
+							{
+								text: 'Extracting Text',
+								link: '/pdfa-lab-core/examples/extracting-text',
+							}
+						],
+					},
+					{
+						text: 'API',
+						items: coreTypedocSidebar,
 					},
 				],
 			},

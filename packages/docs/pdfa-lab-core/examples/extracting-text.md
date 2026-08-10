@@ -7,166 +7,146 @@ number of edge cases.
 
 == TypeScript
 ```TypeScript
-import { PDFALab } from '@pdfa-lab/core'
-const run = font.layout('Hello, world!');
-console.log(`Number of glyphs: ${run.glyphs.length}`);
+import { PDFALab } from '@pdfa-lab/core';
 
-let totalWidth = 0;
-for (let i = 0; i < run.glyphs.length; i++) {
-	const glyph = run.glyphs[i]!;
-	const position = run.positions[i]!;
+extract().catch(err => {
+	console.error(`Extracting text failed: ${err}`);
+	process.exit(1);
+});
 
-	totalWidth += position.xAdvance;
+async function extract() {
+	const url = 'https://github.com/gflohr/pdfa-lab/raw/refs/heads/main/assets/pdfs/type1-fonts-missing.pdf';
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+	}
 
-	console.log(
-		`Glyph #${i}: ID=${glyph.id}, Name=${glyph.name}, xAdvance=${position.xAdvance}, xOffset=${position.xOffset}`,
-	);
-}
+	const arrayBuffer = await response.arrayBuffer();
+	const bytes = new Uint8Array(arrayBuffer);
 
-console.log(`\nTotal Advance Width (font units): ${totalWidth}`);
+	const lab = await PDFALab.from(bytes);
+	const blocks = await lab.extractText();
 
-const fontSize = 16;
-const widthInPoints = (totalWidth / font.unitsPerEm) * fontSize;
-console.log(`Total Width at ${fontSize}pt: ${widthInPoints.toFixed(2)}pt`);
-```
+	for (let i = 0; i < blocks.length; ++i) {
+		const block = blocks[i];
 
-== ES6
-```JavaScript
-const run = font.layout('Hello, world!');
-console.log(`Number of glyphs: ${run.glyphs.length}`);
-
-let totalWidth = 0;
-for (let i = 0; i < run.glyphs.length; i++) {
-	const glyph = run.glyphs[i];
-	const position = run.positions[i];
-
-	totalWidth += position.xAdvance;
-
-	console.log(
-		`Glyph #${i}: ID=${glyph.id}, Name=${glyph.name}, xAdvance=${position.xAdvance}, xOffset=${position.xOffset}`,
-	);
-}
-
-console.log(`\nTotal Advance Width (font units): ${totalWidth}`);
-
-const fontSize = 16;
-const widthInPoints = (totalWidth / font.unitsPerEm) * fontSize;
-console.log(`Total Width at ${fontSize}pt: ${widthInPoints.toFixed(2)}pt`);
-```
-
-== CommonJS
-```JavaScript
-const run = font.layout('Hello, world!');
-console.log(`Number of glyphs: ${run.glyphs.length}`);
-
-let totalWidth = 0;
-for (let i = 0; i < run.glyphs.length; i++) {
-	const glyph = run.glyphs[i];
-	const position = run.positions[i];
-
-	totalWidth += position.xAdvance;
-
-	console.log(
-		`Glyph #${i}: ID=${glyph.id}, Name=${glyph.name}, xAdvance=${position.xAdvance}, xOffset=${position.xOffset}`,
-	);
-}
-
-console.log(`\nTotal Advance Width (font units): ${totalWidth}`);
-
-const fontSize = 16;
-const widthInPoints = (totalWidth / font.unitsPerEm) * fontSize;
-console.log(`Total Width at ${fontSize}pt: ${widthInPoints.toFixed(2)}pt`);
-```
-
-:::
-
-A [GlyphRun](../api/classes/GlyphRun) has properties `glyphs` and `positions`
-which are arrays of identical length. You can use these to get the metrics
-of the rendered layout.
-
-The above example assumes text using a Latin script with left-to-right
-writing direction. But the library can also handle more complex scripts like
-Arabic:
-
-:::tabs key:language variant:code
-
-== TypeScript
-```TypeScript
-const text = 'مرحبا بالعالم'; // "Hello World" in Arabic.
-
-const features = {
-	init: true, // Initial forms.
-	medi: true, // Medial forms.
-	fina: true, // Final forms.
-	liga: true, // Standard ligatures.
-};
-
-const run = font.layout(text, features, 'arab');
-console.log(`Writing direction: ${run.direction}`);
-
-for (let i = 0; i < run.glyphs.length; i++) {
-	const glyph = run.glyphs[i]!;
-	const position = run.positions[i]!;
-
-	console.log(
-		`Glyph #${i}: ID=${glyph.id}, Name=${glyph.name}, xAdvance=${position.xAdvance}, xOffset=${position.xOffset}`,
-	);
+		console.log(`# Block ${i + 1}\n`);
+		console.log(`Page ${block.pageNumber + 1}`);
+		console.log(`Font name: ${block.font.fontName}`);
+		console.log(`Base font name: ${block.font.baseFont}`);
+		console.log(`Text: ${block.text}`);
+		console.log('\n');
+	}
 }
 ```
 
 == ES6
 ```JavaScript
-const text = 'مرحبا بالعالم'; // "Hello World" in Arabic.
+import { PDFALab } from '@pdfa-lab/core';
 
-const features = {
-	init: true, // Initial forms.
-	medi: true, // Medial forms.
-	fina: true, // Final forms.
-	liga: true, // Standard ligatures.
-};
+extract().catch(err => {
+	console.error(`Extracting text failed: ${err}`);
+	process.exit(1);
+});
 
-const run = font.layout(text, features, 'arab');
-console.log(`Writing direction: ${run.direction}`);
+async function extract() {
+	const url = 'https://github.com/gflohr/pdfa-lab/raw/refs/heads/main/assets/pdfs/type1-fonts-missing.pdf';
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+	}
 
-for (let i = 0; i < run.glyphs.length; i++) {
-	const glyph = run.glyphs[i];
-	const position = run.positions[i];
+	const arrayBuffer = await response.arrayBuffer();
+	const bytes = new Uint8Array(arrayBuffer);
 
-	console.log(
-		`Glyph #${i}: ID=${glyph.id}, Name=${glyph.name}, xAdvance=${position.xAdvance}, xOffset=${position.xOffset}`,
-	);
+	const lab = await PDFALab.from(bytes);
+	const blocks = await lab.extractText();
+
+	for (let i = 0; i < blocks.length; ++i) {
+		const block = blocks[i];
+
+		console.log(`# Block ${i + 1}\n`);
+		console.log(`Page ${block.pageNumber + 1}`);
+		console.log(`Font name: ${block.font.fontName}`);
+		console.log(`Base font name: ${block.font.baseFont}`);
+		console.log(`Text: ${block.text}`);
+		console.log('\n');
+	}
 }
 ```
 
 == CommonJS
 ```JavaScript
-const text = 'مرحبا بالعالم'; // "Hello World" in Arabic.
+const { PDFALab } = require('@pdfa-lab/core');
 
-const features = {
-	init: true, // Initial forms.
-	medi: true, // Medial forms.
-	fina: true, // Final forms.
-	liga: true, // Standard ligatures.
-};
+extract().catch(err => {
+	console.error(`Extracting text failed: ${err}`);
+});
 
-const run = font.layout(text, features, 'arab');
-console.log(`Writing direction: ${run.direction}`);
+async function extract() {
+	const url = 'https://github.com/gflohr/pdfa-lab/raw/refs/heads/main/assets/pdfs/type1-fonts-missing.pdf';
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+	}
 
-for (let i = 0; i < run.glyphs.length; i++) {
-	const glyph = run.glyphs[i];
-	const position = run.positions[i];
+	const arrayBuffer = await response.arrayBuffer();
+	const bytes = new Uint8Array(arrayBuffer);
 
-	console.log(
-		`Glyph #${i}: ID=${glyph.id}, Name=${glyph.name}, xAdvance=${position.xAdvance}, xOffset=${position.xOffset}`,
-	);
+	const lab = await PDFALab.from(bytes);
+	const blocks = await lab.extractText();
+
+	for (let i = 0; i < blocks.length; ++i) {
+		const block = blocks[i];
+
+		console.log(`# Block ${i + 1}\n`);
+		console.log(`Page ${block.pageNumber + 1}`);
+		console.log(`Font name: ${block.font.fontName}`);
+		console.log(`Base font name: ${block.font.baseFont}`);
+		console.log(`Text: ${block.text}`);
+		console.log('\n');
+	}
 }
 ```
 
 :::
 
-The code will output "rtl" as the writing direction.
+The method [`extractText()`](/pdfa-lab-core/api/classes/PDFALab.html#extracttext)
+returns the extracted text in blocks as they appear in the PDF. This is not
+necessarily the visual order. Each text rendering instruction can specify
+coordinates, where the particular piece of text should be rendered.
 
-Note that for Right-to-Left (RTL) layout runs, the order of glyphs in
-`run.glyphs` reflects the visual rendering order from left to right. In other
-words: The last letter of the Arabic sentence is represented by the first
-glyph.
+The output should be this:
+
+```text
+# Block 1
+
+Page 1
+Font name: Helvetica
+Base font name: Helvetica
+Text: This page uses Helvetica.
+
+
+# Block 2
+
+Page 2
+Font name: Times-Italic
+Base font name: Times-Italic
+Text: ÄÖÜäöüß in Times-Roman.
+
+
+# Block 3
+
+Page 3
+Font name: Symbol
+Base font name: Symbol
+Text: ΑαΒβΓγ∆δ
+
+
+# Block 4
+
+Page 4
+Font name: ZapfDingbats
+Base font name: ZapfDingbats
+Text: ✂✈✉☎✔✘★
+```

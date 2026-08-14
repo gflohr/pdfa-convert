@@ -51,7 +51,11 @@ export default defineConfig({
 							{
 								text: 'Extracting Text',
 								link: '/pdfa-lab-core/examples/extracting-text',
-							}
+							},
+							{
+								text: 'Listing Fonts',
+								link: '/pdfa-lab-core/examples/list-fonts',
+							},
 						],
 					},
 					{

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://typedoc.org/schema.json",
-	"entryPoints": ["./src/pdfa-lab.ts"],
+	"entryPoints": ["./src/index.ts"],
 	"plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
 	"out": "../docs/pdfa-lab-core/api",
 	"excludeNotDocumented": false,

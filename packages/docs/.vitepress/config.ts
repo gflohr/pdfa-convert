@@ -38,6 +38,10 @@ export default defineConfig({
 								text: 'Installation',
 								link: './installation',
 							},
+							{
+								text: 'Basic Usage',
+								link: './basic-usage',
+							},
 						],
 					},
 					{

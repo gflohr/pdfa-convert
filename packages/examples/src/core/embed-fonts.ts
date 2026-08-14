@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import { type FontData, FontMap, PDFALab } from '@pdfa-lab/core';
+import { PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 
 embedFonts(process.argv[2]!).catch(err => {
@@ -30,7 +30,8 @@ async function embedFonts(pdfFilename: string) {
 	const fontMapping = {
 		Helvetica: {
 			// Unless the code runs in the browser, you can also just specify the
-			// filename of a font file.
+			// filename of a font file.  The library will load the font data
+			// from that file.
 			source: notoBytes,
 
 			// If the font file is a TrueType collection (`.ttc`) or a Datafork

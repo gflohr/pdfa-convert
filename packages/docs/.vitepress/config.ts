@@ -49,6 +49,10 @@ export default defineConfig({
 						collapsed: true,
 						items: [
 							{
+								text: 'Embedding Fonts',
+								link: '/pdfa-lab-core/examples/embed-fonts',
+							},
+							{
 								text: 'Extracting Text',
 								link: '/pdfa-lab-core/examples/extracting-text',
 							},

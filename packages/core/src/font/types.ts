@@ -76,6 +76,8 @@ export type FontData = {
 
 	/**
 	 * The filename of the font file or font collection.
+	 *
+	 * @internal
 	 */
 	filename?: string;
 };

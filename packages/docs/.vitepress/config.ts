@@ -23,6 +23,17 @@ export default defineConfig({
 
 		sidebar: [
 			{
+				text: 'pdfa-lab (CLI)',
+				link: '/cli/about-pdfa-lab',
+				items: [
+					{
+						text: 'About pdfa-lab',
+						collapsed: true,
+						link: '/cli/about-pdfa-lab',
+					},
+				],
+			},
+			{
 				text: '@pdfa-lab/core',
 				link: '/pdfa-lab-core/introduction/about-pdfa-lab',
 				items: [

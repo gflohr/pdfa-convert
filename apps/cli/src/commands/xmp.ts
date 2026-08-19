@@ -27,7 +27,7 @@ export class XMPCommand implements Command {
 		return options;
 	}
 
-	private async doRun(input: Buffer, configOptions: ConfigOptions): number {
+	private async doRun(input: Buffer, configOptions: ConfigOptions): Promise<number> {
 		const lab = await PDFALab.from(input);
 
 		const xml = await lab.extractXMP();

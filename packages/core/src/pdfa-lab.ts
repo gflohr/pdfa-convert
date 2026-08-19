@@ -1,4 +1,5 @@
 import { PDFDocument, PDFName, PDFRef, type PDFStream } from '@cantoo/pdf-lib';
+import type { FontkitAPI } from '@pdfa-lab/fontkit';
 import collectFonts from './font/collect-fonts.js';
 import { collectResources, type FontUsage } from './font/collect-resources.js';
 import collectSubsetPrefixes from './font/collect-subset-prefixes.js';
@@ -7,7 +8,6 @@ import { patchStream } from './font/patch-stream.js';
 import type { FontInfo, FontMap, PatchSet } from './font/types.js';
 import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
 import { extractText, type TextBlock } from './text/extract-text.js';
-import { FontkitAPI } from '@pdfa-lab/fontkit';
 
 /**
  * Options for embedding fonts.
@@ -34,7 +34,7 @@ export interface FontEmbedOptions {
 	 */
 
 	platform?: string;
-};
+}
 
 /**
  * Options for converting to PDF/A.
@@ -49,6 +49,11 @@ export interface PDFAConversionOptions {
 	 * Options for font embedding.
 	 */
 	fontEmbedOptions?: FontEmbedOptions;
+
+	/**
+	 * A fontkit instance. This is mandatory, if fonts have to be embedded.
+	 */
+	fontkit?: FontkitAPI;
 }
 
 export class PDFALab {
@@ -165,9 +170,7 @@ export class PDFALab {
 	 *
 	 * @param options
 	 */
-	public async makePDFA(
-		options: PDFAConversionOptions = {}
-	): Promise<void> {
+	public async makePDFA(options: PDFAConversionOptions = {}): Promise<void> {
 		options.embedFonts ??= true;
 		options.fontEmbedOptions ??= {};
 	}
@@ -185,7 +188,7 @@ export class PDFALab {
 	 * @param references can be determined by `collectFonts()`
 	 */
 	public async embedFonts(
-		fontkit: unknown,
+		fontkit: FontkitAPI,
 		options: FontEmbedOptions = {},
 		references?: PDFRef[],
 	) {

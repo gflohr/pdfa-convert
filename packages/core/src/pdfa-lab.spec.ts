@@ -127,7 +127,7 @@ describe('PDFALab', () => {
 				.spyOn(collectFont, 'default')
 				.mockReturnValue(fontInfoMap);
 
-			await lab.embedFonts();
+			await lab.embedFonts(fontkit);
 
 			expect(collectMock).toHaveBeenCalledTimes(1);
 		});
@@ -212,8 +212,6 @@ describe('PDFALab', () => {
 			expect(options).toStrictEqual(defaultOptions);
 		});
 
-		it.skip('should embed all missing fonts', async () => {
-
-		});
+		it.skip('should embed all missing fonts', async () => {});
 	});
 });

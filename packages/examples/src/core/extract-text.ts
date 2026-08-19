@@ -6,7 +6,7 @@ if (process.argv.length < 3) {
 	process.exit(1);
 }
 
-extract(process.argv[2]!).catch(err => {
+extract(process.argv[2]!).catch((err) => {
 	console.error(`Extracting text failed: ${err}`);
 	process.exit(1);
 });
@@ -27,4 +27,3 @@ async function extract(filename: string) {
 		console.log('\n');
 	}
 }
-

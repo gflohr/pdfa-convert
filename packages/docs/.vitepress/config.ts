@@ -67,11 +67,11 @@ export default defineConfig({
 							},
 							{
 								text: 'Installation',
-								link: './installation',
+								link: '/pdfa-lab-core/introduction/installation',
 							},
 							{
 								text: 'Basic Usage',
-								link: './basic-usage',
+								link: '/pdfa-lab-core/introduction/basic-usage',
 							},
 						],
 					},
@@ -109,19 +109,19 @@ export default defineConfig({
 						items: [
 							{
 								text: 'What is fontkit?',
-								link: './what-is-fontkit'
+								link: '/fontkit/introduction/what-is-fontkit'
 							},
 							{
 								text: 'Installation',
-								link: './installation',
+								link: '/fontkit/introduction/installation',
 							},
 							{
 								text: 'Basic Usage',
-								link: './basic-usage',
+								link: '/fontkit/introduction/basic-usage',
 							},
 							{
 								text: 'Security',
-								link: './security',
+								link: '/fontkit/introduction/security',
 							},
 						],
 					},

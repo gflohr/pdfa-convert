@@ -64,7 +64,7 @@ describe('Text Command', () => {
 		expect(result).toBe(1);
 	});
 
-	it('run() should call extract and return 0 on success', async () => {
+	it('run() should call extractText and return 0 on success', async () => {
 		const extractTextMock = vi.fn().mockReturnValue([]);
 		(PDFALab.from as Mock).mockResolvedValue({
 			extractText: extractTextMock,

@@ -362,4 +362,8 @@ export class PDFALab {
 
 		return await extractText(this.pdfDocument, this.fonts, this.fontUsage);
 	}
+
+	public async extractXMP(): Promise<string | null> {
+		return null;
+	}
 }

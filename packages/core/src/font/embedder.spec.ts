@@ -11,7 +11,7 @@ import {
 	PDFRef,
 	PDFStream,
 } from '@cantoo/pdf-lib';
-import fontkit from '@pdfa-lab/fontkit';
+import { fontkit } from '@pdfa-lab/fontkit';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { type FontEmbedOptions, PDFALab } from '../pdfa-lab.js';
 import type { GlyphBlock } from '../text/extract-glyphs.js';

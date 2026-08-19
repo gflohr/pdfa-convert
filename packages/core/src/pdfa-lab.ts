@@ -40,6 +40,21 @@ export interface FontEmbedOptions {
 	fontkit?: unknown;
 };
 
+/**
+ * Options for converting to PDF/A.
+ */
+export interface PDFAConversionOptions {
+	/**
+	 * Whether to embed fonts. Defaults to `true`.
+	 */
+	embedFonts?: boolean;
+
+	/**
+	 * Options for font embedding.
+	 */
+	fontEmbedOptions?: FontEmbedOptions;
+}
+
 export class PDFALab {
 	private fonts: Map<string, FontInfo> | undefined;
 	private fontUsage: FontUsage[] | undefined;
@@ -147,6 +162,18 @@ export class PDFALab {
 		}
 
 		return new PDFALab(pdfDoc);
+	}
+
+	/**
+	 * Convert a document to PDF/A.
+	 *
+	 * @param options
+	 */
+	public async makePDFA(
+		options: PDFAConversionOptions = {}
+	): Promise<void> {
+		options.embedFonts ??= true;
+		options.fontEmbedOptions ??= {};
 	}
 
 	/**

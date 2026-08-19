@@ -94,6 +94,40 @@ async function genType1FontsMissing(): Promise<void> {
 	console.log(`written ${filename}`);
 }
 
+async function genAllFeaturesPDFA(): Promise<void> {
+	const draw = async (
+		pdfDoc: PDFDocument,
+		label: string,
+		font: StandardFonts | Uint8Array<ArrayBufferLike>,
+	): Promise<void> => {
+		const page = pdfDoc.addPage();
+
+		const f = await pdfDoc.embedFont(font);
+
+		page.drawText(label, {
+			x: 50,
+			y: page.getSize().height - 50,
+			size: 14,
+			font: f,
+			color: rgb(0, 0, 0),
+		});
+	};
+
+	const pdfDoc = await PDFDocument.create();
+
+	const text = `
+This document requires all currently implemented PDF/A conversion features:
+
+- embedding of missing fonts
+`;
+	await draw(pdfDoc, text, StandardFonts.Helvetica);
+
+	const bytes = await pdfDoc.save();
+	const filename = './assets/pdfs/all-features-pdfa.pdf';
+	await fs.writeFile(filename, bytes);
+	console.log(`written ${filename}`);
+}
+
 const encodingTest = `q
 BT
 0 0 0 rg
@@ -240,6 +274,7 @@ async function genAll() {
 	await genStandardFonts();
 	await genType1FontsMissing();
 	await genEncodingTest();
+	await genAllFeaturesPDFA();
 }
 
 genAll().catch((e) => {

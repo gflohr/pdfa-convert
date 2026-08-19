@@ -1,7 +1,4 @@
-# Extracting Text
-
-Extracting text from PDFs is a best-effort approach and may still miss a
-number of edge cases.
+# Listing Fonts
 
 :::tabs key:language variant:code
 
@@ -45,7 +42,7 @@ async function listFonts() {
 import { PDFALab } from '@pdfa-lab/core';
 
 listFonts().catch(err => {
-	console.error(`Extracting text failed: ${err}`);
+	console.error(`Listing fonts failed: ${err}`);
 	process.exit(1);
 });
 
@@ -80,7 +77,7 @@ async function listFonts() {
 const { PDFALab } = require('@pdfa-lab/core');
 
 listFonts().catch(err => {
-	console.error(`Extracting text failed: ${err}`);
+	console.error(`Listing fonts failed: ${err}`);
 	process.exit(1);
 });
 

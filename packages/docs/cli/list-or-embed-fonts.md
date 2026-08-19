@@ -52,7 +52,7 @@ pdfa-lab font --embed --input FILENAME.pdf
 Embed fonts that are currently missing in the document as a subset font. It
 is currently not possible to embed the entire font.
 
-Most of the times, the software will be able to find suitable fonts on the 
+Most of the time, the software will be able to find suitable fonts on the 
 system. It does this by following this strategy:
 
 1. It uses a font that was specified on the command-line, see `--font-map` under [Options](#options) below! 
@@ -80,7 +80,7 @@ Example for a TrueType collection:
 pdfa-lab font --embed --font-map Times-Roman,/usr/share/fonts/Courier.ttc,Regular
 ```
 
-This will replace the font Times-Romand with the font "Regular" from the
+This will replace the font "Times-Romand" with the font "Regular" from the
 TrueType collection `/usr/share/fonts/Courier.ttc`.
 
 ## Options

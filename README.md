@@ -79,7 +79,7 @@ is unmaintained and known to have bugs that prevent font embedding from
 working reliably. The original upstream
 [`fontkit`](https://www.npmjs.com/package/fontkit) is only semi-maintained.
 Besides, both packages are hard to work with, because they are written in
-JavaSCript.
+JavaScript.
 
 This project contains a drop-in replacement for `fontkit`, see its
 [README](./packages/fontkit/README.md). The replacement contains all known

@@ -42,7 +42,7 @@ code.
 
 PDFs produced by scanners usually do not contain structured, textual
 information but only bitmaps. In this case, the textual information cannot be
-extracted with `pdf-lab`.
+extracted with `pdfa-lab`.
 
 The only way to retrieve the textual content is to use optical character
 recognition (OCR).

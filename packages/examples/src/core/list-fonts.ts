@@ -7,7 +7,7 @@ if (process.argv.length < 3) {
 }
 
 listFonts(process.argv[2]!).catch(err => {
-	console.error(`Extracting text failed: ${err}`);
+	console.error(`Listing fonts failed: ${err}`);
 	process.exit(1);
 });
 

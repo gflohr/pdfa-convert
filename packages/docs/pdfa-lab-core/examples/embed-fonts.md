@@ -8,19 +8,19 @@ fonts in a document.
 Note! If you [convert a PDF to PDF/A](./convert-to-pdfa.html), this happens
 automatically.
 
-## Reparing Broken PDFs by Embedding Fonts
+## Repairing Broken PDFs by Embedding Fonts
 
 Modern PDF viewers render PDFs with non-embedded fonts only if the font is
 one of the 14 standard PDF Type 1 fonts:
 
 * Times-Roman
 * Times-Bold
-* Time-Italic
-* Time-BoldItalic
-* Courier
+* Times-Italic
+* Times-BoldItalic
 * Courier
 * Courier-Bold
 * Courier-Oblique
+* Courier-BoldOblique
 * Helvetica
 * Helvetica-Bold
 * Helvetica-Oblique
@@ -32,7 +32,7 @@ Theoretically, other fonts, notably TrueType fonts, can also be referenced by
 name, but documents using this features will appear broken because neither
 will PDF viewers render them, nor printers print them correctly.
 
-With `@pdfa-lib/core`, you can embed these fonts, no matter which type they
+With `@pdfa-lab/core`, you can embed these fonts, no matter which type they
 are.
 
 ## Specifying Font Data
@@ -62,7 +62,7 @@ import { PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 
 embedFonts(process.argv[2]!).catch(err => {
-	console.error(`Extracting text failed: ${err}`);
+	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
 
@@ -105,7 +105,7 @@ import { PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 
 embedFonts(process.argv[2]!).catch(err => {
-	console.error(`Extracting text failed: ${err}`);
+	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
 
@@ -148,7 +148,7 @@ const { PDFALab } = require('@pdfa-lab/core');
 const { fontkit } = require('@pdfa-lab/fontkit');
 
 embedFonts(process.argv[2]!).catch(err => {
-	console.error(`Extracting text failed: ${err}`);
+	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
 

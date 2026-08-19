@@ -3,7 +3,7 @@
 The TypeScript library `@pdfa-lab/core` is a supplement to
 [`@cantoo/pdf-lib`](https://github.com/cantoo-scribe/pdf-lib) that adds
 [PDF/A](https://pdfa.org/) functionality. While the preferred `pdf-lib`
-implementation is the the actively maintained fork
+implementation is the actively maintained fork
 [`@cantoo/pdf-lib`](https://github.com/cantoo-scribe/pdf-lib) by
 [cantoo](https://www.cantoo.fr/), it should also work with the
 [original `pdf-lib`](https://github.com/Hopding/pdf-lib), which is currently

@@ -1,7 +1,7 @@
 # About `pdfa-lab`
 
 The `pdfa-lab` toolchain is a software suite for advanced PDF manipulations.
-It consists of a command-line interface, a TypeScript/JavaScrippt library
+It consists of a command-line interface, a TypeScript/JavaScript library
 [`@pdfa-lab/core`](/pdfa-lab-core) and a font processing library
 [`@pdfa-lab/fontkit`](/fontkit), based on prior work by
 [Devon Gavett](https://github.com/devongavett).

@@ -4,7 +4,7 @@ import { PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 
 embedFonts(process.argv[2]!).catch(err => {
-	console.error(`Extracting text failed: ${err}`);
+	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
 

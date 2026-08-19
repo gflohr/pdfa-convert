@@ -4,21 +4,15 @@ import {
 	decodePDFRawStream,
 	PDFArray,
 	PDFDict,
-	type PDFDocument,
 	PDFName,
 	type PDFObject,
 	PDFRawStream,
-	PDFRef,
 	PDFStream,
 } from '@cantoo/pdf-lib';
 import { fontkit } from '@pdfa-lab/fontkit';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { type FontEmbedOptions, PDFALab } from '../pdfa-lab.js';
-import type { GlyphBlock } from '../text/extract-glyphs.js';
-import { FontEmbedder } from './embedder.js';
-import type { FontInfo, FontMap } from './types.js';
-
-class TestFontEmbedder extends FontEmbedder {}
+import { PDFALab } from '../pdfa-lab.js';
+import type { FontMap } from './types.js';
 
 const rootDir = path.resolve(import.meta.dirname, '..', '..', '..', '..');
 const pdfDir = path.resolve(rootDir, 'assets', 'pdfs');
@@ -54,32 +48,6 @@ async function extractText(lab: PDFALab) {
 }
 
 describe('FontEmbedder', () => {
-	describe('Constructor Guard', () => {
-		const pdfDoc = {} as PDFDocument;
-
-		const fontInfo: FontInfo = {
-			baseFont: 'Helvetica',
-			fontName: 'Helvetica',
-			ref: PDFRef.of(7),
-			embedded: false,
-			subtype: 'TrueType',
-		} as FontInfo;
-
-		it('throws if fontkit is missing', () => {
-			const options = {} as FontEmbedOptions;
-
-			expect(() => {
-				new TestFontEmbedder(
-					pdfDoc,
-					fontInfo,
-					[] as GlyphBlock[],
-					new Set<string>(),
-					options,
-				);
-			}).toThrow('You have to pass a fontkit instance in the embed options!');
-		});
-	});
-
 	describe('Type 1 Fonts', () => {
 		const pdfFilename = path.resolve(pdfDir, 'standard-fonts.pdf');
 		let lab: PDFALab;
@@ -132,8 +100,7 @@ describe('FontEmbedder', () => {
 					source: path.resolve(notoDir, 'NotoSansSymbols2-Regular.ttf'),
 				},
 			};
-			await type1Lab.embedFonts({
-				fontkit,
+			await type1Lab.embedFonts(fontkit, {
 				fontMap,
 				compress: false,
 			});
@@ -159,7 +126,7 @@ describe('FontEmbedder', () => {
 			]);
 		});
 
-		it('should attach a valid /ToUnicode CMap stream to every embedded Type0 font', async () => {
+		it('should attach a valid /ToUnicode CMap stream to every embedded Type 0 font', async () => {
 			const fonts = [...lab.collectFonts().values()];
 
 			for (const font of fonts) {
@@ -238,8 +205,7 @@ describe('FontEmbedder', () => {
 					source: path.resolve(notoDir, 'NotoSerif-Regular.ttf'),
 				},
 			};
-			await trueTypeLab.embedFonts({
-				fontkit,
+			await trueTypeLab.embedFonts(fontkit, {
 				fontMap,
 				compress: false,
 			});
@@ -325,7 +291,7 @@ describe('FontEmbedder', () => {
 		});
 	});
 
-	describe('Type0 Fonts', () => {
+	describe('Type 0 Fonts', () => {
 		const pdfFilename = path.resolve(pdfDir, 'type0-fonts-missing.pdf');
 		let lab: PDFALab;
 
@@ -341,8 +307,7 @@ describe('FontEmbedder', () => {
 					source: path.resolve(notoDir, 'NotoSerif-Regular.ttf'),
 				},
 			};
-			await type0Lab.embedFonts({
-				fontkit,
+			await type0Lab.embedFonts(fontkit, {
 				fontMap,
 				compress: false,
 			});
@@ -365,7 +330,7 @@ describe('FontEmbedder', () => {
 			]);
 		});
 
-		it('should attach a valid /ToUnicode CMap stream to every embedded Type0 font', async () => {
+		it('should attach a valid /ToUnicode CMap stream to every embedded Type 0 font', async () => {
 			const fonts = [...lab.collectFonts().values()];
 
 			for (const font of fonts) {

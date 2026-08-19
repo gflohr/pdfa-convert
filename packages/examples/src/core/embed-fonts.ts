@@ -44,8 +44,7 @@ async function embedFonts(pdfFilename: string) {
 		// fonts in the PDF on your system, add more font mappings here.
 	};
 
-	await lab.embedFonts({
-		fontkit,
+	await lab.embedFonts(fontkit, {
 		fontMap: fontMapping,
 	});
 

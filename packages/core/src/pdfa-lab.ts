@@ -7,6 +7,7 @@ import { patchStream } from './font/patch-stream.js';
 import type { FontInfo, FontMap, PatchSet } from './font/types.js';
 import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
 import { extractText, type TextBlock } from './text/extract-text.js';
+import { FontkitAPI } from '@pdfa-lab/fontkit';
 
 /**
  * Options for embedding fonts.
@@ -33,11 +34,6 @@ export interface FontEmbedOptions {
 	 */
 
 	platform?: string;
-
-	/**
-	 * A fontkit instance, see `@pdfa-lab/fontkit`.
-	 */
-	fontkit?: unknown;
 };
 
 /**
@@ -178,13 +174,18 @@ export class PDFALab {
 
 	/**
 	 * Embed multiple fonts, but only if they are not already embedded.
+	 *
+	 *
+	 *
 	 * If no references were passed, all currently missing fonts are
 	 * embedded.
 	 *
+	 * @param fontkit a fontkit instance
 	 * @param options control the font embedding
 	 * @param references can be determined by `collectFonts()`
 	 */
 	public async embedFonts(
+		fontkit: unknown,
 		options: FontEmbedOptions = {},
 		references?: PDFRef[],
 	) {
@@ -274,7 +275,7 @@ export class PDFALab {
 				options,
 			);
 
-			const patchSets = await embedder.embed();
+			const patchSets = await embedder.embed(fontkit as FontkitAPI);
 			allPatchSets.push(...patchSets);
 		}
 

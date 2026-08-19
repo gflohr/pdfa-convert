@@ -61,12 +61,12 @@ import * as fs from 'node:fs/promises';
 import { PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 
-embedFonts(process.argv[2]!).catch(err => {
+embedFonts().catch(err => {
 	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
 
-async function embedFonts(pdfFilename: string) {
+async function embedFonts() {
 	const url = 'https://github.com/gflohr/pdfa-lab/raw/refs/heads/main/assets/pdfs/standard-fonts-demo.pdf';
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -74,7 +74,7 @@ async function embedFonts(pdfFilename: string) {
 	}
 
 	const arrayBuffer = await response.arrayBuffer();
-	const bytes = new Uint8Array(arrayBuffer);
+	const pdfBytes = new Uint8Array(arrayBuffer);
 	const lab = await PDFALab.from(pdfBytes);
 
 	// We only specify a font for 'Helvetica'.
@@ -104,12 +104,12 @@ import * as fs from 'node:fs/promises';
 import { PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 
-embedFonts(process.argv[2]!).catch(err => {
+embedFonts().catch(err => {
 	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
 
-async function embedFonts(pdfFilename: string) {
+async function embedFonts() {
 	const url = 'https://github.com/gflohr/pdfa-lab/raw/refs/heads/main/assets/pdfs/standard-fonts-demo.pdf';
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -117,7 +117,7 @@ async function embedFonts(pdfFilename: string) {
 	}
 
 	const arrayBuffer = await response.arrayBuffer();
-	const bytes = new Uint8Array(arrayBuffer);
+	const pdfBytes = new Uint8Array(arrayBuffer);
 	const lab = await PDFALab.from(pdfBytes);
 
 	// We only specify a font for 'Helvetica'.
@@ -147,12 +147,12 @@ const fs = require('node:fs/promises');
 const { PDFALab } = require('@pdfa-lab/core');
 const { fontkit } = require('@pdfa-lab/fontkit');
 
-embedFonts(process.argv[2]!).catch(err => {
+embedFonts().catch(err => {
 	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
 
-async function embedFonts(pdfFilename: string) {
+async function embedFonts() {
 	const url = 'https://github.com/gflohr/pdfa-lab/raw/refs/heads/main/assets/pdfs/standard-fonts-demo.pdf';
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -160,7 +160,7 @@ async function embedFonts(pdfFilename: string) {
 	}
 
 	const arrayBuffer = await response.arrayBuffer();
-	const bytes = new Uint8Array(arrayBuffer);
+	const pdfBytes = new Uint8Array(arrayBuffer);
 	const lab = await PDFALab.from(pdfBytes);
 
 	// We only specify a font for 'Helvetica'.

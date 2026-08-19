@@ -33,7 +33,7 @@ const lab = await PDFALab.from(bytes);
 == CommonJS
 ```JavaScript
 const fs = require('node:fs');
-const { PDFALab } = require('@pdfa-lab/core'_;
+const { PDFALab } = require('@pdfa-lab/core');
 
 const bytes = fs.readFileSync('example.pdf');
 const lab = await PDFALab.from(bytes);
@@ -59,7 +59,7 @@ loadPDF().catch(err => {
 	alert(`Loading PDF failed: ${err}`);
 });
 
-async function extract() {
+async function loadPDF() {
 	const url = 'https://raw.githubusercontent.com/gflohr/pdfa-lab/main/assets/pdfs/type1-fonts-missing.pdf';
 	const response = await fetch(url);
 	if (!response.ok) {

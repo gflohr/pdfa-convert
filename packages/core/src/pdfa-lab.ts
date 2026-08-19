@@ -173,6 +173,8 @@ export class PDFALab {
 	public async makePDFA(options: PDFAConversionOptions = {}): Promise<void> {
 		options.embedFonts ??= true;
 		options.fontEmbedOptions ??= {};
+
+		await this.embedFonts(options.fontkit!, options.fontEmbedOptions);
 	}
 
 	/**

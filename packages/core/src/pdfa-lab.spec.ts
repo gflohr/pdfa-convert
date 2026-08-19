@@ -7,6 +7,7 @@ import { SingleByteEncodingMapper } from './encoding/mappers/single-byte-encodin
 import * as collectFont from './font/collect-fonts.js';
 import type { FontInfo, FontMap } from './font/types.js';
 import { type PDFAConversionOptions, PDFALab } from './pdfa-lab.js';
+import { fcMatch } from './font/fc-match.js';
 
 async function makePDFALab(): Promise<PDFALab> {
 	const doc = await PDFDocument.create();
@@ -204,7 +205,11 @@ describe('PDFALab', () => {
 			const options = {};
 			const defaultOptions: PDFAConversionOptions = {
 				embedFonts: true,
-				fontEmbedOptions: {},
+				fontEmbedOptions: {
+					compress: true,
+					fcMatch: 'fc-match',
+					fontMap: {},
+				},
 			};
 
 			await lab.makePDFA(options);
@@ -212,6 +217,20 @@ describe('PDFALab', () => {
 			expect(options).toStrictEqual(defaultOptions);
 		});
 
-		it.skip('should embed all missing fonts', async () => {});
+		it('should embed all missing fonts', async () => {
+			const embedFontSpy = vi.spyOn(PDFALab.prototype, 'embedFonts');
+
+			lab.makePDFA({
+				fontkit,
+				fontEmbedOptions: { fontMap },
+			});
+
+			expect(embedFontSpy).toHaveBeenCalledTimes(1);
+			expect(embedFontSpy).toHaveBeenCalledWith(fontkit, {
+				compress: true,
+				fcMatch: 'fc-match',
+				fontMap,
+			});
+		});
 	});
 });

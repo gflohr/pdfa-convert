@@ -220,7 +220,7 @@ describe('PDFALab', () => {
 		it('should embed all missing fonts', async () => {
 			const embedFontSpy = vi.spyOn(PDFALab.prototype, 'embedFonts');
 
-			lab.makePDFA({
+			await lab.makePDFA({
 				fontkit,
 				fontEmbedOptions: { fontMap },
 			});

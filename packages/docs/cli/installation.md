@@ -26,6 +26,8 @@ yarn global add pdfa-lab
 bun add -g pdfa-lab
 ```
 
+:::
+
 ## Ad-hoc Usage
 
 You can also use the `pdfa-lab` command-line interface directly, without
@@ -52,6 +54,8 @@ yarn dlx pdfa-lab --help
 ```shell
 bunx pdfa-lab --help
 ```
+
+:::
 
 The option `--help` is just an example. You will normally replace it with
 a command like [`pdfa`](./convert-to-pdfa), [`text`](./extract-text),

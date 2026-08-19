@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<title>Test for <code>@pdfa-lab/core</code></title>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<h1>Test for <code>@pdfa-lab/core</code></h1>
+		<div>Contents of test file:</div>
+		<pre id="output"></pre>
+		<script src="./dist/index.browser.js"></script>
+		<script>
+const { PDFALab } = window.pdfalab;
+extract().catch(err => {
+	alert(`Extracting text failed: ${err}`);
+});
+
+async function extract() {
+	const url = 'https://raw.githubusercontent.com/gflohr/pdfa-lab/main/assets/pdfs/type1-fonts-missing.pdf';
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+	}
+
+	const arrayBuffer = await response.arrayBuffer();
+	const bytes = new Uint8Array(arrayBuffer);
+
+	const lab = await PDFALab.from(bytes);
+	const blocks = await lab.extractText();
+
+	const output = document.getElementById('output');
+	for (let i = 0; i < blocks.length; ++i) {
+		const block = blocks[i];
+
+		output.innerText += `# Block ${i + 1}\n`;
+		output.innerText += `Page ${block.pageNumber + 1}\n`;
+		output.innerText += `Font name: ${block.font.fontName}\n`;
+		output.innerText += `Base font name: ${block.font.baseFont}\n`;
+		output.innerText += `Text: ${block.text}\n`;
+		output.innerText += '\n';
+	}
+}
+		</script>
+	</body>
+</html>

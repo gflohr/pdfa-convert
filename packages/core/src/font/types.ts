@@ -23,12 +23,6 @@ export type FontInfo = {
 	ref: PDFRef;
 
 	/**
-	 * The resource name mapping. For each page that references the font,
-	 * the resource name used is stored.
-	 */
-	//resourceNames: Record<number, string>;
-
-	/**
 	 * The indicator for embedded fonts.
 	 */
 	embedded: boolean;
@@ -82,6 +76,8 @@ export type FontData = {
 
 	/**
 	 * The filename of the font file or font collection.
+	 *
+	 * @internal
 	 */
 	filename?: string;
 };
@@ -94,6 +90,8 @@ export type FontMap = Record<string, FontData>;
 
 /**
  * Patch instructions.
+ *
+ * @internal
  */
 export type PatchSet = {
 	/**

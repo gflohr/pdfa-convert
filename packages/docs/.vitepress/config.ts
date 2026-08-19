@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import fontkitTypedocSidebar from '../fontkit/api/typedoc-sidebar.json';
+import coreTypedocSidebar from '../pdfa-lab-core/api/typedoc-sidebar.json';
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
@@ -22,6 +23,83 @@ export default defineConfig({
 
 		sidebar: [
 			{
+				text: 'pdfa-lab (CLI)',
+				link: '/cli/about-pdfa-lab',
+				items: [
+					{
+						text: 'About pdfa-lab',
+						collapsed: true,
+						link: '/cli/about-pdfa-lab',
+					},
+					{
+						text: 'Installation',
+						collapsed: true,
+						link: '/cli/installation',
+					},
+					{
+						text: 'Convert to PDF/A',
+						collapsed: true,
+						link: '/cli/convert-to-pdfa',
+					},
+					{
+						text: 'Embed or List Fonts',
+						collapsed: true,
+						link: '/cli/list-or-embed-fonts',
+					},
+					{
+						text: 'Extract Text',
+						collapsed: true,
+						link: '/cli/extract-text',
+					},
+				],
+			},
+			{
+				text: '@pdfa-lab/core',
+				link: '/pdfa-lab-core/introduction/about-pdfa-lab',
+				items: [
+					{
+						text: 'Introduction',
+						collapsed: true,
+						items: [
+							{
+								text: 'About @pdfa-lab/core',
+								link: '/pdfa-lab-core/introduction/about-pdfa-lab',
+							},
+							{
+								text: 'Installation',
+								link: '/pdfa-lab-core/introduction/installation',
+							},
+							{
+								text: 'Basic Usage',
+								link: '/pdfa-lab-core/introduction/basic-usage',
+							},
+						],
+					},
+					{
+						text: 'Examples',
+						collapsed: true,
+						items: [
+							{
+								text: 'Embedding Fonts',
+								link: '/pdfa-lab-core/examples/embed-fonts',
+							},
+							{
+								text: 'Extracting Text',
+								link: '/pdfa-lab-core/examples/extracting-text',
+							},
+							{
+								text: 'Listing Fonts',
+								link: '/pdfa-lab-core/examples/list-fonts',
+							},
+						],
+					},
+					{
+						text: 'API',
+						items: coreTypedocSidebar,
+					},
+				],
+			},
+			{
 				text: '@pdfa-lab/fontkit',
 				link: '/fontkit',
 				items: [
@@ -31,19 +109,19 @@ export default defineConfig({
 						items: [
 							{
 								text: 'What is fontkit?',
-								link: './what-is-fontkit'
+								link: '/fontkit/introduction/what-is-fontkit'
 							},
 							{
 								text: 'Installation',
-								link: './installation',
+								link: '/fontkit/introduction/installation',
 							},
 							{
 								text: 'Basic Usage',
-								link: './basic-usage',
+								link: '/fontkit/introduction/basic-usage',
 							},
 							{
 								text: 'Security',
-								link: './security',
+								link: '/fontkit/introduction/security',
 							},
 						],
 					},

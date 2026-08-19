@@ -6,8 +6,8 @@ import { octetsToGlyphIds } from '../encoding/util/octets-to-glyph-ids.js';
 import type { FontUsage } from '../font/collect-resources.js';
 import type { FontInfo } from '../font/types.js';
 import { LiteralParser } from '../parser/literal-parser.js';
+import type { TextBlock } from '../pdfa-lab.js';
 import { extractGlyphs } from '../text/extract-glyphs.js';
-import { TextBlock } from '../pdfa-lab.js';
 
 /**
  * Extract text from a PDF document. This is best effort, and may not

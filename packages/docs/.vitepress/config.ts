@@ -31,6 +31,26 @@ export default defineConfig({
 						collapsed: true,
 						link: '/cli/about-pdfa-lab',
 					},
+					{
+						text: 'Installation',
+						collapsed: true,
+						link: '/cli/installation',
+					},
+					{
+						text: 'Convert to PDF/A',
+						collapsed: true,
+						link: '/cli/convert-to-pdfa',
+					},
+					{
+						text: 'Embed or List Fonts',
+						collapsed: true,
+						link: '/cli/list-or-embed-fonts',
+					},
+					{
+						text: 'Extract Text',
+						collapsed: true,
+						link: '/cli/extract-text',
+					},
 				],
 			},
 			{

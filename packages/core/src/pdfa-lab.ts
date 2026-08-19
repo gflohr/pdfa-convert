@@ -11,7 +11,7 @@ import { extractText, type TextBlock } from './text/extract-text.js';
 /**
  * Options for embedding fonts.
  */
-export type FontEmbedOptions = {
+export interface FontEmbedOptions {
 	/**
 	 * Map font names to paths/buffers and optional PostScript names.
 	 */

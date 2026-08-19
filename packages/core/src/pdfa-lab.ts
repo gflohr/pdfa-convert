@@ -7,7 +7,7 @@ import { FontEmbedder } from './font/embedder.js';
 import { patchStream } from './font/patch-stream.js';
 import type { FontInfo, FontMap, PatchSet } from './font/types.js';
 import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
-import { extractText, type TextBlock } from './text/extract-text.js';
+import { extractText } from './text/extract-text.js';
 
 /**
  * Options for embedding fonts.
@@ -55,6 +55,31 @@ export interface PDFAConversionOptions {
 	 */
 	fontkit?: FontkitAPI;
 }
+
+/**
+ * A block of text extracted from a `PDFDocument`.
+ */
+export interface TextBlock {
+	/**
+	 * The extracted text.
+	 */
+	text: string;
+
+	/**
+	 * The corresponding glyph IDs.
+	 */
+	glyphs: number[];
+
+	/**
+	 * The font information.
+	 */
+	font: FontInfo;
+
+	/**
+	 * The page number where the snippet was found.
+	 */
+	pageNumber: number;
+};
 
 export class PDFALab {
 	private fonts: Map<string, FontInfo> | undefined;

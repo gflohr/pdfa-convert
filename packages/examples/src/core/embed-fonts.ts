@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import { PDFALab } from '@pdfa-lab/core';
 import { fontkit } from '@pdfa-lab/fontkit';
 
-embedFonts(process.argv[2]!).catch(err => {
+embedFonts(process.argv[2]!).catch((err) => {
 	console.error(`Embedding fonts failed: ${err}`);
 	process.exit(1);
 });
@@ -44,12 +44,10 @@ async function embedFonts(pdfFilename: string) {
 		// fonts in the PDF on your system, add more font mappings here.
 	};
 
-	await lab.embedFonts({
-		fontkit,
+	await lab.embedFonts(fontkit, {
 		fontMap: fontMapping,
 	});
 
 	const embeddedBytes = await lab.save();
 	await fs.writeFile('output.pdf', embeddedBytes);
 }
-

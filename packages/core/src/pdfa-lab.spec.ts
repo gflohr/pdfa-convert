@@ -1,9 +1,13 @@
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import { PDFDocument, PDFRef } from '@cantoo/pdf-lib';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { fontkit } from '@pdfa-lab/fontkit';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { SingleByteEncodingMapper } from './encoding/mappers/single-byte-encoding-mapper.js';
 import * as collectFont from './font/collect-fonts.js';
-import type { FontInfo } from './font/types.js';
-import { PDFALab } from './pdfa-lab.js';
+import type { FontInfo, FontMap } from './font/types.js';
+import { type PDFAConversionOptions, PDFALab } from './pdfa-lab.js';
+import { fcMatch } from './font/fc-match.js';
 
 async function makePDFALab(): Promise<PDFALab> {
 	const doc = await PDFDocument.create();
@@ -15,6 +19,11 @@ async function makePDFALab(): Promise<PDFALab> {
 
 	return lab;
 }
+
+const rootDir = path.resolve(import.meta.dirname, '..', '..', '..');
+const pdfDir = path.resolve(rootDir, 'assets', 'pdfs');
+const fontDir = path.resolve(rootDir, 'assets', 'fonts');
+const notoDir = path.resolve(fontDir, 'noto');
 
 describe('PDFALab', () => {
 	afterEach(() => {
@@ -119,7 +128,7 @@ describe('PDFALab', () => {
 				.spyOn(collectFont, 'default')
 				.mockReturnValue(fontInfoMap);
 
-			await lab.embedFonts();
+			await lab.embedFonts(fontkit);
 
 			expect(collectMock).toHaveBeenCalledTimes(1);
 		});
@@ -170,6 +179,58 @@ describe('PDFALab', () => {
 			const result3 = lab.collectFonts();
 			expect(collectMock).toHaveBeenCalledTimes(1);
 			expect(result3).toBe(fonts);
+		});
+	});
+
+	describe('convert to PDF/A', () => {
+		const pdfFilename = path.resolve(pdfDir, 'all-features-pdfa.pdf');
+		let lab: PDFALab;
+		const fontMap: FontMap = {
+			Helvetica: {
+				source: path.resolve(notoDir, 'NotoSans-Regular.ttf'),
+			},
+		};
+		const options: PDFAConversionOptions = {
+			fontEmbedOptions: { fontMap },
+		};
+
+		beforeAll(async () => {
+			const pdfBytes = await fs.readFile(pdfFilename);
+			lab = await PDFALab.from(pdfBytes);
+		});
+
+		it('should fill in default options', async () => {
+			const lab = await makePDFALab();
+
+			const options = {};
+			const defaultOptions: PDFAConversionOptions = {
+				embedFonts: true,
+				fontEmbedOptions: {
+					compress: true,
+					fcMatch: 'fc-match',
+					fontMap: {},
+				},
+			};
+
+			await lab.makePDFA(options);
+
+			expect(options).toStrictEqual(defaultOptions);
+		});
+
+		it('should embed all missing fonts', async () => {
+			const embedFontSpy = vi.spyOn(PDFALab.prototype, 'embedFonts');
+
+			await lab.makePDFA({
+				fontkit,
+				fontEmbedOptions: { fontMap },
+			});
+
+			expect(embedFontSpy).toHaveBeenCalledTimes(1);
+			expect(embedFontSpy).toHaveBeenCalledWith(fontkit, {
+				compress: true,
+				fcMatch: 'fc-match',
+				fontMap,
+			});
 		});
 	});
 });

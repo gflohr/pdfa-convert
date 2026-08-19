@@ -9,11 +9,12 @@ import yargs from 'yargs';
 import type { Command } from './command.js';
 import { FontCommand } from './commands/font.js';
 import { TextCommand } from './commands/text.js';
+import { XMPCommand } from './commands/xmp.js';
 import { defaultOptions } from './default-options.js';
 import { Package } from './package.js';
 import { loadInput } from './util/load-input.js';
 
-const commandNames = ['font', 'text'];
+const commandNames = ['font', 'text', 'xmp'];
 
 const gtx = Textdomain.getInstance('pdfa-lab');
 v.setGlobalConfig({ lang: Textdomain.locale });
@@ -32,6 +33,7 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
 	const commands: { [key: string]: Command } = {
 		text: new TextCommand(),
 		font: new FontCommand(),
+		xmp: new XMPCommand(),
 	};
 
 	const program = yargs(argv)

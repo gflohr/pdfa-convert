@@ -94,6 +94,116 @@ async function genType1FontsMissing(): Promise<void> {
 	console.log(`written ${filename}`);
 }
 
+async function genMinimalXMP(): Promise<void> {
+	const draw = async (
+		pdfDoc: PDFDocument,
+		label: string,
+		font: StandardFonts | Uint8Array<ArrayBufferLike>,
+	): Promise<void> => {
+		const page = pdfDoc.addPage();
+
+		const f = await pdfDoc.embedFont(font);
+
+		page.drawText(label, {
+			x: 50,
+			y: page.getSize().height - 50,
+			size: 14,
+			font: f,
+			color: rgb(0, 0, 0),
+		});
+	};
+
+	const pdfDoc = await PDFDocument.create();
+
+	const text = `
+This document contains minimal XMP meta information.
+`;
+	await draw(pdfDoc, text, StandardFonts.Helvetica);
+
+	const xmp = `
+<?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="" xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/">
+			<pdfaid:part>3</pdfaid:part>
+			<pdfaid:conformance>B</pdfaid:conformance>
+		</rdf:Description>
+		<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+			<dc:format>application/pdf</dc:format>
+			<dc:date>
+				<rdf:Seq>
+					<rdf:li>2026-08-18T16:09:22+03:00</rdf:li>
+				</rdf:Seq>
+			</dc:date>
+			<dc:creator>
+				<rdf:Seq>
+					<rdf:li>Guido Flohr</rdf:li>
+				</rdf:Seq>
+			</dc:creator>
+		</rdf:Description>
+		<rdf:Description rdf:about="" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
+			<pdf:Producer>@pdfa-lab/core</pdf:Producer>
+			<pdf:PDFVersion>1.7</pdf:PDFVersion>
+		</rdf:Description>
+		<rdf:Description rdf:about="" xmlns:xmp="http://ns.adobe.com/xap/1.0/">
+			<xmp:CreatorTool>@pdfa-lab/core</xmp:CreatorTool>
+			<xmp:CreateDate>2026-08-19T16:09:22+03:00</xmp:CreateDate>
+			<xmp:ModifyDate>2026-08-19T16:09:22+03:00</xmp:ModifyDate>
+			<xmp:MetadataDate>2026-08-19T16:09:22+03:00</xmp:MetadataDate>
+		</rdf:Description>
+	</rdf:RDF>
+</x:xmpmeta>
+`;
+	const xmpBytes = new TextEncoder().encode(xmp);
+	const metadataStream = pdfDoc.context.stream(xmpBytes, {
+		Type: 'Metadata',
+		Subtype: 'XML',
+		Length: xmpBytes.length,
+	});
+	const metadataStreamRef = pdfDoc.context.register(metadataStream);
+	pdfDoc.catalog.set(PDFName.of('Metadata'), metadataStreamRef);
+
+	const bytes = await pdfDoc.save();
+	const filename = './assets/pdfs/minimal-xmp.pdf';
+	await fs.writeFile(filename, bytes);
+	console.log(`written ${filename}`);
+
+}
+
+async function genAllFeaturesPDFA(): Promise<void> {
+	const draw = async (
+		pdfDoc: PDFDocument,
+		label: string,
+		font: StandardFonts | Uint8Array<ArrayBufferLike>,
+	): Promise<void> => {
+		const page = pdfDoc.addPage();
+
+		const f = await pdfDoc.embedFont(font);
+
+		page.drawText(label, {
+			x: 50,
+			y: page.getSize().height - 50,
+			size: 14,
+			font: f,
+			color: rgb(0, 0, 0),
+		});
+	};
+
+	const pdfDoc = await PDFDocument.create();
+
+	const text = `
+This document requires all currently implemented PDF/A conversion features:
+
+- embedding of missing fonts
+`;
+	await draw(pdfDoc, text, StandardFonts.Helvetica);
+
+	const bytes = await pdfDoc.save();
+	const filename = './assets/pdfs/all-features-pdfa.pdf';
+	await fs.writeFile(filename, bytes);
+	console.log(`written ${filename}`);
+}
+
 const encodingTest = `q
 BT
 0 0 0 rg
@@ -240,6 +350,8 @@ async function genAll() {
 	await genStandardFonts();
 	await genType1FontsMissing();
 	await genEncodingTest();
+	await genAllFeaturesPDFA();
+	await genMinimalXMP();
 }
 
 genAll().catch((e) => {

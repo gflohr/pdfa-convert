@@ -6,7 +6,7 @@ if (process.argv.length < 3) {
 	process.exit(1);
 }
 
-listFonts(process.argv[2]!).catch(err => {
+listFonts(process.argv[2]!).catch((err) => {
 	console.error(`Listing fonts failed: ${err}`);
 	process.exit(1);
 });
@@ -27,4 +27,3 @@ async function listFonts(filename: string) {
 		console.log();
 	});
 }
-

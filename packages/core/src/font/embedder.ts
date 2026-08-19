@@ -38,8 +38,6 @@ type Metrics = {
 export class FontEmbedder {
 	private initialised = false;
 	private _fontDict: PDFDict | undefined;
-	// FIXME! This should be cast to OpenTypeFont, because the font cannot
-	// be embedded without font metrics.
 	private _font: OpenTypeFont | undefined;
 	private _subset: Subset | undefined;
 	private _scale: number | undefined;
@@ -55,12 +53,6 @@ export class FontEmbedder {
 		private readonly _subsetPrefixes: Set<string>,
 		private readonly _options: FontEmbedOptions,
 	) {
-		if (!this.options.fontkit) {
-			throw new Error(
-				'You have to pass a fontkit instance in the embed options!',
-			);
-		}
-
 		const fontRef = this.fontInfo.ref;
 		const fontDict = this.pdfDoc.context.lookupMaybe(fontRef, PDFDict);
 		if (!fontDict) {
@@ -180,7 +172,7 @@ export class FontEmbedder {
 		);
 	}
 
-	private async initialise() {
+	private async initialise(fontkit: FontkitAPI) {
 		if (this.initialised) return;
 
 		const fontData = await this.resolveFont();
@@ -188,7 +180,6 @@ export class FontEmbedder {
 
 		const isTTC = this.probeCollection(source);
 
-		const fontkit = this.options.fontkit as FontkitAPI;
 		const font = isTTC
 			? fontkit.loadFont(source, fontData.postScriptName)
 			: fontkit.loadFont(source);
@@ -227,8 +218,8 @@ export class FontEmbedder {
 		this.initialised = true;
 	}
 
-	public async embed(): Promise<PatchSet[]> {
-		await this.initialise();
+	public async embed(fontkit: FontkitAPI): Promise<PatchSet[]> {
+		await this.initialise(fontkit);
 		this.fontDict.set(PDFName.of('Subtype'), PDFName.of('Type0'));
 		const subsetPrefix = this.generateSubsetPrefix();
 		const baseFontName = `${subsetPrefix}+${this.font.postscriptName ?? 'Unknown'}`;

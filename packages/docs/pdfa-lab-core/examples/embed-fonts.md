@@ -88,8 +88,7 @@ async function embedFonts() {
 		},
 	};
 
-	await lab.embedFonts({
-		fontkit,
+	await lab.embedFonts(fontkit, {
 		fontMap: fontMapping,
 	});
 
@@ -174,8 +173,7 @@ async function embedFonts() {
 		},
 	};
 
-	await lab.embedFonts({
-		fontkit,
+	await lab.embedFonts(fontkit, {
 		fontMap: fontMapping,
 	});
 

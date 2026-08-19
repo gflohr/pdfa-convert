@@ -6,10 +6,10 @@ import { CMapMapper } from '../encoding/mappers/cmap-mapper.js';
 import { IdentityMapper } from '../encoding/mappers/identity-mapper.js';
 import type { FontUsage } from '../font/collect-resources.js';
 import type { FontInfo } from '../font/types.js';
-import { PDFALab } from '../pdfa-lab.js';
+import { PDFALab, type TextBlock } from '../pdfa-lab.js';
 import type { GlyphBlock } from './extract-glyphs.js';
 import * as extractGlyphModule from './extract-glyphs.js';
-import { extractText, type TextBlock } from './extract-text.js';
+import { extractText } from './extract-text.js';
 
 describe('Text Extraction', () => {
 	describe('standard fonts', () => {

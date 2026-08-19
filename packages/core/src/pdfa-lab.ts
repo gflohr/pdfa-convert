@@ -1,4 +1,5 @@
 import { PDFDocument, PDFName, PDFRef, type PDFStream } from '@cantoo/pdf-lib';
+import type { FontkitAPI } from '@pdfa-lab/fontkit';
 import collectFonts from './font/collect-fonts.js';
 import { collectResources, type FontUsage } from './font/collect-resources.js';
 import collectSubsetPrefixes from './font/collect-subset-prefixes.js';
@@ -6,12 +7,12 @@ import { FontEmbedder } from './font/embedder.js';
 import { patchStream } from './font/patch-stream.js';
 import type { FontInfo, FontMap, PatchSet } from './font/types.js';
 import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
-import { extractText, type TextBlock } from './text/extract-text.js';
+import { extractText } from './text/extract-text.js';
 
 /**
  * Options for embedding fonts.
  */
-export type FontEmbedOptions = {
+export interface FontEmbedOptions {
 	/**
 	 * Map font names to paths/buffers and optional PostScript names.
 	 */
@@ -33,11 +34,51 @@ export type FontEmbedOptions = {
 	 */
 
 	platform?: string;
+}
+
+/**
+ * Options for converting to PDF/A.
+ */
+export interface PDFAConversionOptions {
+	/**
+	 * Whether to embed fonts. Defaults to `true`.
+	 */
+	embedFonts?: boolean;
 
 	/**
-	 * A fontkit instance, see `@pdfa-lab/fontkit`.
+	 * Options for font embedding.
 	 */
-	fontkit?: unknown;
+	fontEmbedOptions?: FontEmbedOptions;
+
+	/**
+	 * A fontkit instance. This is mandatory, if fonts have to be embedded.
+	 */
+	fontkit?: FontkitAPI;
+}
+
+/**
+ * A block of text extracted from a `PDFDocument`.
+ */
+export interface TextBlock {
+	/**
+	 * The extracted text.
+	 */
+	text: string;
+
+	/**
+	 * The corresponding glyph IDs.
+	 */
+	glyphs: number[];
+
+	/**
+	 * The font information.
+	 */
+	font: FontInfo;
+
+	/**
+	 * The page number where the snippet was found.
+	 */
+	pageNumber: number;
 };
 
 export class PDFALab {
@@ -150,14 +191,31 @@ export class PDFALab {
 	}
 
 	/**
+	 * Convert a document to PDF/A.
+	 *
+	 * @param options
+	 */
+	public async makePDFA(options: PDFAConversionOptions = {}): Promise<void> {
+		options.embedFonts ??= true;
+		options.fontEmbedOptions ??= {};
+
+		await this.embedFonts(options.fontkit!, options.fontEmbedOptions);
+	}
+
+	/**
 	 * Embed multiple fonts, but only if they are not already embedded.
+	 *
+	 *
+	 *
 	 * If no references were passed, all currently missing fonts are
 	 * embedded.
 	 *
+	 * @param fontkit a fontkit instance
 	 * @param options control the font embedding
 	 * @param references can be determined by `collectFonts()`
 	 */
 	public async embedFonts(
+		fontkit: FontkitAPI,
 		options: FontEmbedOptions = {},
 		references?: PDFRef[],
 	) {
@@ -247,7 +305,7 @@ export class PDFALab {
 				options,
 			);
 
-			const patchSets = await embedder.embed();
+			const patchSets = await embedder.embed(fontkit as FontkitAPI);
 			allPatchSets.push(...patchSets);
 		}
 
@@ -303,5 +361,9 @@ export class PDFALab {
 		}
 
 		return await extractText(this.pdfDocument, this.fonts, this.fontUsage);
+	}
+
+	public async extractXMP(): Promise<string | null> {
+		return null;
 	}
 }

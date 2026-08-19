@@ -6,32 +6,8 @@ import { octetsToGlyphIds } from '../encoding/util/octets-to-glyph-ids.js';
 import type { FontUsage } from '../font/collect-resources.js';
 import type { FontInfo } from '../font/types.js';
 import { LiteralParser } from '../parser/literal-parser.js';
+import type { TextBlock } from '../pdfa-lab.js';
 import { extractGlyphs } from '../text/extract-glyphs.js';
-
-/**
- * A block of text extracted from a `PDFDocument`.
- */
-export type TextBlock = {
-	/**
-	 * The extracted text.
-	 */
-	text: string;
-
-	/**
-	 * The corresponding glyph IDs.
-	 */
-	glyphs: number[];
-
-	/**
-	 * The font information.
-	 */
-	font: FontInfo;
-
-	/**
-	 * The page number where the snippet was found.
-	 */
-	pageNumber: number;
-};
 
 /**
  * Extract text from a PDF document. This is best effort, and may not

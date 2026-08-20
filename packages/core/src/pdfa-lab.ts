@@ -79,7 +79,7 @@ export interface TextBlock {
 	 * The page number where the snippet was found.
 	 */
 	pageNumber: number;
-};
+}
 
 export class PDFALab {
 	private fonts: Map<string, FontInfo> | undefined;

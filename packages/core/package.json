@@ -54,6 +54,7 @@
 	},
 	"dependencies": {
 		"@cantoo/pdf-lib": "^2.7.1",
-		"@pdfa-lab/fontkit": "workspace:*"
+		"@pdfa-lab/fontkit": "workspace:*",
+		"@xmldom/xmldom": "^0.9.11"
 	}
 }

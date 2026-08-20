@@ -123,6 +123,9 @@ importers:
       '@pdfa-lab/fontkit':
         specifier: workspace:*
         version: link:../fontkit
+      '@xmldom/xmldom':
+        specifier: ^0.9.11
+        version: 0.9.11
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^29.0.3
@@ -1749,6 +1752,10 @@ packages:
 
   '@vueuse/shared@12.8.2':
     resolution: {integrity: sha512-dznP38YzxZoNloI0qpEfpkms8knDtaoQ6Y/sfS0L7Yki4zh40LFHEhur0odJC6xTHG5dxWVPiUWBXn+wCG2s5w==}
+
+  '@xmldom/xmldom@0.9.11':
+    resolution: {integrity: sha512-tW8bcK3hsG0/uqSnNz6TK4BkcuZSezoU7DlnYssILmZDktPnSHHuDJJFM0AJv+13gz2r0iGdrj6qqKeUnxXEDg==}
+    engines: {node: '>=14.6'}
 
   abab@1.0.4:
     resolution: {integrity: sha512-I+Wi+qiE2kUXyrRhNsWv6XsjUTBJjSoVSctKNBfLG5zG/Xe7Rjbxf13+vqYHNTwHaFU+FtSlVxOCTiMEVtPv0A==}
@@ -4998,6 +5005,8 @@ snapshots:
       vue: 3.5.39(typescript@6.0.3)
     transitivePeerDependencies:
       - typescript
+
+  '@xmldom/xmldom@0.9.11': {}
 
   abab@1.0.4:
     optional: true

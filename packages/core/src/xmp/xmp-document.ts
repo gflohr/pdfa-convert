@@ -2,17 +2,29 @@ import { DOMParser, type Document, type Element, Node, XMLSerializer } from '@xm
 import * as rdflib from 'rdflib';
 
 /**
- * Output formats
+ * Output formats.
+ *
+ * You can either use the shortcut keys or the full MIME types.
  */
 export const rdfSerialisationFormat: Record<string, string> = {
 	xml: 'application/rdf+xml',
+	html: 'text/html',
+	xhtml: 'application/xhtml+xml',
 	turtle: 'text/turtle',
+	'turtle-legacy': 'application/x-turtle',
+	'x-turtle': 'application/x-turtle',
 	'n-triples': 'application/n-triples',
-	'json-ld': 'application/json+ld',
+	'json-ld': 'application/ld+json',
 	n3: 'text/n3',
+	'n3-legacy': 'application/n3',
+	'nquads': 'application/nquads',
+	'n-quads': 'application/n-quads',
+	'sparql-update': 'application/sparql-update',
+	'sparql-update-single': 'application/sparql-update-single',
+	'sparql-update-s': 'application/sparql-update-single',
 };
 
-/** Localized strings (e.g., alt text, titles in rdf:Alt) */
+/** Localised strings (e.g., alt text, titles in rdf:Alt) */
 export type XmpLangAlt = Record<string, string>; // e.g., { 'x-default': 'Title', 'de-DE': 'Titel' }
 
 /** Primitives supported in XMP fields */

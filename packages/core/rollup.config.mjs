@@ -3,6 +3,7 @@ import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
+import polyfillNode from 'rollup-plugin-polyfill-node';
 
 function tsPlugin(tsconfig) {
 	return typescript({
@@ -34,13 +35,14 @@ export default [
 			file: 'dist/index.esm.js',
 			format: 'esm',
 			sourcemap: true,
+			inlineDynamicImports: true,
 		},
 		external,
 		onwarn,
 		plugins: [
 			json(),
 			tsPlugin('./tsconfig.build.json'),
-			nodeResolve(),
+			nodeResolve({ preferBuiltins: true }),
 			commonjs(),
 		],
 	},
@@ -50,6 +52,7 @@ export default [
 			file: 'dist/index.cjs.cjs',
 			format: 'cjs',
 			sourcemap: true,
+			inlineDynamicImports: true,
 			exports: 'named',
 		},
 		external,
@@ -57,7 +60,7 @@ export default [
 		plugins: [
 			json(),
 			tsPlugin('./tsconfig.build.json'),
-			nodeResolve(),
+			nodeResolve({ preferBuiltins: true }),
 			commonjs(),
 		],
 	},
@@ -68,13 +71,16 @@ export default [
 			format: 'umd',
 			name: 'pdfalab',
 			sourcemap: true,
+			inlineDynamicImports: true,
 		},
 		onwarn,
 		plugins: [
+			polyfillNode(),
 			json(),
 			tsPlugin('./tsconfig.build.json'),
 			nodeResolve({
 				browser: true,
+				preferBuiltins: false,
 			}),
 			commonjs(),
 		],
@@ -86,13 +92,16 @@ export default [
 			format: 'umd',
 			name: 'pdfalab',
 			sourcemap: true,
+			inlineDynamicImports: true,
 		},
 		onwarn,
 		plugins: [
+			polyfillNode(),
 			json(),
 			tsPlugin('./tsconfig.build.json'),
 			nodeResolve({
 				browser: true,
+				preferBuiltins: false,
 			}),
 			commonjs(),
 			terser(),

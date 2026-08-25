@@ -272,7 +272,8 @@ export async function loadFont(
 			`The font '${fontName}' is not embedded, and no replacement font has been specified.`,
 		);
 	} else {
-		const fs = await import('node:fs/promises');
+		const fsModuleName = 'node:fs/promises';
+		const fs = await import(fsModuleName);
 		const map = fontFiles[platform] ?? fontFiles.unix;
 		const locations = fontLocations[platform] ?? fontLocations.unix;
 
@@ -323,7 +324,8 @@ export async function loadFontFromPath(
 			`The font '${fontName}' is not embedded and must be passed as raw data in the browser.`,
 		);
 	} else {
-		const fs = await import('node:fs/promises');
+		const fsModuleName = 'node:fs/promises';
+		const fs = await import(fsModuleName);
 
 		return { source: await fs.readFile(path), filename: path };
 	}
@@ -332,8 +334,10 @@ export async function loadFontFromPath(
 async function getDirectoryMap(
 	directories: string[],
 ): Promise<Record<string, string>> {
-	const fs = await import('node:fs/promises');
-	const path = await import('node:path');
+	const fsModuleName = 'node:fs/promises';
+	const fs = await import(fsModuleName);
+	const pathModuleName = 'node:path';
+	const path = await import(pathModuleName);
 
 	const entries: Record<string, string> = {};
 	for (const directory of directories) {

@@ -157,6 +157,9 @@ importers:
       rollup:
         specifier: ^4.62.2
         version: 4.62.2
+      rollup-plugin-polyfill-node:
+        specifier: ^0.13.0
+        version: 0.13.0(rollup@4.62.2)
       typedoc:
         specifier: ^0.28.19
         version: 0.28.19(typescript@6.0.3)

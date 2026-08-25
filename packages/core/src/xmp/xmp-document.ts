@@ -1,5 +1,5 @@
 import { DOMParser, type Document, type Element, Node, XMLSerializer } from '@xmldom/xmldom';
-import { graph, parse, serialize } from 'rdflib';
+import * as rdflib from 'rdflib';
 
 /**
  * Output formats
@@ -55,7 +55,7 @@ export class XmpDocument {
 		'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 
 	private doc: Document;
-	private kb = graph();
+	private kb = rdflib.graph();
 
 	constructor(xmlString?: string, private readonly baseIRI = 'urn:xmp:doc', ) {
 		if (!xmlString || xmlString.trim() === '') {
@@ -97,7 +97,7 @@ export class XmpDocument {
 		const rdfElement = this.getOrCreateRdfElement(xmpMeta);
 		xmlString = new XMLSerializer().serializeToString(rdfElement);
 
-		parse(xmlString, this.kb, baseIRI, 'application/rdf+xml');
+		rdflib.parse(xmlString, this.kb, baseIRI, 'application/rdf+xml');
 	}
 
 	private static createEmptyXmpMeta(): string {
@@ -133,7 +133,7 @@ export class XmpDocument {
 	public serialise(format = 'xml'): string {
 		const mimeType = rdfSerialisationFormat[format.toLowerCase()] ?? format;
 
-		const output = serialize(null, this.kb, this.baseIRI, mimeType);
+		const output = rdflib.serialize(null, this.kb, this.baseIRI, mimeType);
 		if (!output) {
 			throw new Error(`Invalid output format '${format}'!`);
 		}

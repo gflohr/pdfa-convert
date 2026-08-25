@@ -1,10 +1,16 @@
-import {
-	DOMParser,
-	type Document,
-	type Element,
-	Node,
-	XMLSerializer,
-} from '@xmldom/xmldom';
+import { DOMParser, type Document, type Element, Node, XMLSerializer } from '@xmldom/xmldom';
+import { graph, parse, serialize } from 'rdflib';
+
+/**
+ * Output formats
+ */
+export const rdfSerialisationFormat: Record<string, string> = {
+	xml: 'application/rdf+xml',
+	turtle: 'text/turtle',
+	'n-triples': 'application/n-triples',
+	'json-ld': 'application/json+ld',
+	n3: 'text/n3',
+};
 
 /** Localized strings (e.g., alt text, titles in rdf:Alt) */
 export type XmpLangAlt = Record<string, string>; // e.g., { 'x-default': 'Title', 'de-DE': 'Titel' }
@@ -41,16 +47,17 @@ export interface DublinCoreMetadata {
 	type?: string;
 }
 
+const bom = '\uFEFF';
+
 export class XmpDocument {
 	private static readonly NS_X = 'adobe:ns:meta/';
 	private static readonly NS_RDF =
 		'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 
 	private doc: Document;
-	private xmpMeta: Element;
-	private rdfElement: Element;
+	private kb = graph();
 
-	constructor(xmlString?: string) {
+	constructor(xmlString?: string, private readonly baseIRI = 'urn:xmp:doc', ) {
 		if (!xmlString || xmlString.trim() === '') {
 			xmlString = XmpDocument.createEmptyXmpMeta();
 		}
@@ -73,6 +80,7 @@ export class XmpDocument {
 			}
 		}
 
+		let xmpMeta: Element;
 		if (
 			relevantNodes.length !== 3 ||
 			relevantNodes[0]?.nodeType !== Node.PROCESSING_INSTRUCTION_NODE ||
@@ -81,12 +89,15 @@ export class XmpDocument {
 		) {
 			xmlString = XmpDocument.createEmptyXmpMeta();
 			this.doc = new DOMParser().parseFromString(xmlString, 'text/xml');
-			this.xmpMeta = this.doc.childNodes[2] as unknown as Element;
+			xmpMeta = this.doc.childNodes[2] as unknown as Element;
 		} else {
-			this.xmpMeta = relevantNodes[1]! as unknown as Element;
+			xmpMeta = relevantNodes[1]! as unknown as Element;
 		}
 
-		this.rdfElement = this.getOrCreateRdfElement();
+		const rdfElement = this.getOrCreateRdfElement(xmpMeta);
+		xmlString = new XMLSerializer().serializeToString(rdfElement);
+
+		parse(xmlString, this.kb, baseIRI, 'application/rdf+xml');
 	}
 
 	private static createEmptyXmpMeta(): string {
@@ -119,12 +130,30 @@ export class XmpDocument {
 		return true;
 	}
 
-	public serialize(): string {
-		return new XMLSerializer().serializeToString(this.doc);
+	public serialise(format = 'xml'): string {
+		const mimeType = rdfSerialisationFormat[format.toLowerCase()] ?? format;
+
+		const output = serialize(null, this.kb, this.baseIRI, mimeType);
+		if (!output) {
+			throw new Error(`Invalid output format '${format}'!`);
+		}
+
+		return output;
 	}
 
-	private getOrCreateRdfElement(): Element {
-		for (const childNode of this.xmpMeta.childNodes) {
+	public serialiseXmp(): string {
+		const output = this.serialise()
+			.replace(/^( {4})+/gm, (match) => '\t'.repeat(match.length / 4))
+			.replace(/\n$/, '')
+			.replace(/^/gm, '\t');
+		return `<?xpacket begin="${bom}" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+${output}</x:xmpmeta>
+<?xpacket end="w"?>`;
+	}
+
+	private getOrCreateRdfElement(xmpMeta: Element): Element {
+		for (const childNode of xmpMeta.childNodes) {
 			if (childNode.nodeType === Node.ELEMENT_NODE) {
 				const child = childNode as unknown as Element;
 				if (child.attributes) {
@@ -145,14 +174,7 @@ export class XmpDocument {
 
 		// Create and attach <rdf:RDF>
 		const newRdf = this.doc.createElementNS(XmpDocument.NS_RDF, 'rdf:RDF');
-		this.appendIndented(this.xmpMeta, newRdf, 0);
-
+		xmpMeta.appendChild(newRdf);
 		return newRdf;
-	}
-
-	private appendIndented(parent: Element, child: Element, level: number) {
-		parent.appendChild(this.doc.createTextNode(`${'\t'.repeat(level + 1)}`));
-		parent.appendChild(child);
-		parent.appendChild(this.doc.createTextNode(`\n${'\t'.repeat(level)}`));
 	}
 }

@@ -7,7 +7,8 @@ describe('XMP document', () => {
 	it('should create a fresh XMP document', () => {
 		const xmpDoc = new XmpDocument();
 
-		const xmp = xmpDoc.serialize();
+		const xmp = xmpDoc.serialiseXmp();
+console.log(xmp);
 		expect(xmp).toMatchSnapshot();
 	});
 
@@ -29,7 +30,7 @@ describe('XMP document', () => {
 
 		const xmpDoc = new XmpDocument(packet);
 
-		const xmp = xmpDoc.serialize();
+		const xmp = xmpDoc.serialiseXmp();
 		expect(xmp).toMatchSnapshot();
 	});
 });

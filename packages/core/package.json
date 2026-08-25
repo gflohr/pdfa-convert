@@ -55,6 +55,11 @@
 	"dependencies": {
 		"@cantoo/pdf-lib": "^2.7.1",
 		"@pdfa-lab/fontkit": "workspace:*",
-		"@xmldom/xmldom": "^0.9.11"
+		"@xmldom/xmldom": "^0.9.11",
+		"fast-xml-parser": "^5.11.0",
+		"rdf-parse": "^5.0.0",
+		"rdflib": "^2.4.0",
+		"rdfxml-streaming-parser": "^3.3.0",
+		"xmlbuilder2": "^4.0.3"
 	}
 }

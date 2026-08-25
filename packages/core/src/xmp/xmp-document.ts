@@ -6,16 +6,39 @@ import {
 	XMLSerializer,
 } from '@xmldom/xmldom';
 
-export interface PdfaIdentification {
-	part: 1 | 2 | 3 | 4;
-	conformance: 'A' | 'B' | 'U' | 'E';
-}
+/** Localized strings (e.g., alt text, titles in rdf:Alt) */
+export type XmpLangAlt = Record<string, string>; // e.g., { 'x-default': 'Title', 'de-DE': 'Titel' }
 
+/** Primitives supported in XMP fields */
+export type XmpValue =
+	| string
+	| number
+	| boolean
+	| XmpLangAlt
+	| XmpValue[]
+	| { [key: string]: XmpValue };
+
+/**
+ * Dublin core metadata.
+ *
+ * See https://developer.adobe.com/xmp/docs/xmp-namespaces/dc/!
+ */
 export interface DublinCoreMetadata {
-	title?: string;
+	contributor?: string[];
+	coverage?: string;
 	creator?: string[];
+	date?: Date;
 	description?: string;
+	format?: string;
+	identifier?: string;
+	language?: string[];
+	publisher?: string[];
+	relation?: string[];
+	rights?: XmpLangAlt;
+	source?: string;
 	subject?: string[];
+	title?: XmpLangAlt;
+	type?: string;
 }
 
 export class XmpDocument {
@@ -25,10 +48,9 @@ export class XmpDocument {
 
 	private doc: Document;
 	private xmpMeta: Element;
-	private rdfPrefix;
 	private rdfElement: Element;
 
-	constructor (xmlString?: string) {
+	constructor(xmlString?: string) {
 		if (!xmlString || xmlString.trim() === '') {
 			xmlString = XmpDocument.createEmptyXmpMeta();
 		}
@@ -37,22 +59,26 @@ export class XmpDocument {
 
 		const relevantNodes: Node[] = [];
 		for (const node of this.doc.childNodes) {
-			if (node.nodeType === Node.ELEMENT_NODE
-				|| node.nodeType === Node.PROCESSING_INSTRUCTION_NODE
+			if (
+				node.nodeType === Node.ELEMENT_NODE ||
+				node.nodeType === Node.PROCESSING_INSTRUCTION_NODE
 			) {
 				relevantNodes.push(node);
 			} else if (
-				node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
+				node.nodeType === Node.TEXT_NODE &&
+				node.textContent?.trim() !== ''
 			) {
 				// This is an error.
 				relevantNodes.push(node);
 			}
 		}
 
-		if (relevantNodes.length !== 3
-			|| relevantNodes[0]?.nodeType !== Node.PROCESSING_INSTRUCTION_NODE
-			|| relevantNodes[0]?.nodeName !== 'xpacket'
-			|| !this.isXmpMetaElement(relevantNodes[1] as unknown as Element)) {
+		if (
+			relevantNodes.length !== 3 ||
+			relevantNodes[0]?.nodeType !== Node.PROCESSING_INSTRUCTION_NODE ||
+			relevantNodes[0]?.nodeName !== 'xpacket' ||
+			!this.isXmpMetaElement(relevantNodes[1] as unknown as Element)
+		) {
 			xmlString = XmpDocument.createEmptyXmpMeta();
 			this.doc = new DOMParser().parseFromString(xmlString, 'text/xml');
 			this.xmpMeta = this.doc.childNodes[2] as unknown as Element;
@@ -60,7 +86,7 @@ export class XmpDocument {
 			this.xmpMeta = relevantNodes[1]! as unknown as Element;
 		}
 
-		[this.rdfElement, this.rdfPrefix] = this.getOrCreateRdfElement();
+		this.rdfElement = this.getOrCreateRdfElement();
 	}
 
 	private static createEmptyXmpMeta(): string {
@@ -71,7 +97,6 @@ export class XmpDocument {
 </x:xmpmeta>
 <?xpacket end="w"?>`;
 	}
-
 
 	private isXmpMetaElement(elem?: Element): boolean {
 		if (!elem || elem.nodeType !== Node.ELEMENT_NODE || !elem.attributes) {
@@ -98,20 +123,18 @@ export class XmpDocument {
 		return new XMLSerializer().serializeToString(this.doc);
 	}
 
-	private getOrCreateRdfElement(): [Element, string] {
+	private getOrCreateRdfElement(): Element {
 		for (const childNode of this.xmpMeta.childNodes) {
-			if (childNode.nodeType === Node.ELEMENT_NODE
-			) {
+			if (childNode.nodeType === Node.ELEMENT_NODE) {
 				const child = childNode as unknown as Element;
 				if (child.attributes) {
 					for (let i = 0; i < child.attributes.length; ++i) {
 						const attr = child.attributes.item(i);
-						if (attr?.name.startsWith('xmlns:')
-						    && attr.name.length > 6) {
+						if (attr?.name.startsWith('xmlns:') && attr.name.length > 6) {
 							if (attr.value === XmpDocument.NS_RDF) {
 								const prefix = attr.name.slice(6);
 								if (child.nodeName === `${prefix}:RDF`) {
-									return [child, prefix];
+									return child;
 								}
 							}
 						}
@@ -124,7 +147,7 @@ export class XmpDocument {
 		const newRdf = this.doc.createElementNS(XmpDocument.NS_RDF, 'rdf:RDF');
 		this.appendIndented(this.xmpMeta, newRdf, 0);
 
-		return [newRdf, 'rdf'];
+		return newRdf;
 	}
 
 	private appendIndented(parent: Element, child: Element, level: number) {

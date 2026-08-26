@@ -73,6 +73,7 @@ export interface DublinCoreMetadata {
 
 const bom = '\uFEFF';
 
+/** @internal */
 export class XmpDocument {
 	private static readonly NS_X = 'adobe:ns:meta/';
 	private static readonly NS_RDF =
@@ -157,6 +158,7 @@ export class XmpDocument {
 		return true;
 	}
 
+	/** @internal */
 	public serialise(
 		format: RdfSerialisationFormat = 'application/rdf+xml',
 	): string {
@@ -168,6 +170,7 @@ export class XmpDocument {
 		return output;
 	}
 
+	/** @internal */
 	public serialiseXmp(): string {
 		const output = this.serialise()
 			.replace(/^( {4})+/gm, (match) => '\t'.repeat(match.length / 4))

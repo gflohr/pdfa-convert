@@ -377,6 +377,13 @@ export class PDFALab {
 		return await extractText(this.pdfDocument, this.fonts, this.fontUsage);
 	}
 
+	/**
+	 * Extract XMP meta information from the PDF.
+	 *
+	 * @param format the desired serialisation format (default: application/rdf+xml)
+	 * @param baseIRI the base IRI (default: urn:xmp:doc)
+	 * @returns the serialised XMP or `null` if no meta information available
+	 */
 	public extractXMP(
 		format: RdfSerialisationFormat | RdfSerialisationFormatAlias = 'application/rdf+xml',
 		baseIRI = DEFAULT_BASE_IRI,

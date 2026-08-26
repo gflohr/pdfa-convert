@@ -5,9 +5,9 @@ import { fontkit } from '@pdfa-lab/fontkit';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { SingleByteEncodingMapper } from './encoding/mappers/single-byte-encoding-mapper.js';
 import * as collectFont from './font/collect-fonts.js';
+import { fcMatch } from './font/fc-match.js';
 import type { FontInfo, FontMap } from './font/types.js';
 import { type PDFAConversionOptions, PDFALab } from './pdfa-lab.js';
-import { fcMatch } from './font/fc-match.js';
 
 async function makePDFALab(): Promise<PDFALab> {
 	const doc = await PDFDocument.create();

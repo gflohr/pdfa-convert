@@ -1,5 +1,9 @@
 import { Textdomain } from '@esgettext/runtime';
-import { PDFALab } from '@pdfa-lab/core';
+import {
+	DEFAULT_BASE_IRI,
+	PDFALab,
+	type RdfSerialisationFormat,
+} from '@pdfa-lab/core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
@@ -7,8 +11,55 @@ import { coerceOptions, type OptSpec } from '../util/optspec.js';
 
 const gtx = Textdomain.getInstance('pdfa-lab');
 
+const formatAliases: Record<string, RdfSerialisationFormat> = {
+	xml: 'application/rdf+xml',
+	'rdf+xml': 'application/rdf+xml',
+	n3: 'text/n3',
+	notation3: 'text/n3',
+	turtle: 'text/turtle',
+	'n-triples': 'application/n-triples',
+	'nquads': 'application/nquads',
+	'json-ld': 'application/ld+json',
+	'ld+json': 'application/ld+json',
+	'json': 'application/ld+json',
+}
+type RdfSerialisationFormatKey = keyof typeof formatAliases;
+
+const formatChoices: (RdfSerialisationFormat | RdfSerialisationFormatKey)[] = [
+	'application/rdf+xml',
+	'text/n3',
+	'text/turtle',
+	'application/n-triples',
+	'application/nquads',
+	'application/ld+json',
+];
+for (const s in formatAliases) {
+	const shortcut = s as RdfSerialisationFormatKey;
+	if (!formatChoices.includes(shortcut)) {
+		formatChoices.push(shortcut);
+	}
+	formatChoices.push(formatAliases[shortcut]!);
+}
+
 const options: {
+	'base-iri': OptSpec;
+	format: OptSpec;
 } = {
+	'base-iri': {
+		group: gtx._('Mode of Operation'),
+		alias: ['b'],
+		type: 'string',
+		default: DEFAULT_BASE_IRI,
+		describe: gtx._('the base IRI'),
+	},
+	format: {
+		group: gtx._('Output format'),
+		alias: ['f'],
+		type: 'string',
+		choices: formatChoices,
+		default: 'xml',
+		describe: gtx._('the output format'),
+	},
 };
 
 const allOptions = { ...defaultOptions, ...options };
@@ -27,14 +78,34 @@ export class XMPCommand implements Command {
 		return options;
 	}
 
-	private async doRun(input: Buffer, configOptions: ConfigOptions): Promise<number> {
+	private resolveFormatAlias(given: string): RdfSerialisationFormat {
+		if (typeof formatAliases[given] !== 'undefined') {
+			return formatAliases[given];
+		} else {
+			return given as RdfSerialisationFormat;
+		}
+	}
+
+	private serialise(lab: PDFALab, configOptions: ConfigOptions) {
+		const serialised = lab.extractXMP(
+			this.resolveFormatAlias((configOptions.format as string).toLowerCase()),
+			configOptions['base-iri'] as string,
+		);
+
+		if (!serialised) {
+			console.error('Document does not contain XMP meta information.');
+		}
+
+		console.log(serialised);
+	}
+
+	private async doRun(
+		input: Buffer,
+		configOptions: ConfigOptions,
+	): Promise<number> {
 		const lab = await PDFALab.from(input);
 
-		const xml = await lab.extractXMP();
-		if (!xml) {
-			console.error('Document does not contain XMP meta information.');
-			return 1;
-		}
+		this.serialise(lab, configOptions);
 
 		return 0;
 	}

@@ -11,9 +11,12 @@ export async function fcMatch(
 		) === '[object process]';
 	if (!isNode) return;
 
-	const { execFile } = await import('node:child_process');
-	const { promisify } = await import('node:util');
-	const { readFile } = await import('node:fs/promises');
+	const cpModuleName = 'node:child_process';
+	const { execFile } = await import(cpModuleName);
+	const utilModuleName = 'node:util';
+	const { promisify } = await import(utilModuleName);
+	const fsModuleName = 'node:fs/promises';
+	const { readFile } = await import(fsModuleName);
 
 	const execFileAsync = promisify(execFile);
 

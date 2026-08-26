@@ -121,26 +121,9 @@ This document contains minimal XMP meta information.
 	await draw(pdfDoc, text, StandardFonts.Helvetica);
 
 	const xmp = `
-<?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<?xpacket begin="\uFEFF" id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
 	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-		<rdf:Description rdf:about="" xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/">
-			<pdfaid:part>3</pdfaid:part>
-			<pdfaid:conformance>B</pdfaid:conformance>
-		</rdf:Description>
-		<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
-			<dc:format>application/pdf</dc:format>
-			<dc:date>
-				<rdf:Seq>
-					<rdf:li>2026-08-18T16:09:22+03:00</rdf:li>
-				</rdf:Seq>
-			</dc:date>
-			<dc:creator>
-				<rdf:Seq>
-					<rdf:li>Guido Flohr</rdf:li>
-				</rdf:Seq>
-			</dc:creator>
-		</rdf:Description>
 		<rdf:Description rdf:about="" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
 			<pdf:Producer>@pdfa-lab/core</pdf:Producer>
 			<pdf:PDFVersion>1.7</pdf:PDFVersion>
@@ -152,7 +135,7 @@ This document contains minimal XMP meta information.
 			<xmp:MetadataDate>2026-08-19T16:09:22+03:00</xmp:MetadataDate>
 		</rdf:Description>
 	</rdf:RDF>
-</x:xmpmeta>
+</x:xmpmeta><?xpacket end='w'?>
 `;
 	const xmpBytes = new TextEncoder().encode(xmp);
 	const metadataStream = pdfDoc.context.stream(xmpBytes, {
@@ -167,7 +150,6 @@ This document contains minimal XMP meta information.
 	const filename = './assets/pdfs/minimal-xmp.pdf';
 	await fs.writeFile(filename, bytes);
 	console.log(`written ${filename}`);
-
 }
 
 async function genAllFeaturesPDFA(): Promise<void> {

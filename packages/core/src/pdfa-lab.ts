@@ -1,4 +1,11 @@
-import { PDFDocument, PDFName, PDFRef, type PDFStream } from '@cantoo/pdf-lib';
+import {
+	decodePDFRawStream,
+	PDFDocument,
+	PDFName,
+	PDFRawStream,
+	PDFRef,
+	PDFStream,
+} from '@cantoo/pdf-lib';
 import type { FontkitAPI } from '@pdfa-lab/fontkit';
 import collectFonts from './font/collect-fonts.js';
 import { collectResources, type FontUsage } from './font/collect-resources.js';
@@ -8,6 +15,13 @@ import { patchStream } from './font/patch-stream.js';
 import type { FontInfo, FontMap, PatchSet } from './font/types.js';
 import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
 import { extractText } from './text/extract-text.js';
+import {
+	DEFAULT_BASE_IRI,
+	type RdfSerialisationFormat,
+	type RdfSerialisationFormatAlias,
+	rdfSerialisationFormatAlias,
+	XmpDocument,
+} from './xmp/xmp-document.js';
 
 /**
  * Options for embedding fonts.
@@ -79,7 +93,7 @@ export interface TextBlock {
 	 * The page number where the snippet was found.
 	 */
 	pageNumber: number;
-};
+}
 
 export class PDFALab {
 	private fonts: Map<string, FontInfo> | undefined;
@@ -363,7 +377,47 @@ export class PDFALab {
 		return await extractText(this.pdfDocument, this.fonts, this.fontUsage);
 	}
 
-	public async extractXMP(): Promise<string | null> {
-		return null;
+	/**
+	 * Extract XMP meta information from the PDF.
+	 *
+	 * @param format the desired serialisation format (default: application/rdf+xml)
+	 * @param baseIRI the base IRI (default: urn:xmp:doc)
+	 * @returns the serialised XMP or `null` if no meta information available
+	 */
+	public extractXMP(
+		format: RdfSerialisationFormat | RdfSerialisationFormatAlias = 'application/rdf+xml',
+		baseIRI = DEFAULT_BASE_IRI,
+	): string | null {
+		format = format.toLowerCase();
+		if (
+			typeof rdfSerialisationFormatAlias[
+				format as keyof typeof rdfSerialisationFormatAlias
+			] !== 'undefined'
+		) {
+			format = rdfSerialisationFormatAlias[
+				format as keyof typeof rdfSerialisationFormatAlias
+			] as RdfSerialisationFormat;
+		}
+
+		const metadataRef = this.pdfDocument.catalog.get(PDFName.of('Metadata'));
+		if (!metadataRef) return null;
+
+		const stream = this.pdfDocument.context.lookup(metadataRef);
+		if (!(stream instanceof PDFStream)) {
+			return null;
+		}
+
+		let bytes: Uint8Array;
+		if (stream instanceof PDFRawStream) {
+			const decoded = decodePDFRawStream(stream);
+			bytes = decoded.getBytes(0) as Uint8Array;
+		} else {
+			bytes = stream.getContents();
+		}
+
+		const xmlString = new TextDecoder().decode(bytes);
+		const xmpDocument = new XmpDocument(xmlString, baseIRI);
+
+		return xmpDocument.serialise(format as RdfSerialisationFormat);
 	}
 }

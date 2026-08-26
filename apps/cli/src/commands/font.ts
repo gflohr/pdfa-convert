@@ -182,7 +182,6 @@ export class FontCommand implements Command {
 		const configOptions = argv as unknown as ConfigOptions;
 
 		if (!coerceOptions(argv, options)) {
-			console.warn('coerce failed :(');
 			return 1;
 		}
 

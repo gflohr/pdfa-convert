@@ -87,7 +87,7 @@ export class XMPCommand implements Command {
 
 	private serialise(lab: PDFALab, configOptions: ConfigOptions) {
 		const serialised = lab.extractXMP(
-			this.resolveFormatAlias(configOptions.format as string),
+			this.resolveFormatAlias((configOptions.format as string).toLowerCase()),
 			configOptions['base-iri'] as string,
 		);
 

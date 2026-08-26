@@ -62,12 +62,14 @@ describe('XMP Command', () => {
 	});
 
 	it('run() should call extractXMP and return 0 on success', async () => {
-		const extractXMPMock = vi.fn().mockReturnValue([]);
+		const extractXMPMock = vi.fn().mockReturnValue('');
 		(PDFALab.from as Mock).mockResolvedValue({
 			extractXMP: extractXMPMock,
 		});
 
-		const result = await xmpCommand.run(Buffer.from(''), {} as Arguments);
+		const result = await xmpCommand.run(Buffer.from(''), {
+			format: 'xml',
+		} as unknown as Arguments);
 
 		expect(extractXMPMock).toHaveBeenCalledTimes(1);
 		expect(result).toBe(0);

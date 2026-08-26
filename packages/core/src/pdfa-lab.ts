@@ -17,11 +17,9 @@ import { extractGlyphs, type GlyphBlock } from './text/extract-glyphs.js';
 import { extractText } from './text/extract-text.js';
 import {
 	DEFAULT_BASE_IRI,
-	rdfSerialisationFormat,
 	type RdfSerialisationFormat,
+	type RdfSerialisationFormatAlias,
 	rdfSerialisationFormatAlias,
-	RdfSerialisationFormatAlias,
-	RdfSerialisationFormatKey,
 	XmpDocument,
 } from './xmp/xmp-document.js';
 
@@ -380,12 +378,18 @@ export class PDFALab {
 	}
 
 	public async extractXMP(
-		format: RdfSerialisationFormat | RdfSerialisationFormatAlias = 'xml',
+		format: RdfSerialisationFormat | RdfSerialisationFormatAlias = 'application/rdf+xml',
 		baseIRI = DEFAULT_BASE_IRI,
 	): Promise<string | null> {
-		format = format.toLowerCase() as RdfSerialisationFormatKey;
-		if (typeof rdfSerialisationFormatAlias[format as keyof typeof rdfSerialisationFormatAlias] !== 'undefined') {
-			format = rdfSerialisationFormatAlias[format as keyof typeof rdfSerialisationFormatAlias] as RdfSerialisationFormat;
+		format = format.toLowerCase();
+		if (
+			typeof rdfSerialisationFormatAlias[
+				format as keyof typeof rdfSerialisationFormatAlias
+			] !== 'undefined'
+		) {
+			format = rdfSerialisationFormatAlias[
+				format as keyof typeof rdfSerialisationFormatAlias
+			] as RdfSerialisationFormat;
 		}
 
 		const metadataRef = this.pdfDocument.catalog.get(PDFName.of('Metadata'));
@@ -407,6 +411,6 @@ export class PDFALab {
 		const xmlString = new TextDecoder().decode(bytes);
 		const xmpDocument = new XmpDocument(xmlString, baseIRI);
 
-		return xmpDocument.serialise(format);
+		return xmpDocument.serialise(format as RdfSerialisationFormat);
 	}
 }

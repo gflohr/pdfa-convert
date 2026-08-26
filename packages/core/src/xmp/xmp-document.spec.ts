@@ -1,19 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { XmpDocument } from './xmp-document.js';
+import { type RdfSerialisationFormat, XmpDocument } from './xmp-document.js';
 
 const bom = '\uFEFF';
-
-describe('XMP document', () => {
-	it('should create a fresh XMP document', () => {
-		const xmpDoc = new XmpDocument();
-
-		const xmp = xmpDoc.serialiseXmp();
-		console.log(xmp);
-		expect(xmp).toMatchSnapshot();
-	});
-
-	it('should accept an existing XMP document', () => {
-		const packet = `<?xpacket begin="${bom}" id="W5M0MpCehiHzreSzNTczkc9d"?>
+const defaultPacket = `<?xpacket begin="${bom}" id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
 	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 		<rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="">
@@ -28,9 +17,64 @@ describe('XMP document', () => {
 <?xpacket end="w"?>
 `;
 
-		const xmpDoc = new XmpDocument(packet);
+describe('XMP document', () => {
+	describe('serialise XMP', () => {
+		it('should create a fresh XMP document', () => {
+			const xmpDoc = new XmpDocument();
 
-		const xmp = xmpDoc.serialiseXmp();
-		expect(xmp).toMatchSnapshot();
+			const xmp = xmpDoc.serialiseXmp();
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should accept an existing XMP document', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			const xmp = xmpDoc.serialiseXmp();
+			expect(xmp).toMatchSnapshot();
+		});
+	});
+
+	describe('Serialisation Formats', () => {
+		it('should serialise to application/rdf+xml', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			const xmp = xmpDoc.serialise('application/rdf+xml');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should serialise to text/turtle', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			const xmp = xmpDoc.serialise('text/turtle');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should serialise to applidation/n-triples', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			const xmp = xmpDoc.serialise('application/n-triples');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should serialise to applidation/ld+json', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			const xmp = xmpDoc.serialise('application/ld+json');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should serialise to text/n3', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			const xmp = xmpDoc.serialise('text/n3');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should serialise to application/nquads', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			const xmp = xmpDoc.serialise('application/nquads');
+			expect(xmp).toMatchSnapshot();
+		});
 	});
 });

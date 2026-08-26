@@ -14,34 +14,27 @@ export const DEFAULT_BASE_IRI = 'urn:xmp:doc';
 
 /**
  * Output formats.
- *
- * You can either use the shortcut keys or the full MIME types.
  */
-export const rdfSerialisationFormat = {
-	xml: 'application/rdf+xml',
-	turtle: 'text/turtle',
-	'n-triples': 'application/n-triples',
-	'json-ld': 'application/ld+json',
-	n3: 'text/n3',
-	nquads: 'application/nquads',
-} as const satisfies Record<string, string>;
-
 /** Union of all valid key aliases ('xml' | 'html' | 'turtle' | ...) */
-export type RdfSerialisationFormatKey = keyof typeof rdfSerialisationFormat;
-
-/** Union of all unique MIME type values ('application/rdf+xml' | 'text/html'
- * | ...) */
 export type RdfSerialisationFormat =
-	| (typeof rdfSerialisationFormat)[RdfSerialisationFormatKey]
-	| RdfSerialisationFormatKey;
+	| 'application/rdf+xml'
+	| 'text/turtle'
+	| 'application/n-triples'
+	| 'application/ld+json'
+	| 'text/n3'
+	| 'application/nquads';
 
-export const rdfSerialisationFormatAlias = {
+export const rdfSerialisationFormatAlias: Record<
+	string,
+	RdfSerialisationFormat
+> = {
 	'application/x-turtle': 'text/turtle',
 	'application/n3': 'text/n3',
 	'application/n-quads': 'application/nquads',
 };
 
-export type RdfSerialisationFormatAlias = keyof typeof rdfSerialisationFormatAlias;
+export type RdfSerialisationFormatAlias =
+	keyof typeof rdfSerialisationFormatAlias;
 
 /** Localised strings (e.g., alt text, titles in rdf:Alt) */
 export type XmpLangAlt = Record<string, string>; // e.g., { 'x-default': 'Title', 'de-DE': 'Titel' }
@@ -164,13 +157,10 @@ export class XmpDocument {
 		return true;
 	}
 
-	public serialise(format: RdfSerialisationFormat = 'xml'): string {
-		const mimeType =
-			rdfSerialisationFormat[
-				format.toLowerCase() as RdfSerialisationFormatKey
-			] ?? format;
-
-		const output = rdflib.serialize(null, this.kb, this.baseIRI, mimeType);
+	public serialise(
+		format: RdfSerialisationFormat = 'application/rdf+xml',
+	): string {
+		const output = rdflib.serialize(null, this.kb, this.baseIRI, format);
 		if (!output) {
 			throw new Error(`Invalid output format '${format}'!`);
 		}

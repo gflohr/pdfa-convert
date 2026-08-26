@@ -13,8 +13,26 @@ import { coerceOptions, type OptSpec } from '../util/optspec.js';
 
 const gtx = Textdomain.getInstance('pdfa-lab');
 
-const formatChoices: RdfSerialisationFormat[] = [];
-for (const s in rdfSerialisationFormat) {
+const formatAliases: Record<string, RdfSerialisationFormat> = {
+	xml: 'application/rdf+xml',
+	n3: 'text/n3',
+	notation3: 'text/n3',
+	turtle: 'text/turtle',
+	'n-triples': 'application/n-triples',
+	'nquads': 'application/nquads',
+	'json-ld': 'application/ld+json',
+	'ld+json': 'application/ld+json',
+	'json': 'application/ld+json',
+}
+const formatChoices: RdfSerialisationFormat[] = [
+	'application/rdf+xml',
+	'text/n3',
+	'text/turtle',
+	'application/n-triples',
+	'application/nquads',
+	'application/ld+json',
+];
+for (const s in formatAliases) {
 	const shortcut = s as RdfSerialisationFormatKey;
 	if (!formatChoices.includes(shortcut)) {
 		formatChoices.push(shortcut);
@@ -23,7 +41,7 @@ for (const s in rdfSerialisationFormat) {
 }
 
 const options: {
-	'base-iri': OptSpec,
+	'base-iri': OptSpec;
 	format: OptSpec;
 } = {
 	'base-iri': {

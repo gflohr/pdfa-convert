@@ -1,5 +1,5 @@
 import { Textdomain } from '@esgettext/runtime';
-import { PDFALab } from '@pdfa-lab/core';
+import { PDFALab, rdfSerialisationFormat } from '@pdfa-lab/core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
@@ -7,8 +7,26 @@ import { coerceOptions, type OptSpec } from '../util/optspec.js';
 
 const gtx = Textdomain.getInstance('pdfa-lab');
 
+const formatChoices: string[] = [];
+for (const shortcut in rdfSerialisationFormat) {
+	if (!formatChoices.includes(shortcut)) {
+		formatChoices.push(shortcut);
+	}
+	formatChoices.push(rdfSerialisationFormat[shortcut]!);
+}
+console.dir(formatChoices);
+
 const options: {
+	format: OptSpec,
 } = {
+	format: {
+		group: gtx._('Output format'),
+		alias: ['f'],
+		type: 'string',
+		choices: formatChoices,
+		default: 'xml',
+		describe: gtx._('the output format'),
+	}
 };
 
 const allOptions = { ...defaultOptions, ...options };

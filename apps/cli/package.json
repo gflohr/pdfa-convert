@@ -2,7 +2,20 @@
 	"name": "pdfa-lab",
 	"version": "0.1.0",
 	"private": true,
-	"description": "CLI for converting PDFs to PDF/A",
+	"description": "CLI for converting PDFs to PDF/A-1b, PDF/A-2b, or PDF/A-3b, embed fonts, extract text, extract and modify XMP meta information.",
+	"homepage": "https://github.com/gflohr/pdfa-lab/tree/main/apps/cli#readme",
+	"keywords": [
+		"PDF",
+		"PDF/A",
+		"PDF/A-1b",
+		"PDF/A-2b",
+		"PDF/A-3b",
+		"Factur-X",
+		"ZUGFeRD",
+		"XMP",
+		"nodejs",
+		"typescript"
+	],
 	"type": "module",
 	"author": {
 		"name": "Guido Flohr",
@@ -16,7 +29,6 @@
 	"bugs": {
 		"url": "https://github.com/gflohr/pdfa-lab/issues"
 	},
-	"homepage": "https://github.com/gflohr/pdfa-lab/tree/main/apps/cli#readme",
 	"bin": {
 		"pdfa-lab": "./dist/cli.js"
 	},

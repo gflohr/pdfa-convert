@@ -3,8 +3,6 @@ import {
 	DEFAULT_BASE_IRI,
 	PDFALab,
 	type RdfSerialisationFormat,
-	type RdfSerialisationFormatKey,
-	rdfSerialisationFormat,
 } from '@pdfa-lab/core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
@@ -24,7 +22,9 @@ const formatAliases: Record<string, RdfSerialisationFormat> = {
 	'ld+json': 'application/ld+json',
 	'json': 'application/ld+json',
 }
-const formatChoices: RdfSerialisationFormat[] = [
+type RdfSerialisationFormatKey = keyof typeof formatAliases;
+
+const formatChoices: (RdfSerialisationFormat | RdfSerialisationFormatKey)[] = [
 	'application/rdf+xml',
 	'text/n3',
 	'text/turtle',
@@ -37,7 +37,7 @@ for (const s in formatAliases) {
 	if (!formatChoices.includes(shortcut)) {
 		formatChoices.push(shortcut);
 	}
-	formatChoices.push(rdfSerialisationFormat[shortcut]!);
+	formatChoices.push(formatAliases[shortcut]!);
 }
 
 const options: {

@@ -377,10 +377,10 @@ export class PDFALab {
 		return await extractText(this.pdfDocument, this.fonts, this.fontUsage);
 	}
 
-	public async extractXMP(
+	public extractXMP(
 		format: RdfSerialisationFormat | RdfSerialisationFormatAlias = 'application/rdf+xml',
 		baseIRI = DEFAULT_BASE_IRI,
-	): Promise<string | null> {
+	): string | null {
 		format = format.toLowerCase();
 		if (
 			typeof rdfSerialisationFormatAlias[

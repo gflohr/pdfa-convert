@@ -8,6 +8,7 @@ import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
 import { coerceOptions, type OptSpec } from '../util/optspec.js';
+import { config } from 'yargs';
 
 const gtx = Textdomain.getInstance('pdfa-lab');
 
@@ -77,21 +78,26 @@ export class XMPCommand implements Command {
 		return options;
 	}
 
+	private serialise(lab: PDFALab, configOptions: ConfigOptions) {
+		const serialised = lab.extractXMP(
+			configOptions.format as RdfSerialisationFormat,
+			configOptions['base-iri'] as string,
+		);
+
+		if (!serialised) {
+			console.error('Document does not contain XMP meta information.');
+		}
+
+		console.log(serialised);
+	}
+
 	private async doRun(
 		input: Buffer,
 		configOptions: ConfigOptions,
 	): Promise<number> {
 		const lab = await PDFALab.from(input);
 
-		const serialised = await lab.extractXMP(
-			configOptions.format as RdfSerialisationFormat,
-		);
-		if (!serialised) {
-			console.error('Document does not contain XMP meta information.');
-			return 1;
-		}
-
-		console.log(serialised);
+		this.serialise(lab, configOptions);
 
 		return 0;
 	}

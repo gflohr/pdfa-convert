@@ -8,7 +8,6 @@ import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
 import { coerceOptions, type OptSpec } from '../util/optspec.js';
-import { config } from 'yargs';
 
 const gtx = Textdomain.getInstance('pdfa-lab');
 
@@ -78,9 +77,17 @@ export class XMPCommand implements Command {
 		return options;
 	}
 
+	private resolveFormatAlias(given: string): RdfSerialisationFormat {
+		if (typeof formatAliases[given] !== 'undefined') {
+			return formatAliases[given];
+		} else {
+			return given as RdfSerialisationFormat;
+		}
+	}
+
 	private serialise(lab: PDFALab, configOptions: ConfigOptions) {
 		const serialised = lab.extractXMP(
-			configOptions.format as RdfSerialisationFormat,
+			this.resolveFormatAlias(configOptions.format as string),
 			configOptions['base-iri'] as string,
 		);
 

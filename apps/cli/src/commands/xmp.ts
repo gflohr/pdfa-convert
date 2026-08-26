@@ -13,6 +13,7 @@ const gtx = Textdomain.getInstance('pdfa-lab');
 
 const formatAliases: Record<string, RdfSerialisationFormat> = {
 	xml: 'application/rdf+xml',
+	'rdf+xml': 'application/rdf+xml',
 	n3: 'text/n3',
 	notation3: 'text/n3',
 	turtle: 'text/turtle',

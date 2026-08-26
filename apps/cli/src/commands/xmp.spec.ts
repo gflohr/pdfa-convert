@@ -1,6 +1,7 @@
 import { PDFALab } from '@pdfa-lab/core';
 import {
 	afterEach,
+	beforeAll,
 	beforeEach,
 	describe,
 	expect,
@@ -62,7 +63,8 @@ describe('XMP Command', () => {
 	});
 
 	it('run() should call extractXMP and return 0 on success', async () => {
-		const extractXMPMock = vi.fn().mockReturnValue('');
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+		const extractXMPMock = vi.fn().mockReturnValue('abc');
 		(PDFALab.from as Mock).mockResolvedValue({
 			extractXMP: extractXMPMock,
 		});
@@ -73,5 +75,179 @@ describe('XMP Command', () => {
 
 		expect(extractXMPMock).toHaveBeenCalledTimes(1);
 		expect(result).toBe(0);
+		expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+		expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+	});
+
+	describe('Serialisation Format Aliases', () => {
+		let consoleLogSpy: ReturnType<typeof vi.spyOn>;
+
+		beforeEach(() => {
+			consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+		});
+
+		afterEach(() => {
+			vi.restoreAllMocks();
+		});
+
+		it('should allow \'xml\' as an alias for \'application/rdf+xml\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'xml',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/rdf+xml', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'rdf+xml\' as an alias for \'application/rdf+xml\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'rdf+xml',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/rdf+xml', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'N3\' as an alias for \'text/n3\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'N3',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('text/n3', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'Notation3\' as an alias for \'text/n3\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'Notation3',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('text/n3', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'Turtle\' as an alias for \'text/turtle\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'Turtle',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('text/turtle', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'N-Triples\' as an alias for \'application/n-triples\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'N-Triples',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/n-triples', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'nquads\' as an alias for \'application/nquads\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'nquads',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/nquads', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'json-ld\' as an alias for \'application/ld+json\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'json-ld',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'ld+json\' as an alias for \'application/ld+json\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'ld+json',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
+
+		it('should allow \'json\' as an alias for \'application/ld+json\'', async () => {
+			const extractXMPMock = vi.fn().mockReturnValue('abc');
+			(PDFALab.from as Mock).mockResolvedValue({
+				extractXMP: extractXMPMock,
+			});
+
+			await xmpCommand.run(Buffer.from(''), {
+				format: 'json',
+			} as unknown as Arguments);
+
+			expect(extractXMPMock).toHaveBeenCalledTimes(1);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined);
+			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
+		});
 	});
 });

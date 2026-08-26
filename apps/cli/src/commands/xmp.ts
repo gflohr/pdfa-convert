@@ -1,5 +1,11 @@
 import { Textdomain } from '@esgettext/runtime';
-import { PDFALab, rdfSerialisationFormat } from '@pdfa-lab/core';
+import {
+	DEFAULT_BASE_IRI,
+	PDFALab,
+	type RdfSerialisationFormat,
+	type RdfSerialisationFormatKey,
+	rdfSerialisationFormat,
+} from '@pdfa-lab/core';
 import type { Arguments, InferredOptionTypes } from 'yargs';
 import type { Command } from '../command.js';
 import { defaultOptions } from '../default-options.js';
@@ -7,18 +13,26 @@ import { coerceOptions, type OptSpec } from '../util/optspec.js';
 
 const gtx = Textdomain.getInstance('pdfa-lab');
 
-const formatChoices: string[] = [];
-for (const shortcut in rdfSerialisationFormat) {
+const formatChoices: RdfSerialisationFormat[] = [];
+for (const s in rdfSerialisationFormat) {
+	const shortcut = s as RdfSerialisationFormatKey;
 	if (!formatChoices.includes(shortcut)) {
 		formatChoices.push(shortcut);
 	}
 	formatChoices.push(rdfSerialisationFormat[shortcut]!);
 }
-console.dir(formatChoices);
 
 const options: {
-	format: OptSpec,
+	'base-iri': OptSpec,
+	format: OptSpec;
 } = {
+	'base-iri': {
+		group: gtx._('Mode of Operation'),
+		alias: ['b'],
+		type: 'string',
+		default: DEFAULT_BASE_IRI,
+		describe: gtx._('the base IRI'),
+	},
 	format: {
 		group: gtx._('Output format'),
 		alias: ['f'],
@@ -26,7 +40,7 @@ const options: {
 		choices: formatChoices,
 		default: 'xml',
 		describe: gtx._('the output format'),
-	}
+	},
 };
 
 const allOptions = { ...defaultOptions, ...options };
@@ -45,14 +59,21 @@ export class XMPCommand implements Command {
 		return options;
 	}
 
-	private async doRun(input: Buffer, configOptions: ConfigOptions): Promise<number> {
+	private async doRun(
+		input: Buffer,
+		configOptions: ConfigOptions,
+	): Promise<number> {
 		const lab = await PDFALab.from(input);
 
-		const xml = await lab.extractXMP();
-		if (!xml) {
+		const serialised = await lab.extractXMP(
+			configOptions.format as RdfSerialisationFormat,
+		);
+		if (!serialised) {
 			console.error('Document does not contain XMP meta information.');
 			return 1;
 		}
+
+		console.log(serialised);
 
 		return 0;
 	}

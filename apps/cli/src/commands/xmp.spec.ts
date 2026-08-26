@@ -39,7 +39,9 @@ describe('XMP Command', () => {
 	});
 
 	it('description() should return a valid description', () => {
-		expect(xmpCommand.description()).toBe('Show or manipulate XMP meta information of a PDF document.');
+		expect(xmpCommand.description()).toBe(
+			'Show or manipulate XMP meta information of a PDF document.',
+		);
 	});
 
 	it('aliases() should return an empty array', () => {

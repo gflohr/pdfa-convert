@@ -150,7 +150,6 @@ This document contains minimal XMP meta information.
 	const filename = './assets/pdfs/minimal-xmp.pdf';
 	await fs.writeFile(filename, bytes);
 	console.log(`written ${filename}`);
-
 }
 
 async function genAllFeaturesPDFA(): Promise<void> {

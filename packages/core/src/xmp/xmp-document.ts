@@ -95,7 +95,8 @@ const bom = '\uFEFF';
 
 /** @internal */
 export class XmpDocument {
-	private static readonly NS_X = 'adobe:ns:meta/';
+	/** @internal */
+	public static readonly NS_X = 'adobe:ns:meta/';
 	private static readonly NS_RDF =
 		'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 
@@ -184,7 +185,11 @@ export class XmpDocument {
 		format: RdfSerialisationFormat = 'application/rdf+xml',
 		options: RdfSerialisationOptions = {},
 	): string {
-		const output = rdflib.serialize(null, this.kb, this.baseIRI, format,
+		const output = rdflib.serialize(
+			null,
+			this.kb,
+			this.baseIRI,
+			format,
 			undefined,
 			{ ...options, namespaces: this.namespaces },
 		);

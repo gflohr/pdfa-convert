@@ -386,7 +386,7 @@ export class PDFALab {
 	 * @param options serialisation options for certain formats, see {@link TODO}
 	 * @returns the serialised XMP or `null` if no meta information available
 	 */
-	public extractXMP(
+	public extractXmp(
 		format:
 			| RdfSerialisationFormat
 			| RdfSerialisationFormatAlias = 'application/rdf+xml',

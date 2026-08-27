@@ -240,7 +240,7 @@ describe('PDFALab', () => {
 				const pdfFilename = path.resolve(pdfDir, 'factur-x.pdf');
 				const pdfBytes = await fs.readFile(pdfFilename);
 				const lab = await PDFALab.from(pdfBytes);
-				const rdf = lab.extractXMP();
+				const rdf = lab.extractXmp();
 
 				expect(rdf).toMatchSnapshot();
 			});
@@ -265,7 +265,7 @@ describe('PDFALab', () => {
 
 				const newPdfBytes = await lab.save();
 				const newLab = await PDFALab.from(newPdfBytes);
-				const xmp = newLab.extractXMP();
+				const xmp = newLab.extractXmp();
 				expect(xmp).toBe(`<rdf:RDF
  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
@@ -298,7 +298,7 @@ describe('PDFALab', () => {
 
 				const newPdfBytes = await lab.save();
 				const newLab = await PDFALab.from(newPdfBytes);
-				const xmp = newLab.extractXMP();
+				const xmp = newLab.extractXmp();
 				expect(xmp).toBe(`<rdf:RDF
  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns:pdf="http://ns.adobe.com/pdf/1.3/"

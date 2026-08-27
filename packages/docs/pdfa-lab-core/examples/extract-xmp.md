@@ -25,7 +25,7 @@ async function extract() {
 	const bytes = new Uint8Array(arrayBuffer);
 
 	const lab = await PDFALab.from(bytes);
-	const output = await lab.extractXMP(
+	const output = await lab.extractXmp(
 		'text/turtle',
 		'urn:xmp:doc',
 		{ flags: 'o' },
@@ -55,7 +55,7 @@ async function extract() {
 	const bytes = new Uint8Array(arrayBuffer);
 
 	const lab = await PDFALab.from(bytes);
-	const output = await lab.extractXMP(
+	const output = await lab.extractXmp(
 		'text/turtle',
 		'urn:xmp:doc',
 		{ flags: 'o' },
@@ -85,7 +85,7 @@ async function extract() {
 	const bytes = new Uint8Array(arrayBuffer);
 
 	const lab = await PDFALab.from(bytes);
-	const output = await lab.extractXMP(
+	const output = await lab.extractXmp(
 		'text/turtle',
 		'urn:xmp:doc',
 		{ flags: 'o' },
@@ -97,7 +97,7 @@ async function extract() {
 
 :::
 
-The method [`extractXMP()`](/pdfa-lab-core/api/classes/PDFALab.html#extractxmp)
+The method [`extractXmp()`](/pdfa-lab-core/api/classes/PDFALab.html#extractxmp)
 returns the extracted XMP meta information in various formats, or `null`, if
 no XMP meta information is found.
 

@@ -44,6 +44,7 @@ for (const s in formatAliases) {
 const options: {
 	'base-iri': OptSpec;
 	format: OptSpec;
+	flags: OptSpec;
 } = {
 	'base-iri': {
 		group: gtx._('Mode of Operation'),
@@ -59,6 +60,11 @@ const options: {
 		choices: formatChoices,
 		default: 'xml',
 		describe: gtx._('the output format'),
+	},
+	flags: {
+		group: gtx._('Output format'),
+		type: 'string',
+		describe: gtx._('the serialiser flags'),
 	},
 };
 
@@ -90,6 +96,7 @@ export class XMPCommand implements Command {
 		const serialised = lab.extractXMP(
 			this.resolveFormatAlias((configOptions.format as string).toLowerCase()),
 			configOptions['base-iri'] as string,
+			{ flags: configOptions.flags as string },
 		);
 
 		if (!serialised) {

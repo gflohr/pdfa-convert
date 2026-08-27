@@ -36,6 +36,26 @@ export const rdfSerialisationFormatAlias: Record<
 export type RdfSerialisationFormatAlias =
 	keyof typeof rdfSerialisationFormatAlias;
 
+/**
+ * Serialisation options.
+ */
+export interface RdfSerialisationOptions {
+	/**
+	 * Common flags used internally (you can combine them, e.g. 'o k'):
+	 *
+	 * * s i – used by default for Turtle to suppress =, => notations
+	 * * d e i n p r s t u x – used for N-Triples/N-Quads to simplify output
+	 * * dr – used with JSON‑LD conversion (no default, no relative prefix)
+	 * o – new: do not abbreviate to a prefixed name when the local part contains a dot. This keeps IRIs like http://example.org/ns/subject.example in <...> form instead of ns:subject.example.
+	 *
+	 * Notes:
+	 *
+	 * For Turtle and JSON‑LD, user‑provided flags are merged with the defaults so your flags (like o) are honored.
+	 * By contrast, passing 'p' disables prefix abbreviations entirely (all terms are written as <...> IRIs).
+	 */
+	flags?: string;
+}
+
 /** Localised strings (e.g., alt text, titles in rdf:Alt) */
 export type XmpLangAlt = Record<string, string>; // e.g., { 'x-default': 'Title', 'de-DE': 'Titel' }
 
@@ -81,6 +101,7 @@ export class XmpDocument {
 
 	private doc: Document;
 	private kb = rdflib.graph();
+	private namespaces: Record<string, string> = {};
 
 	constructor(
 		xmlString?: string,
@@ -161,8 +182,12 @@ export class XmpDocument {
 	/** @internal */
 	public serialise(
 		format: RdfSerialisationFormat = 'application/rdf+xml',
+		options: RdfSerialisationOptions = {},
 	): string {
-		const output = rdflib.serialize(null, this.kb, this.baseIRI, format);
+		const output = rdflib.serialize(null, this.kb, this.baseIRI, format,
+			undefined,
+			{ ...options, namespaces: this.namespaces },
+		);
 		if (!output) {
 			throw new Error(`Invalid output format '${format}'!`);
 		}
@@ -172,7 +197,7 @@ export class XmpDocument {
 
 	/** @internal */
 	public serialiseXmp(): string {
-		const output = this.serialise()
+		const output = this.serialise('application/rdf+xml', undefined)
 			.replace(/^( {4})+/gm, (match) => '\t'.repeat(match.length / 4))
 			.replace(/\n$/, '')
 			.replace(/^/gm, '\t');

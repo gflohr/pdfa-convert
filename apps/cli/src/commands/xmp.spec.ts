@@ -101,7 +101,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('application/rdf+xml', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/rdf+xml', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -117,7 +117,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('application/rdf+xml', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/rdf+xml', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -133,7 +133,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('text/n3', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('text/n3', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -149,7 +149,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('text/n3', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('text/n3', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -165,7 +165,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('text/turtle', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('text/turtle', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -181,7 +181,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('application/n-triples', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/n-triples', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -197,7 +197,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('application/nquads', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/nquads', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -213,7 +213,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -229,7 +229,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});
@@ -245,7 +245,7 @@ describe('XMP Command', () => {
 			} as unknown as Arguments);
 
 			expect(extractXMPMock).toHaveBeenCalledTimes(1);
-			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined);
+			expect(extractXMPMock).toHaveBeenCalledWith('application/ld+json', undefined, { flags: undefined });
 			expect(consoleLogSpy).toHaveBeenCalledTimes(1);
 			expect(consoleLogSpy).toHaveBeenCalledWith('abc');
 		});

@@ -20,6 +20,7 @@ import {
 	type RdfSerialisationFormat,
 	type RdfSerialisationFormatAlias,
 	rdfSerialisationFormatAlias,
+	RdfSerialisationOptions,
 	XmpDocument,
 } from './xmp/xmp-document.js';
 
@@ -382,11 +383,13 @@ export class PDFALab {
 	 *
 	 * @param format the desired serialisation format (default: application/rdf+xml)
 	 * @param baseIRI the base IRI (default: urn:xmp:doc)
+	 * @param options serialisation options for certain formats, see {@link TODO}
 	 * @returns the serialised XMP or `null` if no meta information available
 	 */
 	public extractXMP(
 		format: RdfSerialisationFormat | RdfSerialisationFormatAlias = 'application/rdf+xml',
 		baseIRI = DEFAULT_BASE_IRI,
+		options: RdfSerialisationOptions = {},
 	): string | null {
 		format = format.toLowerCase();
 		if (

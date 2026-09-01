@@ -52,7 +52,7 @@ You can further control the output with the option `--flags` or `-f`. Flags
 can be combined (for example `o k`):
 
 
-* `s i` – used by default for Turtle to suppress =, => notations
+* `s i` – used by default for Turtle to suppress `=`, `=>` notations
 * `d e i n p r s t u x` – used for N-Triples/N-Quads to simplify output
 * `dr` – used with JSON‑LD conversion (no default, no relative prefix)
 * `o` – new: do not abbreviate to a prefixed name when the local part contains a dot. This keeps IRIs like http://example.org/ns/subject.example in <...> form instead of ns:subject.example.

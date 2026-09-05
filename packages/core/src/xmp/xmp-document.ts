@@ -96,9 +96,52 @@ const bom = '\uFEFF';
 /** @internal */
 export class XmpDocument {
 	/** @internal */
-	public static readonly NS_X = 'adobe:ns:meta/';
+	private static readonly NS_X = 'adobe:ns:meta/';
+
+	/** @internal */
 	private static readonly NS_RDF =
 		'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+
+	/** The IPTC Core namespace; preferred prefix: `Iptc4xmpCore`. */
+	public static readonly NS_IPTC4XMPCORE =
+		'http://ns.adobe.com/camera-raw-settings/1.0/';
+
+	/** The Camera Raw namespace; preferred prefix: `crs`. */
+	public static readonly NS_CRS =
+		'http://ns.adobe.com/camera-raw-settings/1.0/';
+
+	/** The Dublin Core namespace. Preferred prefix: `dc`. */
+	public static readonly NS_DC = 'http://purl.org/dc/elements/1.1/';
+
+	/** The EXIF namespace. Preferred prefix: `exif`. */
+	public static readonly NS_EXIF = 'http://ns.adobe.com/exif/1.0/';
+
+	/** The Adobe PDF namespace. Preferred prefix: `pdf`. */
+	public static readonly NS_PDF = 'http://ns.adobe.com/pdf/1.3/';
+
+	/** The Photoshop namespace. Preferred prefix: `photoshop`. */
+	public static readonly NS_PHOTOSHOP = 'http://ns.adobe.com/exif/1.0/';
+
+	/** The TIFF namespace. Preferred prefix: `tiff`. */
+	public static readonly NS_TIFF = 'http://ns.adobe.com/tiff/1.0/';
+
+	/** The Adobe XMP Basic namespace. Preferred prefix: `xmp`. */
+	public static readonly NS_XMP = 'http://ns.adobe.com/xap/1.0/';
+
+	/** The Basic Job Ticket namespace. Preferred prefix: `xmpBJ`. */
+	public static readonly NS_XMPBJ = 'http://ns.adobe.com/xap/1.0/bj/';
+
+	/** The XMP Dynamic Media namespace. Preferred prefix: `xmpDM`. */
+	public static readonly NS_XMPDM = 'http://ns.adobe.com/xmp/1.0/DynamicMedia/';
+
+	/** The XMP Media Management namespace. Preferred prefix: `xmpMM`. */
+	public static readonly NS_XMPMM = 'http://ns.adobe.com/xap/1.0/mm/';
+
+	/** The XMP Rights Management namespace. Preferred prefix: `xmpRights`. */
+	public static readonly NS_XMPRIGHTS = 'http://ns.adobe.com/xap/1.0/rights/';
+
+	/** The XMP Paged-Text namespace. Preferred prefix: `xmpTPg`. */
+	public static readonly NS_XMPTPG = 'http://ns.adobe.com/xap/1.0/t/pg/';
 
 	private doc: Document;
 	private kb = rdflib.graph();
@@ -148,6 +191,19 @@ export class XmpDocument {
 		xmlString = new XMLSerializer().serializeToString(rdfElement);
 
 		rdflib.parse(xmlString, this.kb, baseIRI, 'application/rdf+xml');
+
+		this.setNamespacePrefix('Iptc4xmpCore', XmpDocument.NS_IPTC4XMPCORE);
+		this.setNamespacePrefix('crs', XmpDocument.NS_CRS);
+		this.setNamespacePrefix('dc', XmpDocument.NS_DC);
+		this.setNamespacePrefix('exif', XmpDocument.NS_EXIF);
+		this.setNamespacePrefix('pdf', XmpDocument.NS_PDF);
+		this.setNamespacePrefix('photoshop', XmpDocument.NS_PHOTOSHOP);
+		this.setNamespacePrefix('tiff', XmpDocument.NS_TIFF);
+		this.setNamespacePrefix('xmp', XmpDocument.NS_XMP);
+		this.setNamespacePrefix('xmpBJ', XmpDocument.NS_XMPBJ);
+		this.setNamespacePrefix('xmpMM', XmpDocument.NS_XMPMM);
+		this.setNamespacePrefix('xmpRights', XmpDocument.NS_XMPRIGHTS);
+		this.setNamespacePrefix('xmpTPg', XmpDocument.NS_XMPTPG);
 	}
 
 	private static createEmptyXmpMeta(): string {
@@ -236,5 +292,49 @@ ${output}</x:xmpmeta>
 		const newRdf = this.doc.createElementNS(XmpDocument.NS_RDF, 'rdf:RDF');
 		xmpMeta.appendChild(newRdf);
 		return newRdf;
+	}
+
+	/**
+	 * Registers a prefix for a given namespace. A number of namespaces have a
+	 * default prefix that does not have to be set explicitely:
+	 *
+	 * * `Iptc4xmpCore`
+	 * * `crs`
+	 * * `dc`
+	 * * `exif`
+	 * * `pdf`
+	 * * `photoshop`
+	 * * `tiff`
+	 * * `xmp`
+	 * * `xmpBJ`
+	 * * `xmpDM`
+	 * * `xmpMM`
+	 * * `xmpRights`
+	 * * `xmpTPg`
+	 *
+	 * @param namespace
+	 * @param url
+	 * @see {@link XMPDocument.NS_IPTC4XMPCORE}, {@link XMPDocument.NS_CRS}, {@link XMPDocument.NS_DC}, {@link XMPDocument.NS_EXIF}, {@link XMPDocument.NS_PDF}, {@link XMPDocument.NS_PHOTOSHOP}, {@link XMPDocument.NS_TIFF}, {@link XMPDocument.NS_XMP}, {@link XMPDocument.NS_XMPBJ}, {@link XMPDocument.NS_XMPDM}, {@link XMPDocument.NS_XMPRIGHTS}, {@link XMPDocument.NS_XMPTPG}.
+	 */
+	public setNamespacePrefix(prefix: string, namespace: string) {
+		this.namespaces[prefix] = namespace;
+	}
+
+	public setMetaInfo(prefix: string, name: string, value: string) {
+		const namespaceUri = this.namespaces[prefix];
+		if (!namespaceUri) {
+			throw new Error(`Unknown prefix: '${prefix}'`);
+		}
+
+		const subject = rdflib.sym(this.baseIRI);
+		const predicate = rdflib.sym(namespaceUri + name);
+		const newObject = rdflib.literal(value);
+
+		// 1. Remove existing triple(s) for this predicate (overwrite)
+		const existingQuads = this.kb.statementsMatching(subject, predicate, null);
+		this.kb.removeStatements(existingQuads);
+
+		// 2. Add the new value
+		this.kb.add(subject, predicate, newObject);
 	}
 }

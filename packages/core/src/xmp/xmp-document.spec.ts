@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type RdfSerialisationFormat, XmpDocument } from './xmp-document.js';
+import { XmpDocument } from './xmp-document.js';
 
 const bom = '\uFEFF';
 const defaultPacket = `<?xpacket begin="${bom}" id="W5M0MpCehiHzreSzNTczkc9d"?>
@@ -75,6 +75,34 @@ describe('XMP document', () => {
 
 			const xmp = xmpDoc.serialise('application/nquads');
 			expect(xmp).toMatchSnapshot();
+		});
+	});
+
+	describe('setMetaInfo', () => {
+		it('should add a new property to a fresh document', () => {
+			const xmpDoc = new XmpDocument();
+			xmpDoc.setMetaInfo('pdf', 'Keywords', 'PDF/A, TypeScript');
+
+			const xmp = xmpDoc.serialiseXmp();
+			expect(xmp).toContain('pdf:Keywords');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should overwrite an existing property value', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+			xmpDoc.setMetaInfo('pdf', 'Producer', 'Custom PDF Generator');
+
+			const xmp = xmpDoc.serialiseXmp();
+			expect(xmp).toContain('Custom PDF Generator');
+			expect(xmp).not.toContain('@pdfa-lab/core');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should throw when providing an unregistered namespace prefix', () => {
+			const xmpDoc = new XmpDocument();
+			expect(() => xmpDoc.setMetaInfo('unknown', 'Foo', 'Bar')).toThrow(
+				"Unknown prefix: 'unknown'",
+			);
 		});
 	});
 });

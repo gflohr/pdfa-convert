@@ -319,6 +319,24 @@ ${output}</x:xmpmeta>
 		this.namespaces[prefix] = namespace;
 	}
 
+
+	public getMetaInfo(path: string): string | null {
+		const [prefix, name] = path.split(':');
+		if (typeof prefix === 'undefined' || typeof name === 'undefined') {
+			throw new Error('Path must start with a namespace prefix!');
+		}
+
+		const namespaceUri = this.namespaces[prefix];
+		if (!namespaceUri) {
+			throw new Error(`Unknown prefix: '${prefix}'`);
+		}
+
+		const subject = rdflib.sym(this.baseIRI);
+		const predicate = rdflib.sym(namespaceUri + name);
+
+		return this.kb.anyValue(subject, predicate, null) ?? null;
+	}
+
 	public setMetaInfo(
 		path: string,
 		value: string,

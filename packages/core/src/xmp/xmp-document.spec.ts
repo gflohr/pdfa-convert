@@ -97,4 +97,18 @@ describe('XMP document', () => {
 			expect(xmp).toMatchSnapshot();
 		});
 	});
+
+	describe('getMetaInfo', () => {
+		it('should get an existing property', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			expect(xmpDoc.getMetaInfo('dc:format')).toBe('application/pdf');
+		});
+
+		it('should return null for non-existing properties', () => {
+			const xmpDoc = new XmpDocument(defaultPacket);
+
+			expect(xmpDoc.getMetaInfo('dc:identifier')).toBeNull();
+		});
+	});
 });

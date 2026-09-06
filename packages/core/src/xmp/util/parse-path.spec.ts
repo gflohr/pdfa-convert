@@ -6,11 +6,9 @@ describe('XMP Path Parser', () => {
 		const path = 'xy:person.name';
 		expect(parsePath(path)).toStrictEqual([
 			{
-				tokenType: 'name',
 				value: 'xy:person',
 			},
 			{
-				tokenType: 'name',
 				value: 'name',
 			},
 		]);
@@ -20,11 +18,9 @@ describe('XMP Path Parser', () => {
 		const path = '$.xy:person.name';
 		expect(parsePath(path)).toStrictEqual([
 			{
-				tokenType: 'name',
 				value: 'xy:person',
 			},
 			{
-				tokenType: 'name',
 				value: 'name',
 			},
 		]);
@@ -34,15 +30,10 @@ describe('XMP Path Parser', () => {
 		const path = '$.xy:person[1].name';
 		expect(parsePath(path)).toStrictEqual([
 			{
-				tokenType: 'name',
 				value: 'xy:person',
+				index: 1,
 			},
 			{
-				tokenType: '[]',
-				value: 1,
-			},
-			{
-				tokenType: 'name',
 				value: 'name',
 			},
 		]);
@@ -52,34 +43,24 @@ describe('XMP Path Parser', () => {
 		const path = '$.xy:person.name[bg-BG]';
 		expect(parsePath(path)).toStrictEqual([
 			{
-				tokenType: 'name',
 				value: 'xy:person',
 			},
 			{
-				tokenType: 'name',
 				value: 'name',
-			},
-			{
-				tokenType: '[]',
-				value: 'bg-BG',
+				index: 'bg-BG',
 			},
 		]);
 	});
 
-	it("should treat an empty language tag as 'x-default'", () => {
+	it("should allow empty indexes", () => {
 		const path = '$.xy:person.name[]';
 		expect(parsePath(path)).toStrictEqual([
 			{
-				tokenType: 'name',
 				value: 'xy:person',
 			},
 			{
-				tokenType: 'name',
 				value: 'name',
-			},
-			{
-				tokenType: '[]',
-				value: 'x-default',
+				index: '',
 			},
 		]);
 	});

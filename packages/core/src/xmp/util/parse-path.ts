@@ -1,8 +1,8 @@
 import { langTagRegex } from './lang-tag-regex.js';
 
 export interface PathToken {
-	tokenType: '[]' | 'name';
-	value: string | number;
+	value: string;
+	index?: string | number;
 }
 
 /** @internal */
@@ -18,7 +18,7 @@ export function parsePath(path: string): PathToken[] {
 		if (indexMatch) {
 			part = part.substring(0, indexMatch.index);
 			if (!indexMatch[1]) {
-				index = 'x-default';
+				index = '';
 			} else if (indexMatch[1].match(/^[0-9]+$/)) {
 				index = parseInt(indexMatch[1], 10);
 			} else if (indexMatch[1].match(langTagRegex)) {
@@ -32,17 +32,12 @@ export function parsePath(path: string): PathToken[] {
 			throw new Error('Empty element names are not allowed');
 		}
 
-		tokens.push({
-			tokenType: 'name',
-			value: part,
-		});
-
+		const token: PathToken = { value: part };
 		if (typeof index !== 'undefined') {
-			tokens.push({
-				tokenType: '[]',
-				value: index,
-			});
+			token.index = index;
 		}
+
+		tokens.push(token);
 	});
 
 	return tokens;

@@ -316,9 +316,21 @@ ${output}</x:xmpmeta>
 		namespace: string,
 		schema: XMPNamespaceSchema,
 	) {
-		this.namespaces[prefix] = namespace;
-	}
+		if (!prefix) {
+			throw new Error('Missing or empty namespace argument!');
+		}
 
+		if (!namespace) {
+			throw new Error('Missing or empty namespace argument!');
+		}
+
+		if (!schema) {
+			throw new Error('The schema argument must be a valibot object schema!');
+		}
+
+		this.namespaces[prefix] = namespace;
+		this.schemas[prefix] = schema;
+	}
 
 	public getMetaInfo(path: string): string | null {
 		const [prefix, name] = path.split(':');
@@ -354,8 +366,16 @@ ${output}</x:xmpmeta>
 
 		const subject = rdflib.sym(this.baseIRI);
 		const predicate = rdflib.sym(namespaceUri + name);
-		const newObject = rdflib.literal(value);
 
+		this.setLiteralMetaInfo(subject, predicate, value, options);
+	}
+
+	private setLiteralMetaInfo(
+		subject: rdflib.NamedNode,
+		predicate: rdflib.NamedNode,
+		value: string,
+		options: XMPSetMetaInfoOptions,
+	) {
 		// 1. Remove existing triple(s) for this predicate (overwrite).
 		const existingQuads = this.kb.statementsMatching(subject, predicate, null);
 		if (existingQuads.length && options.noOverwrite) {
@@ -365,6 +385,42 @@ ${output}</x:xmpmeta>
 		this.kb.removeStatements(existingQuads);
 
 		// 2. Add the new value
-		this.kb.add(subject, predicate, newObject);
+		this.kb.add(subject, predicate, rdflib.literal(value));
+	}
+
+	public tryOut() {
+		const prefix = 'dc';
+		const namespaceUri = this.namespaces[prefix]!;
+		const subject = rdflib.sym(this.baseIRI);
+		const dcIdentifier = rdflib.sym(`${namespaceUri}identifier`);
+
+		let container = this.kb.any(subject, dcIdentifier, null) as
+			| rdflib.NamedNode
+			| rdflib.BlankNode
+			| null;
+
+		if (!container) {
+			container = rdflib.blankNode('dc:identifier');
+			this.kb.add(
+				container,
+				rdflib.sym(`${XmpDocument.NS_RDF}type`),
+				rdflib.sym(`${XmpDocument.NS_RDF}Bag`),
+			);
+			this.kb.add(subject, dcIdentifier, container);
+		}
+
+		this.kb.add(
+			container,
+			rdflib.sym(`${XmpDocument.NS_RDF}_1`),
+			rdflib.literal('Jane Doe'),
+		);
+
+		this.kb.add(
+			container,
+			rdflib.sym(`${XmpDocument.NS_RDF}_2`),
+			rdflib.literal('John Doe'),
+		);
+
+		console.log(this.serialiseXmp());
 	}
 }

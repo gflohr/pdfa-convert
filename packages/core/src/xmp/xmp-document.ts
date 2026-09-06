@@ -69,6 +69,21 @@ export type XmpValue =
 	| { [key: string]: XmpValue };
 
 /**
+ * Options for setMetaInfo().
+ */
+export interface XMPSetMetaInfoOptions {
+	/**
+	 * Skip validation? Default `false`.
+	 */
+	noValidate?: boolean;
+
+	/**
+	 * Keep existing value? Default `false`.
+	 */
+	noOverwrite?: boolean;
+}
+
+/**
  * Dublin core metadata.
  *
  * See https://developer.adobe.com/xmp/docs/xmp-namespaces/dc/!
@@ -320,7 +335,12 @@ ${output}</x:xmpmeta>
 		this.namespaces[prefix] = namespace;
 	}
 
-	public setMetaInfo(prefix: string, name: string, value: string) {
+	public setMetaInfo(
+		prefix: string,
+		name: string,
+		value: string,
+		options: XMPSetMetaInfoOptions = {},
+	) {
 		const namespaceUri = this.namespaces[prefix];
 		if (!namespaceUri) {
 			throw new Error(`Unknown prefix: '${prefix}'`);
@@ -330,7 +350,7 @@ ${output}</x:xmpmeta>
 		const predicate = rdflib.sym(namespaceUri + name);
 		const newObject = rdflib.literal(value);
 
-		// 1. Remove existing triple(s) for this predicate (overwrite)
+		// 1. Remove existing triple(s) for this predicate (overwrite).
 		const existingQuads = this.kb.statementsMatching(subject, predicate, null);
 		this.kb.removeStatements(existingQuads);
 

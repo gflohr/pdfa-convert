@@ -42,7 +42,9 @@ describe('XMP Path Parser', () => {
 
 	it('should throw an exception for a missing top-level prefix', () => {
 		const path = 'person.name';
-		expect(() => parsePath(path)).toThrow('The first path element must have a namespace prefix!');
+		expect(() => parsePath(path)).toThrow(
+			'The first path element must have a namespace prefix!',
+		);
 	});
 
 	it('should throw an exception for a lone colon following a valid path element', () => {
@@ -95,7 +97,7 @@ describe('XMP Path Parser', () => {
 		]);
 	});
 
-	it("should allow empty indexes", () => {
+	it('should allow empty indexes', () => {
 		const path = '$.xy:person.name[]';
 		expect(parsePath(path)).toStrictEqual([
 			{

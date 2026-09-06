@@ -6,9 +6,10 @@ import {
 	XMLSerializer,
 } from '@xmldom/xmldom';
 import * as rdflib from 'rdflib';
+import * as v from 'valibot';
 import { dublinCoreNamespace } from './namespaces/dublin-core.js';
 import { parsePath } from './util/parse-path.js';
-import type { XMPNamespaceSchema } from './xmp-namespace.js';
+import type { XMPNamespaceSchema, XmpSchema } from './xmp-namespace.js';
 
 /**
  * Default base IRI.
@@ -376,25 +377,30 @@ ${output}</x:xmpmeta>
 
 		const token = tokens[0]!;
 
-		this.setMetaInfoLeaf(token.prefix, token.name, value, token.index, options);
-	}
-
-	public setMetaInfoLeaf(
-		prefix: string,
-		name: string,
-		value: string,
-		index: string | number | undefined,
-		options: XMPSetMetaInfoOptions,
-	) {
-		const namespaceUri = this.namespaces[prefix];
+		const namespaceUri = this.namespaces[token.prefix];
 		if (!namespaceUri) {
-			throw new Error(`Unknown prefix: '${prefix}'`);
+			throw new Error(`Unknown prefix: '${token.prefix}'`);
 		}
 
 		const subject = rdflib.sym(this.baseIRI);
-		const predicate = rdflib.sym(namespaceUri + name);
+		const predicate = rdflib.sym(namespaceUri + token.name);
 
-		this.setLiteralMetaInfo(subject, predicate, value, options);
+		const namespaceSchema = this.schemas[token.prefix]!;
+		const schema = namespaceSchema.entries[token.name];
+		if (!schema) {
+			throw new Error(`The node '${path}' is unknown!`);
+		}
+
+		if (schema.expects.includes('Array')) {
+			const node = rdflib.sym(`${namespaceUri}${token.name}`);
+			const listType =
+				(schema as XmpSchema).xmpContainer === 'Seq' ? 'Seq' : 'Bag';
+			const container = this.getContainer(subject, node, token.name, listType);
+
+			this.setListItem(container, token.index, value, options);
+		} else {
+			this.setLiteralMetaInfo(subject, predicate, value, options);
+		}
 	}
 
 	private setLiteralMetaInfo(
@@ -413,6 +419,66 @@ ${output}</x:xmpmeta>
 
 		// 2. Add the new value
 		this.kb.add(subject, predicate, rdflib.literal(value));
+	}
+
+	private getContainer(
+		subject: rdflib.NamedNode,
+		node: rdflib.NamedNode,
+		name: string,
+		listType: 'Bag' | 'Seq',
+	): rdflib.NamedNode | rdflib.BlankNode {
+		let container = this.kb.any(subject, node, null) as
+			| rdflib.NamedNode
+			| rdflib.BlankNode
+			| null;
+
+		if (container) return container;
+
+		container = rdflib.blankNode(name);
+		this.kb.add(
+			container,
+			rdflib.sym(`${XmpDocument.NS_RDF}type`),
+			rdflib.sym(`${XmpDocument.NS_RDF}${listType}`),
+		);
+		this.kb.add(subject, node, container);
+
+		return container;
+	}
+
+	private getListItemIndices(container: rdflib.NamedNode | rdflib.BlankNode): number[] {
+		const RDF_LI_REGEX =
+			/^http:\/\/www\.w3\.org\/1999\/02\/22-rdf-syntax-ns#_(\d+)$/;
+
+		return this.kb.statementsMatching(container, null, null).flatMap((stmt) => {
+			const match = stmt.predicate.value.match(RDF_LI_REGEX);
+			return match ? [parseInt(match[1]!, 10) - 1] : [];
+		});
+	}
+
+	private setListItem(
+		container: rdflib.NamedNode | rdflib.BlankNode,
+		index: number | string,
+		value: string,
+		options: XMPSetMetaInfoOptions,
+	) {
+		const existing = this.getListItemIndices(container);
+		if (typeof index === 'number' && options.noOverwrite && existing.includes(index)) {
+			return;
+		}
+
+		const highest = existing.length ? Math.max(... existing) : -1;
+		if (typeof index === 'string') {
+			index = highest + 1;
+		} else if ((index as number) > highest + 1) {
+			throw new RangeError(`Index '${index}' is out of range!`);
+		}
+
+		const rdfIndex = (index as number) + 1;
+		this.kb.add(
+			container,
+			rdflib.sym(`${XmpDocument.NS_RDF}_${rdfIndex}`),
+			rdflib.literal(value),
+		);
 	}
 
 	public tryOut() {

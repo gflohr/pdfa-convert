@@ -97,14 +97,17 @@ describe('XMP document', () => {
 			expect(xmp).toMatchSnapshot();
 		});
 
-		it.skip('should set Seq items', () => {
+		it('should set Seq items', () => {
 			const xmpDoc = new XmpDocument();
 
 			xmpDoc.setMetaInfo('dc:creator[0]', 'Jane Doe');
 			xmpDoc.setMetaInfo('dc:creator[1]', 'John Doe');
 
 			const xmp = xmpDoc.serialiseXmp();
-			console.log(xmp);
+
+			expect(xmp).toContain('<rdf:li>Jane Doe</rdf:li>');
+			expect(xmp).toContain('<rdf:li>John Doe</rdf:li>');
+			expect(xmp).toMatchSnapshot();
 		});
 	});
 

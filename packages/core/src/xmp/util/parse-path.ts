@@ -1,4 +1,4 @@
-import { langTagRegex } from './lang-tag-regex';
+import { langTagRegex } from './lang-tag-regex.js';
 
 export interface PathToken {
 	tokenType: '[]' | 'name';
@@ -12,11 +12,11 @@ export function parsePath(path: string): PathToken[] {
 
 	const tokens: PathToken[] = [];
 
-	parts.forEach(part => {
+	parts.forEach((part) => {
 		let index: string | number | undefined;
 		const indexMatch = part.match(/\[(.*)\]/);
 		if (indexMatch) {
-			part = part.substr(0, indexMatch.index);
+			part = part.substring(0, indexMatch.index);
 			if (!indexMatch[1]) {
 				index = 'x-default';
 			} else if (indexMatch[1].match(/^[0-9]+$/)) {
@@ -29,7 +29,7 @@ export function parsePath(path: string): PathToken[] {
 		}
 
 		if (!part.length) {
-			throw new Error('Empty element names are not allowed')
+			throw new Error('Empty element names are not allowed');
 		}
 
 		tokens.push({

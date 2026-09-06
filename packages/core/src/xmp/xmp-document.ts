@@ -6,6 +6,8 @@ import {
 	XMLSerializer,
 } from '@xmldom/xmldom';
 import * as rdflib from 'rdflib';
+import { dublinCoreNamespace } from './namespaces/dublin-core.js';
+import type { XMPNamespaceSchema } from './xmp-namespace.js';
 
 /**
  * Default base IRI.
@@ -83,29 +85,6 @@ export interface XMPSetMetaInfoOptions {
 	noOverwrite?: boolean;
 }
 
-/**
- * Dublin core metadata.
- *
- * See https://developer.adobe.com/xmp/docs/xmp-namespaces/dc/!
- */
-export interface DublinCoreMetadata {
-	contributor?: string[];
-	coverage?: string;
-	creator?: string[];
-	date?: Date;
-	description?: string;
-	format?: string;
-	identifier?: string;
-	language?: string[];
-	publisher?: string[];
-	relation?: string[];
-	rights?: XmpLangAlt;
-	source?: string;
-	subject?: string[];
-	title?: XmpLangAlt;
-	type?: string;
-}
-
 const bom = '\uFEFF';
 
 /** @internal */
@@ -161,6 +140,7 @@ export class XmpDocument {
 	private doc: Document;
 	private kb = rdflib.graph();
 	private namespaces: Record<string, string> = {};
+	private schemas: Record<string, XMPNamespaceSchema> = {};
 
 	constructor(
 		xmlString?: string,
@@ -207,18 +187,18 @@ export class XmpDocument {
 
 		rdflib.parse(xmlString, this.kb, baseIRI, 'application/rdf+xml');
 
-		this.setNamespacePrefix('Iptc4xmpCore', XmpDocument.NS_IPTC4XMPCORE);
-		this.setNamespacePrefix('crs', XmpDocument.NS_CRS);
-		this.setNamespacePrefix('dc', XmpDocument.NS_DC);
-		this.setNamespacePrefix('exif', XmpDocument.NS_EXIF);
-		this.setNamespacePrefix('pdf', XmpDocument.NS_PDF);
-		this.setNamespacePrefix('photoshop', XmpDocument.NS_PHOTOSHOP);
-		this.setNamespacePrefix('tiff', XmpDocument.NS_TIFF);
-		this.setNamespacePrefix('xmp', XmpDocument.NS_XMP);
-		this.setNamespacePrefix('xmpBJ', XmpDocument.NS_XMPBJ);
-		this.setNamespacePrefix('xmpMM', XmpDocument.NS_XMPMM);
-		this.setNamespacePrefix('xmpRights', XmpDocument.NS_XMPRIGHTS);
-		this.setNamespacePrefix('xmpTPg', XmpDocument.NS_XMPTPG);
+		//this.registerNamespace('Iptc4xmpCore', XmpDocument.NS_IPTC4XMPCORE);
+		//this.registerNamespace('crs', XmpDocument.NS_CRS);
+		this.registerNamespace('dc', XmpDocument.NS_DC, dublinCoreNamespace);
+		//this.registerNamespace('exif', XmpDocument.NS_EXIF);
+		//this.registerNamespace('pdf', XmpDocument.NS_PDF);
+		//this.registerNamespace('photoshop', XmpDocument.NS_PHOTOSHOP);
+		//this.registerNamespace('tiff', XmpDocument.NS_TIFF);
+		//this.registerNamespace('xmp', XmpDocument.NS_XMP);
+		//this.registerNamespace('xmpBJ', XmpDocument.NS_XMPBJ);
+		//this.registerNamespace('xmpMM', XmpDocument.NS_XMPMM);
+		//this.registerNamespace('xmpRights', XmpDocument.NS_XMPRIGHTS);
+		//this.registerNamespace('xmpTPg', XmpDocument.NS_XMPTPG);
 	}
 
 	private static createEmptyXmpMeta(): string {
@@ -331,16 +311,24 @@ ${output}</x:xmpmeta>
 	 * @param url
 	 * @see {@link XMPDocument.NS_IPTC4XMPCORE}, {@link XMPDocument.NS_CRS}, {@link XMPDocument.NS_DC}, {@link XMPDocument.NS_EXIF}, {@link XMPDocument.NS_PDF}, {@link XMPDocument.NS_PHOTOSHOP}, {@link XMPDocument.NS_TIFF}, {@link XMPDocument.NS_XMP}, {@link XMPDocument.NS_XMPBJ}, {@link XMPDocument.NS_XMPDM}, {@link XMPDocument.NS_XMPRIGHTS}, {@link XMPDocument.NS_XMPTPG}.
 	 */
-	public setNamespacePrefix(prefix: string, namespace: string) {
+	public registerNamespace(
+		prefix: string,
+		namespace: string,
+		schema: XMPNamespaceSchema,
+	) {
 		this.namespaces[prefix] = namespace;
 	}
 
 	public setMetaInfo(
-		prefix: string,
-		name: string,
+		path: string,
 		value: string,
 		options: XMPSetMetaInfoOptions = {},
 	) {
+		const [prefix, name] = path.split(':');
+		if (typeof prefix === 'undefined' || typeof name === 'undefined') {
+			throw new Error('Path must start with a namespace prefix!');
+		}
+
 		const namespaceUri = this.namespaces[prefix];
 		if (!namespaceUri) {
 			throw new Error(`Unknown prefix: '${prefix}'`);
@@ -352,6 +340,10 @@ ${output}</x:xmpmeta>
 
 		// 1. Remove existing triple(s) for this predicate (overwrite).
 		const existingQuads = this.kb.statementsMatching(subject, predicate, null);
+		if (existingQuads.length && options.noOverwrite) {
+			return;
+		}
+
 		this.kb.removeStatements(existingQuads);
 
 		// 2. Add the new value

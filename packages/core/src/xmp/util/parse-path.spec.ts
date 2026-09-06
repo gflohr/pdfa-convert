@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parsePath } from './parse-path';
+import { parsePath } from './parse-path.js';
 
 describe('XMP Path Parser', () => {
 	it('should parses a simple path', () => {
@@ -85,14 +85,20 @@ describe('XMP Path Parser', () => {
 	});
 
 	it('should throw an exception for empty path elements', () => {
-		expect(() => parsePath('foo..bar')).toThrow('Empty element names are not allowed');
+		expect(() => parsePath('foo..bar')).toThrow(
+			'Empty element names are not allowed',
+		);
 	});
 
 	it('should throw an exception for indexed empty path elements', () => {
-		expect(() => parsePath('foo.[1].bar')).toThrow('Empty element names are not allowed');
+		expect(() => parsePath('foo.[1].bar')).toThrow(
+			'Empty element names are not allowed',
+		);
 	});
 
 	it('should throw an exception for invalid language tags', () => {
-		expect(() => parsePath('foo[de%de].bar')).toThrow("Invalid language tag 'de%de'");
+		expect(() => parsePath('foo[de%de].bar')).toThrow(
+			"Invalid language tag 'de%de'",
+		);
 	});
-})
+});

@@ -8,6 +8,7 @@ import {
 import * as rdflib from 'rdflib';
 import { dublinCoreNamespace } from './namespaces/dublin-core.js';
 import type { XMPNamespaceSchema } from './xmp-namespace.js';
+import { parsePath } from './util/parse-path.js';
 
 /**
  * Default base IRI.
@@ -354,11 +355,25 @@ ${output}</x:xmpmeta>
 		value: string,
 		options: XMPSetMetaInfoOptions = {},
 	) {
-		const [prefix, name] = path.split(':');
-		if (typeof prefix === 'undefined' || typeof name === 'undefined') {
-			throw new Error('Path must start with a namespace prefix!');
+		const tokens = parsePath(path);
+		if (!tokens.length) {
+			throw new Error('Path must not be empty!');
+		} else if (tokens.length > 1) {
+			throw new Error('Nested meta information is not yet implemented!');
 		}
 
+		const token = tokens[0]!;
+
+		this.setMetaInfoLeaf(token.prefix, token.name, value, token.index, options);
+	}
+
+	public setMetaInfoLeaf(
+		prefix: string,
+		name: string,
+		value: string,
+		index: string | number | undefined,
+		options: XMPSetMetaInfoOptions,
+	) {
 		const namespaceUri = this.namespaces[prefix];
 		if (!namespaceUri) {
 			throw new Error(`Unknown prefix: '${prefix}'`);

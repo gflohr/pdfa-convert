@@ -1,7 +1,8 @@
 import { langTagRegex } from './lang-tag-regex.js';
 
 export interface PathToken {
-	value: string;
+	prefix: string;
+	name: string;
 	index?: string | number;
 }
 
@@ -12,6 +13,7 @@ export function parsePath(path: string): PathToken[] {
 
 	const tokens: PathToken[] = [];
 
+	let parentPrefix = '';
 	parts.forEach((part) => {
 		let index: string | number | undefined;
 		const indexMatch = part.match(/\[(.*)\]/);
@@ -29,10 +31,25 @@ export function parsePath(path: string): PathToken[] {
 		}
 
 		if (!part.length) {
-			throw new Error('Empty element names are not allowed');
+			throw new Error('Empty element names are not allowed!');
 		}
 
-		const token: PathToken = { value: part };
+		let [prefix, name] = part.split(':');
+		if (!name) {
+			name = prefix;
+			prefix = parentPrefix;
+			if (!prefix.length) {
+				throw new Error('The first path element must have a namespace prefix!');
+			}
+		} else {
+			parentPrefix = prefix!;
+		}
+
+		if (!name!.length) {
+			throw new Error('Empty element names are not allowed!');
+		}
+
+		const token: PathToken = { prefix: prefix!, name: name! };
 		if (typeof index !== 'undefined') {
 			token.index = index;
 		}

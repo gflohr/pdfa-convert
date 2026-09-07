@@ -107,6 +107,30 @@ describe('XMP document', () => {
 			expect(xmp).toContain('<rdf:Seq><rdf:li>John Doe</rdf:li></rdf:Seq>');
 			expect(xmp).toMatchSnapshot();
 		});
+
+		it('should overwrite Seq items by default', () => {
+			const xmpDoc = new XmpDocument();
+
+			xmpDoc.setMetaInfo('dc:creator', 'John Doe');
+			xmpDoc.setMetaInfo('dc:creator', 'Jane Doe');
+
+			const xmp = xmpDoc.serialiseXmp();
+
+			expect(xmp).toContain('<rdf:Seq><rdf:li>Jane Doe</rdf:li></rdf:Seq>');
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should append Seq items if requested', () => {
+			const xmpDoc = new XmpDocument();
+
+			xmpDoc.setMetaInfo('dc:creator', 'John Doe');
+			xmpDoc.setMetaInfo('dc:creator', 'Jane Doe', { append: true });
+
+			const xmp = xmpDoc.serialiseXmp();
+
+			expect(xmp).toContain('<rdf:Seq><rdf:li>John Doe</rdf:li><rdf:li>Jane Doe</rdf:li></rdf:Seq>');
+			expect(xmp).toMatchSnapshot();
+		});
 	});
 
 	describe('getMetaInfo', () => {

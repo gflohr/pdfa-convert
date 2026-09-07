@@ -102,6 +102,21 @@ exports[`XMP document > setMetaInfo > should add a new property to a fresh docum
 <?xpacket end="w"?>"
 `;
 
+exports[`XMP document > setMetaInfo > should append Seq items if requested 1`] = `
+"<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+	<rdf:RDF
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<rdf:Description rdf:about="">
+			<dc:creator rdf:parseType="Resource">
+			   <rdf:Seq><rdf:li>John Doe</rdf:li><rdf:li>Jane Doe</rdf:li></rdf:Seq>
+			</dc:creator>
+		</rdf:Description>
+	</rdf:RDF></x:xmpmeta>
+<?xpacket end="w"?>"
+`;
+
 exports[`XMP document > setMetaInfo > should honour the \`noOverwrite\` option 1`] = `
 "<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
@@ -113,6 +128,21 @@ exports[`XMP document > setMetaInfo > should honour the \`noOverwrite\` option 1
 			<pdf:PDFVersion>1.7</pdf:PDFVersion>
 			<pdf:Producer>@pdfa-lab/core</pdf:Producer>
 			<dc:format>application/pdf</dc:format>
+		</rdf:Description>
+	</rdf:RDF></x:xmpmeta>
+<?xpacket end="w"?>"
+`;
+
+exports[`XMP document > setMetaInfo > should overwrite Seq items by default 1`] = `
+"<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+	<rdf:RDF
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<rdf:Description rdf:about="">
+			<dc:creator rdf:parseType="Resource">
+			   <rdf:Seq><rdf:li>Jane Doe</rdf:li></rdf:Seq>
+			</dc:creator>
 		</rdf:Description>
 	</rdf:RDF></x:xmpmeta>
 <?xpacket end="w"?>"

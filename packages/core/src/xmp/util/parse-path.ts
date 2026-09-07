@@ -3,33 +3,44 @@ import { langTagRegex } from './lang-tag-regex.js';
 export interface PathToken {
 	prefix: string;
 	name: string;
-	index?: string | number;
+	lang?: string;
+	index?: number;
 }
 
 /** @internal */
 export function parsePath(path: string): PathToken[] {
-	const parts = path.split('/').filter(part => part.length);
+	const parts = path.split('/').filter((part) => part.length);
 
 	const tokens: PathToken[] = [];
 
 	let parentPrefix = '';
 	parts.forEach((part) => {
-		let index: string | number | undefined;
+		let index: number | undefined;
 		const indexMatch = part.match(/\[(.*)\]/);
 		if (indexMatch) {
 			part = part.substring(0, indexMatch.index);
 			if (!indexMatch[1]) {
-				index = '';
+				throw new Error("Empty index '[]' is not allowed!");
 			} else if (indexMatch[1].match(/^[0-9]+$/)) {
 				index = parseInt(indexMatch[1], 10) - 1;
 				if (index < 0) {
-					throw new Error('XMP paths are 1-based, 0 is not allowed as an index!');
+					throw new Error(
+						'XMP paths are 1-based, 0 is not allowed as an index!',
+					);
 				}
-			} else if (indexMatch[1].match(langTagRegex)) {
-				index = indexMatch[1];
 			} else {
-				throw new Error(`Invalid language tag '${indexMatch[1]}'`);
+				throw new Error(`Invalid index '${indexMatch[1]}'`);
 			}
+		}
+
+		const langMatch = part.match(/@(.*)/);
+		let lang: string | undefined;
+		if (langMatch) {
+			part = part.substring(0, langMatch.index);
+			if (!langMatch[1]?.match(langTagRegex)) {
+				throw new Error(`Invalid language tag '${langMatch[1]}'`);
+			}
+			lang = langMatch[1];
 		}
 
 		if (!part.length) {
@@ -56,6 +67,10 @@ export function parsePath(path: string): PathToken[] {
 			token.index = index;
 		}
 
+		if (typeof lang !== 'undefined') {
+			token.lang = lang;
+		}
+
 		tokens.push(token);
 	});
 
@@ -64,7 +79,9 @@ export function parsePath(path: string): PathToken[] {
 	}
 
 	if (tokens[tokens.length - 1]!.index) {
-		throw new Error(`Index [${tokens[tokens.length - 1]!.index}] is not allowed for leaf nodes.`);
+		throw new Error(
+			`Index [${tokens[tokens.length - 1]!.index}] is not allowed for leaf nodes.`,
+		);
 	}
 
 	return tokens;

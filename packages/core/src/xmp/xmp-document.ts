@@ -85,6 +85,11 @@ export interface XMPSetMetaInfoOptions {
 	 * Keep existing value? Default `false`.
 	 */
 	noOverwrite?: boolean;
+
+	/**
+	 * Append item to Bag/Seq? Ignored for other types. Default `false`.
+	 */
+	append?: boolean;
 }
 
 const bom = '\uFEFF';
@@ -397,7 +402,7 @@ ${output}</x:xmpmeta>
 				(schema as XmpSchema).xmpContainer === 'Seq' ? 'Seq' : 'Bag';
 			const container = this.getContainer(subject, node, token.name, listType);
 
-			this.setListItem(container, token.index, value, options);
+			this.setListItem(container, value, options);
 		} else {
 			this.setLiteralMetaInfo(subject, predicate, value, options);
 		}
@@ -445,7 +450,9 @@ ${output}</x:xmpmeta>
 		return container;
 	}
 
-	private getListItemIndices(container: rdflib.NamedNode | rdflib.BlankNode): number[] {
+	private getListItemIndices(
+		container: rdflib.NamedNode | rdflib.BlankNode,
+	): number[] {
 		const RDF_LI_REGEX =
 			/^http:\/\/www\.w3\.org\/1999\/02\/22-rdf-syntax-ns#_(\d+)$/;
 
@@ -457,23 +464,24 @@ ${output}</x:xmpmeta>
 
 	private setListItem(
 		container: rdflib.NamedNode | rdflib.BlankNode,
-		index: number | string,
 		value: string,
 		options: XMPSetMetaInfoOptions,
 	) {
-		const existing = this.getListItemIndices(container);
-		if (typeof index === 'number' && options.noOverwrite && existing.includes(index)) {
+		let existing = this.getListItemIndices(container);
+		if (options.noOverwrite && existing.length) {
 			return;
 		}
 
-		const highest = existing.length ? Math.max(... existing) : -1;
-		if (typeof index === 'string') {
-			index = highest + 1;
-		} else if ((index as number) > highest + 1) {
-			throw new RangeError(`Index '${index}' is out of range!`);
+		// FIXME! Do this only, when not appending.
+		if (!options.append) {
+			this.clearContainerItems(container);
+		} else {
+			existing = [];
 		}
 
-		const rdfIndex = (index as number) + 1;
+		const highest = existing.length ? Math.max(...existing) : 0;
+
+		const rdfIndex = highest + 1;
 		this.kb.add(
 			container,
 			rdflib.sym(`${XmpDocument.NS_RDF}_${rdfIndex}`),
@@ -481,39 +489,20 @@ ${output}</x:xmpmeta>
 		);
 	}
 
-	public tryOut() {
-		const prefix = 'dc';
-		const namespaceUri = this.namespaces[prefix]!;
-		const subject = rdflib.sym(this.baseIRI);
-		const dcIdentifier = rdflib.sym(`${namespaceUri}identifier`);
+	private clearContainerItems(container: rdflib.NamedNode | rdflib.BlankNode): void {
+		const RDF_LI_PREFIX = `${XmpDocument.NS_RDF}_`;
+		const RDF_LI = `${XmpDocument.NS_RDF}li`;
 
-		let container = this.kb.any(subject, dcIdentifier, null) as
-			| rdflib.NamedNode
-			| rdflib.BlankNode
-			| null;
-
-		if (!container) {
-			container = rdflib.blankNode('dc:identifier');
-			this.kb.add(
-				container,
-				rdflib.sym(`${XmpDocument.NS_RDF}type`),
-				rdflib.sym(`${XmpDocument.NS_RDF}Bag`),
+		// Find all triples where container is the subject and predicate is an item index
+		const itemStatements = this.kb
+			.statementsMatching(container, null, null)
+			.filter(
+				(stmt) =>
+					stmt.predicate.value.startsWith(RDF_LI_PREFIX) ||
+					stmt.predicate.value === RDF_LI,
 			);
-			this.kb.add(subject, dcIdentifier, container);
-		}
 
-		this.kb.add(
-			container,
-			rdflib.sym(`${XmpDocument.NS_RDF}_1`),
-			rdflib.literal('Jane Doe'),
-		);
-
-		this.kb.add(
-			container,
-			rdflib.sym(`${XmpDocument.NS_RDF}_2`),
-			rdflib.literal('John Doe'),
-		);
-
-		console.log(this.serialiseXmp());
+		// Remove all matched item triples from the store
+		this.kb.remove(itemStatements);
 	}
 }

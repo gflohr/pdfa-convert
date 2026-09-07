@@ -83,7 +83,7 @@ describe('XMP Path Parser', () => {
 	});
 
 	it.skip('should extract a language tag', () => {
-		const path = '/xy:person/name[bg-BG]';
+		const path = '/xy:person/name@bg-BG';
 		expect(parsePath(path)).toStrictEqual([
 			{
 				prefix: 'xy',
@@ -92,24 +92,14 @@ describe('XMP Path Parser', () => {
 			{
 				prefix: 'xy',
 				name: 'name',
-				index: 'bg-BG',
+				lang: 'bg-BG',
 			},
 		]);
 	});
 
-	it('should allow empty indexes', () => {
-		const path = '/xy:person/name[]';
-		expect(parsePath(path)).toStrictEqual([
-			{
-				prefix: 'xy',
-				name: 'person',
-			},
-			{
-				prefix: 'xy',
-				name: 'name',
-				index: '',
-			},
-		]);
+	it('should throw an exception for empty indices', () => {
+		const path = '/xy:person[]/name';
+		expect(() => parsePath(path)).toThrow("Empty index '[]' is not allowed!");
 	});
 
 	it('should ignore empty path elements', () => {
@@ -133,7 +123,7 @@ describe('XMP Path Parser', () => {
 	});
 
 	it('should throw an exception for invalid language tags', () => {
-		expect(() => parsePath('xy:foo[de%de]/bar')).toThrow(
+		expect(() => parsePath('xy:foo@de%de/bar')).toThrow(
 			"Invalid language tag 'de%de'",
 		);
 	});

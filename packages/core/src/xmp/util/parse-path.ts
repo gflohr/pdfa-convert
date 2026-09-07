@@ -24,7 +24,10 @@ export function parsePath(path: string): PathToken[] {
 			if (!indexMatch[1]) {
 				index = '';
 			} else if (indexMatch[1].match(/^[0-9]+$/)) {
-				index = parseInt(indexMatch[1], 10);
+				index = parseInt(indexMatch[1], 10) - 1;
+				if (index < 0) {
+					throw new Error('XMP paths are 1-based, 0 is not allowed as an index!');
+				}
 			} else if (indexMatch[1].match(langTagRegex)) {
 				index = indexMatch[1];
 			} else {

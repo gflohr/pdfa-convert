@@ -100,8 +100,8 @@ describe('XMP document', () => {
 		it('should set Seq items', () => {
 			const xmpDoc = new XmpDocument();
 
-			xmpDoc.setMetaInfo('dc:creator[0]', 'Jane Doe');
-			xmpDoc.setMetaInfo('dc:creator[1]', 'John Doe');
+			xmpDoc.setMetaInfo('dc:creator[1]', 'Jane Doe');
+			xmpDoc.setMetaInfo('dc:creator[2]', 'John Doe');
 
 			const xmp = xmpDoc.serialiseXmp();
 

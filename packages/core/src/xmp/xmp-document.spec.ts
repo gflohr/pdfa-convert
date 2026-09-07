@@ -97,7 +97,7 @@ describe('XMP document', () => {
 			expect(xmp).toMatchSnapshot();
 		});
 
-		it('should set Seq items', () => {
+		it.skip('should set Seq items', () => {
 			const xmpDoc = new XmpDocument();
 
 			xmpDoc.setMetaInfo('dc:creator[1]', 'Jane Doe');

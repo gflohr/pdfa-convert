@@ -9,9 +9,6 @@ export interface PathToken {
 /** @internal */
 export function parsePath(path: string): PathToken[] {
 	const parts = path.split('/').filter(part => part.length);
-	if (!parts.length) {
-		throw new Error('Empty paths are not allowed!');
-	}
 
 	const tokens: PathToken[] = [];
 
@@ -61,6 +58,14 @@ export function parsePath(path: string): PathToken[] {
 
 		tokens.push(token);
 	});
+
+	if (!tokens.length) {
+		throw new Error('Empty paths are not allowed!');
+	}
+
+	if (tokens[tokens.length - 1]!.index) {
+		throw new Error(`Index [${tokens[tokens.length - 1]!.index}] is not allowed for leaf nodes.`);
+	}
 
 	return tokens;
 }

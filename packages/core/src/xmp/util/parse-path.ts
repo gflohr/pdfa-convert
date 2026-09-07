@@ -8,8 +8,10 @@ export interface PathToken {
 
 /** @internal */
 export function parsePath(path: string): PathToken[] {
-	const parts = path.split('.');
-	if (parts[0] === '$') parts.shift();
+	const parts = path.split('/').filter(part => part.length);
+	if (!parts.length) {
+		throw new Error('Empty paths are not allowed!');
+	}
 
 	const tokens: PathToken[] = [];
 

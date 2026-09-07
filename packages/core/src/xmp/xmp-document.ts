@@ -10,6 +10,8 @@ import * as v from 'valibot';
 import { dublinCoreNamespace } from './namespaces/dublin-core.js';
 import { parsePath } from './util/parse-path.js';
 import type { XMPNamespaceSchema, XmpSchema } from './xmp-namespace.js';
+import { GraphType, ObjectType, PredicateType, SubjectType } from 'rdflib/lib/types.js';
+import { stat } from 'node:fs';
 
 /**
  * Default base IRI.
@@ -93,6 +95,12 @@ export interface XMPSetMetaInfoOptions {
 }
 
 const bom = '\uFEFF';
+
+interface LangMapEntry {
+	index: number; // e.g., 1
+	predicate: rdflib.NamedNode; // e.g., rdflib.sym('...#_1')
+	statement: rdflib.Statement;
+}
 
 /** @internal */
 export class XmpDocument {
@@ -349,13 +357,12 @@ ${output}</x:xmpmeta>
 
 		const token = tokens[0]!;
 
-		return this.getMetaInfoLeaf(token.prefix, token.name, token.index);
+		return this.getMetaInfoLeaf(token.prefix, token.name);
 	}
 
 	private getMetaInfoLeaf(
 		prefix: string,
 		name: string,
-		index: string | number | undefined,
 	): string | null {
 		const namespaceUri = this.namespaces[prefix];
 		if (!namespaceUri) {
@@ -403,6 +410,11 @@ ${output}</x:xmpmeta>
 			const container = this.getContainer(subject, node, token.name, listType);
 
 			this.setListItem(container, value, options);
+		} else if ((schema as XmpSchema).xmpContainer === 'Alt') {
+			const node = rdflib.sym(`${namespaceUri}${token.name}`);
+			const container = this.getContainer(subject, node, token.name, 'Alt');
+
+			this.setLanguageAlternative(container, value, token.lang, options);
 		} else {
 			this.setLiteralMetaInfo(subject, predicate, value, options);
 		}
@@ -430,7 +442,7 @@ ${output}</x:xmpmeta>
 		subject: rdflib.NamedNode,
 		node: rdflib.NamedNode,
 		name: string,
-		listType: 'Bag' | 'Seq',
+		listType: 'Bag' | 'Seq' | 'Alt',
 	): rdflib.NamedNode | rdflib.BlankNode {
 		let container = this.kb.any(subject, node, null) as
 			| rdflib.NamedNode
@@ -489,7 +501,64 @@ ${output}</x:xmpmeta>
 		);
 	}
 
-	private clearContainerItems(container: rdflib.NamedNode | rdflib.BlankNode): void {
+	private setLanguageAlternative(
+		container: rdflib.NamedNode | rdflib.BlankNode,
+		value: string,
+		lang: string | undefined,
+		options: XMPSetMetaInfoOptions,
+	) {
+		if (!lang?.length) {
+			lang = 'x-default';
+		}
+
+		const statements = this.getLanguageStatements(container);
+		let rdfIndex = statements.length + 1;
+
+		if (lang === 'x-default') {
+			if (options.noOverwrite && statements.length) {
+				// Check whether there is a default entry.
+				for (let i = 0; i < statements.length; ++i) {
+					const statement = statements[i];
+
+					if (statement && (statement.object.lang === ''
+						|| statement.object.lang === 'x-default'
+						|| !statement.object.lang
+					)) {
+						return;
+					}
+				}
+			}
+
+			// Wipe out all existing values.
+			this.clearContainerItems(container);
+			rdfIndex = 1;
+		} else {
+			for (let i = 0; i < statements.length; ++i) {
+				const statement = statements[i];
+
+				if (statement && statement.object.lang === lang) {
+					if (options.noOverwrite) {
+						return;
+					}
+
+					// Do not exit the loop here. If there are duplicates,
+					// we want to delete them all, not just the first.
+					this.kb.removeStatement(statement);
+					rdfIndex = i + 1;
+				}
+			}
+		}
+
+		this.kb.add(
+			container,
+			rdflib.sym(`${XmpDocument.NS_RDF}_${rdfIndex}`),
+			rdflib.literal(value, lang),
+		);
+	}
+
+	private clearContainerItems(
+		container: rdflib.NamedNode | rdflib.BlankNode,
+	): void {
 		const RDF_LI_PREFIX = `${XmpDocument.NS_RDF}_`;
 		const RDF_LI = `${XmpDocument.NS_RDF}li`;
 
@@ -504,5 +573,57 @@ ${output}</x:xmpmeta>
 
 		// Remove all matched item triples from the store
 		this.kb.remove(itemStatements);
+	}
+
+	private getLanguageStatements(container: rdflib.NamedNode | rdflib.BlankNode) {
+		const allStatements = this.kb.statementsMatching(container, null, null);
+
+		const ORDINAL_REGEX =
+			/^http:\/\/www\.w3\.org\/1999\/02\/22-rdf-syntax-ns#_(\d+)$/;
+
+		const statements: rdflib.Statement<SubjectType, PredicateType, rdflib.Literal>[] = [];
+		for (const stmt of allStatements) {
+			const match = stmt.predicate.value.match(ORDINAL_REGEX);
+
+			// Ensure predicate is an ordinal (_1, _2, etc.) and object is a
+			// Literal with a lang attribute.
+			if (match && stmt.object.termType === 'Literal') {
+				const index = parseInt(match[1]!, 10);
+				if (index) {
+					statements[index - 1] = stmt as rdflib.Statement<SubjectType, PredicateType, rdflib.Literal>;
+				}
+			}
+		}
+
+		return statements;
+	}
+
+	private getLanguageMapping(
+		container: rdflib.NamedNode | rdflib.BlankNode,
+	): Record<string, LangMapEntry> {
+		const langMap: Record<string, LangMapEntry> = {};
+		const statements = this.kb.statementsMatching(container, null, null);
+
+		const ORDINAL_REGEX =
+			/^http:\/\/www\.w3\.org\/1999\/02\/22-rdf-syntax-ns#_(\d+)$/;
+
+		for (const stmt of statements) {
+			const match = stmt.predicate.value.match(ORDINAL_REGEX);
+
+			// Ensure predicate is an ordinal (_1, _2, etc.) and object is a
+			// Literal with a lang attribute.
+			if (match && stmt.object.termType === 'Literal') {
+				const index = parseInt(match[1]!, 10);
+				const lang = stmt.object.lang || 'x-default';
+
+				langMap[lang] = {
+					index,
+					predicate: stmt.predicate as rdflib.NamedNode,
+					statement: stmt,
+				};
+			}
+		}
+
+		return langMap;
 	}
 }

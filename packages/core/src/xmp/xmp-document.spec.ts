@@ -128,7 +128,95 @@ describe('XMP document', () => {
 
 			const xmp = xmpDoc.serialiseXmp();
 
-			expect(xmp).toContain('<rdf:Seq><rdf:li>John Doe</rdf:li><rdf:li>Jane Doe</rdf:li></rdf:Seq>');
+			expect(xmp).toContain(
+				'<rdf:Seq><rdf:li>John Doe</rdf:li><rdf:li>Jane Doe</rdf:li></rdf:Seq>',
+			);
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should set language alternatives', () => {
+			const xmpDoc = new XmpDocument();
+
+			const title = 'Internet For Dummies, Remedial Edition';
+			xmpDoc.setMetaInfo('dc:title', title);
+
+			const xmp = xmpDoc.serialiseXmp();
+
+			expect(xmp).toContain(`<rdf:li xml:lang="x-default">${title}</rdf:li>`);
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should append localised language alternative values', () => {
+			const xmpDoc = new XmpDocument();
+
+			const title = 'Les Misérables';
+			xmpDoc.setMetaInfo('dc:title', title);
+
+			const titleDe = 'Die Elenden';
+			xmpDoc.setMetaInfo('dc:title@de', titleDe);
+
+			const xmp = xmpDoc.serialiseXmp();
+
+			expect(xmp).toContain(`<rdf:li xml:lang="x-default">${title}</rdf:li>`);
+			expect(xmp).toContain(`<rdf:li xml:lang="de">${titleDe}</rdf:li>`);
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should wipe out all other language alternatives, when setting the default', () => {
+			const xmpDoc = new XmpDocument();
+
+			const oldTitleFr = 'Les Misérables';
+			xmpDoc.setMetaInfo('dc:title', oldTitleFr);
+
+			const oldTitleDe = 'Die Elenden';
+			xmpDoc.setMetaInfo('dc:title@de-DE', oldTitleDe);
+
+			const newTitle = '1000 Classic Pranks';
+			xmpDoc.setMetaInfo('dc:title', newTitle);
+
+			const xmp = xmpDoc.serialiseXmp();
+
+			expect(xmp).not.toContain('de-DE');
+			expect(xmp).toContain(
+				`<rdf:li xml:lang="x-default">${newTitle}</rdf:li>`,
+			);
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should honour the noOverwrite option, when setting the default', () => {
+			const xmpDoc = new XmpDocument();
+
+			const oldTitle = 'Les Misérables';
+			xmpDoc.setMetaInfo('dc:title', oldTitle);
+
+			const newTitle = '1000 Classic Pranks';
+			xmpDoc.setMetaInfo('dc:title', newTitle, { noOverwrite: true });
+
+			const xmp = xmpDoc.serialiseXmp();
+
+			expect(xmp).not.toContain('de-DE');
+			expect(xmp).toContain(
+				`<rdf:li xml:lang="x-default">${oldTitle}</rdf:li>`,
+			);
+			expect(xmp).toMatchSnapshot();
+		});
+
+		it('should overwrite language alternative values by default', () => {
+			const xmpDoc = new XmpDocument();
+
+			const title = 'Les Misérables';
+			xmpDoc.setMetaInfo('dc:title', title);
+
+			const titleDe = 'Die Elenden';
+			xmpDoc.setMetaInfo('dc:title@de', titleDe);
+			const fallbackTitleDe = 'Die Pest';
+			xmpDoc.setMetaInfo('dc:title@de', fallbackTitleDe);
+
+			const xmp = xmpDoc.serialiseXmp();
+
+			expect(xmp).toContain(`<rdf:li xml:lang="x-default">${title}</rdf:li>`);
+			expect(xmp).not.toContain(`<rdf:li xml:lang="de">${titleDe}</rdf:li>`);
+			expect(xmp).toContain(`<rdf:li xml:lang="de">${fallbackTitleDe}</rdf:li>`);
 			expect(xmp).toMatchSnapshot();
 		});
 	});
